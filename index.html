@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pedras Valiosas — O Guia Completo para Identificar o que Você Pode Ter em Casa</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%2317151b%22/%3E%0A%20%20%3Cpolygon%20points%3D%2232%2C10%2048%2C24%2043%2C54%2021%2C54%2016%2C24%22%20fill%3D%22%239169c9%22/%3E%0A%20%20%3Cpolygon%20points%3D%2232%2C10%2048%2C24%2032%2C30%22%20fill%3D%22%23b18ee0%22/%3E%0A%20%20%3Cpolygon%20points%3D%2216%2C24%2032%2C30%2021%2C54%22%20fill%3D%22%237a4fab%22/%3E%0A%20%20%3Cpolygon%20points%3D%2232%2C30%2048%2C24%2043%2C54%22%20fill%3D%22%23663f96%22/%3E%0A%3C/svg%3E%0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -356,10 +357,30 @@
     .steps{grid-template-columns:1fr; gap:38px;}
     .testi-grid{grid-template-columns:1fr;}
   }
+  @media (max-width:640px){
+    nav{padding:14px 20px; gap:12px;}
+    .logo{font-size:16px; gap:7px;}
+    .nav-cta{font-size:11.5px; padding:9px 14px; white-space:nowrap;}
+    .wrap{padding:0 20px;}
+    /* stop the overlapping "tag stack" effect: stack them plainly instead */
+    .specimen-stack{
+      height:auto; max-width:340px;
+      display:flex; flex-direction:column; gap:14px;
+    }
+    .tag{position:static; width:100%; transform:none !important;}
+  }
   @media (max-width:520px){
     .feat-grid{grid-template-columns:1fr;}
+    .catalog-scroller{grid-template-columns:1fr;}
     section{padding:64px 0;}
     .hero{padding:56px 0 40px;}
+    .logo{font-size:15px;}
+    .logo .dot{width:6px; height:6px;}
+  }
+  @media (max-width:360px){
+    nav{padding:12px 16px;}
+    .logo{font-size:13.5px;}
+    .nav-cta{font-size:10.5px; padding:8px 11px;}
   }
   @media (prefers-reduced-motion: reduce){
     .strip-track{animation:none;}
@@ -373,7 +394,7 @@
 <header>
   <nav>
     <div class="logo"><span class="dot"></span>Pedras Valiosas</div>
-    <a href="#preco" class="nav-cta">Quero o guia — R$19,99</a>
+    <a href="https://app.cakto.com.br/checkout-builder/985115" target="_blank" rel="noopener" class="nav-cta">Quero o guia — R$19,99</a>
   </nav>
 </header>
 
@@ -385,7 +406,7 @@
       <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
       <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
       <div class="hero-cta-row">
-        <a href="#preco" class="btn-primary">
+        <a href="https://app.cakto.com.br/checkout-builder/985115" target="_blank" rel="noopener" class="btn-primary">
           Acessar o catálogo agora
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
@@ -643,7 +664,7 @@
         <span class="old">R$47,00</span>
         <span class="new"><sup>R$</sup>19,99</span>
       </div>
-      <a href="#" class="receipt-cta">Comprar agora — acesso imediato</a>
+      <a href="https://app.cakto.com.br/checkout-builder/985115" target="_blank" rel="noopener" class="receipt-cta">Comprar agora — acesso imediato</a>
       <div class="receipt-sub">Pagamento único · sem assinatura · PDF digital</div>
     </div>
   </div>
@@ -682,7 +703,7 @@
   <div class="wrap">
     <h2>Da próxima vez que encontrar uma pedra estranha, você vai saber o que fazer.</h2>
     <p>Catálogo completo, em português, por R$19,99.</p>
-    <a href="#preco" class="btn-primary">Quero identificar minhas pedras</a>
+    <a href="https://app.cakto.com.br/checkout-builder/985115" target="_blank" rel="noopener" class="btn-primary">Quero identificar minhas pedras</a>
   </div>
 </section>
 
