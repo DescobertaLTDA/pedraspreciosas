@@ -370,24 +370,19 @@
     .testi-grid{grid-template-columns:1fr;}
 
     .hero-mobile-photo{
-      display:block; position:relative; margin:22px 0 4px;
+      display:block; position:relative; margin:0 0 24px;
       border-radius:10px; overflow:hidden;
       box-shadow:0 14px 34px rgba(0,0,0,0.4);
     }
     .hero-mobile-photo img{
       width:100%; aspect-ratio:4/3; object-fit:cover; display:block;
     }
-    .hero-mobile-price{
-      position:absolute; top:14px; right:14px;
-      background:var(--citrino); color:#241a06;
-      font-family:'Space Mono',monospace; font-weight:700;
-      padding:9px 13px; border-radius:6px;
-      box-shadow:0 8px 20px rgba(227,173,46,0.4);
-      display:flex; flex-direction:column; align-items:center; line-height:1.25;
-      transform:rotate(4deg);
+    .hero-mobile-photo::after{
+      content:'';
+      position:absolute; left:0; right:0; bottom:0; height:60%;
+      background:linear-gradient(to bottom, transparent, var(--bg) 92%);
+      pointer-events:none;
     }
-    .hero-mobile-price .old{font-size:10.5px; text-decoration:line-through; opacity:0.65;}
-    .hero-mobile-price .new{font-size:19px;}
   }
   @media (max-width:640px){
     nav{padding:14px 20px; gap:12px;}
@@ -428,17 +423,13 @@
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
+      <div class="hero-mobile-photo">
+        <img src="pedra2.jpeg" alt="Ametista sendo segurada na mão">
+      </div>
+
       <div class="eyebrow">Guia digital em PDF · 100% em português</div>
       <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
       <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
-
-      <div class="hero-mobile-photo">
-        <img src="pedra2.jpeg" alt="Ametista sendo segurada na mão">
-        <div class="hero-mobile-price">
-          <span class="old">R$47,00</span>
-          <span class="new">R$19,99</span>
-        </div>
-      </div>
 
       <div class="hero-cta-row">
         <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary">
