@@ -560,7 +560,16 @@
     content:''; width:5px; height:5px; border-radius:50%; background:var(--turmalina); flex-shrink:0;
   }
   @media (max-width:520px){
-    .sales-popup{left:12px; right:12px; bottom:14px; max-width:none;}
+    .sales-popup{
+      left:12px; right:auto; bottom:14px;
+      max-width:min(78vw, 250px);
+      padding:11px 14px 11px 11px; gap:10px;
+    }
+    .sales-popup .sp-icon{width:32px; height:32px;}
+    .sales-popup .sp-icon svg{width:15px; height:15px;}
+    .sales-popup .sp-name{font-size:12.5px;}
+    .sales-popup .sp-detail{font-size:11px;}
+    .sales-popup .sp-meta{font-size:10px;}
   }
 </style>
 </head>
