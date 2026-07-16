@@ -503,6 +503,49 @@
     .strip-track{animation:none;}
     *{transition:none !important;}
   }
+
+  /* ===== POPUP DE PROVA SOCIAL ===== */
+  .sales-popup{
+    position:fixed; left:20px; bottom:20px; z-index:70;
+    display:flex; align-items:center; gap:13px;
+    max-width:310px;
+    background:var(--parchment);
+    border-radius:12px;
+    padding:13px 16px 13px 13px;
+    box-shadow:0 18px 40px rgba(0,0,0,0.45);
+    transform:translateY(140%) scale(0.96);
+    opacity:0;
+    transition:transform .45s cubic-bezier(.2,.9,.3,1.2), opacity .35s ease;
+    pointer-events:none;
+  }
+  .sales-popup.show{
+    transform:translateY(0) scale(1);
+    opacity:1;
+  }
+  .sales-popup .sp-icon{
+    width:38px; height:38px; border-radius:50%; flex-shrink:0;
+    background:var(--turmalina);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .sales-popup .sp-icon svg{width:18px; height:18px; stroke:#fff; stroke-width:2.8;}
+  .sales-popup .sp-body{line-height:1.35;}
+  .sales-popup .sp-name{
+    font-family:'Fraunces',serif; font-weight:600; font-size:13.5px; color:var(--ink);
+  }
+  .sales-popup .sp-name b{font-weight:700;}
+  .sales-popup .sp-detail{
+    font-size:12px; color:var(--ink-soft); margin-top:1px;
+  }
+  .sales-popup .sp-meta{
+    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--amethyst-deep);
+    margin-top:4px; display:flex; align-items:center; gap:5px;
+  }
+  .sales-popup .sp-meta::before{
+    content:''; width:5px; height:5px; border-radius:50%; background:var(--turmalina); flex-shrink:0;
+  }
+  @media (max-width:520px){
+    .sales-popup{left:12px; right:12px; bottom:14px; max-width:none;}
+  }
 </style>
 </head>
 <body>
@@ -907,6 +950,17 @@
   </div>
 </section>
 
+<div class="sales-popup" id="salesPopup" role="status" aria-live="polite">
+  <div class="sp-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+  </div>
+  <div class="sp-body">
+    <div class="sp-name"><b id="spName">Mariana C.</b> comprou o guia</div>
+    <div class="sp-detail" id="spCity">São Paulo, SP</div>
+    <div class="sp-meta" id="spTime">há 3 minutos</div>
+  </div>
+</div>
+
 <footer>
   <div class="wrap">
     <p class="disclaimer">Aviso importante: este é um guia educativo e de curiosidade sobre identificação de pedras. Para avaliações oficiais de alto valor, sempre consulte um gemólogo profissional.</p>
@@ -948,6 +1002,70 @@
 
     tick();
     const interval = setInterval(tick, 1000);
+  })();
+
+  // ===== Popup de prova social (compras recentes) =====
+  (function(){
+    const popup = document.getElementById('salesPopup');
+    const nameEl = document.getElementById('spName');
+    const cityEl = document.getElementById('spCity');
+    const timeEl = document.getElementById('spTime');
+    if(!popup) return;
+
+    const pessoas = [
+      { nome:'Mariana C.', cidade:'São Paulo, SP' },
+      { nome:'Carlos E.', cidade:'Belo Horizonte, MG' },
+      { nome:'Fernanda R.', cidade:'Porto Alegre, RS' },
+      { nome:'Diego S.', cidade:'Ouro Preto, MG' },
+      { nome:'Juliana P.', cidade:'Curitiba, PR' },
+      { nome:'Ricardo A.', cidade:'Salvador, BA' },
+      { nome:'Patrícia L.', cidade:'Recife, PE' },
+      { nome:'Bruno M.', cidade:'Governador Valadares, MG' },
+      { nome:'Camila O.', cidade:'Brasília, DF' },
+      { nome:'Eduardo N.', cidade:'Teófilo Otoni, MG' },
+      { nome:'Larissa F.', cidade:'Fortaleza, CE' },
+      { nome:'Rafael T.', cidade:'Florianópolis, SC' },
+      { nome:'Beatriz S.', cidade:'Goiânia, GO' },
+      { nome:'Thiago V.', cidade:'Campinas, SP' },
+      { nome:'Aline D.', cidade:'Vitória, ES' }
+    ];
+
+    let lastIndex = -1;
+
+    function pickPerson(){
+      let i;
+      do{ i = Math.floor(Math.random() * pessoas.length); }while(i === lastIndex);
+      lastIndex = i;
+      return pessoas[i];
+    }
+
+    function randomTimeText(){
+      const min = Math.floor(Math.random() * 18) + 1; // 1 a 18 minutos
+      return min === 1 ? 'há 1 minuto' : `há ${min} minutos`;
+    }
+
+    function showPopup(){
+      const p = pickPerson();
+      nameEl.textContent = p.nome;
+      cityEl.textContent = p.cidade;
+      timeEl.textContent = randomTimeText();
+      popup.classList.add('show');
+
+      const visibleTime = 5000 + Math.random() * 1500; // 5 a 6.5s visível
+      setTimeout(()=>{ popup.classList.remove('show'); }, visibleTime);
+    }
+
+    function schedule(){
+      const delay = 9000 + Math.random() * 14000; // 9 a 23s entre popups
+      setTimeout(()=>{
+        showPopup();
+        schedule();
+      }, delay);
+    }
+
+    // primeira aparição um pouco mais rápida
+    setTimeout(showPopup, 4000);
+    schedule();
   })();
 
   document.querySelectorAll('.faq-item').forEach(item=>{
