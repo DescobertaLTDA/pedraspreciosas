@@ -469,10 +469,28 @@
     }
     .hmp-slide{
       position:absolute; inset:0; width:100%; height:100%;
-      object-fit:cover; display:block;
       opacity:0; transition:opacity .6s ease;
     }
+    .hmp-slide img{
+      width:100%; height:100%; object-fit:cover; display:block;
+    }
     .hmp-slide.active{opacity:1;}
+    .hmp-price{
+      position:absolute; top:12px; right:12px; z-index:2;
+      background:var(--parchment);
+      border-radius:8px;
+      padding:7px 11px;
+      box-shadow:0 8px 18px rgba(0,0,0,0.35);
+      text-align:right;
+      line-height:1.15;
+    }
+    .hmp-price .hmp-price-label{
+      font-family:'Space Mono',monospace; font-size:8.5px; letter-spacing:0.05em;
+      text-transform:uppercase; color:var(--ink-soft);
+    }
+    .hmp-price .hmp-price-value{
+      font-family:'Fraunces',serif; font-weight:700; font-size:14.5px; color:var(--ink);
+    }
     .hero-mobile-photo::after{
       content:'';
       position:absolute; left:0; right:0; bottom:0; height:60%;
@@ -605,12 +623,30 @@
     <div>
       <div class="hero-mobile-photo" id="heroCarousel">
         <div class="hmp-track">
-          <img src="pedra1.jpeg" alt="Quartzo Rosa" class="hmp-slide active">
-          <img src="pedra2.jpeg" alt="Ametista sendo segurada na mão" class="hmp-slide">
-          <img src="pedra3.jpeg" alt="Citrino" class="hmp-slide">
-          <img src="pedra4.jpeg" alt="Turmalina" class="hmp-slide">
-          <img src="pedra5.jpeg" alt="Topázio" class="hmp-slide">
-          <img src="pedra6.jpeg" alt="Água-marinha" class="hmp-slide">
+          <div class="hmp-slide active">
+            <img src="pedra1.jpeg" alt="Quartzo Rosa">
+            <div class="hmp-price"><div class="hmp-price-label">Vende por até</div><div class="hmp-price-value">R$150</div></div>
+          </div>
+          <div class="hmp-slide">
+            <img src="pedra2.jpeg" alt="Ametista sendo segurada na mão">
+            <div class="hmp-price"><div class="hmp-price-label">Vende por até</div><div class="hmp-price-value">R$500</div></div>
+          </div>
+          <div class="hmp-slide">
+            <img src="pedra3.jpeg" alt="Citrino">
+            <div class="hmp-price"><div class="hmp-price-label">Vende por até</div><div class="hmp-price-value">R$200</div></div>
+          </div>
+          <div class="hmp-slide">
+            <img src="pedra4.jpeg" alt="Turmalina">
+            <div class="hmp-price"><div class="hmp-price-label">Vende por até</div><div class="hmp-price-value">R$800+</div></div>
+          </div>
+          <div class="hmp-slide">
+            <img src="pedra5.jpeg" alt="Topázio">
+            <div class="hmp-price"><div class="hmp-price-label">Vende por até</div><div class="hmp-price-value">R$500</div></div>
+          </div>
+          <div class="hmp-slide">
+            <img src="pedra6.jpeg" alt="Água-marinha">
+            <div class="hmp-price"><div class="hmp-price-label">Vende por até</div><div class="hmp-price-value">R$700+</div></div>
+          </div>
         </div>
         <div class="hmp-dots">
           <span class="hmp-dot active"></span>
