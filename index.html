@@ -136,13 +136,13 @@
   .hero-meta svg{width:14px;height:14px; stroke:var(--turmalina);}
 
   /* hero specimen stack */
-  .specimen-stack{position:relative; height:460px;}
+  .specimen-stack{position:relative; height:640px;}
   .tag{
     position:absolute;
-    width:230px;
+    width:190px;
     background:var(--parchment);
     border-radius:4px;
-    padding:20px 18px 18px;
+    padding:16px 16px 14px;
     box-shadow:var(--shadow);
     border:1px solid rgba(0,0,0,0.06);
   }
@@ -159,21 +159,28 @@
     box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
   }
   .tag-num{
-    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--ink-soft);
+    font-family:'Space Mono',monospace; font-size:10px; color:var(--ink-soft);
     letter-spacing:0.06em; margin-top:8px;
   }
   .tag-name{
-    font-family:'Fraunces',serif; font-weight:600; font-size:20px; color:var(--ink); margin-top:4px;
+    font-family:'Fraunces',serif; font-weight:600; font-size:18px; color:var(--ink); margin-top:4px;
   }
   .tag-price{
-    margin-top:10px; padding-top:10px; border-top:1px dashed rgba(42,33,24,0.25);
-    font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft);
+    margin-top:8px; padding-top:8px; border-top:1px dashed rgba(42,33,24,0.25);
+    font-family:'Space Mono',monospace; font-size:12px; color:var(--ink-soft);
   }
-  .tag-price b{color:var(--ink); font-size:15px;}
-  .gem-icon{width:46px; height:46px;}
-  .t1{top:0; left:10%; transform:rotate(-7deg); z-index:3;}
-  .t2{top:120px; left:44%; transform:rotate(5deg); z-index:4;}
-  .t3{top:260px; left:6%; transform:rotate(3deg); z-index:2;}
+  .tag-price b{color:var(--ink); font-size:13.5px;}
+  .tag-photo{
+    width:100%; aspect-ratio:1/1; object-fit:cover;
+    border-radius:4px; margin-top:4px; display:block;
+    box-shadow:0 6px 14px rgba(0,0,0,0.2);
+  }
+  .t1{top:0; left:4%; transform:rotate(-7deg); z-index:3;}
+  .t2{top:30px; left:52%; transform:rotate(6deg); z-index:5;}
+  .t3{top:210px; left:24%; transform:rotate(-4deg); z-index:4;}
+  .t4{top:250px; left:64%; transform:rotate(4deg); z-index:2;}
+  .t5{top:430px; left:2%; transform:rotate(5deg); z-index:6;}
+  .t6{top:450px; left:48%; transform:rotate(-6deg); z-index:1;}
 
   /* ===== marquee strip ===== */
   .strip{
@@ -355,7 +362,7 @@
 
   @media (max-width:980px){
     .hero-grid{grid-template-columns:1fr;}
-    .specimen-stack{height:380px; margin:0 auto; max-width:400px;}
+    .specimen-stack{height:560px; margin:0 auto; max-width:420px;}
     .problem-grid{grid-template-columns:1fr;}
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr); overflow-x:visible;}
@@ -427,24 +434,45 @@
     <div class="specimen-stack">
       <div class="tag t1">
         <div class="hole"></div>
-        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e8a6b8"/><polygon points="32,6 50,22 32,30" fill="#f2c3cf"/><polygon points="14,22 32,30 20,58" fill="#d386a0"/><polygon points="32,30 50,22 44,58" fill="#c96f8f"/></svg>
+        <img src="pedra1.jpeg" alt="Quartzo Rosa" class="tag-photo">
         <div class="tag-num">ESPÉCIME Nº 001</div>
         <div class="tag-name">Quartzo Rosa</div>
         <div class="tag-price">faixa <b>R$15 – R$150</b></div>
       </div>
       <div class="tag t2">
         <div class="hole"></div>
-        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#9169c9"/><polygon points="32,6 50,22 32,30" fill="#b18ee0"/><polygon points="14,22 32,30 20,58" fill="#7a4fab"/><polygon points="32,30 50,22 44,58" fill="#663f96"/></svg>
+        <img src="pedra2.jpeg" alt="Ametista" class="tag-photo">
         <div class="tag-num">ESPÉCIME Nº 002</div>
         <div class="tag-name">Ametista</div>
         <div class="tag-price">faixa <b>R$20 – R$500</b></div>
       </div>
       <div class="tag t3">
         <div class="hole"></div>
-        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e3ad2e"/><polygon points="32,6 50,22 32,30" fill="#f0c766"/><polygon points="14,22 32,30 20,58" fill="#c8901c"/><polygon points="32,30 50,22 44,58" fill="#b57c12"/></svg>
+        <img src="pedra3.jpeg" alt="Citrino" class="tag-photo">
         <div class="tag-num">ESPÉCIME Nº 003</div>
         <div class="tag-name">Citrino</div>
         <div class="tag-price">faixa <b>R$15 – R$200</b></div>
+      </div>
+      <div class="tag t4">
+        <div class="hole"></div>
+        <img src="pedra4.jpeg" alt="Turmalina" class="tag-photo">
+        <div class="tag-num">ESPÉCIME Nº 004</div>
+        <div class="tag-name">Turmalina</div>
+        <div class="tag-price">faixa <b>R$50 – R$800+</b></div>
+      </div>
+      <div class="tag t5">
+        <div class="hole"></div>
+        <img src="pedra5.jpeg" alt="Topázio" class="tag-photo">
+        <div class="tag-num">ESPÉCIME Nº 005</div>
+        <div class="tag-name">Topázio</div>
+        <div class="tag-price">faixa <b>R$40 – R$500</b></div>
+      </div>
+      <div class="tag t6">
+        <div class="hole"></div>
+        <img src="pedra6.jpeg" alt="Água-marinha" class="tag-photo">
+        <div class="tag-num">ESPÉCIME Nº 006</div>
+        <div class="tag-name">Água-marinha</div>
+        <div class="tag-price">faixa <b>R$60 – R$700+</b></div>
       </div>
     </div>
   </div>
