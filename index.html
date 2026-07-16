@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedras Valiosas — O Guia Completo para Identificar o que Você Pode Ter em Casa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#17151b;
+    --bg-alt:#1e1a23;
+    --bg-alt2:#211c28;
+    --parchment:#f1e7d3;
+    --parchment-dim:#e7dabf;
+    --ink:#2a2118;
+    --ink-soft:#5a4c3a;
+    --ink-light:#efe6d8;
+    --ink-mute:#b4a99a;
+    --amethyst:#9169c9;
+    --amethyst-deep:#6a4a99;
+    --citrino:#e3ad2e;
+    --quartzo:#e8a6b8;
+    --turmalina:#4f9a72;
+    --topazio:#e08a2e;
+    --line:rgba(240,230,210,0.14);
+    --line-strong:rgba(240,230,210,0.28);
+    --shadow:0 20px 50px rgba(0,0,0,0.45);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink-light);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:600; letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--citrino);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:22px; height:1px;
+    background:var(--citrino);
+    display:inline-block;
+  }
+  /* texture */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:2; opacity:0.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== NAV ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(23,21,27,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Fraunces',serif; font-weight:600; font-size:19px; letter-spacing:0.01em;
+    display:flex; align-items:center; gap:9px;
+  }
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--amethyst); box-shadow:0 0 10px var(--amethyst);}
+  .nav-cta{
+    font-family:'Space Mono',monospace; font-size:13px; font-weight:700;
+    background:var(--citrino); color:#241a06; padding:10px 20px; border-radius:3px;
+    text-decoration:none; letter-spacing:0.02em;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .nav-cta:hover{transform:translateY(-1px); box-shadow:0 6px 18px rgba(227,173,46,0.35);}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    padding:88px 0 70px;
+    background:
+      radial-gradient(ellipse 900px 500px at 82% -10%, rgba(145,105,201,0.25), transparent 60%),
+      radial-gradient(ellipse 700px 400px at 10% 100%, rgba(227,173,46,0.12), transparent 60%);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(34px,4.6vw,58px);
+    line-height:1.06;
+    color:var(--ink-light);
+  }
+  .hero h1 em{
+    font-style:italic; font-weight:500;
+    background:linear-gradient(100deg,var(--citrino),var(--quartzo) 60%,var(--amethyst));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-sub{
+    margin-top:22px; font-size:18px; color:var(--ink-mute); max-width:480px;
+  }
+  .hero-cta-row{
+    margin-top:34px; display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  }
+  .btn-primary{
+    font-family:'Space Mono',monospace; font-weight:700; font-size:14.5px;
+    background:var(--citrino); color:#241a06;
+    padding:16px 30px; border-radius:3px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:10px;
+    box-shadow:0 10px 30px rgba(227,173,46,0.25);
+    transition:transform .15s ease, box-shadow .15s ease;
+    border:none; cursor:pointer;
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 14px 34px rgba(227,173,46,0.4);}
+  .price-inline{
+    font-family:'Space Mono',monospace; font-size:13.5px; color:var(--ink-mute);
+  }
+  .price-inline b{color:var(--parchment); font-size:16px;}
+  .hero-meta{
+    margin-top:28px; display:flex; gap:26px; flex-wrap:wrap;
+    font-family:'Space Mono',monospace; font-size:12.5px; color:var(--ink-mute);
+  }
+  .hero-meta span{display:flex; align-items:center; gap:7px;}
+  .hero-meta svg{width:14px;height:14px; stroke:var(--turmalina);}
+
+  /* hero specimen stack */
+  .specimen-stack{position:relative; height:460px;}
+  .tag{
+    position:absolute;
+    width:230px;
+    background:var(--parchment);
+    border-radius:4px;
+    padding:20px 18px 18px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(0,0,0,0.06);
+  }
+  .tag::before{
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:14px;
+    background-image:radial-gradient(circle at 14px 7px, transparent 5px, var(--parchment) 5.5px);
+    background-size:28px 14px;
+    background-repeat:repeat-x;
+  }
+  .tag .hole{
+    position:absolute; top:8px; left:50%; transform:translateX(-50%);
+    width:8px; height:8px; border-radius:50%; background:var(--bg);
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
+  }
+  .tag-num{
+    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--ink-soft);
+    letter-spacing:0.06em; margin-top:8px;
+  }
+  .tag-name{
+    font-family:'Fraunces',serif; font-weight:600; font-size:20px; color:var(--ink); margin-top:4px;
+  }
+  .tag-price{
+    margin-top:10px; padding-top:10px; border-top:1px dashed rgba(42,33,24,0.25);
+    font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft);
+  }
+  .tag-price b{color:var(--ink); font-size:15px;}
+  .gem-icon{width:46px; height:46px;}
+  .t1{top:0; left:10%; transform:rotate(-7deg); z-index:3;}
+  .t2{top:120px; left:44%; transform:rotate(5deg); z-index:4;}
+  .t3{top:260px; left:6%; transform:rotate(3deg); z-index:2;}
+
+  /* ===== marquee strip ===== */
+  .strip{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:var(--bg-alt);
+    padding:14px 0; overflow:hidden;
+  }
+  .strip-track{
+    display:flex; gap:48px; white-space:nowrap; width:max-content;
+    animation:scroll 32s linear infinite;
+    font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-mute); letter-spacing:0.04em;
+  }
+  .strip-track span{display:flex; align-items:center; gap:10px;}
+  .strip-track span::after{content:'◆'; color:var(--amethyst); font-size:8px; margin-left:38px;}
+  @keyframes scroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+  /* ===== SECTION generic ===== */
+  section{padding:96px 0;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head h2{font-size:clamp(28px,3.4vw,40px); margin-top:14px; color:var(--parchment);}
+  .section-head p{margin-top:16px; color:var(--ink-mute); font-size:16.5px;}
+
+  /* ===== PROBLEM ===== */
+  .problem{background:var(--bg-alt);}
+  .problem-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden;}
+  .problem-card{background:var(--bg-alt2); padding:34px 28px;}
+  .problem-card .q-num{font-family:'Space Mono',monospace; font-size:12px; color:var(--citrino);}
+  .problem-card p{margin-top:14px; font-size:16px; color:var(--ink-light); font-weight:500;}
+
+  /* ===== FEATURES grid ===== */
+  .feat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:22px;}
+  .feat-card{
+    background:var(--bg-alt); border:1px solid var(--line); border-radius:8px;
+    padding:28px 22px; transition:border-color .2s ease, transform .2s ease;
+  }
+  .feat-card:hover{border-color:var(--line-strong); transform:translateY(-4px);}
+  .feat-icon{width:34px; height:34px; margin-bottom:16px;}
+  .feat-card h3{font-size:17px; color:var(--parchment); font-weight:600;}
+  .feat-card p{margin-top:8px; font-size:14.5px; color:var(--ink-mute);}
+
+  /* ===== CATALOG / specimen cards ===== */
+  .catalog{background:var(--bg-alt);}
+  .catalog-scroller{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:20px;
+  }
+  .spec-card{
+    background:var(--parchment);
+    border-radius:4px;
+    padding:24px 20px 20px;
+    position:relative;
+    box-shadow:0 14px 30px rgba(0,0,0,0.3);
+  }
+  .spec-card::before{
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:12px;
+    background-image:radial-gradient(circle at 12px 6px, transparent 4.5px, var(--parchment) 5px);
+    background-size:24px 12px; background-repeat:repeat-x;
+  }
+  .spec-card .hole{position:absolute; top:7px; left:50%; transform:translateX(-50%); width:7px;height:7px;border-radius:50%; background:var(--bg-alt); box-shadow:inset 0 1px 2px rgba(0,0,0,0.5);}
+  .spec-num{font-family:'Space Mono',monospace; font-size:10px; color:var(--ink-soft); letter-spacing:0.08em; margin-top:10px;}
+  .spec-card .gem-icon{width:52px; height:52px; margin:14px 0 10px;}
+  .spec-name{font-family:'Fraunces',serif; font-size:20px; font-weight:600; color:var(--ink);}
+  .spec-sci{font-size:12px; color:var(--ink-soft); font-style:italic; margin-top:2px;}
+  .spec-row{margin-top:14px; padding-top:12px; border-top:1px dashed rgba(42,33,24,0.25);}
+  .spec-row .lbl{font-family:'Space Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft);}
+  .spec-row .val{font-size:12.5px; color:var(--ink); margin-top:3px; line-height:1.4;}
+  .spec-price{margin-top:14px; font-family:'Space Mono',monospace; font-size:12.5px; color:var(--ink-soft);}
+  .spec-price b{color:var(--ink); font-size:14px;}
+  .catalog-note{
+    margin-top:34px; text-align:center; color:var(--ink-mute); font-size:14.5px;
+    font-family:'Space Mono',monospace;
+  }
+  .catalog-note b{color:var(--citrino);}
+
+  /* ===== HOW IT WORKS ===== */
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:30px;}
+  .step{position:relative; padding-left:0;}
+  .step-num{
+    font-family:'Fraunces',serif; font-size:52px; font-weight:600; color:transparent;
+    -webkit-text-stroke:1.5px var(--amethyst); line-height:1; opacity:0.9;
+  }
+  .step h3{margin-top:14px; font-size:19px; color:var(--parchment);}
+  .step p{margin-top:10px; color:var(--ink-mute); font-size:15px;}
+
+  /* ===== TESTIMONIALS ===== */
+  .testi{background:var(--bg-alt);}
+  .testi-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .testi-card{
+    background:var(--bg-alt2); border:1px solid var(--line); border-radius:8px; padding:28px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .stars{color:var(--citrino); font-size:14px; letter-spacing:2px;}
+  .testi-card p{font-size:15px; color:var(--ink-light); line-height:1.6;}
+  .testi-who{display:flex; align-items:center; gap:12px; margin-top:auto;}
+  .avatar{width:36px;height:36px;border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:600; font-size:14px; color:#fff;}
+  .testi-who .name{font-size:13.5px; font-weight:600; color:var(--parchment);}
+  .testi-who .loc{font-size:12px; color:var(--ink-mute);}
+  .testi-flag{font-family:'Space Mono',monospace; font-size:11px; color:var(--ink-mute); text-align:center; margin-top:30px; opacity:0.7;}
+
+  /* ===== PRICING ===== */
+  .pricing{
+    display:flex; justify-content:center;
+  }
+  .receipt{
+    width:100%; max-width:460px;
+    background:var(--parchment);
+    border-radius:6px;
+    padding:40px 38px 34px;
+    color:var(--ink);
+    position:relative;
+    box-shadow:0 30px 70px rgba(0,0,0,0.5);
+  }
+  .receipt::after{
+    content:'';
+    position:absolute; left:0; right:0; bottom:-1px; height:14px;
+    background:
+      linear-gradient(135deg, var(--parchment) 50%, transparent 50%),
+      linear-gradient(-135deg, var(--parchment) 50%, transparent 50%);
+    background-size:16px 16px; background-position:bottom;
+    background-repeat:repeat-x;
+    transform:translateY(100%);
+  }
+  .receipt-head{text-align:center; border-bottom:1px dashed rgba(42,33,24,0.3); padding-bottom:20px;}
+  .receipt-head .eyebrow{color:var(--amethyst-deep); justify-content:center;}
+  .receipt-head .eyebrow::before{background:var(--amethyst-deep);}
+  .receipt-head h2{font-size:26px; margin-top:10px; color:var(--ink);}
+  .receipt-list{margin-top:22px; display:flex; flex-direction:column; gap:13px;}
+  .receipt-list li{display:flex; gap:10px; font-size:14.5px; color:var(--ink-soft); list-style:none; align-items:flex-start;}
+  .receipt-list svg{width:16px;height:16px; flex-shrink:0; margin-top:2px; stroke:var(--turmalina);}
+  .receipt-price{
+    margin-top:26px; padding-top:22px; border-top:1px dashed rgba(42,33,24,0.3);
+    display:flex; align-items:baseline; justify-content:center; gap:12px;
+  }
+  .receipt-price .old{font-family:'Space Mono',monospace; color:var(--ink-soft); text-decoration:line-through; font-size:16px;}
+  .receipt-price .new{font-family:'Fraunces',serif; font-weight:700; font-size:42px; color:var(--ink);}
+  .receipt-price .new sup{font-size:18px; top:-1.2em;}
+  .receipt-cta{
+    margin-top:22px; display:block; text-align:center; width:100%;
+    background:var(--ink); color:var(--parchment);
+    font-family:'Space Mono',monospace; font-weight:700; font-size:14.5px;
+    padding:17px; border-radius:4px; text-decoration:none; border:none; cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .receipt-cta:hover{transform:translateY(-2px);}
+  .receipt-sub{margin-top:14px; text-align:center; font-size:12px; color:var(--ink-soft); font-family:'Space Mono',monospace;}
+
+  /* ===== FAQ ===== */
+  .faq-list{max-width:760px;}
+  .faq-item{border-bottom:1px solid var(--line); padding:22px 0;}
+  .faq-q{
+    display:flex; justify-content:space-between; align-items:center; cursor:pointer;
+    font-size:17px; color:var(--parchment); font-weight:500; font-family:'Fraunces',serif;
+  }
+  .faq-q .plus{font-family:'Space Mono',monospace; font-size:20px; color:var(--citrino); transition:transform .2s ease;}
+  .faq-item.open .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .3s ease;}
+  .faq-a p{padding-top:14px; color:var(--ink-mute); font-size:15px; max-width:600px;}
+
+  /* ===== FINAL CTA ===== */
+  .final-cta{
+    text-align:center;
+    background:
+      radial-gradient(ellipse 600px 300px at 50% 0%, rgba(145,105,201,0.22), transparent 70%),
+      var(--bg-alt);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .final-cta h2{font-size:clamp(28px,4vw,42px); color:var(--parchment); max-width:640px; margin:0 auto;}
+  .final-cta p{margin-top:16px; color:var(--ink-mute); font-size:16.5px;}
+  .final-cta .btn-primary{margin-top:30px;}
+
+  footer{padding:44px 0; text-align:center;}
+  footer .disclaimer{font-size:12.5px; color:var(--ink-mute); max-width:560px; margin:0 auto 18px; line-height:1.6;}
+  footer .fine{font-family:'Space Mono',monospace; font-size:11.5px; color:#5a5460;}
+
+  @media (max-width:980px){
+    .hero-grid{grid-template-columns:1fr;}
+    .specimen-stack{height:380px; margin:0 auto; max-width:400px;}
+    .problem-grid{grid-template-columns:1fr;}
+    .feat-grid{grid-template-columns:repeat(2,1fr);}
+    .catalog-scroller{grid-template-columns:repeat(2,1fr); overflow-x:visible;}
+    .steps{grid-template-columns:1fr; gap:38px;}
+    .testi-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:520px){
+    .feat-grid{grid-template-columns:1fr;}
+    section{padding:64px 0;}
+    .hero{padding:56px 0 40px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .strip-track{animation:none;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <nav>
+    <div class="logo"><span class="dot"></span>Pedras Valiosas</div>
+    <a href="#preco" class="nav-cta">Quero o guia — R$19,99</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Guia digital em PDF · 100% em português</div>
+      <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
+      <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
+      <div class="hero-cta-row">
+        <a href="#preco" class="btn-primary">
+          Acessar o catálogo agora
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <span class="price-inline">por apenas <b>R$19,99</b> · acesso imediato</span>
+      </div>
+      <div class="hero-meta">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Sem termos técnicos de geologia</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Foco nas pedras do Brasil</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Leia no celular ou impresso</span>
+      </div>
+    </div>
+
+    <div class="specimen-stack">
+      <div class="tag t1">
+        <div class="hole"></div>
+        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e8a6b8"/><polygon points="32,6 50,22 32,30" fill="#f2c3cf"/><polygon points="14,22 32,30 20,58" fill="#d386a0"/><polygon points="32,30 50,22 44,58" fill="#c96f8f"/></svg>
+        <div class="tag-num">ESPÉCIME Nº 001</div>
+        <div class="tag-name">Quartzo Rosa</div>
+        <div class="tag-price">faixa <b>R$15 – R$150</b></div>
+      </div>
+      <div class="tag t2">
+        <div class="hole"></div>
+        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#9169c9"/><polygon points="32,6 50,22 32,30" fill="#b18ee0"/><polygon points="14,22 32,30 20,58" fill="#7a4fab"/><polygon points="32,30 50,22 44,58" fill="#663f96"/></svg>
+        <div class="tag-num">ESPÉCIME Nº 002</div>
+        <div class="tag-name">Ametista</div>
+        <div class="tag-price">faixa <b>R$20 – R$500</b></div>
+      </div>
+      <div class="tag t3">
+        <div class="hole"></div>
+        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e3ad2e"/><polygon points="32,6 50,22 32,30" fill="#f0c766"/><polygon points="14,22 32,30 20,58" fill="#c8901c"/><polygon points="32,30 50,22 44,58" fill="#b57c12"/></svg>
+        <div class="tag-num">ESPÉCIME Nº 003</div>
+        <div class="tag-name">Citrino</div>
+        <div class="tag-price">faixa <b>R$15 – R$200</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="strip-track">
+    <span>QUARTZO ROSA</span><span>AMETISTA</span><span>CITRINO</span><span>TURMALINA</span><span>TOPÁZIO</span>
+    <span>QUARTZO ROSA</span><span>AMETISTA</span><span>CITRINO</span><span>TURMALINA</span><span>TOPÁZIO</span>
+  </div>
+</div>
+
+<!-- ============ PROBLEMA ============ -->
+<section class="problem">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Você já passou por isso?</div>
+      <h2>A maioria das pessoas descarta ou esquece pedras que valem dinheiro.</h2>
+      <p>Elas ficam em gavetas, terrenos de família ou baús de herança — simplesmente porque ninguém ensinou como reconhecê-las.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="q-num">01</div>
+        <p>"Achei essa pedra estranha no quintal, será que é só uma pedra normal?"</p>
+      </div>
+      <div class="problem-card">
+        <div class="q-num">02</div>
+        <p>"Herdei uma caixa de pedras da minha avó e não faço ideia do que fazer com elas."</p>
+      </div>
+      <div class="problem-card">
+        <div class="q-num">03</div>
+        <p>"Queria aprender, mas todo material sobre gemologia é complicado demais."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ O QUE VOCÊ VAI APRENDER ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">O que você vai aprender</div>
+      <h2>Identificação prática, sem faculdade de geologia.</h2>
+      <p>Cada pedra do catálogo é explicada da mesma forma simples — para você comparar com o que tem em mãos e já saber o próximo passo.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="#e3ad2e" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+        <h3>Como reconhecer</h3>
+        <p>Cor, brilho, transparência e textura descritos em linguagem simples, sem jargão técnico.</p>
+      </div>
+      <div class="feat-card">
+        <svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="#4f9a72" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        <h3>Faixa de preço real</h3>
+        <p>Valores de mercado praticados hoje, por peça bruta ou lapidada, sem promessas exageradas.</p>
+      </div>
+      <div class="feat-card">
+        <svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="#9169c9" stroke-width="1.8"><path d="M12 2C8 6 5 9.5 5 13a7 7 0 0014 0c0-3.5-3-7-7-11z"/></svg>
+        <h3>Onde é encontrada</h3>
+        <p>Os estados brasileiros onde cada pedra costuma aparecer — útil para quem já garimpa ou herdou terreno.</p>
+      </div>
+      <div class="feat-card">
+        <svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="#e8a6b8" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>
+        <h3>Nome científico</h3>
+        <p>A composição mineral de cada pedra, caso você queira aprofundar ou confirmar com um especialista.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATÁLOGO PREVIEW ============ -->
+<section class="catalog" id="catalogo">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Prévia do catálogo</div>
+      <h2>5 das pedras mais procuradas — direto do guia.</h2>
+      <p>Cada página segue este mesmo formato de ficha, fácil de consultar sempre que você encontrar uma pedra nova.</p>
+    </div>
+
+    <div class="catalog-scroller">
+
+      <div class="spec-card">
+        <div class="hole"></div>
+        <div class="spec-num">Nº 001</div>
+        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e8a6b8"/><polygon points="32,6 50,22 32,30" fill="#f2c3cf"/><polygon points="14,22 32,30 20,58" fill="#d386a0"/><polygon points="32,30 50,22 44,58" fill="#c96f8f"/></svg>
+        <div class="spec-name">Quartzo Rosa</div>
+        <div class="spec-sci">Variedade rosada do quartzo</div>
+        <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Rosa suave e leitoso, translucidez baixa a média.</div></div>
+        <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Minas Gerais e Bahia</div></div>
+        <div class="spec-price">R$15 a <b>R$150</b></div>
+      </div>
+
+      <div class="spec-card">
+        <div class="hole"></div>
+        <div class="spec-num">Nº 002</div>
+        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#9169c9"/><polygon points="32,6 50,22 32,30" fill="#b18ee0"/><polygon points="14,22 32,30 20,58" fill="#7a4fab"/><polygon points="32,30 50,22 44,58" fill="#663f96"/></svg>
+        <div class="spec-name">Ametista</div>
+        <div class="spec-sci">Variedade violeta do quartzo</div>
+        <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Lilás claro a roxo intenso, brilho vítreo, forma geodos.</div></div>
+        <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Rio Grande do Sul</div></div>
+        <div class="spec-price">R$20 a <b>R$300+</b></div>
+      </div>
+
+      <div class="spec-card">
+        <div class="hole"></div>
+        <div class="spec-num">Nº 003</div>
+        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e3ad2e"/><polygon points="32,6 50,22 32,30" fill="#f0c766"/><polygon points="14,22 32,30 20,58" fill="#c8901c"/><polygon points="32,30 50,22 44,58" fill="#b57c12"/></svg>
+        <div class="spec-name">Citrino</div>
+        <div class="spec-sci">Variedade amarela/laranja do quartzo</div>
+        <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Amarelo-dourado a laranja-âmbar, brilho vítreo.</div></div>
+        <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Rio Grande do Sul e Minas Gerais</div></div>
+        <div class="spec-price">R$15 a <b>R$200</b></div>
+      </div>
+
+      <div class="spec-card">
+        <div class="hole"></div>
+        <div class="spec-num">Nº 004</div>
+        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#4f9a72"/><polygon points="32,6 50,22 32,30" fill="#7cbf98"/><polygon points="14,22 32,30 20,58" fill="#e8a6b8"/><polygon points="32,30 50,22 44,58" fill="#3d7d5b"/></svg>
+        <div class="spec-name">Turmalina</div>
+        <div class="spec-sci">Grupo de silicatos boratados</div>
+        <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Várias cores, cristais alongados com estrias longitudinais.</div></div>
+        <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Minas Gerais e Paraíba</div></div>
+        <div class="spec-price">R$50 a <b>R$800+</b></div>
+      </div>
+
+      <div class="spec-card">
+        <div class="hole"></div>
+        <div class="spec-num">Nº 005</div>
+        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e08a2e"/><polygon points="32,6 50,22 32,30" fill="#eeb066"/><polygon points="14,22 32,30 20,58" fill="#c26e18"/><polygon points="32,30 50,22 44,58" fill="#a85c10"/></svg>
+        <div class="spec-name">Topázio</div>
+        <div class="spec-sci">Silicato de alumínio e flúor</div>
+        <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Cristais prismáticos, cor imperial dourada ou azul.</div></div>
+        <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Ouro Preto (MG)</div></div>
+        <div class="spec-price">R$40 a <b>R$500</b></div>
+      </div>
+
+    </div>
+
+    <div class="catalog-note">+ mais pedras dentro do guia completo, sempre no mesmo formato de ficha rápida</div>
+  </div>
+</section>
+
+<!-- ============ COMO FUNCIONA ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Como funciona</div>
+      <h2>Do "será que isso vale alguma coisa" até a resposta, em 3 passos.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Compare a sua pedra</h3>
+        <p>Observe cor, brilho e textura e compare com as fichas do catálogo até encontrar a mais parecida.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Confira a faixa de valor</h3>
+        <p>Veja quanto peças parecidas costumam valer no mercado — bruta, polida ou lapidada.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Decida o próximo passo</h3>
+        <p>Guarde, venda ou leve a um gemólogo para uma avaliação oficial, com mais segurança sobre o que tem em mãos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="testi">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Quem já usou</div>
+      <h2>Pensado para quem nunca estudou nada disso.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Achei que era só quartzo comum, comparei com o catálogo e era ametista. Nunca imaginei que teria valor."</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:var(--amethyst-deep)">R</div>
+          <div><div class="name">Renata M.</div><div class="loc">Belo Horizonte, MG</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Herdei uma caixa de pedras do meu avô que trabalhava com garimpo. Consegui identificar quase tudo em uma tarde."</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:#c8901c">D</div>
+          <div><div class="name">Diego S.</div><div class="loc">Ouro Preto, MG</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Linguagem bem simples, sem termo técnico. Deu pra entender de primeira mesmo sem saber nada de geologia."</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:#3d7d5b">L</div>
+          <div><div class="name">Luciana F.</div><div class="loc">Porto Alegre, RS</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-flag">* depoimentos ilustrativos — substitua pelos relatos reais dos seus primeiros leitores</div>
+  </div>
+</section>
+
+<!-- ============ PREÇO ============ -->
+<section id="preco">
+  <div class="wrap pricing">
+    <div class="receipt">
+      <div class="receipt-head">
+        <div class="eyebrow">Acesso completo</div>
+        <h2>Pedras Valiosas — Guia Completo</h2>
+      </div>
+      <ul class="receipt-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Catálogo completo em PDF, para ler no celular, tablet ou computador</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Fichas de identificação com preço de mercado atualizado</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Foco nas pedras encontradas no Brasil</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Acesso imediato após a confirmação da compra</li>
+      </ul>
+      <div class="receipt-price">
+        <span class="old">R$47,00</span>
+        <span class="new"><sup>R$</sup>19,99</span>
+      </div>
+      <a href="#" class="receipt-cta">Comprar agora — acesso imediato</a>
+      <div class="receipt-sub">Pagamento único · sem assinatura · PDF digital</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Perguntas frequentes</div>
+      <h2>Ainda com dúvidas?</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q"><span>Preciso saber alguma coisa de geologia para entender o guia?</span><span class="plus">+</span></div>
+        <div class="faq-a"><p>Não. O guia foi escrito especificamente para quem nunca teve contato com geologia ou gemologia — sem termos complicados.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>O guia identifica o valor exato da minha pedra?</span><span class="plus">+</span></div>
+        <div class="faq-a"><p>Ele mostra faixas de preço praticadas no mercado como ponto de partida. Para uma avaliação oficial de alto valor, sempre recomendamos consultar um gemólogo profissional.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Como recebo o material?</span><span class="plus">+</span></div>
+        <div class="faq-a"><p>É um PDF digital com acesso imediato após a confirmação do pagamento — sem necessidade de espera ou envio físico.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Funciona para pedras encontradas fora do Brasil?</span><span class="plus">+</span></div>
+        <div class="faq-a"><p>O foco do guia é nas pedras mais comuns encontradas em território brasileiro, mas os métodos de identificação (cor, brilho, transparência) se aplicam de forma geral.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final-cta">
+  <div class="wrap">
+    <h2>Da próxima vez que encontrar uma pedra estranha, você vai saber o que fazer.</h2>
+    <p>Catálogo completo, em português, por R$19,99.</p>
+    <a href="#preco" class="btn-primary">Quero identificar minhas pedras</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Aviso importante: este é um guia educativo e de curiosidade sobre identificação de pedras. Para avaliações oficiais de alto valor, sempre consulte um gemólogo profissional.</p>
+    <p class="fine">© Pedras Valiosas — todos os direitos reservados</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    q.addEventListener('click', ()=>{
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>{
+        i.classList.remove('open');
+        i.querySelector('.faq-a').style.maxHeight = null;
+      });
+      if(!isOpen){
+        item.classList.add('open');
+        a.style.maxHeight = a.scrollHeight + 'px';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
