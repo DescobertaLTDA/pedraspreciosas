@@ -96,7 +96,7 @@
       radial-gradient(ellipse 700px 400px at 10% 100%, rgba(227,173,46,0.12), transparent 60%);
   }
   .hero-grid{
-    display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
+    display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;
   }
   .hero h1{
     font-size:clamp(34px,4.6vw,58px);
@@ -138,49 +138,92 @@
   /* ===== HERO MOBILE PHOTO ===== */
   .hero-mobile-photo{display:none;}
 
-  /* hero specimen stack */
-  .specimen-stack{position:relative; height:560px;}
-  .tag{
-    position:absolute;
-    width:230px;
-    background:var(--parchment);
-    border-radius:4px;
-    padding:20px 18px 18px;
-    box-shadow:var(--shadow);
-    border:1px solid rgba(0,0,0,0.06);
+  /* ===== HERO TOP BAR: timer + price badge ===== */
+  .hero-topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap; margin-bottom:44px;
   }
-  .tag::before{
-    content:'';
-    position:absolute; top:0; left:0; right:0; height:14px;
-    background-image:radial-gradient(circle at 14px 7px, transparent 5px, var(--parchment) 5.5px);
-    background-size:28px 14px;
-    background-repeat:repeat-x;
+  .hero-timer{
+    display:flex; align-items:center; gap:12px;
+    background:var(--bg-alt2); border:1px solid var(--line-strong);
+    border-radius:40px; padding:9px 18px 9px 16px;
   }
-  .tag .hole{
-    position:absolute; top:8px; left:50%; transform:translateX(-50%);
-    width:8px; height:8px; border-radius:50%; background:var(--bg);
-    box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
+  .hero-timer .dot-live{
+    width:7px; height:7px; border-radius:50%; background:#e0553f;
+    box-shadow:0 0 0 4px rgba(224,85,63,0.18);
+    animation:pulse 1.4s ease-in-out infinite;
+    flex-shrink:0;
   }
-  .tag-num{
-    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--ink-soft);
-    letter-spacing:0.06em; margin-top:8px;
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.4;}}
+  .hero-timer .timer-label{
+    font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:0.05em;
+    color:var(--ink-mute); text-transform:uppercase; white-space:nowrap;
   }
-  .tag-name{
-    font-family:'Fraunces',serif; font-weight:600; font-size:20px; color:var(--ink); margin-top:4px;
+  .hero-timer .timer-clock{
+    font-family:'Space Mono',monospace; font-weight:700; font-size:15px;
+    color:var(--parchment); letter-spacing:0.03em; white-space:nowrap;
+    display:flex; align-items:center; gap:2px;
   }
-  .tag-price{
-    margin-top:10px; padding-top:10px; border-top:1px dashed rgba(42,33,24,0.25);
-    font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft);
+  .hero-timer .timer-clock .sep{color:var(--citrino); opacity:0.7;}
+  .hero-timer .timer-clock span.unit{
+    background:rgba(240,230,210,0.08); border-radius:4px; padding:2px 5px;
+    min-width:26px; text-align:center; display:inline-block;
   }
-  .tag-price b{color:var(--ink); font-size:15px;}
-  .tag-photo{
-    width:100%; aspect-ratio:1/1; object-fit:cover;
-    border-radius:4px; margin-top:4px; display:block;
-    box-shadow:0 6px 14px rgba(0,0,0,0.2);
+  .hero-price-badge{
+    display:flex; align-items:center; gap:12px;
+    background:var(--parchment); border-radius:10px;
+    padding:11px 20px; box-shadow:0 14px 30px rgba(0,0,0,0.35);
+    flex-shrink:0;
   }
-  .t1{top:0; left:10%; transform:rotate(-7deg); z-index:3;}
-  .t2{top:120px; left:44%; transform:rotate(5deg); z-index:4;}
-  .t3{top:260px; left:6%; transform:rotate(3deg); z-index:2;}
+  .hero-price-badge .hpb-labels{display:flex; flex-direction:column; line-height:1.15;}
+  .hero-price-badge .hpb-old{
+    font-family:'Space Mono',monospace; font-size:11.5px; color:var(--ink-soft);
+    text-decoration:line-through;
+  }
+  .hero-price-badge .hpb-new{
+    font-family:'Fraunces',serif; font-weight:700; font-size:22px; color:var(--ink);
+  }
+  .hero-price-badge .hpb-new sup{font-size:11px; top:-0.9em;}
+  .hero-price-badge .hpb-tag{
+    font-family:'Space Mono',monospace; font-size:9.5px; letter-spacing:0.06em;
+    text-transform:uppercase; color:#fff; background:var(--amethyst-deep);
+    padding:5px 8px; border-radius:5px; white-space:nowrap;
+  }
+
+  /* ===== hero stone grid (6 pedras) ===== */
+  .hero-stones{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+  }
+  .stone-card{
+    position:relative; border-radius:12px; overflow:hidden;
+    aspect-ratio:1/1;
+    box-shadow:0 16px 32px rgba(0,0,0,0.4);
+    border:1px solid var(--line-strong);
+    background:var(--bg-alt2);
+  }
+  .stone-card img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform .45s ease;
+  }
+  .stone-card:hover img{transform:scale(1.07);}
+  .stone-num-badge{
+    position:absolute; top:9px; left:9px; z-index:2;
+    background:rgba(23,21,27,0.8); backdrop-filter:blur(4px);
+    color:var(--ink-mute); font-family:'Space Mono',monospace; font-size:9px;
+    letter-spacing:0.05em; padding:3px 7px; border-radius:20px;
+  }
+  .stone-info{
+    position:absolute; left:0; right:0; bottom:0; z-index:2;
+    padding:20px 12px 10px;
+    background:linear-gradient(to top, rgba(15,12,9,0.95), rgba(15,12,9,0.05) 85%, transparent);
+  }
+  .stone-info .s-name{
+    font-family:'Fraunces',serif; font-weight:600; font-size:13.5px; color:var(--parchment);
+    line-height:1.15;
+  }
+  .stone-info .s-price{
+    font-family:'Space Mono',monospace; font-size:10px; color:var(--citrino); margin-top:3px;
+  }
 
   /* ===== marquee strip ===== */
   .strip{
@@ -362,7 +405,7 @@
 
   @media (max-width:980px){
     .hero-grid{grid-template-columns:1fr;}
-    .specimen-stack{display:none;}
+    .hero-stones{display:none;}
     .problem-grid{grid-template-columns:1fr;}
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr); overflow-x:visible;}
@@ -389,6 +432,9 @@
     .logo{font-size:16px; gap:7px;}
     .nav-cta{font-size:11.5px; padding:9px 14px; white-space:nowrap;}
     .wrap{padding:0 20px;}
+    .hero-topbar{margin-bottom:30px;}
+    .hero-price-badge{padding:9px 15px; gap:9px;}
+    .hero-price-badge .hpb-new{font-size:19px;}
   }
   @media (max-width:520px){
     .feat-grid{grid-template-columns:1fr;}
@@ -397,6 +443,9 @@
     .hero{padding:56px 0 40px;}
     .logo{font-size:15px;}
     .logo .dot{width:6px; height:6px;}
+    .hero-topbar{flex-direction:column; align-items:stretch;}
+    .hero-timer{justify-content:center;}
+    .hero-price-badge{justify-content:center;}
   }
   @media (max-width:360px){
     nav{padding:12px 16px;}
@@ -421,6 +470,22 @@
 
 <!-- ============ HERO ============ -->
 <section class="hero">
+  <div class="wrap">
+    <div class="hero-topbar">
+      <div class="hero-timer">
+        <span class="dot-live"></span>
+        <span class="timer-label">Oferta termina em</span>
+        <span class="timer-clock"><span class="unit" id="timerMin">25</span><span class="sep">:</span><span class="unit" id="timerSec">00</span></span>
+      </div>
+      <div class="hero-price-badge">
+        <div class="hpb-labels">
+          <span class="hpb-old">R$47,00</span>
+          <span class="hpb-new"><sup>R$</sup>19,99</span>
+        </div>
+        <span class="hpb-tag">Hoje</span>
+      </div>
+    </div>
+  </div>
   <div class="wrap hero-grid">
     <div>
       <div class="hero-mobile-photo">
@@ -445,27 +510,54 @@
       </div>
     </div>
 
-    <div class="specimen-stack">
-      <div class="tag t1">
-        <div class="hole"></div>
-        <img src="pedra1.jpeg" alt="Quartzo Rosa" class="tag-photo">
-        <div class="tag-num">ESPÉCIME Nº 001</div>
-        <div class="tag-name">Quartzo Rosa</div>
-        <div class="tag-price">faixa <b>R$15 – R$150</b></div>
+    <div class="hero-stones">
+      <div class="stone-card">
+        <span class="stone-num-badge">Nº 001</span>
+        <img src="pedra1.jpeg" alt="Quartzo Rosa">
+        <div class="stone-info">
+          <div class="s-name">Quartzo Rosa</div>
+          <div class="s-price">R$15 – R$150</div>
+        </div>
       </div>
-      <div class="tag t2">
-        <div class="hole"></div>
-        <img src="pedra2.jpeg" alt="Ametista" class="tag-photo">
-        <div class="tag-num">ESPÉCIME Nº 002</div>
-        <div class="tag-name">Ametista</div>
-        <div class="tag-price">faixa <b>R$20 – R$500</b></div>
+      <div class="stone-card">
+        <span class="stone-num-badge">Nº 002</span>
+        <img src="pedra2.jpeg" alt="Ametista">
+        <div class="stone-info">
+          <div class="s-name">Ametista</div>
+          <div class="s-price">R$20 – R$500</div>
+        </div>
       </div>
-      <div class="tag t3">
-        <div class="hole"></div>
-        <img src="pedra3.jpeg" alt="Citrino" class="tag-photo">
-        <div class="tag-num">ESPÉCIME Nº 003</div>
-        <div class="tag-name">Citrino</div>
-        <div class="tag-price">faixa <b>R$15 – R$200</b></div>
+      <div class="stone-card">
+        <span class="stone-num-badge">Nº 003</span>
+        <img src="pedra3.jpeg" alt="Citrino">
+        <div class="stone-info">
+          <div class="s-name">Citrino</div>
+          <div class="s-price">R$15 – R$200</div>
+        </div>
+      </div>
+      <div class="stone-card">
+        <span class="stone-num-badge">Nº 004</span>
+        <img src="pedra4.jpeg" alt="Turmalina">
+        <div class="stone-info">
+          <div class="s-name">Turmalina</div>
+          <div class="s-price">R$50 – R$800+</div>
+        </div>
+      </div>
+      <div class="stone-card">
+        <span class="stone-num-badge">Nº 005</span>
+        <img src="pedra5.jpeg" alt="Topázio">
+        <div class="stone-info">
+          <div class="s-name">Topázio</div>
+          <div class="s-price">R$40 – R$500</div>
+        </div>
+      </div>
+      <div class="stone-card">
+        <span class="stone-num-badge">Nº 006</span>
+        <img src="pedra6.jpeg" alt="Água-marinha">
+        <div class="stone-info">
+          <div class="s-name">Água-marinha</div>
+          <div class="s-price">R$60 – R$700+</div>
+        </div>
       </div>
     </div>
   </div>
@@ -752,6 +844,41 @@
 </footer>
 
 <script>
+  // ===== Contagem regressiva da oferta (25 minutos) =====
+  (function(){
+    const DURATION_MS = 25 * 60 * 1000;
+    const STORAGE_KEY = 'pv_offer_end';
+    const minEl = document.getElementById('timerMin');
+    const secEl = document.getElementById('timerSec');
+    if(!minEl || !secEl) return;
+
+    let end = Number(localStorage.getItem(STORAGE_KEY));
+    if(!end || Date.now() >= end){
+      end = Date.now() + DURATION_MS;
+      localStorage.setItem(STORAGE_KEY, String(end));
+    }
+
+    function pad(n){ return String(n).padStart(2,'0'); }
+
+    function tick(){
+      const remaining = end - Date.now();
+      if(remaining <= 0){
+        minEl.textContent = '00';
+        secEl.textContent = '00';
+        clearInterval(interval);
+        return;
+      }
+      const totalSeconds = Math.floor(remaining / 1000);
+      const m = Math.floor(totalSeconds / 60);
+      const s = totalSeconds % 60;
+      minEl.textContent = pad(m);
+      secEl.textContent = pad(s);
+    }
+
+    tick();
+    const interval = setInterval(tick, 1000);
+  })();
+
   document.querySelectorAll('.faq-item').forEach(item=>{
     const q = item.querySelector('.faq-q');
     const a = item.querySelector('.faq-a');
