@@ -217,7 +217,7 @@
   /* ===== CATALOG / specimen cards ===== */
   .catalog{background:var(--bg-alt);}
   .catalog-scroller{
-    display:grid; grid-template-columns:repeat(5,1fr); gap:20px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
   }
   .spec-card{
     background:var(--parchment);
@@ -235,6 +235,11 @@
   .spec-card .hole{position:absolute; top:7px; left:50%; transform:translateX(-50%); width:7px;height:7px;border-radius:50%; background:var(--bg-alt); box-shadow:inset 0 1px 2px rgba(0,0,0,0.5);}
   .spec-num{font-family:'Space Mono',monospace; font-size:10px; color:var(--ink-soft); letter-spacing:0.08em; margin-top:10px;}
   .spec-card .gem-icon{width:52px; height:52px; margin:14px 0 10px;}
+  .spec-photo{
+    width:100%; aspect-ratio:1/1; object-fit:cover;
+    border-radius:4px; margin:14px 0 10px; display:block;
+    box-shadow:0 6px 16px rgba(0,0,0,0.18);
+  }
   .spec-name{font-family:'Fraunces',serif; font-size:20px; font-weight:600; color:var(--ink);}
   .spec-sci{font-size:12px; color:var(--ink-soft); font-style:italic; margin-top:2px;}
   .spec-row{margin-top:14px; padding-top:12px; border-top:1px dashed rgba(42,33,24,0.25);}
@@ -394,7 +399,7 @@
 <header>
   <nav>
     <div class="logo"><span class="dot"></span>Pedras Valiosas</div>
-    <a href="https://app.cakto.com.br/checkout-builder/985115" target="_blank" rel="noopener" class="nav-cta">Quero o guia — R$19,99</a>
+    <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="nav-cta">Quero o guia — R$19,99</a>
   </nav>
 </header>
 
@@ -406,7 +411,7 @@
       <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
       <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
       <div class="hero-cta-row">
-        <a href="https://app.cakto.com.br/checkout-builder/985115" target="_blank" rel="noopener" class="btn-primary">
+        <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary">
           Acessar o catálogo agora
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
@@ -515,7 +520,7 @@
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">Prévia do catálogo</div>
-      <h2>5 das pedras mais procuradas — direto do guia.</h2>
+      <h2>6 das pedras mais procuradas — direto do guia.</h2>
       <p>Cada página segue este mesmo formato de ficha, fácil de consultar sempre que você encontrar uma pedra nova.</p>
     </div>
 
@@ -524,7 +529,7 @@
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 001</div>
-        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e8a6b8"/><polygon points="32,6 50,22 32,30" fill="#f2c3cf"/><polygon points="14,22 32,30 20,58" fill="#d386a0"/><polygon points="32,30 50,22 44,58" fill="#c96f8f"/></svg>
+        <img src="assets/pedra1.png" alt="Quartzo Rosa" class="spec-photo">
         <div class="spec-name">Quartzo Rosa</div>
         <div class="spec-sci">Variedade rosada do quartzo</div>
         <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Rosa suave e leitoso, translucidez baixa a média.</div></div>
@@ -535,7 +540,7 @@
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 002</div>
-        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#9169c9"/><polygon points="32,6 50,22 32,30" fill="#b18ee0"/><polygon points="14,22 32,30 20,58" fill="#7a4fab"/><polygon points="32,30 50,22 44,58" fill="#663f96"/></svg>
+        <img src="assets/pedra2.png" alt="Ametista" class="spec-photo">
         <div class="spec-name">Ametista</div>
         <div class="spec-sci">Variedade violeta do quartzo</div>
         <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Lilás claro a roxo intenso, brilho vítreo, forma geodos.</div></div>
@@ -546,7 +551,7 @@
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 003</div>
-        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e3ad2e"/><polygon points="32,6 50,22 32,30" fill="#f0c766"/><polygon points="14,22 32,30 20,58" fill="#c8901c"/><polygon points="32,30 50,22 44,58" fill="#b57c12"/></svg>
+        <img src="assets/pedra3.png" alt="Citrino" class="spec-photo">
         <div class="spec-name">Citrino</div>
         <div class="spec-sci">Variedade amarela/laranja do quartzo</div>
         <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Amarelo-dourado a laranja-âmbar, brilho vítreo.</div></div>
@@ -557,7 +562,7 @@
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 004</div>
-        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#4f9a72"/><polygon points="32,6 50,22 32,30" fill="#7cbf98"/><polygon points="14,22 32,30 20,58" fill="#e8a6b8"/><polygon points="32,30 50,22 44,58" fill="#3d7d5b"/></svg>
+        <img src="assets/pedra4.png" alt="Turmalina" class="spec-photo">
         <div class="spec-name">Turmalina</div>
         <div class="spec-sci">Grupo de silicatos boratados</div>
         <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Várias cores, cristais alongados com estrias longitudinais.</div></div>
@@ -568,12 +573,23 @@
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 005</div>
-        <svg class="gem-icon" viewBox="0 0 64 64"><polygon points="32,6 50,22 44,58 20,58 14,22" fill="#e08a2e"/><polygon points="32,6 50,22 32,30" fill="#eeb066"/><polygon points="14,22 32,30 20,58" fill="#c26e18"/><polygon points="32,30 50,22 44,58" fill="#a85c10"/></svg>
+        <img src="assets/pedra5.png" alt="Topázio" class="spec-photo">
         <div class="spec-name">Topázio</div>
         <div class="spec-sci">Silicato de alumínio e flúor</div>
         <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Cristais prismáticos, cor imperial dourada ou azul.</div></div>
         <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Ouro Preto (MG)</div></div>
         <div class="spec-price">R$40 a <b>R$500</b></div>
+      </div>
+
+      <div class="spec-card">
+        <div class="hole"></div>
+        <div class="spec-num">Nº 006</div>
+        <img src="assets/pedra6.png" alt="Água-marinha" class="spec-photo">
+        <div class="spec-name">Água-marinha</div>
+        <div class="spec-sci">Variedade azulada do berilo</div>
+        <div class="spec-row"><div class="lbl">Como reconhecer</div><div class="val">Azul claro a esverdeado, alta transparência, brilho vítreo.</div></div>
+        <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Minas Gerais e Espírito Santo</div></div>
+        <div class="spec-price">R$60 a <b>R$700+</b></div>
       </div>
 
     </div>
@@ -664,7 +680,7 @@
         <span class="old">R$47,00</span>
         <span class="new"><sup>R$</sup>19,99</span>
       </div>
-      <a href="https://app.cakto.com.br/checkout-builder/985115" target="_blank" rel="noopener" class="receipt-cta">Comprar agora — acesso imediato</a>
+      <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="receipt-cta">Comprar agora — acesso imediato</a>
       <div class="receipt-sub">Pagamento único · sem assinatura · PDF digital</div>
     </div>
   </div>
@@ -703,7 +719,7 @@
   <div class="wrap">
     <h2>Da próxima vez que encontrar uma pedra estranha, você vai saber o que fazer.</h2>
     <p>Catálogo completo, em português, por R$19,99.</p>
-    <a href="https://app.cakto.com.br/checkout-builder/985115" target="_blank" rel="noopener" class="btn-primary">Quero identificar minhas pedras</a>
+    <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary">Quero identificar minhas pedras</a>
   </div>
 </section>
 

@@ -1,0 +1,154 @@
+<!-- ======================================================
+  SEÇÃO: PEDRAS À VENDA
+  Cole esse bloco dentro do <body> do seu index.html,
+  no lugar onde quiser que apareça.
+
+  IMAGENS: coloque na pasta /assets os arquivos:
+    assets/pedra1.png  -> Ametista
+    assets/pedra2.png  -> Citrino
+    assets/pedra3.png  -> Água-marinha
+    assets/pedra4.png  -> Turmalina Verde
+    assets/pedra5.png  -> Quartzo Rosa
+    assets/pedra6.png  -> Topázio Imperial
+
+  Tamanho recomendado: 800x800px (quadrado, 1:1)
+====================================================== -->
+
+<section class="pedras-section" id="pedras">
+  <h2 class="pedras-titulo">Pedras à Venda</h2>
+  <p class="pedras-subtitulo">Valores estimados com base em média de mercado — ajuste conforme sua realidade</p>
+
+  <div class="pedras-grid">
+
+    <div class="pedra-card">
+      <div class="pedra-img-wrap">
+        <img src="assets/pedra1.png" alt="Ametista" class="pedra-img">
+      </div>
+      <h3 class="pedra-nome">Ametista</h3>
+      <div class="pedra-valores">
+        <span class="valor-custo">Custo: R$ 45,00</span>
+        <span class="valor-venda">Venda: R$ 90,00</span>
+      </div>
+    </div>
+
+    <div class="pedra-card">
+      <div class="pedra-img-wrap">
+        <img src="assets/pedra2.png" alt="Citrino" class="pedra-img">
+      </div>
+      <h3 class="pedra-nome">Citrino</h3>
+      <div class="pedra-valores">
+        <span class="valor-custo">Custo: R$ 35,00</span>
+        <span class="valor-venda">Venda: R$ 75,00</span>
+      </div>
+    </div>
+
+    <div class="pedra-card">
+      <div class="pedra-img-wrap">
+        <img src="assets/pedra3.png" alt="Água-marinha" class="pedra-img">
+      </div>
+      <h3 class="pedra-nome">Água-marinha</h3>
+      <div class="pedra-valores">
+        <span class="valor-custo">Custo: R$ 120,00</span>
+        <span class="valor-venda">Venda: R$ 250,00</span>
+      </div>
+    </div>
+
+    <div class="pedra-card">
+      <div class="pedra-img-wrap">
+        <img src="assets/pedra4.png" alt="Turmalina Verde" class="pedra-img">
+      </div>
+      <h3 class="pedra-nome">Turmalina Verde</h3>
+      <div class="pedra-valores">
+        <span class="valor-custo">Custo: R$ 150,00</span>
+        <span class="valor-venda">Venda: R$ 320,00</span>
+      </div>
+    </div>
+
+    <div class="pedra-card">
+      <div class="pedra-img-wrap">
+        <img src="assets/pedra5.png" alt="Quartzo Rosa" class="pedra-img">
+      </div>
+      <h3 class="pedra-nome">Quartzo Rosa</h3>
+      <div class="pedra-valores">
+        <span class="valor-custo">Custo: R$ 25,00</span>
+        <span class="valor-venda">Venda: R$ 55,00</span>
+      </div>
+    </div>
+
+    <div class="pedra-card">
+      <div class="pedra-img-wrap">
+        <img src="assets/pedra6.png" alt="Topázio Imperial" class="pedra-img">
+      </div>
+      <h3 class="pedra-nome">Topázio Imperial</h3>
+      <div class="pedra-valores">
+        <span class="valor-custo">Custo: R$ 300,00</span>
+        <span class="valor-venda">Venda: R$ 600,00</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .pedras-section{
+    padding:60px 20px;
+    text-align:center;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .pedras-titulo{
+    font-size:2rem;
+    margin-bottom:8px;
+  }
+  .pedras-subtitulo{
+    color:#777;
+    margin-bottom:36px;
+    font-size:0.95rem;
+  }
+  .pedras-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap:28px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .pedra-card{
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    padding:16px;
+    transition:transform .2s ease;
+  }
+  .pedra-card:hover{
+    transform:translateY(-4px);
+  }
+  .pedra-img-wrap{
+    width:100%;
+    aspect-ratio: 1 / 1;
+    overflow:hidden;
+    border-radius:10px;
+    background:#f2f2f2;
+  }
+  .pedra-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .pedra-nome{
+    margin:14px 0 8px;
+    font-size:1.1rem;
+  }
+  .pedra-valores{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    font-size:0.95rem;
+  }
+  .valor-custo{
+    color:#999;
+  }
+  .valor-venda{
+    color:#2e7d32;
+    font-weight:bold;
+  }
+</style>
