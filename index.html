@@ -87,6 +87,32 @@
   }
   .nav-cta:hover{transform:translateY(-1px); box-shadow:0 6px 18px rgba(227,173,46,0.35);}
 
+  /* ===== FAIXA PROMOCIONAL ===== */
+  .promo-banner{
+    background:#c0272d;
+    color:#fff;
+    text-align:center;
+    padding:11px 16px;
+    position:relative;
+    z-index:40;
+  }
+  .promo-banner p{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .promo-banner b{
+    color:#ffe27a;
+  }
+  @media (max-width:640px){
+    .promo-banner p{font-size:11px;}
+  }
+  @media (max-width:420px){
+    .promo-banner p{font-size:10px; letter-spacing:0.01em;}
+  }
+
   /* ===== HERO ===== */
   .hero{
     position:relative;
@@ -659,6 +685,10 @@
     <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="nav-cta">Quero o guia — R$19,99</a>
   </nav>
 </header>
+
+<div class="promo-banner">
+  <p>⚠️ Não venda sua pedra sem saber o valor real — ela pode valer até <b>R$2.000</b></p>
+</div>
 
 <!-- ============ HERO ============ -->
 <section class="hero">
