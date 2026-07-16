@@ -96,7 +96,7 @@
       radial-gradient(ellipse 700px 400px at 10% 100%, rgba(227,173,46,0.12), transparent 60%);
   }
   .hero-grid{
-    display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
   }
   .hero h1{
     font-size:clamp(34px,4.6vw,58px);
@@ -140,7 +140,7 @@
 
   /* ===== HERO TOP BAR: timer + price badge ===== */
   .hero-topbar{
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:center; justify-content:flex-start;
     gap:16px; flex-wrap:wrap; margin-bottom:44px;
   }
   .hero-timer{
@@ -170,7 +170,7 @@
     min-width:26px; text-align:center; display:inline-block;
   }
   .hero-price-badge{
-    display:flex; align-items:center; gap:12px;
+    display:none; align-items:center; gap:12px;
     background:var(--parchment); border-radius:10px;
     padding:11px 20px; box-shadow:0 14px 30px rgba(0,0,0,0.35);
     flex-shrink:0;
@@ -190,9 +190,53 @@
     padding:5px 8px; border-radius:5px; white-space:nowrap;
   }
 
-  /* ===== hero stone grid (6 pedras) ===== */
+  /* ===== hero specimen stack (desktop) ===== */
+  .specimen-stack{position:relative; height:560px;}
+  .tag{
+    position:absolute;
+    width:230px;
+    background:var(--parchment);
+    border-radius:4px;
+    padding:20px 18px 18px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(0,0,0,0.06);
+  }
+  .tag::before{
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:14px;
+    background-image:radial-gradient(circle at 14px 7px, transparent 5px, var(--parchment) 5.5px);
+    background-size:28px 14px;
+    background-repeat:repeat-x;
+  }
+  .tag .hole{
+    position:absolute; top:8px; left:50%; transform:translateX(-50%);
+    width:8px; height:8px; border-radius:50%; background:var(--bg);
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
+  }
+  .tag-num{
+    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--ink-soft);
+    letter-spacing:0.06em; margin-top:8px;
+  }
+  .tag-name{
+    font-family:'Fraunces',serif; font-weight:600; font-size:20px; color:var(--ink); margin-top:4px;
+  }
+  .tag-price{
+    margin-top:10px; padding-top:10px; border-top:1px dashed rgba(42,33,24,0.25);
+    font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft);
+  }
+  .tag-price b{color:var(--ink); font-size:15px;}
+  .tag-photo{
+    width:100%; aspect-ratio:1/1; object-fit:cover;
+    border-radius:4px; margin-top:4px; display:block;
+    box-shadow:0 6px 14px rgba(0,0,0,0.2);
+  }
+  .t1{top:0; left:10%; transform:rotate(-7deg); z-index:3;}
+  .t2{top:120px; left:44%; transform:rotate(5deg); z-index:4;}
+  .t3{top:260px; left:6%; transform:rotate(3deg); z-index:2;}
+
+  /* ===== hero stone grid (6 pedras) — MOBILE ONLY ===== */
   .hero-stones{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+    display:none;
   }
   .stone-card{
     position:relative; border-radius:12px; overflow:hidden;
@@ -405,7 +449,10 @@
 
   @media (max-width:980px){
     .hero-grid{grid-template-columns:1fr;}
-    .hero-stones{display:none;}
+    .specimen-stack{display:none;}
+    .hero-stones{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+    .hero-topbar{justify-content:space-between;}
+    .hero-price-badge{display:flex;}
     .problem-grid{grid-template-columns:1fr;}
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr); overflow-x:visible;}
@@ -507,6 +554,30 @@
         <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Sem termos técnicos de geologia</span>
         <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Foco nas pedras do Brasil</span>
         <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Leia no celular ou impresso</span>
+      </div>
+    </div>
+
+    <div class="specimen-stack">
+      <div class="tag t1">
+        <div class="hole"></div>
+        <img src="pedra1.jpeg" alt="Quartzo Rosa" class="tag-photo">
+        <div class="tag-num">ESPÉCIME Nº 001</div>
+        <div class="tag-name">Quartzo Rosa</div>
+        <div class="tag-price">faixa <b>R$15 – R$150</b></div>
+      </div>
+      <div class="tag t2">
+        <div class="hole"></div>
+        <img src="pedra2.jpeg" alt="Ametista" class="tag-photo">
+        <div class="tag-num">ESPÉCIME Nº 002</div>
+        <div class="tag-name">Ametista</div>
+        <div class="tag-price">faixa <b>R$20 – R$500</b></div>
+      </div>
+      <div class="tag t3">
+        <div class="hole"></div>
+        <img src="pedra3.jpeg" alt="Citrino" class="tag-photo">
+        <div class="tag-num">ESPÉCIME Nº 003</div>
+        <div class="tag-name">Citrino</div>
+        <div class="tag-price">faixa <b>R$15 – R$200</b></div>
       </div>
     </div>
 
