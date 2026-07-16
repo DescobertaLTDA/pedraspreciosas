@@ -90,7 +90,7 @@
   /* ===== HERO ===== */
   .hero{
     position:relative;
-    padding:88px 0 70px;
+    padding:88px 0 130px;
     background:
       radial-gradient(ellipse 900px 500px at 82% -10%, rgba(145,105,201,0.25), transparent 60%),
       radial-gradient(ellipse 700px 400px at 10% 100%, rgba(227,173,46,0.12), transparent 60%);
@@ -135,8 +135,11 @@
   .hero-meta span{display:flex; align-items:center; gap:7px;}
   .hero-meta svg{width:14px;height:14px; stroke:var(--turmalina);}
 
+  /* ===== HERO MOBILE PHOTO ===== */
+  .hero-mobile-photo{display:none;}
+
   /* hero specimen stack */
-  .specimen-stack{position:relative; height:460px;}
+  .specimen-stack{position:relative; height:560px;}
   .tag{
     position:absolute;
     width:230px;
@@ -359,24 +362,38 @@
 
   @media (max-width:980px){
     .hero-grid{grid-template-columns:1fr;}
-    .specimen-stack{height:380px; margin:0 auto; max-width:400px;}
+    .specimen-stack{display:none;}
     .problem-grid{grid-template-columns:1fr;}
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr); overflow-x:visible;}
     .steps{grid-template-columns:1fr; gap:38px;}
     .testi-grid{grid-template-columns:1fr;}
+
+    .hero-mobile-photo{
+      display:block; position:relative; margin:22px 0 4px;
+      border-radius:10px; overflow:hidden;
+      box-shadow:0 14px 34px rgba(0,0,0,0.4);
+    }
+    .hero-mobile-photo img{
+      width:100%; aspect-ratio:4/3; object-fit:cover; display:block;
+    }
+    .hero-mobile-price{
+      position:absolute; top:14px; right:14px;
+      background:var(--citrino); color:#241a06;
+      font-family:'Space Mono',monospace; font-weight:700;
+      padding:9px 13px; border-radius:6px;
+      box-shadow:0 8px 20px rgba(227,173,46,0.4);
+      display:flex; flex-direction:column; align-items:center; line-height:1.25;
+      transform:rotate(4deg);
+    }
+    .hero-mobile-price .old{font-size:10.5px; text-decoration:line-through; opacity:0.65;}
+    .hero-mobile-price .new{font-size:19px;}
   }
   @media (max-width:640px){
     nav{padding:14px 20px; gap:12px;}
     .logo{font-size:16px; gap:7px;}
     .nav-cta{font-size:11.5px; padding:9px 14px; white-space:nowrap;}
     .wrap{padding:0 20px;}
-    /* stop the overlapping "tag stack" effect: stack them plainly instead */
-    .specimen-stack{
-      height:auto; max-width:340px;
-      display:flex; flex-direction:column; gap:14px;
-    }
-    .tag{position:static; width:100%; transform:none !important;}
   }
   @media (max-width:520px){
     .feat-grid{grid-template-columns:1fr;}
@@ -414,6 +431,15 @@
       <div class="eyebrow">Guia digital em PDF · 100% em português</div>
       <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
       <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
+
+      <div class="hero-mobile-photo">
+        <img src="pedra2.jpeg" alt="Ametista sendo segurada na mão">
+        <div class="hero-mobile-price">
+          <span class="old">R$47,00</span>
+          <span class="new">R$19,99</span>
+        </div>
+      </div>
+
       <div class="hero-cta-row">
         <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary">
           Acessar o catálogo agora
