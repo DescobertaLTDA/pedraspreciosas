@@ -464,15 +464,31 @@
       border-radius:10px; overflow:hidden;
       box-shadow:0 14px 34px rgba(0,0,0,0.4);
     }
-    .hero-mobile-photo img{
-      width:100%; aspect-ratio:4/3; object-fit:cover; display:block;
+    .hmp-track{
+      position:relative; width:100%; aspect-ratio:4/3;
     }
+    .hmp-slide{
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; display:block;
+      opacity:0; transition:opacity .6s ease;
+    }
+    .hmp-slide.active{opacity:1;}
     .hero-mobile-photo::after{
       content:'';
       position:absolute; left:0; right:0; bottom:0; height:60%;
       background:linear-gradient(to bottom, transparent, var(--bg) 92%);
-      pointer-events:none;
+      pointer-events:none; z-index:1;
     }
+    .hmp-dots{
+      position:absolute; left:0; right:0; bottom:11px; z-index:2;
+      display:flex; justify-content:center; gap:6px;
+    }
+    .hmp-dot{
+      width:6px; height:6px; border-radius:50%;
+      background:rgba(241,231,211,0.4);
+      transition:background .3s ease, transform .3s ease;
+    }
+    .hmp-dot.active{background:var(--citrino); transform:scale(1.35);}
   }
   @media (max-width:640px){
     nav{padding:14px 20px; gap:12px;}
@@ -578,8 +594,23 @@
   </div>
   <div class="wrap hero-grid">
     <div>
-      <div class="hero-mobile-photo">
-        <img src="pedra2.jpeg" alt="Ametista sendo segurada na mão">
+      <div class="hero-mobile-photo" id="heroCarousel">
+        <div class="hmp-track">
+          <img src="pedra1.jpeg" alt="Quartzo Rosa" class="hmp-slide active">
+          <img src="pedra2.jpeg" alt="Ametista sendo segurada na mão" class="hmp-slide">
+          <img src="pedra3.jpeg" alt="Citrino" class="hmp-slide">
+          <img src="pedra4.jpeg" alt="Turmalina" class="hmp-slide">
+          <img src="pedra5.jpeg" alt="Topázio" class="hmp-slide">
+          <img src="pedra6.jpeg" alt="Água-marinha" class="hmp-slide">
+        </div>
+        <div class="hmp-dots">
+          <span class="hmp-dot active"></span>
+          <span class="hmp-dot"></span>
+          <span class="hmp-dot"></span>
+          <span class="hmp-dot"></span>
+          <span class="hmp-dot"></span>
+          <span class="hmp-dot"></span>
+        </div>
       </div>
 
       <div class="eyebrow">Guia digital em PDF · 100% em português</div>
@@ -969,6 +1000,50 @@
 </footer>
 
 <script>
+  // ===== Carrossel da foto do hero (mobile) =====
+  (function(){
+    const root = document.getElementById('heroCarousel');
+    if(!root) return;
+    const slides = root.querySelectorAll('.hmp-slide');
+    const dots = root.querySelectorAll('.hmp-dot');
+    if(slides.length < 2) return;
+
+    let current = 0;
+    let autoplay;
+
+    function goTo(index){
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (index + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
+
+    function startAutoplay(){
+      clearInterval(autoplay);
+      autoplay = setInterval(()=> goTo(current + 1), 3800);
+    }
+
+    dots.forEach((dot, i)=>{
+      dot.addEventListener('click', ()=>{ goTo(i); startAutoplay(); });
+    });
+
+    // swipe (arrastar) no touch
+    let touchStartX = 0;
+    root.addEventListener('touchstart', (e)=>{
+      touchStartX = e.touches[0].clientX;
+    }, { passive:true });
+    root.addEventListener('touchend', (e)=>{
+      const diff = e.changedTouches[0].clientX - touchStartX;
+      if(Math.abs(diff) > 40){
+        diff < 0 ? goTo(current + 1) : goTo(current - 1);
+        startAutoplay();
+      }
+    }, { passive:true });
+
+    startAutoplay();
+  })();
+
   // ===== Contagem regressiva da oferta (25 minutos) =====
   (function(){
     const DURATION_MS = 25 * 60 * 1000;
