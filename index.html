@@ -135,6 +135,7 @@
   .hero-mobile-photo{display:none;}
   .hero-copy-mobile{display:none;}
 
+  /* ===== HERO SPECIMEN STACK (desktop) ===== */
   .specimen-stack{position:relative; height:560px; align-self:start; margin-top:-32px;}
   .tag{
     position:absolute;
@@ -170,7 +171,9 @@
   }
   .tag-price b{color:var(--ink); font-size:15px;}
   .tag-photo{
-    width:100%; aspect-ratio:1/1; object-fit:cover;
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
     border-radius:4px; margin-top:4px; display:block;
     box-shadow:0 6px 14px rgba(0,0,0,0.2);
   }
@@ -178,39 +181,7 @@
   .t2{top:96px; left:44%; transform:rotate(5deg); z-index:4;}
   .t3{top:210px; left:6%; transform:rotate(3deg); z-index:2;}
 
-  .hero-stones{
-    display:none;
-  }
-  .stone-card{
-    position:relative; border-radius:12px; overflow:hidden;
-    aspect-ratio:1/1;
-    box-shadow:0 16px 32px rgba(0,0,0,0.4);
-    border:1px solid var(--line-strong);
-    background:var(--bg-alt2);
-  }
-  .stone-card img{
-    width:100%; height:100%; object-fit:cover; display:block;
-    transition:transform .45s ease;
-  }
-  .stone-card:hover img{transform:scale(1.07);}
-  .stone-num-badge{
-    position:absolute; top:9px; left:9px; z-index:2;
-    background:rgba(23,21,27,0.8); backdrop-filter:blur(4px);
-    color:var(--ink-mute); font-family:'Space Mono',monospace; font-size:9px;
-    letter-spacing:0.05em; padding:3px 7px; border-radius:20px;
-  }
-  .stone-info{
-    position:absolute; left:0; right:0; bottom:0; z-index:2;
-    padding:20px 12px 10px;
-    background:linear-gradient(to top, rgba(15,12,9,0.95), rgba(15,12,9,0.05) 85%, transparent);
-  }
-  .stone-info .s-name{
-    font-family:'Fraunces',serif; font-weight:600; font-size:13.5px; color:var(--parchment);
-    line-height:1.15;
-  }
-  .stone-info .s-price{
-    font-family:'Space Mono',monospace; font-size:10px; color:var(--citrino); margin-top:3px;
-  }
+  /* ===== HERO STONE GRID - REMOVIDO ===== */
 
   .strip{
     border-top:1px solid var(--line); border-bottom:1px solid var(--line);
@@ -379,6 +350,7 @@
   footer .disclaimer{font-size:12.5px; color:var(--ink-mute); max-width:560px; margin:0 auto 18px; line-height:1.6;}
   footer .fine{font-family:'Space Mono',monospace; font-size:11.5px; color:#5a5460;}
 
+  /* ===== HERO TAG MOBILE ===== */
   .hero-tag-mobile{
     display:none;
   }
@@ -526,7 +498,6 @@
     .hero{padding-top:0;}
     .hero-grid{grid-template-columns:1fr;}
     .specimen-stack{display:none;}
-    .hero-stones{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
     .problem-grid{grid-template-columns:1fr;}
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr); overflow-x:visible;}
@@ -536,7 +507,7 @@
     .hero-tag-mobile{
       display:block;
       width:100%;
-      max-width:320px;
+      max-width:340px;
       margin:0 auto 24px;
       background:var(--parchment);
       border-radius:4px;
@@ -562,7 +533,9 @@
       letter-spacing:0.06em; margin-top:8px;
     }
     .hero-tag-mobile .tag-photo{
-      width:100%; aspect-ratio:1/1; object-fit:cover;
+      width:100%;
+      aspect-ratio:4/3;
+      object-fit:cover;
       border-radius:4px; margin-top:4px; display:block;
       box-shadow:0 6px 14px rgba(0,0,0,0.2);
     }
@@ -856,77 +829,28 @@
     <div class="specimen-stack">
       <div class="tag t1" style="background:var(--parchment); padding:20px 18px 18px;">
         <div class="hole"></div>
-        <img src="pagina1.png" alt="Capa do Ebook" class="tag-photo" style="aspect-ratio:3/4; object-fit:cover;">
+        <img src="pagina1.png" alt="Capa do Ebook" class="tag-photo" style="aspect-ratio:4/3; object-fit:cover;">
         <div class="tag-num">EDIÇÃO DIGITAL</div>
         <div class="tag-name" style="font-size:16px;">Pedras Valiosas</div>
         <div class="tag-price">guia completo <b>de identificação</b></div>
       </div>
       <div class="tag t2">
         <div class="hole"></div>
-        <img src="pedra2.jpeg" alt="Ametista" class="tag-photo">
+        <img src="pedra2.jpeg" alt="Ametista" class="tag-photo" style="aspect-ratio:1/1; object-fit:cover;">
         <div class="tag-num">ESPÉCIME Nº 002</div>
         <div class="tag-name">Ametista</div>
         <div class="tag-price">faixa <b>R$20 – R$500</b></div>
       </div>
       <div class="tag t3">
         <div class="hole"></div>
-        <img src="pedra3.jpeg" alt="Citrino" class="tag-photo">
+        <img src="pedra3.jpeg" alt="Citrino" class="tag-photo" style="aspect-ratio:1/1; object-fit:cover;">
         <div class="tag-num">ESPÉCIME Nº 003</div>
         <div class="tag-name">Citrino</div>
         <div class="tag-price">faixa <b>R$15 – R$200</b></div>
       </div>
     </div>
 
-    <div class="hero-stones">
-      <div class="stone-card">
-        <span class="stone-num-badge">Nº 001</span>
-        <img src="pedra1.jpeg" alt="Quartzo Rosa">
-        <div class="stone-info">
-          <div class="s-name">Quartzo Rosa</div>
-          <div class="s-price">R$15 – R$150</div>
-        </div>
-      </div>
-      <div class="stone-card">
-        <span class="stone-num-badge">Nº 002</span>
-        <img src="pedra2.jpeg" alt="Ametista">
-        <div class="stone-info">
-          <div class="s-name">Ametista</div>
-          <div class="s-price">R$20 – R$500</div>
-        </div>
-      </div>
-      <div class="stone-card">
-        <span class="stone-num-badge">Nº 003</span>
-        <img src="pedra3.jpeg" alt="Citrino">
-        <div class="stone-info">
-          <div class="s-name">Citrino</div>
-          <div class="s-price">R$15 – R$200</div>
-        </div>
-      </div>
-      <div class="stone-card">
-        <span class="stone-num-badge">Nº 004</span>
-        <img src="pedra4.jpeg" alt="Turmalina">
-        <div class="stone-info">
-          <div class="s-name">Turmalina</div>
-          <div class="s-price">R$50 – R$800+</div>
-        </div>
-      </div>
-      <div class="stone-card">
-        <span class="stone-num-badge">Nº 005</span>
-        <img src="pedra5.jpeg" alt="Topázio">
-        <div class="stone-info">
-          <div class="s-name">Topázio</div>
-          <div class="s-price">R$40 – R$500</div>
-        </div>
-      </div>
-      <div class="stone-card">
-        <span class="stone-num-badge">Nº 006</span>
-        <img src="pedra6.jpeg" alt="Água-marinha">
-        <div class="stone-info">
-          <div class="s-name">Água-marinha</div>
-          <div class="s-price">R$60 – R$700+</div>
-        </div>
-      </div>
-    </div>
+    <!-- GRADE DE 6 PEDRAS REMOVIDA -->
   </div>
 </section>
 
@@ -954,12 +878,12 @@
       </div>
       <!-- Página 2 -->
       <div class="preview-page">
-        <img src="pagina2.png" alt="Página 2">
+        <img src="pagina2.png" alt="Página 2 - Introdução">
         <span class="page-number">Pág. 2</span>
       </div>
       <!-- Página 3 - COM BLUR -->
       <div class="preview-page">
-        <img src="pagina2.png" alt="Página 3 - Conteúdo bloqueado">
+        <img src="pagina3.png" alt="Página 3 - Conteúdo bloqueado">
         <div class="blur-overlay">
           <span class="lock-icon">🔒</span>
           <span class="blur-label">Conteúdo exclusivo</span>
@@ -968,27 +892,27 @@
       </div>
       <!-- Página 4 -->
       <div class="preview-page">
-        <img src="pagina2.png" alt="Página 4">
+        <img src="pagina4.png" alt="Página 4">
         <span class="page-number">Pág. 4</span>
       </div>
       <!-- Página 5 -->
       <div class="preview-page">
-        <img src="pagina2.png" alt="Página 5">
+        <img src="pagina5.png" alt="Página 5">
         <span class="page-number">Pág. 5</span>
       </div>
       <!-- Página 6 -->
       <div class="preview-page">
-        <img src="pagina2.png" alt="Página 6">
+        <img src="pagina6.png" alt="Página 6">
         <span class="page-number">Pág. 6</span>
       </div>
       <!-- Página 7 -->
       <div class="preview-page">
-        <img src="pagina2.png" alt="Página 7">
+        <img src="pagina7.png" alt="Página 7">
         <span class="page-number">Pág. 7</span>
       </div>
       <!-- Página 8 -->
       <div class="preview-page">
-        <img src="pagina2.png" alt="Página 8">
+        <img src="pagina8.png" alt="Página 8">
         <span class="page-number">Pág. 8</span>
       </div>
     </div>
