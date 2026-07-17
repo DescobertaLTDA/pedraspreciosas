@@ -135,7 +135,6 @@
   .hero-mobile-photo{display:none;}
   .hero-copy-mobile{display:none;}
 
-  /* ===== HERO SPECIMEN STACK (desktop) ===== */
   .specimen-stack{position:relative; height:560px; align-self:start; margin-top:-32px;}
   .tag{
     position:absolute;
@@ -181,8 +180,6 @@
   .t1{top:0; left:10%; transform:rotate(-7deg); z-index:3;}
   .t2{top:96px; left:44%; transform:rotate(5deg); z-index:4;}
   .t3{top:210px; left:6%; transform:rotate(3deg); z-index:2;}
-
-  /* ===== HERO STONE GRID - REMOVIDO ===== */
 
   .strip{
     border-top:1px solid var(--line); border-bottom:1px solid var(--line);
@@ -351,12 +348,10 @@
   footer .disclaimer{font-size:12.5px; color:var(--ink-mute); max-width:560px; margin:0 auto 18px; line-height:1.6;}
   footer .fine{font-family:'Space Mono',monospace; font-size:11.5px; color:#5a5460;}
 
-  /* ===== HERO TAG MOBILE ===== */
   .hero-tag-mobile{
     display:none;
   }
 
-  /* ===== SEÇÃO DE PRÉVIA DO EBOOK ===== */
   #preview-ebook{
     background:var(--bg-alt);
     scroll-margin-top:80px;
@@ -441,7 +436,6 @@
     color:var(--citrino);
   }
 
-  /* ===== SEÇÃO MOCKUP ===== */
   .mockup-section{
     background:var(--bg);
     border-top:1px solid var(--line);
@@ -493,6 +487,101 @@
     height:20px;
     stroke:var(--citrino);
     flex-shrink:0;
+  }
+
+  /* ===== UTM DISPLAY ===== */
+  .utm-display{
+    position:fixed;
+    bottom:90px;
+    right:20px;
+    z-index:60;
+    background:rgba(23,21,27,0.92);
+    backdrop-filter:blur(8px);
+    border:1px solid var(--line-strong);
+    border-radius:10px;
+    padding:12px 16px;
+    font-family:'Space Mono',monospace;
+    font-size:10px;
+    color:var(--ink-mute);
+    max-width:260px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.5);
+    transition:opacity .3s ease, transform .3s ease;
+    cursor:pointer;
+    line-height:1.5;
+  }
+  .utm-display:hover{
+    border-color:var(--citrino);
+  }
+  .utm-display .utm-label{
+    color:var(--citrino);
+    font-size:8px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    display:block;
+    margin-bottom:4px;
+  }
+  .utm-display .utm-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:2px 0;
+  }
+  .utm-display .utm-row .utm-key{
+    color:var(--ink-mute);
+    opacity:0.6;
+  }
+  .utm-display .utm-row .utm-value{
+    color:var(--parchment);
+    text-align:right;
+    word-break:break-all;
+  }
+  .utm-display .utm-empty{
+    color:var(--ink-mute);
+    opacity:0.4;
+    font-size:9px;
+    text-align:center;
+    padding:4px 0;
+  }
+  .utm-toggle{
+    position:fixed;
+    bottom:90px;
+    right:20px;
+    z-index:59;
+    background:rgba(23,21,27,0.8);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--ink-mute);
+    font-size:14px;
+    cursor:pointer;
+    transition:all .2s ease;
+    backdrop-filter:blur(4px);
+  }
+  .utm-toggle:hover{
+    border-color:var(--citrino);
+    color:var(--citrino);
+  }
+  .utm-toggle.hidden{display:none;}
+
+  @media (max-width:640px){
+    .utm-display{
+      bottom:80px;
+      right:10px;
+      max-width:200px;
+      padding:10px 12px;
+      font-size:9px;
+    }
+    .utm-toggle{
+      bottom:80px;
+      right:10px;
+      width:30px;
+      height:30px;
+      font-size:12px;
+    }
   }
 
   @media (max-width:980px){
@@ -777,7 +866,6 @@
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <!-- TAG/ETIQUETA com a capa do ebook (mobile) -->
       <div class="hero-tag-mobile">
         <div class="hole"></div>
         <div class="tag-num">EDIÇÃO DIGITAL</div>
@@ -792,7 +880,7 @@
         <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
 
         <div class="hero-cta-row">
-          <a href="#preview-ebook" class="btn-primary scroll-to-preview">
+          <a href="#preview-ebook" class="btn-primary scroll-to-preview" id="btnHeroDesktop">
             Acessar Catálogo
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </a>
@@ -812,7 +900,7 @@
         <div class="hcm-tagline">em sites de colecionadores</div>
         <p class="hcm-sub">Sem curso. Sem termos técnicos de geologia. <b>Identifique em minutos</b> com o guia visual completo — do achado ao valor real de mercado.</p>
 
-        <a href="#preview-ebook" class="hcm-cta scroll-to-preview">
+        <a href="#preview-ebook" class="hcm-cta scroll-to-preview" id="btnHeroMobile">
           <span class="hcm-cta-label">
             <svg class="hcm-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             Acessar Catálogo
@@ -851,8 +939,6 @@
         <div class="tag-price">faixa <b>R$15 – R$200</b></div>
       </div>
     </div>
-
-    <!-- GRADE DE 6 PEDRAS REMOVIDA -->
   </div>
 </section>
 
@@ -863,7 +949,7 @@
   </div>
 </div>
 
-<!-- ============ PRÉVIA DO EBOOK - 8 PÁGINAS ============ -->
+<!-- ============ PRÉVIA DO EBOOK ============ -->
 <section id="preview-ebook">
   <div class="wrap">
     <div class="section-head">
@@ -873,17 +959,14 @@
     </div>
 
     <div class="preview-grid">
-      <!-- Página 1 - Capa -->
       <div class="preview-page">
         <img src="pagina1.png" alt="Página 1 - Capa do ebook">
         <span class="page-number">Pág. 1</span>
       </div>
-      <!-- Página 2 -->
       <div class="preview-page">
         <img src="pagina2.png" alt="Página 2 - Introdução">
         <span class="page-number">Pág. 2</span>
       </div>
-      <!-- Página 3 - COM BLUR -->
       <div class="preview-page">
         <img src="pagina3.png" alt="Página 3 - Conteúdo bloqueado">
         <div class="blur-overlay">
@@ -892,27 +975,22 @@
         </div>
         <span class="page-number">Pág. 3</span>
       </div>
-      <!-- Página 4 -->
       <div class="preview-page">
         <img src="pagina4.png" alt="Página 4">
         <span class="page-number">Pág. 4</span>
       </div>
-      <!-- Página 5 -->
       <div class="preview-page">
         <img src="pagina5.png" alt="Página 5">
         <span class="page-number">Pág. 5</span>
       </div>
-      <!-- Página 6 -->
       <div class="preview-page">
         <img src="pagina6.png" alt="Página 6">
         <span class="page-number">Pág. 6</span>
       </div>
-      <!-- Página 7 -->
       <div class="preview-page">
         <img src="pagina7.png" alt="Página 7">
         <span class="page-number">Pág. 7</span>
       </div>
-      <!-- Página 8 -->
       <div class="preview-page">
         <img src="pagina8.png" alt="Página 8">
         <span class="page-number">Pág. 8</span>
@@ -924,7 +1002,7 @@
     </div>
 
     <div class="preview-cta">
-      <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary">
+      <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary" id="btnCompra">
         Quero o guia completo — R$19,99
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
@@ -932,7 +1010,7 @@
   </div>
 </section>
 
-<!-- ============ MOCKUP DO EBOOK ============ -->
+<!-- ============ MOCKUP ============ -->
 <section class="mockup-section">
   <div class="wrap">
     <div class="mockup-grid">
@@ -1038,7 +1116,6 @@
     </div>
 
     <div class="catalog-scroller">
-
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 001</div>
@@ -1049,7 +1126,6 @@
         <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Minas Gerais e Bahia</div></div>
         <div class="spec-price">R$15 a <b>R$150</b></div>
       </div>
-
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 002</div>
@@ -1060,7 +1136,6 @@
         <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Rio Grande do Sul</div></div>
         <div class="spec-price">R$20 a <b>R$300+</b></div>
       </div>
-
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 003</div>
@@ -1071,7 +1146,6 @@
         <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Rio Grande do Sul e Minas Gerais</div></div>
         <div class="spec-price">R$15 a <b>R$200</b></div>
       </div>
-
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 004</div>
@@ -1082,7 +1156,6 @@
         <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Minas Gerais e Paraíba</div></div>
         <div class="spec-price">R$50 a <b>R$800+</b></div>
       </div>
-
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 005</div>
@@ -1093,7 +1166,6 @@
         <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Ouro Preto (MG)</div></div>
         <div class="spec-price">R$40 a <b>R$500</b></div>
       </div>
-
       <div class="spec-card">
         <div class="hole"></div>
         <div class="spec-num">Nº 006</div>
@@ -1104,7 +1176,6 @@
         <div class="spec-row"><div class="lbl">Onde no Brasil</div><div class="val">Minas Gerais e Espírito Santo</div></div>
         <div class="spec-price">R$60 a <b>R$700+</b></div>
       </div>
-
     </div>
 
     <div class="catalog-note">+ mais pedras dentro do guia completo, sempre no mesmo formato de ficha rápida</div>
@@ -1192,7 +1263,7 @@
         <span class="old">R$47,00</span>
         <span class="new"><sup>R$</sup>19,99</span>
       </div>
-      <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="receipt-cta">Comprar agora — acesso imediato</a>
+      <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="receipt-cta" id="btnReceipt">Comprar agora — acesso imediato</a>
       <div class="receipt-sub">Pagamento único · sem assinatura · PDF digital</div>
     </div>
   </div>
@@ -1231,7 +1302,7 @@
   <div class="wrap">
     <h2>Da próxima vez que encontrar uma pedra estranha, você vai saber o que fazer.</h2>
     <p>Catálogo completo, em português, por R$19,99.</p>
-    <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary">Quero identificar minhas pedras</a>
+    <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary" id="btnFinal">Quero identificar minhas pedras</a>
   </div>
 </section>
 
@@ -1253,6 +1324,12 @@
   <span class="fc-label">Acessar Catálogo<span class="fc-sub">prévia do ebook</span></span>
 </a>
 
+<!-- ===== UTM DISPLAY ===== -->
+<div class="utm-display" id="utmDisplay">
+  <span class="utm-label">📊 Rastreamento UTM</span>
+  <div id="utmContent"></div>
+</div>
+
 <footer>
   <div class="wrap">
     <p class="disclaimer">Aviso importante: este é um guia educativo e de curiosidade sobre identificação de pedras. Para avaliações oficiais de alto valor, sempre consulte um gemólogo profissional.</p>
@@ -1261,101 +1338,297 @@
 </footer>
 
 <script>
-  // ===== Scroll suave para a prévia do ebook =====
-  document.querySelectorAll('.scroll-to-preview').forEach(el => {
+  // ============================================================
+  //  SISTEMA DE UTM E RASTREAMENTO DE VENDAS
+  // ============================================================
+
+  (function() {
+    'use strict';
+
+    // 1. Capturar parâmetros UTM da URL
+    function getUTMParams() {
+      var params = new URLSearchParams(window.location.search);
+      var utm = {};
+      var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'afiliado', 'src', 'ref'];
+      keys.forEach(function(key) {
+        var val = params.get(key);
+        if (val) utm[key] = val;
+      });
+      return utm;
+    }
+
+    // 2. Salvar UTM em cookie por 30 dias
+    function setCookie(name, value, days) {
+      var expires = '';
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = '; expires=' + date.toUTCString();
+      }
+      document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/; SameSite=Lax';
+    }
+
+    function getCookie(name) {
+      var nameEQ = name + '=';
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length));
+      }
+      return null;
+    }
+
+    // 3. Armazenar UTM (da URL ou do cookie)
+    var utmData = getUTMParams();
+    var hasUtm = Object.keys(utmData).length > 0;
+
+    // Se veio da URL, salva no cookie
+    if (hasUtm) {
+      setCookie('pedras_utm', JSON.stringify(utmData), 30);
+    } else {
+      // Tenta recuperar do cookie
+      var saved = getCookie('pedras_utm');
+      if (saved) {
+        try {
+          utmData = JSON.parse(saved);
+          hasUtm = Object.keys(utmData).length > 0;
+        } catch(e) { /* ignora */ }
+      }
+    }
+
+    // 4. Exibir UTM no canto da tela
+    var container = document.getElementById('utmContent');
+    if (container) {
+      if (hasUtm) {
+        var html = '';
+        var fields = {
+          'utm_source': 'Origem',
+          'utm_medium': 'Médio',
+          'utm_campaign': 'Campanha',
+          'utm_term': 'Termo',
+          'utm_content': 'Conteúdo',
+          'utm_id': 'ID',
+          'afiliado': 'Afiliado',
+          'src': 'SRC',
+          'ref': 'Referência'
+        };
+        Object.keys(fields).forEach(function(key) {
+          if (utmData[key]) {
+            html += '<div class="utm-row"><span class="utm-key">' + fields[key] + '</span><span class="utm-value">' + utmData[key] + '</span></div>';
+          }
+        });
+        if (html) {
+          container.innerHTML = html;
+        } else {
+          container.innerHTML = '<div class="utm-empty">Nenhum parâmetro capturado</div>';
+        }
+      } else {
+        container.innerHTML = '<div class="utm-empty">🔍 Nenhum UTM detectado<br><span style="font-size:8px;opacity:0.5;">Acesse com ?utm_source=... na URL</span></div>';
+      }
+    }
+
+    // 5. Função para adicionar UTM a todos os links de compra
+    function addUTMToLinks() {
+      var baseUrl = 'https://pay.cakto.com.br/kduxrpm_985115';
+      var utmString = '';
+
+      if (hasUtm) {
+        var params = [];
+        Object.keys(utmData).forEach(function(key) {
+          params.push(key + '=' + encodeURIComponent(utmData[key]));
+        });
+        utmString = params.join('&');
+      }
+
+      // Seleciona todos os links que vão para o checkout
+      var links = document.querySelectorAll('a[href*="pay.cakto.com.br"], a[href*="kduxrpm_985115"]');
+      links.forEach(function(link) {
+        var originalHref = link.getAttribute('href');
+        // Se o link já tem parâmetros, usa ? ou & conforme necessário
+        if (utmString) {
+          var separator = originalHref.indexOf('?') !== -1 ? '&' : '?';
+          link.setAttribute('href', originalHref + separator + utmString);
+        }
+      });
+    }
+
+    // Executa após o DOM carregar
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', addUTMToLinks);
+    } else {
+      addUTMToLinks();
+    }
+
+    // 6. Registrar "venda" no console (simulação para rastreamento)
+    // Em produção, isso enviaria para um webhook ou analytics
+    function registrarVenda(fonte) {
+      var dados = {
+        timestamp: new Date().toISOString(),
+        pagina: window.location.href,
+        utm: utmData,
+        fonte: fonte || 'botao'
+      };
+      console.log('🛒 VENDA REGISTRADA:', dados);
+
+      // Se tiver afiliado, destaca no console
+      if (utmData.afiliado) {
+        console.log('🏷️ AFILIADO: ' + utmData.afiliado);
+      }
+      if (utmData.utm_source) {
+        console.log('📢 FONTE: ' + utmData.utm_source);
+      }
+
+      // Armazena no sessionStorage para não perder
+      try {
+        sessionStorage.setItem('pedras_venda', JSON.stringify(dados));
+      } catch(e) { /* ignora */ }
+
+      return dados;
+    }
+
+    // 7. Escutar cliques em botões de compra para rastrear
+    document.addEventListener('click', function(e) {
+      var target = e.target.closest('a');
+      if (!target) return;
+
+      var href = target.getAttribute('href') || '';
+      if (href.includes('pay.cakto.com.br') || href.includes('kduxrpm_985115')) {
+        var fonte = target.id || target.innerText.trim().slice(0, 20) || 'botao';
+        registrarVenda(fonte);
+      }
+    });
+
+    // 8. Se o usuário já estava na página e clica no floating CTA
+    var floatingCta = document.getElementById('floatingCta');
+    if (floatingCta) {
+      floatingCta.addEventListener('click', function() {
+        // O scroll-to-preview já cuida do scroll, mas registramos também
+        console.log('📌 CTA flutuante clicado');
+      });
+    }
+
+    // 9. Exibir resumo no console para o administrador
+    console.log('📊 === SISTEMA DE UTM ATIVO ===');
+    console.log('🔗 URL atual:', window.location.href);
+    console.log('🏷️ UTM capturados:', utmData);
+    if (hasUtm) {
+      console.log('✅ UTM salvo em cookie por 30 dias');
+      if (utmData.afiliado) {
+        console.log('🤝 AFILIADO DETECTADO: ' + utmData.afiliado);
+      }
+    } else {
+      console.log('ℹ️ Nenhum UTM detectado. Para testar, acesse com ?utm_source=teste&afiliado=fulano');
+    }
+    console.log('📦 Links de compra foram atualizados com os UTM automaticamente');
+    console.log('📊 ============================');
+
+    // 10. Expor dados globalmente para debug
+    window._pedrasUtm = {
+      dados: utmData,
+      hasUtm: hasUtm,
+      registrarVenda: registrarVenda
+    };
+
+  })();
+
+  // ============================================================
+  //  SCROLL SUAVE E DEMAIS FUNÇÕES
+  // ============================================================
+
+  document.querySelectorAll('.scroll-to-preview').forEach(function(el) {
     el.addEventListener('click', function(e) {
       e.preventDefault();
-      const target = document.getElementById('preview-ebook');
-      if(target) {
+      var target = document.getElementById('preview-ebook');
+      if (target) {
         target.scrollIntoView({ behavior: 'smooth' });
       }
     });
   });
 
-  // ===== Botão CTA flutuante =====
+  // CTA flutuante
   (function(){
-    const fab = document.getElementById('floatingCta');
-    if(!fab) return;
-    const heroEl = document.querySelector('.hero');
-    const previewEl = document.getElementById('preview-ebook');
-    const precoEl = document.getElementById('preco');
-    const finalCtaEl = document.querySelector('.final-cta');
+    var fab = document.getElementById('floatingCta');
+    if (!fab) return;
+    var heroEl = document.querySelector('.hero');
+    var previewEl = document.getElementById('preview-ebook');
+    var precoEl = document.getElementById('preco');
+    var finalCtaEl = document.querySelector('.final-cta');
 
-    function isInView(el){
-      if(!el) return false;
-      const r = el.getBoundingClientRect();
+    function isInView(el) {
+      if (!el) return false;
+      var r = el.getBoundingClientRect();
       return r.top < window.innerHeight * 0.85 && r.bottom > 0;
     }
 
-    function update(){
-      const pastHero = heroEl ? (heroEl.getBoundingClientRect().bottom < 0) : window.scrollY > 400;
-      const hideBecauseCta = isInView(previewEl) || isInView(precoEl) || isInView(finalCtaEl);
-      if(pastHero && !hideBecauseCta){
+    function update() {
+      var pastHero = heroEl ? (heroEl.getBoundingClientRect().bottom < 0) : window.scrollY > 400;
+      var hideBecauseCta = isInView(previewEl) || isInView(precoEl) || isInView(finalCtaEl);
+      if (pastHero && !hideBecauseCta) {
         fab.classList.add('show');
-      }else{
+      } else {
         fab.classList.remove('show');
       }
     }
 
-    window.addEventListener('scroll', update, { passive:true });
+    window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
     update();
   })();
 
-  // ===== Popup de prova social =====
+  // Popup de prova social
   (function(){
-    const popup = document.getElementById('salesPopup');
-    const nameEl = document.getElementById('spName');
-    const cityEl = document.getElementById('spCity');
-    const timeEl = document.getElementById('spTime');
-    if(!popup) return;
+    var popup = document.getElementById('salesPopup');
+    var nameEl = document.getElementById('spName');
+    var cityEl = document.getElementById('spCity');
+    var timeEl = document.getElementById('spTime');
+    if (!popup) return;
 
-    const pessoas = [
-      { nome:'Mariana C.', cidade:'São Paulo, SP' },
-      { nome:'Carlos E.', cidade:'Belo Horizonte, MG' },
-      { nome:'Fernanda R.', cidade:'Porto Alegre, RS' },
-      { nome:'Diego S.', cidade:'Ouro Preto, MG' },
-      { nome:'Juliana P.', cidade:'Curitiba, PR' },
-      { nome:'Ricardo A.', cidade:'Salvador, BA' },
-      { nome:'Patrícia L.', cidade:'Recife, PE' },
-      { nome:'Bruno M.', cidade:'Governador Valadares, MG' },
-      { nome:'Camila O.', cidade:'Brasília, DF' },
-      { nome:'Eduardo N.', cidade:'Teófilo Otoni, MG' },
-      { nome:'Larissa F.', cidade:'Fortaleza, CE' },
-      { nome:'Rafael T.', cidade:'Florianópolis, SC' },
-      { nome:'Beatriz S.', cidade:'Goiânia, GO' },
-      { nome:'Thiago V.', cidade:'Campinas, SP' },
-      { nome:'Aline D.', cidade:'Vitória, ES' }
+    var pessoas = [
+      { nome: 'Mariana C.', cidade: 'São Paulo, SP' },
+      { nome: 'Carlos E.', cidade: 'Belo Horizonte, MG' },
+      { nome: 'Fernanda R.', cidade: 'Porto Alegre, RS' },
+      { nome: 'Diego S.', cidade: 'Ouro Preto, MG' },
+      { nome: 'Juliana P.', cidade: 'Curitiba, PR' },
+      { nome: 'Ricardo A.', cidade: 'Salvador, BA' },
+      { nome: 'Patrícia L.', cidade: 'Recife, PE' },
+      { nome: 'Bruno M.', cidade: 'Governador Valadares, MG' },
+      { nome: 'Camila O.', cidade: 'Brasília, DF' },
+      { nome: 'Eduardo N.', cidade: 'Teófilo Otoni, MG' },
+      { nome: 'Larissa F.', cidade: 'Fortaleza, CE' },
+      { nome: 'Rafael T.', cidade: 'Florianópolis, SC' },
+      { nome: 'Beatriz S.', cidade: 'Goiânia, GO' },
+      { nome: 'Thiago V.', cidade: 'Campinas, SP' },
+      { nome: 'Aline D.', cidade: 'Vitória, ES' }
     ];
 
-    let lastIndex = -1;
+    var lastIndex = -1;
 
-    function pickPerson(){
-      let i;
-      do{ i = Math.floor(Math.random() * pessoas.length); }while(i === lastIndex);
+    function pickPerson() {
+      var i;
+      do { i = Math.floor(Math.random() * pessoas.length); } while (i === lastIndex);
       lastIndex = i;
       return pessoas[i];
     }
 
-    function randomTimeText(){
-      const min = Math.floor(Math.random() * 18) + 1;
-      return min === 1 ? 'há 1 minuto' : `há ${min} minutos`;
+    function randomTimeText() {
+      var min = Math.floor(Math.random() * 18) + 1;
+      return min === 1 ? 'há 1 minuto' : 'há ' + min + ' minutos';
     }
 
-    function showPopup(){
-      const p = pickPerson();
+    function showPopup() {
+      var p = pickPerson();
       nameEl.textContent = p.nome;
       cityEl.textContent = p.cidade;
       timeEl.textContent = randomTimeText();
       popup.classList.add('show');
 
-      const visibleTime = 5000 + Math.random() * 1500;
-      setTimeout(()=>{ popup.classList.remove('show'); }, visibleTime);
+      var visibleTime = 5000 + Math.random() * 1500;
+      setTimeout(function() { popup.classList.remove('show'); }, visibleTime);
     }
 
-    function schedule(){
-      const delay = 9000 + Math.random() * 14000;
-      setTimeout(()=>{
+    function schedule() {
+      var delay = 9000 + Math.random() * 14000;
+      setTimeout(function() {
         showPopup();
         schedule();
       }, delay);
@@ -1365,16 +1638,17 @@
     schedule();
   })();
 
-  document.querySelectorAll('.faq-item').forEach(item=>{
-    const q = item.querySelector('.faq-q');
-    const a = item.querySelector('.faq-a');
-    q.addEventListener('click', ()=>{
-      const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(i=>{
+  // FAQ
+  document.querySelectorAll('.faq-item').forEach(function(item) {
+    var q = item.querySelector('.faq-q');
+    var a = item.querySelector('.faq-a');
+    q.addEventListener('click', function() {
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function(i) {
         i.classList.remove('open');
         i.querySelector('.faq-a').style.maxHeight = null;
       });
-      if(!isOpen){
+      if (!isOpen) {
         item.classList.add('open');
         a.style.maxHeight = a.scrollHeight + 'px';
       }
