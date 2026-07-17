@@ -489,101 +489,6 @@
     flex-shrink:0;
   }
 
-  /* ===== UTM DISPLAY ===== */
-  .utm-display{
-    position:fixed;
-    bottom:90px;
-    right:20px;
-    z-index:60;
-    background:rgba(23,21,27,0.92);
-    backdrop-filter:blur(8px);
-    border:1px solid var(--line-strong);
-    border-radius:10px;
-    padding:12px 16px;
-    font-family:'Space Mono',monospace;
-    font-size:10px;
-    color:var(--ink-mute);
-    max-width:260px;
-    box-shadow:0 12px 30px rgba(0,0,0,0.5);
-    transition:opacity .3s ease, transform .3s ease;
-    cursor:pointer;
-    line-height:1.5;
-  }
-  .utm-display:hover{
-    border-color:var(--citrino);
-  }
-  .utm-display .utm-label{
-    color:var(--citrino);
-    font-size:8px;
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-    display:block;
-    margin-bottom:4px;
-  }
-  .utm-display .utm-row{
-    display:flex;
-    justify-content:space-between;
-    gap:12px;
-    padding:2px 0;
-  }
-  .utm-display .utm-row .utm-key{
-    color:var(--ink-mute);
-    opacity:0.6;
-  }
-  .utm-display .utm-row .utm-value{
-    color:var(--parchment);
-    text-align:right;
-    word-break:break-all;
-  }
-  .utm-display .utm-empty{
-    color:var(--ink-mute);
-    opacity:0.4;
-    font-size:9px;
-    text-align:center;
-    padding:4px 0;
-  }
-  .utm-toggle{
-    position:fixed;
-    bottom:90px;
-    right:20px;
-    z-index:59;
-    background:rgba(23,21,27,0.8);
-    border:1px solid var(--line);
-    border-radius:50%;
-    width:36px;
-    height:36px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--ink-mute);
-    font-size:14px;
-    cursor:pointer;
-    transition:all .2s ease;
-    backdrop-filter:blur(4px);
-  }
-  .utm-toggle:hover{
-    border-color:var(--citrino);
-    color:var(--citrino);
-  }
-  .utm-toggle.hidden{display:none;}
-
-  @media (max-width:640px){
-    .utm-display{
-      bottom:80px;
-      right:10px;
-      max-width:200px;
-      padding:10px 12px;
-      font-size:9px;
-    }
-    .utm-toggle{
-      bottom:80px;
-      right:10px;
-      width:30px;
-      height:30px;
-      font-size:12px;
-    }
-  }
-
   @media (max-width:980px){
     .hero{padding-top:0;}
     .hero-grid{grid-template-columns:1fr;}
@@ -1324,12 +1229,6 @@
   <span class="fc-label">Acessar Catálogo<span class="fc-sub">prévia do ebook</span></span>
 </a>
 
-<!-- ===== UTM DISPLAY ===== -->
-<div class="utm-display" id="utmDisplay">
-  <span class="utm-label">📊 Rastreamento UTM</span>
-  <div id="utmContent"></div>
-</div>
-
 <footer>
   <div class="wrap">
     <p class="disclaimer">Aviso importante: este é um guia educativo e de curiosidade sobre identificação de pedras. Para avaliações oficiais de alto valor, sempre consulte um gemólogo profissional.</p>
@@ -1339,7 +1238,7 @@
 
 <script>
   // ============================================================
-  //  SISTEMA DE UTM E RASTREAMENTO DE VENDAS
+  //  SISTEMA DE UTM E RASTREAMENTO DE VENDAS (SOMENTE CONSOLE)
   // ============================================================
 
   (function() {
@@ -1382,11 +1281,9 @@
     var utmData = getUTMParams();
     var hasUtm = Object.keys(utmData).length > 0;
 
-    // Se veio da URL, salva no cookie
     if (hasUtm) {
       setCookie('pedras_utm', JSON.stringify(utmData), 30);
     } else {
-      // Tenta recuperar do cookie
       var saved = getCookie('pedras_utm');
       if (saved) {
         try {
@@ -1396,38 +1293,7 @@
       }
     }
 
-    // 4. Exibir UTM no canto da tela
-    var container = document.getElementById('utmContent');
-    if (container) {
-      if (hasUtm) {
-        var html = '';
-        var fields = {
-          'utm_source': 'Origem',
-          'utm_medium': 'Médio',
-          'utm_campaign': 'Campanha',
-          'utm_term': 'Termo',
-          'utm_content': 'Conteúdo',
-          'utm_id': 'ID',
-          'afiliado': 'Afiliado',
-          'src': 'SRC',
-          'ref': 'Referência'
-        };
-        Object.keys(fields).forEach(function(key) {
-          if (utmData[key]) {
-            html += '<div class="utm-row"><span class="utm-key">' + fields[key] + '</span><span class="utm-value">' + utmData[key] + '</span></div>';
-          }
-        });
-        if (html) {
-          container.innerHTML = html;
-        } else {
-          container.innerHTML = '<div class="utm-empty">Nenhum parâmetro capturado</div>';
-        }
-      } else {
-        container.innerHTML = '<div class="utm-empty">🔍 Nenhum UTM detectado<br><span style="font-size:8px;opacity:0.5;">Acesse com ?utm_source=... na URL</span></div>';
-      }
-    }
-
-    // 5. Função para adicionar UTM a todos os links de compra
+    // 4. Adicionar UTM a todos os links de compra
     function addUTMToLinks() {
       var baseUrl = 'https://pay.cakto.com.br/kduxrpm_985115';
       var utmString = '';
@@ -1440,11 +1306,9 @@
         utmString = params.join('&');
       }
 
-      // Seleciona todos os links que vão para o checkout
       var links = document.querySelectorAll('a[href*="pay.cakto.com.br"], a[href*="kduxrpm_985115"]');
       links.forEach(function(link) {
         var originalHref = link.getAttribute('href');
-        // Se o link já tem parâmetros, usa ? ou & conforme necessário
         if (utmString) {
           var separator = originalHref.indexOf('?') !== -1 ? '&' : '?';
           link.setAttribute('href', originalHref + separator + utmString);
@@ -1452,15 +1316,13 @@
       });
     }
 
-    // Executa após o DOM carregar
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', addUTMToLinks);
     } else {
       addUTMToLinks();
     }
 
-    // 6. Registrar "venda" no console (simulação para rastreamento)
-    // Em produção, isso enviaria para um webhook ou analytics
+    // 5. Registrar venda no console
     function registrarVenda(fonte) {
       var dados = {
         timestamp: new Date().toISOString(),
@@ -1470,7 +1332,6 @@
       };
       console.log('🛒 VENDA REGISTRADA:', dados);
 
-      // Se tiver afiliado, destaca no console
       if (utmData.afiliado) {
         console.log('🏷️ AFILIADO: ' + utmData.afiliado);
       }
@@ -1478,7 +1339,6 @@
         console.log('📢 FONTE: ' + utmData.utm_source);
       }
 
-      // Armazena no sessionStorage para não perder
       try {
         sessionStorage.setItem('pedras_venda', JSON.stringify(dados));
       } catch(e) { /* ignora */ }
@@ -1486,7 +1346,7 @@
       return dados;
     }
 
-    // 7. Escutar cliques em botões de compra para rastrear
+    // 6. Escutar cliques em botões de compra
     document.addEventListener('click', function(e) {
       var target = e.target.closest('a');
       if (!target) return;
@@ -1498,16 +1358,7 @@
       }
     });
 
-    // 8. Se o usuário já estava na página e clica no floating CTA
-    var floatingCta = document.getElementById('floatingCta');
-    if (floatingCta) {
-      floatingCta.addEventListener('click', function() {
-        // O scroll-to-preview já cuida do scroll, mas registramos também
-        console.log('📌 CTA flutuante clicado');
-      });
-    }
-
-    // 9. Exibir resumo no console para o administrador
+    // 7. Exibir resumo no console (SOMENTE PARA VOCÊ)
     console.log('📊 === SISTEMA DE UTM ATIVO ===');
     console.log('🔗 URL atual:', window.location.href);
     console.log('🏷️ UTM capturados:', utmData);
@@ -1522,7 +1373,7 @@
     console.log('📦 Links de compra foram atualizados com os UTM automaticamente');
     console.log('📊 ============================');
 
-    // 10. Expor dados globalmente para debug
+    // 8. Expor dados globalmente para debug
     window._pedrasUtm = {
       dados: utmData,
       hasUtm: hasUtm,
@@ -1532,7 +1383,7 @@
   })();
 
   // ============================================================
-  //  SCROLL SUAVE E DEMAIS FUNÇÕES
+  //  DEMAIS FUNÇÕES (scroll, popup, FAQ)
   // ============================================================
 
   document.querySelectorAll('.scroll-to-preview').forEach(function(el) {
@@ -1545,7 +1396,6 @@
     });
   });
 
-  // CTA flutuante
   (function(){
     var fab = document.getElementById('floatingCta');
     if (!fab) return;
@@ -1575,7 +1425,6 @@
     update();
   })();
 
-  // Popup de prova social
   (function(){
     var popup = document.getElementById('salesPopup');
     var nameEl = document.getElementById('spName');
@@ -1638,7 +1487,6 @@
     schedule();
   })();
 
-  // FAQ
   document.querySelectorAll('.faq-item').forEach(function(item) {
     var q = item.querySelector('.faq-q');
     var a = item.querySelector('.faq-a');
