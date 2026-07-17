@@ -163,6 +163,7 @@
 
   /* ===== HERO MOBILE PHOTO ===== */
   .hero-mobile-photo{display:none;}
+  .hero-copy-mobile{display:none;}
 
   /* ===== HERO TOP BAR: timer + price badge ===== */
   .hero-topbar{
@@ -223,7 +224,7 @@
   }
 
   /* ===== hero specimen stack (desktop) ===== */
-  .specimen-stack{position:relative; height:560px;}
+  .specimen-stack{position:relative; height:560px; align-self:start; margin-top:-32px;}
   .tag{
     position:absolute;
     width:230px;
@@ -263,8 +264,8 @@
     box-shadow:0 6px 14px rgba(0,0,0,0.2);
   }
   .t1{top:0; left:10%; transform:rotate(-7deg); z-index:3;}
-  .t2{top:120px; left:44%; transform:rotate(5deg); z-index:4;}
-  .t3{top:260px; left:6%; transform:rotate(3deg); z-index:2;}
+  .t2{top:96px; left:44%; transform:rotate(5deg); z-index:4;}
+  .t3{top:210px; left:6%; transform:rotate(3deg); z-index:2;}
 
   /* ===== hero stone grid (6 pedras) — MOBILE ONLY ===== */
   .hero-stones{
@@ -492,12 +493,13 @@
     .testi-grid{grid-template-columns:1fr;}
 
     .hero-mobile-photo{
-      display:block; position:relative; margin:0 0 24px;
-      border-radius:10px; overflow:hidden;
-      box-shadow:0 14px 34px rgba(0,0,0,0.4);
+      display:block; position:relative;
+      margin:-56px calc(50% - 50vw) 0;
+      width:100vw;
+      overflow:hidden;
     }
     .hmp-track{
-      position:relative; width:100%; aspect-ratio:4/3;
+      position:relative; width:100%; aspect-ratio:4/3.1;
     }
     .hmp-slide{
       position:absolute; inset:0; width:100%; height:100%;
@@ -525,8 +527,14 @@
     }
     .hero-mobile-photo::after{
       content:'';
-      position:absolute; left:0; right:0; bottom:0; height:60%;
-      background:linear-gradient(to bottom, transparent, var(--bg) 92%);
+      position:absolute; left:0; right:0; bottom:0; height:78%;
+      background:linear-gradient(to bottom, transparent, var(--bg) 85%);
+      pointer-events:none; z-index:1;
+    }
+    .hero-mobile-photo::before{
+      content:'';
+      position:absolute; inset:0;
+      background:linear-gradient(to top, transparent 60%, rgba(23,21,27,0.35));
       pointer-events:none; z-index:1;
     }
     .hmp-dots{
@@ -539,6 +547,62 @@
       transition:background .3s ease, transform .3s ease;
     }
     .hmp-dot.active{background:var(--citrino); transform:scale(1.35);}
+
+    .hero-copy-desktop{display:none;}
+    .hero-copy-mobile{
+      display:block; position:relative; z-index:2;
+      margin-top:-18px; padding:0 4px;
+    }
+    .hcm-eyebrow{
+      font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--citrino); text-align:center;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .hcm-eyebrow::before, .hcm-eyebrow::after{
+      content:''; width:18px; height:1px; background:var(--citrino); opacity:0.6;
+    }
+    .hcm-label{
+      margin-top:16px; font-family:'Space Mono',monospace; font-weight:700; font-size:14px;
+      letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-light);
+      text-align:center;
+    }
+    .hcm-number{
+      display:block; text-align:center; margin-top:6px;
+      font-family:'Fraunces',serif; font-weight:700;
+      font-size:clamp(44px,15vw,68px); line-height:1;
+      background:linear-gradient(100deg,var(--citrino),var(--quartzo) 55%,var(--amethyst));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .hcm-tagline{
+      margin-top:8px; font-family:'Space Mono',monospace; font-weight:700; font-size:13px;
+      letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-mute); text-align:center;
+    }
+    .hcm-sub{
+      margin-top:20px; text-align:center; font-size:15.5px; color:var(--ink-mute);
+      max-width:380px; margin-left:auto; margin-right:auto; line-height:1.55;
+    }
+    .hcm-sub b{color:var(--citrino); font-weight:600;}
+    .hcm-cta{
+      margin-top:26px; display:flex; align-items:center; justify-content:space-between; gap:14px;
+      background:var(--citrino); color:#241a06; border-radius:6px;
+      padding:18px 22px; text-decoration:none;
+      box-shadow:0 14px 32px rgba(227,173,46,0.3);
+    }
+    .hcm-cta-icon{width:19px; height:19px; flex-shrink:0; stroke:#241a06; stroke-width:2.5;}
+    .hcm-cta-label{
+      font-family:'Space Mono',monospace; font-weight:700; font-size:14.5px;
+      display:flex; align-items:center; gap:10px; flex:1;
+    }
+    .hcm-cta-price{
+      font-family:'Fraunces',serif; font-weight:700; font-size:21px; white-space:nowrap;
+    }
+    .hcm-cta-price small{font-family:'Space Mono',monospace; font-size:12px; font-weight:400;}
+    .hcm-trust{
+      margin-top:16px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap;
+      font-family:'Space Mono',monospace; font-size:10.5px; color:var(--ink-mute);
+    }
+    .hcm-trust span{display:flex; align-items:center; gap:5px;}
+    .hcm-trust svg{width:12px; height:12px; stroke:var(--turmalina); stroke-width:2.5; flex-shrink:0;}
   }
   @media (max-width:640px){
     nav{padding:14px 20px; gap:12px;}
@@ -743,21 +807,45 @@
         </div>
       </div>
 
-      <div class="eyebrow">Guia digital em PDF · 100% em português</div>
-      <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
-      <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
+      <div class="hero-copy-desktop">
+        <div class="eyebrow">Guia digital em PDF · 100% em português</div>
+        <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
+        <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
 
-      <div class="hero-cta-row">
-        <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary">
-          Acessar o catálogo agora
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </a>
-        <span class="price-inline">por apenas <b>R$19,99</b> · acesso imediato</span>
+        <div class="hero-cta-row">
+          <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary">
+            Acessar o catálogo agora
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <span class="price-inline">por apenas <b>R$19,99</b> · acesso imediato</span>
+        </div>
+        <div class="hero-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Sem termos técnicos de geologia</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Foco nas pedras do Brasil</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Leia no celular ou impresso</span>
+        </div>
       </div>
-      <div class="hero-meta">
-        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Sem termos técnicos de geologia</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Foco nas pedras do Brasil</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Leia no celular ou impresso</span>
+
+      <div class="hero-copy-mobile">
+        <div class="hcm-eyebrow">Guia digital em PDF</div>
+        <div class="hcm-label">Pedras da sua gaveta<br>podem valer até</div>
+        <span class="hcm-number">R$700+</span>
+        <div class="hcm-tagline">em sites de colecionadores</div>
+        <p class="hcm-sub">Sem curso. Sem termos técnicos de geologia. <b>Identifique em minutos</b> com o guia visual completo — do achado ao valor real de mercado.</p>
+
+        <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="hcm-cta">
+          <span class="hcm-cta-label">
+            <svg class="hcm-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            Acessar o catálogo agora
+          </span>
+          <span class="hcm-cta-price">R$19<small>,99</small></span>
+        </a>
+
+        <div class="hcm-trust">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Acesso imediato</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Acesso vitalício</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Foco no Brasil</span>
+        </div>
       </div>
     </div>
 
