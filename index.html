@@ -55,12 +55,6 @@
   .hero h1{font-size:clamp(34px,4.6vw,58px);line-height:1.06;color:var(--ink-light);}
   .hero h1 em{font-style:italic;font-weight:500;background:linear-gradient(100deg,var(--citrino),var(--quartzo) 60%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent;}
   .hero-sub{margin-top:22px;font-size:18px;color:var(--ink-mute);max-width:480px;}
-  .hero-cta-row{margin-top:34px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-  .price-inline{font-family:'Space Mono',monospace;font-size:13.5px;color:var(--ink-mute);}
-  .price-inline b{color:var(--parchment);font-size:16px;}
-  .hero-meta{margin-top:28px;display:flex;gap:26px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:12.5px;color:var(--ink-mute);}
-  .hero-meta span{display:flex;align-items:center;gap:7px;}
-  .hero-meta svg{width:14px;height:14px;stroke:var(--turmalina);}
   .specimen-stack{position:relative;height:560px;align-self:start;margin-top:-32px;}
   .tag{position:absolute;width:230px;background:var(--parchment);border-radius:4px;padding:20px 18px 18px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.06);}
   .tag::before{content:'';position:absolute;top:0;left:0;right:0;height:14px;background-image:radial-gradient(circle at 14px 7px, transparent 5px, var(--parchment) 5.5px);background-size:28px 14px;background-repeat:repeat-x;}
@@ -73,28 +67,202 @@
   .t1{top:0;left:10%;transform:rotate(-7deg);z-index:3;}
   .t2{top:96px;left:44%;transform:rotate(5deg);z-index:4;}
   .t3{top:210px;left:6%;transform:rotate(3deg);z-index:2;}
-  /* SOCIAL PROOF HERO */
-  .social-proof{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:20px;padding:16px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.06);max-width:480px;}
-  .stars-row{display:flex;align-items:center;gap:8px;}
-  .stars-row .stars{color:var(--gold);font-size:16px;letter-spacing:1px;}
-  .stars-row .rating{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--parchment);}
-  .stars-row .rating small{font-weight:400;color:var(--ink-mute);font-size:12px;}
-  .proof-divider{width:1px;height:32px;background:var(--line-strong);}
-  .proof-sales{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:13px;color:var(--ink-mute);}
-  .proof-sales b{color:var(--citrino);font-size:16px;}
-  .proof-badge{display:flex;align-items:center;gap:6px;background:rgba(79,154,114,0.15);padding:4px 12px;border-radius:20px;font-family:'Space Mono',monospace;font-size:10px;color:var(--turmalina);text-transform:uppercase;letter-spacing:0.05em;border:1px solid rgba(79,154,114,0.2);}
-  .proof-badge svg{width:12px;height:12px;stroke:var(--turmalina);}
-  /* SCARCITY BANNER */
-  .scarcity-banner{display:inline-flex;align-items:center;gap:8px;background:rgba(227,173,46,0.12);border:1px solid rgba(227,173,46,0.2);padding:6px 16px;border-radius:20px;font-family:'Space Mono',monospace;font-size:11px;color:var(--citrino);margin-top:12px;}
-  .scarcity-banner .pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--citrino);animation:pulse 1.5s ease-in-out infinite;}
+  /* ===== PRODUCT CARD (STYLE MARKETPLACE) ===== */
+  .product-card {
+    background: var(--parchment);
+    border-radius: 12px;
+    padding: 20px 22px 18px;
+    max-width: 440px;
+    margin-top: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    border: 1px solid rgba(0,0,0,0.06);
+    position: relative;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 60px rgba(0,0,0,0.5);
+  }
+  .product-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(42,33,24,0.08);
+  }
+  .product-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: #f5b342;
+    color: #241a06;
+    padding: 3px 12px;
+    border-radius: 12px;
+  }
+  .product-seller {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .product-seller strong {
+    color: var(--ink);
+  }
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .product-rating .stars {
+    color: var(--gold);
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+  .product-rating .rating-number {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .product-rating .rating-count {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .product-rating .rating-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #22a65e;
+    background: rgba(34,166,94,0.12);
+    padding: 2px 10px;
+    border-radius: 12px;
+  }
+  .product-sales {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .product-sales svg {
+    stroke: var(--turmalina);
+    flex-shrink: 0;
+  }
+  .product-sales b {
+    color: var(--ink);
+  }
+  .product-price {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(42,33,24,0.08);
+  }
+  .price-old {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    color: var(--ink-soft);
+    text-decoration: line-through;
+  }
+  .price-new {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--ink);
+  }
+  .price-new sup {
+    font-size: 14px;
+    top: -0.8em;
+  }
+  .price-discount {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    background: #22a65e;
+    color: #fff;
+    padding: 2px 12px;
+    border-radius: 12px;
+  }
+  .product-stock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .stock-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22a65e;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
   @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.8);}}
-  /* LIVE VIEWERS */
-  .live-viewers{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-mute);margin-top:10px;}
-  .live-viewers .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2s ease-in-out infinite;}
-  .live-viewers b{color:var(--parchment);}
-  /* BESTSELLER BADGE */
-  .bestseller-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:#241a06;padding:4px 14px;border-radius:20px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;}
-  .bestseller-badge svg{width:14px;height:14px;fill:#241a06;}
+  .stock-text b {
+    color: var(--ink);
+  }
+  .product-shipping {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .product-shipping svg {
+    stroke: var(--citrino);
+    flex-shrink: 0;
+  }
+  .product-shipping b {
+    color: var(--ink);
+  }
+  .product-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--citrino);
+    color: #241a06;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 8px 24px rgba(227,173,46,0.3);
+  }
+  .product-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(227,173,46,0.45);
+  }
+  .product-btn svg {
+    stroke: #241a06;
+  }
+  .product-guarantee {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+  }
+  .product-guarantee svg {
+    stroke: var(--turmalina);
+    flex-shrink: 0;
+  }
   /* MOBILE HERO */
   .hero-tag-mobile{display:none;}
   .hero-copy-mobile{display:none;}
@@ -116,15 +284,10 @@
     .hcm-tagline{margin-top:8px;font-family:'Space Mono',monospace;font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink-mute);text-align:center;}
     .hcm-sub{margin-top:20px;text-align:center;font-size:15.5px;color:var(--ink-mute);max-width:380px;margin-left:auto;margin-right:auto;line-height:1.55;}
     .hcm-sub b{color:var(--citrino);font-weight:600;}
-    .hcm-cta{margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--citrino);color:#241a06;border-radius:6px;padding:18px 22px;text-decoration:none;box-shadow:0 14px 32px rgba(227,173,46,0.3);}
-    .hcm-cta-icon{width:19px;height:19px;flex-shrink:0;stroke:#241a06;stroke-width:2.5;}
-    .hcm-cta-label{font-family:'Space Mono',monospace;font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:10px;flex:1;}
-    .hcm-cta-price{font-family:'Fraunces',serif;font-weight:700;font-size:21px;white-space:nowrap;}
-    .hcm-cta-price small{font-family:'Space Mono',monospace;font-size:12px;font-weight:400;}
     .hcm-trust{margin-top:16px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--ink-mute);}
     .hcm-trust span{display:flex;align-items:center;gap:5px;}
     .hcm-trust svg{width:12px;height:12px;stroke:var(--turmalina);stroke-width:2.5;flex-shrink:0;}
-    .social-proof{max-width:100%;justify-content:center;}
+    .product-card{max-width:100%;margin-top:18px;}
   }
   @media (max-width:640px){
     nav{padding:14px 20px;}
@@ -132,8 +295,10 @@
     .nav-cta{font-size:11.5px;padding:9px 14px;white-space:nowrap;}
     .wrap{padding:0 20px;}
     .hero-tag-mobile{max-width:100%;}
-    .social-proof{gap:12px;padding:12px 16px;}
-    .proof-divider{display:none;}
+    .product-card{padding:16px;}
+    .price-new{font-size:26px;}
+    .product-btn{font-size:14px;padding:14px;}
+    .product-rating .rating-count{font-size:12px;}
   }
   /* STRIP */
   .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-alt);padding:14px 0;overflow:hidden;}
@@ -276,9 +441,6 @@
   footer{padding:44px 0;text-align:center;}
   footer .disclaimer{font-size:12.5px;color:var(--ink-mute);max-width:560px;margin:0 auto 18px;line-height:1.6;}
   footer .fine{font-family:'Space Mono',monospace;font-size:11.5px;color:#5a5460;}
-  /* GUARANTEE BADGE */
-  .guarantee-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(79,154,114,0.1);padding:6px 14px;border-radius:20px;font-family:'Space Mono',monospace;font-size:10px;color:var(--turmalina);border:1px solid rgba(79,154,114,0.15);margin-top:8px;}
-  .guarantee-badge svg{width:14px;height:14px;stroke:var(--turmalina);}
 </style>
 </head>
 <body>
@@ -304,67 +466,53 @@
       </div>
 
       <div class="hero-copy-desktop">
-        <!-- BESTSELLER BADGE -->
-        <div class="bestseller-badge">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          Mais Vendido
-        </div>
-
         <div class="eyebrow">Guia digital em PDF · 100% em português</div>
         <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
         <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
 
-        <!-- SOCIAL PROOF -->
-        <div class="social-proof">
-          <div class="stars-row">
-            <span class="stars">★★★★★</span>
-            <span class="rating">4,8 <small>/ 5</small></span>
+        <!-- ===== PRODUCT CARD ===== -->
+        <div class="product-card">
+          <div class="product-card-top">
+            <span class="product-badge">🔥 Mais Vendido</span>
+            <span class="product-seller">Vendido por <strong>Pedras Valiosas</strong> ★ Loja Oficial</span>
           </div>
-          <div class="proof-divider"></div>
-          <div class="proof-sales">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-            <b>3.500+</b> compras
+          <div class="product-card-body">
+            <div class="product-rating">
+              <span class="stars">★★★★★</span>
+              <span class="rating-number">4,8</span>
+              <span class="rating-count">(3.536 avaliações)</span>
+              <span class="rating-label">⭐ Excelente</span>
+            </div>
+            <div class="product-sales">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              <span><b>+3.500</b> pessoas compraram este guia</span>
+            </div>
+            <div class="product-price">
+              <span class="price-old">R$ 47,00</span>
+              <span class="price-new"><sup>R$</sup>19,99</span>
+              <span class="price-discount">-57%</span>
+            </div>
+            <div class="product-stock">
+              <span class="stock-dot"></span>
+              <span class="stock-text"><b>Em estoque</b> — 47 unidades com desconto</span>
+            </div>
+            <div class="product-shipping">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h15M12 3v15M12 21l3-6h-6l3 6z"/></svg>
+              <span><b>Frete grátis</b> (envio digital imediato)</span>
+            </div>
+            <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="product-btn" id="heroBtnDesktop">
+              Comprar agora
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+            <div class="product-guarantee">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>Compra segura · 7 dias de garantia · Acesso imediato</span>
+            </div>
           </div>
-          <div class="proof-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            Confiável
-          </div>
-        </div>
-
-        <!-- SCARCITY -->
-        <div class="scarcity-banner">
-          <span class="pulse"></span>
-          ⚡ Últimas <b>47 vagas</b> com desconto especial
-        </div>
-
-        <!-- LIVE VIEWERS -->
-        <div class="live-viewers">
-          <span class="dot"></span>
-          <b>34</b> pessoas estão vendo este guia agora
-        </div>
-
-        <div class="hero-cta-row">
-          <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary" id="heroBtnDesktop">
-            Quero identificar minhas pedras agora
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
-          <span class="price-inline">por apenas <b>R$19,99</b> · acesso imediato</span>
-        </div>
-
-        <!-- GUARANTEE -->
-        <div class="guarantee-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          Satisfação garantida ou seu dinheiro de volta
-        </div>
-
-        <div class="hero-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Sem termos técnicos de geologia</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Foco nas pedras do Brasil</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Leia no celular ou impresso</span>
         </div>
       </div>
 
-      <!-- MOBILE VERSION -->
+      <!-- ===== MOBILE VERSION ===== -->
       <div class="hero-copy-mobile">
         <div class="hcm-eyebrow">⭐ 4,8/5 · 3.500+ compras</div>
         <div class="hcm-label">Pedras da sua gaveta<br>podem valer até</div>
@@ -372,22 +520,36 @@
         <div class="hcm-tagline">em sites de colecionadores</div>
         <p class="hcm-sub">Sem curso. Sem termos técnicos de geologia. <b>Identifique em minutos</b> com o guia visual completo — do achado ao valor real de mercado.</p>
 
-        <div class="scarcity-banner" style="display:flex;justify-content:center;margin:12px auto 0;width:fit-content;">
-          <span class="pulse"></span>
-          ⚡ Últimas <b>47 vagas</b> com desconto
-        </div>
-
-        <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="hcm-cta" id="heroBtnMobile">
-          <span class="hcm-cta-label">
-            <svg class="hcm-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-            Quero identificar minhas pedras
-          </span>
-          <span class="hcm-cta-price">R$19<small>,99</small></span>
-        </a>
-
-        <div class="guarantee-badge" style="display:flex;justify-content:center;margin:10px auto 0;width:fit-content;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          Satisfação garantida
+        <!-- Card mobile simplificado -->
+        <div class="product-card" style="max-width:100%;margin:16px 0;">
+          <div class="product-card-top">
+            <span class="product-badge">🔥 Mais Vendido</span>
+            <span class="product-seller">★ Loja Oficial</span>
+          </div>
+          <div class="product-card-body">
+            <div class="product-rating">
+              <span class="stars">★★★★★</span>
+              <span class="rating-number">4,8</span>
+              <span class="rating-count">(3.536 avaliações)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-old">R$ 47,00</span>
+              <span class="price-new"><sup>R$</sup>19,99</span>
+              <span class="price-discount">-57%</span>
+            </div>
+            <div class="product-stock">
+              <span class="stock-dot"></span>
+              <span class="stock-text"><b>Em estoque</b> — 47 unidades</span>
+            </div>
+            <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="product-btn" id="heroBtnMobile">
+              Comprar agora
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+            <div class="product-guarantee">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>Acesso imediato · Garantia</span>
+            </div>
+          </div>
         </div>
 
         <div class="hcm-trust">
