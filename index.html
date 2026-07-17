@@ -374,9 +374,13 @@
     border-color: var(--amethyst-deep);
   }
   .modal-upload-area .icon {
-    font-size: 40px;
     display: block;
-    margin-bottom: 8px;
+    margin: 0 auto 8px;
+  }
+  .modal-upload-area .icon svg {
+    width: 48px;
+    height: 48px;
+    stroke: var(--amethyst);
   }
   .modal-upload-area .label {
     font-family: 'Space Mono', monospace;
@@ -445,9 +449,13 @@
     display: block;
   }
   .modal-result .result-icon {
-    font-size: 48px;
     display: block;
-    margin-bottom: 8px;
+    margin: 0 auto 8px;
+  }
+  .modal-result .result-icon svg {
+    width: 56px;
+    height: 56px;
+    stroke: var(--amethyst);
   }
   .modal-result .result-title {
     font-family: 'Fraunces', serif;
@@ -463,11 +471,21 @@
   .modal-result .result-text b {
     color: var(--amethyst-deep);
   }
+  .modal-result .result-divider {
+    margin: 18px 0 14px;
+    border: none;
+    border-top: 1px dashed rgba(42,33,24,0.15);
+  }
+  .modal-result .result-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
   .modal-result .result-cta {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
-    margin-top: 16px;
     padding: 14px 28px;
     background: var(--citrino);
     color: #241a06;
@@ -478,24 +496,42 @@
     text-decoration: none;
     transition: transform .15s ease, box-shadow .15s ease;
     box-shadow: 0 8px 24px rgba(227,173,46,0.3);
+    width: 100%;
+    border: none;
+    cursor: pointer;
   }
   .modal-result .result-cta:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 32px rgba(227,173,46,0.45);
   }
-  .modal-result .result-skip {
-    display: block;
-    margin-top: 12px;
-    font-size: 12px;
+  .modal-result .result-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: transparent;
     color: var(--ink-soft);
-    text-decoration: underline;
+    font-family: 'Space Mono', monospace;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 6px;
+    border: 1px solid rgba(42,33,24,0.15);
+    text-decoration: none;
+    transition: all .15s ease;
+    width: 100%;
     cursor: pointer;
     background: none;
-    border: none;
-    font-family: 'Inter', sans-serif;
   }
-  .modal-result .result-skip:hover {
+  .modal-result .result-secondary:hover {
+    background: rgba(42,33,24,0.05);
+    border-color: var(--ink-soft);
     color: var(--ink);
+  }
+  .modal-result .result-secondary svg {
+    stroke: var(--ink-soft);
+    width: 16px;
+    height: 16px;
   }
 
   /* MOBILE HERO */
@@ -841,10 +877,15 @@
 
     <!-- Estado 1: Upload -->
     <div id="modalStateUpload">
-      <h3>📸 Avalie sua pedra</h3>
+      <h3>Avalie sua pedra</h3>
       <p class="modal-sub">Tire uma foto da sua pedra com a câmera do celular ou escolha uma da galeria. Vamos analisar!</p>
       <div class="modal-upload-area" id="uploadArea">
-        <span class="icon">📷</span>
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </span>
         <span class="label">Toque para <b>tirar foto</b> ou <b>escolher da galeria</b></span>
         <input type="file" id="fileInput" accept="image/*" capture="environment">
       </div>
@@ -862,18 +903,35 @@
 
     <!-- Estado 3: Resultado -->
     <div class="modal-result" id="modalStateResult">
-      <span class="result-icon">💎</span>
+      <span class="result-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a8 8 0 0 0-8 8c0 5 8 12 8 12s8-7 8-12a8 8 0 0 0-8-8z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </span>
       <p class="result-title">Sua pedra pode ser valiosa!</p>
       <p class="result-text">
         Com base na análise visual, sua pedra tem características compatíveis com <b>gemas de médio a alto valor</b>.
         <br><br>
-        Para saber <b>exatamente</b> o que você tem em mãos e quanto vale, você precisa do guia completo.
+        Para saber <b>exatamente</b> o que você tem em mãos e quanto vale, você pode:
       </p>
-      <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="result-cta">
-        Quero o guia completo — R$19,99
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-      <button class="result-skip" id="closeResult">Voltar</button>
+
+      <hr class="result-divider">
+
+      <div class="result-buttons">
+        <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="result-cta">
+          📖 Quero o guia completo — R$19,99
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+
+        <button class="result-secondary" id="closeResult">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Obrigado, vou falar com um gemólogo na minha cidade
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -1341,6 +1399,7 @@
         stateAnalyzing.classList.remove('active');
         previewContainer.classList.remove('active');
         fileInput.value = '';
+        closeModal();
       });
     }
 
