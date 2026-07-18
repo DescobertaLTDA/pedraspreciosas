@@ -508,16 +508,16 @@
       <!-- DESKTOP: título -->
       <div class="hero-copy-desktop">
         <div class="eyebrow">Guia digital em PDF · 100% em português</div>
-        <h1 style="font-size:clamp(32px,4.4vw,54px);line-height:1.08;">
+        <h1 style="font-size:clamp(32px,4.4vw,54px);line-height:1.08;color:var(--parchment);">
           <span style="display:block;font-size:0.65em;font-weight:400;color:var(--citrino);font-family:'Space Mono',monospace;letter-spacing:0.04em;margin-bottom:4px;">
-            UMA PEDRA ESQUECIDA PODE VALER
+            IDENTIFIQUE PEDRAS QUE VALEM DINHEIRO
           </span>
-          <em style="font-style:italic;font-weight:500;background:linear-gradient(100deg,var(--citrino),var(--quartzo) 60%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.15em;">
-            MAIS DE R$700
-          </em>
+          <span style="font-style:italic;font-weight:500;background:linear-gradient(100deg,var(--citrino),var(--quartzo) 60%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.15em;">
+            COM O GUIA MAIS COMPLETO DO BRASIL
+          </span>
         </h1>
         <p class="hero-sub" style="margin-top:14px;font-size:17px;max-width:500px;">
-          Descubra se você tem uma em casa com o <strong style="color:var(--parchment);">Tesouro Esquecido</strong> — 
+          Descubra se você tem uma pedra valiosa em casa com o <strong style="color:var(--parchment);">Tesouro Esquecido</strong> — 
           o guia que identifica <strong style="color:var(--parchment);">em minutos</strong> o que vale e o que não vale.
         </p>
 
@@ -612,17 +612,19 @@
 
       <!-- MOBILE: copy + card enxuto -->
       <div class="hero-copy-mobile">
-        <!-- TÍTULO — sem avaliações no topo -->
+        <!-- TÍTULO — REMOVIDO O R$700+ -->
         <div style="text-align:center;margin-top:4px;">
           <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--citrino);display:block;">
-            Uma pedra esquecida pode valer
+            IDENTIFIQUE PEDRAS QUE VALEM DINHEIRO
           </span>
-          <span class="hcm-number" style="font-size:clamp(38px,12vw,56px);">R$700+</span>
+          <span style="display:block;font-family:'Fraunces',serif;font-weight:700;font-size:clamp(28px,8vw,42px);line-height:1.1;background:linear-gradient(100deg,var(--citrino),var(--quartzo) 55%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:2px;">
+            COM O GUIA MAIS COMPLETO DO BRASIL
+          </span>
         </div>
 
         <!-- SUBTÍTULO -->
         <p class="hcm-sub" style="font-size:15px;max-width:340px;margin:10px auto 0;">
-          Descubra se você tem uma em casa com o <b>Tesouro Esquecido</b> — 
+          Descubra se você tem uma pedra valiosa em casa com o <b>Tesouro Esquecido</b> — 
           o guia que identifica <b>em minutos</b> o que vale e o que não vale.
         </p>
 
@@ -763,132 +765,132 @@
     <div style="position:relative;overflow:hidden;border-radius:12px;">
 
       <!-- TRACK -->
-      <div id="depoimentosTrack" style="display:flex;transition:transform 0.5s ease;gap:16px;">
+      <div id="depoimentosTrack" style="display:flex;transition:transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);gap:16px;cursor:grab;">
 
-        <!-- Depoimento 1 -->
+        <!-- Depoimento 1 - Carlos E. -->
         <div class="depoimento-item" style="min-width:calc(33.333% - 11px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;max-height:180px;">
-            <img src="depoimento1.jpeg" alt="Carlos E." style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:11px;>📷 Carlos E.</span>'">
+          <div style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento1.jpeg" alt="Carlos E." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=color:var(--ink-mute);font-size:13px;text-align:center;>📷<br>Carlos E.</div>'">
           </div>
-          <div class="stars" style="color:var(--gold);font-size:12px;letter-spacing:1px;">★★★★★</div>
-          <p style="font-size:13px;color:var(--ink-light);line-height:1.5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Achei essa pedra no quintal. O guia me ajudou a identificar que era ametista."</p>
+          <div class="stars" style="color:var(--gold);font-size:11px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--ink-light);line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Achei essa pedra no quintal. O guia me ajudou a identificar que era ametista."</p>
           <div style="display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line);">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--amethyst-deep);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:11px;color:#fff;flex-shrink:0;">C</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--amethyst-deep);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:10px;color:#fff;flex-shrink:0;">C</div>
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--parchment);">Carlos E.</div>
-              <div style="font-size:10px;color:var(--ink-mute);">Ouro Preto, MG</div>
+              <div style="font-size:11px;font-weight:600;color:var(--parchment);">Carlos E.</div>
+              <div style="font-size:9px;color:var(--ink-mute);">Ouro Preto, MG</div>
             </div>
           </div>
         </div>
 
-        <!-- Depoimento 2 -->
+        <!-- Depoimento 2 - Mariana C. -->
         <div class="depoimento-item" style="min-width:calc(33.333% - 11px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;max-height:180px;">
-            <img src="depoimento2.jpeg" alt="Mariana C." style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:11px;>📷 Mariana C.</span>'">
+          <div style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento2.jpeg" alt="Mariana C." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=color:var(--ink-mute);font-size:13px;text-align:center;>📷<br>Mariana C.</div>'">
           </div>
-          <div class="stars" style="color:var(--gold);font-size:12px;letter-spacing:1px;">★★★★★</div>
-          <p style="font-size:13px;color:var(--ink-light);line-height:1.5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Comprei o PDF e no mesmo dia identifiquei um quartzo rosa que estava na gaveta da minha avó."</p>
+          <div class="stars" style="color:var(--gold);font-size:11px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--ink-light);line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Comprei o PDF e no mesmo dia identifiquei um quartzo rosa que estava na gaveta da minha avó."</p>
           <div style="display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line);">
-            <div style="width:28px;height:28px;border-radius:50%;background:#c8901c;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:11px;color:#fff;flex-shrink:0;">M</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:#c8901c;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:10px;color:#fff;flex-shrink:0;">M</div>
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--parchment);">Mariana C.</div>
-              <div style="font-size:10px;color:var(--ink-mute);">São Paulo, SP</div>
+              <div style="font-size:11px;font-weight:600;color:var(--parchment);">Mariana C.</div>
+              <div style="font-size:9px;color:var(--ink-mute);">São Paulo, SP</div>
             </div>
           </div>
         </div>
 
-        <!-- Depoimento 3 -->
+        <!-- Depoimento 3 - Renata M. -->
         <div class="depoimento-item" style="min-width:calc(33.333% - 11px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;max-height:180px;">
-            <img src="depoimento3.jpeg" alt="Renata M." style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:11px;>📷 Renata M.</span>'">
+          <div style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento3.jpeg" alt="Renata M." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=color:var(--ink-mute);font-size:13px;text-align:center;>📷<br>Renata M.</div>'">
           </div>
-          <div class="stars" style="color:var(--gold);font-size:12px;letter-spacing:1px;">★★★★★</div>
-          <p style="font-size:13px;color:var(--ink-light);line-height:1.5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Herdei uma caixa de pedras do meu avô. Em uma tarde, identifiquei quase todas com o guia."</p>
+          <div class="stars" style="color:var(--gold);font-size:11px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--ink-light);line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Herdei uma caixa de pedras do meu avô. Em uma tarde, identifiquei quase todas com o guia."</p>
           <div style="display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line);">
-            <div style="width:28px;height:28px;border-radius:50%;background:#3d7d5b;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:11px;color:#fff;flex-shrink:0;">R</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:#3d7d5b;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:10px;color:#fff;flex-shrink:0;">R</div>
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--parchment);">Renata M.</div>
-              <div style="font-size:10px;color:var(--ink-mute);">Belo Horizonte, MG</div>
+              <div style="font-size:11px;font-weight:600;color:var(--parchment);">Renata M.</div>
+              <div style="font-size:9px;color:var(--ink-mute);">Belo Horizonte, MG</div>
             </div>
           </div>
         </div>
 
-        <!-- Depoimento 5 -->
+        <!-- Depoimento 5 - Fernanda R. -->
         <div class="depoimento-item" style="min-width:calc(33.333% - 11px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;max-height:180px;">
-            <img src="depoimento5.jpeg" alt="Fernanda R." style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:11px;>📷 Fernanda R.</span>'">
+          <div style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento5.jpeg" alt="Fernanda R." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=color:var(--ink-mute);font-size:13px;text-align:center;>📷<br>Fernanda R.</div>'">
           </div>
-          <div class="stars" style="color:var(--gold);font-size:12px;letter-spacing:1px;">★★★★★</div>
-          <p style="font-size:13px;color:var(--ink-light);line-height:1.5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Pensei que era só uma pedra comum. O guia mostrou que era turmalina. Valeu muito a pena!"</p>
+          <div class="stars" style="color:var(--gold);font-size:11px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--ink-light);line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Pensei que era só uma pedra comum. O guia mostrou que era turmalina. Valeu muito a pena!"</p>
           <div style="display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line);">
-            <div style="width:28px;height:28px;border-radius:50%;background:#7a4fab;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:11px;color:#fff;flex-shrink:0;">F</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:#7a4fab;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:10px;color:#fff;flex-shrink:0;">F</div>
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--parchment);">Fernanda R.</div>
-              <div style="font-size:10px;color:var(--ink-mute);">Porto Alegre, RS</div>
+              <div style="font-size:11px;font-weight:600;color:var(--parchment);">Fernanda R.</div>
+              <div style="font-size:9px;color:var(--ink-mute);">Porto Alegre, RS</div>
             </div>
           </div>
         </div>
 
-        <!-- Depoimento 6 -->
+        <!-- Depoimento 6 - Diego S. -->
         <div class="depoimento-item" style="min-width:calc(33.333% - 11px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;max-height:180px;">
-            <img src="depoimento6.jpeg" alt="Diego S." style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:11px;>📷 Diego S.</span>'">
+          <div style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento6.jpeg" alt="Diego S." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=color:var(--ink-mute);font-size:13px;text-align:center;>📷<br>Diego S.</div>'">
           </div>
-          <div class="stars" style="color:var(--gold);font-size:12px;letter-spacing:1px;">★★★★★</div>
-          <p style="font-size:13px;color:var(--ink-light);line-height:1.5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Encontrei uma pedra estranha na beira do rio. O guia me ajudou a identificar que era citrino!"</p>
+          <div class="stars" style="color:var(--gold);font-size:11px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--ink-light);line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Encontrei uma pedra estranha na beira do rio. O guia me ajudou a identificar que era citrino!"</p>
           <div style="display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line);">
-            <div style="width:28px;height:28px;border-radius:50%;background:#e08a2e;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:11px;color:#fff;flex-shrink:0;">D</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:#e08a2e;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:10px;color:#fff;flex-shrink:0;">D</div>
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--parchment);">Diego S.</div>
-              <div style="font-size:10px;color:var(--ink-mute);">Curitiba, PR</div>
+              <div style="font-size:11px;font-weight:600;color:var(--parchment);">Diego S.</div>
+              <div style="font-size:9px;color:var(--ink-mute);">Curitiba, PR</div>
             </div>
           </div>
         </div>
 
-        <!-- Depoimento 7 -->
+        <!-- Depoimento 7 - Luciana F. -->
         <div class="depoimento-item" style="min-width:calc(33.333% - 11px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;max-height:180px;">
-            <img src="depoimento7.jpeg" alt="Luciana F." style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:11px;>📷 Luciana F.</span>'">
+          <div style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento7.jpeg" alt="Luciana F." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=color:var(--ink-mute);font-size:13px;text-align:center;>📷<br>Luciana F.</div>'">
           </div>
-          <div class="stars" style="color:var(--gold);font-size:12px;letter-spacing:1px;">★★★★★</div>
-          <p style="font-size:13px;color:var(--ink-light);line-height:1.5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Linguagem simples e direta. Em 10 minutos já sabia o que era a pedra que achei no sítio."</p>
+          <div class="stars" style="color:var(--gold);font-size:11px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--ink-light);line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Linguagem simples e direta. Em 10 minutos já sabia o que era a pedra que achei no sítio."</p>
           <div style="display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line);">
-            <div style="width:28px;height:28px;border-radius:50%;background:#4f9a72;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:11px;color:#fff;flex-shrink:0;">L</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:#4f9a72;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:10px;color:#fff;flex-shrink:0;">L</div>
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--parchment);">Luciana F.</div>
-              <div style="font-size:10px;color:var(--ink-mute);">Salvador, BA</div>
+              <div style="font-size:11px;font-weight:600;color:var(--parchment);">Luciana F.</div>
+              <div style="font-size:9px;color:var(--ink-mute);">Salvador, BA</div>
             </div>
           </div>
         </div>
 
-        <!-- Depoimento 9 -->
+        <!-- Depoimento 9 - André L. -->
         <div class="depoimento-item" style="min-width:calc(33.333% - 11px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;max-height:180px;">
-            <img src="depoimento9.jpeg" alt="André L." style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:11px;>📷 André L.</span>'">
+          <div style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento9.jpeg" alt="André L." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=color:var(--ink-mute);font-size:13px;text-align:center;>📷<br>André L.</div>'">
           </div>
-          <div class="stars" style="color:var(--gold);font-size:12px;letter-spacing:1px;">★★★★★</div>
-          <p style="font-size:13px;color:var(--ink-light);line-height:1.5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Nunca tinha reparado nas pedras do meu jardim. Com o guia descobri que algumas valem dinheiro!"</p>
+          <div class="stars" style="color:var(--gold);font-size:11px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--ink-light);line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Nunca tinha reparado nas pedras do meu jardim. Com o guia descobri que algumas valem dinheiro!"</p>
           <div style="display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line);">
-            <div style="width:28px;height:28px;border-radius:50%;background:#8a4f9a;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:11px;color:#fff;flex-shrink:0;">A</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:#8a4f9a;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:10px;color:#fff;flex-shrink:0;">A</div>
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--parchment);">André L.</div>
-              <div style="font-size:10px;color:var(--ink-mute);">Brasília, DF</div>
+              <div style="font-size:11px;font-weight:600;color:var(--parchment);">André L.</div>
+              <div style="font-size:9px;color:var(--ink-mute);">Brasília, DF</div>
             </div>
           </div>
         </div>
 
-        <!-- Depoimento 10 -->
+        <!-- Depoimento 10 - Paula R. -->
         <div class="depoimento-item" style="min-width:calc(33.333% - 11px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;max-height:180px;">
-            <img src="depoimento10.jpeg" alt="Paula R." style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:11px;>📷 Paula R.</span>'">
+          <div style="width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento10.jpeg" alt="Paula R." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=color:var(--ink-mute);font-size:13px;text-align:center;>📷<br>Paula R.</div>'">
           </div>
-          <div class="stars" style="color:var(--gold);font-size:12px;letter-spacing:1px;">★★★★★</div>
-          <p style="font-size:13px;color:var(--ink-light);line-height:1.5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Comprei o guia por curiosidade e acabei identificando uma pedra que estava na família há anos!"</p>
+          <div class="stars" style="color:var(--gold);font-size:11px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--ink-light);line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"Comprei o guia por curiosidade e acabei identificando uma pedra que estava na família há anos!"</p>
           <div style="display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line);">
-            <div style="width:28px;height:28px;border-radius:50%;background:#d48a3a;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:11px;color:#fff;flex-shrink:0;">P</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:#d48a3a;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:10px;color:#fff;flex-shrink:0;">P</div>
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--parchment);">Paula R.</div>
-              <div style="font-size:10px;color:var(--ink-mute);">Rio de Janeiro, RJ</div>
+              <div style="font-size:11px;font-weight:600;color:var(--parchment);">Paula R.</div>
+              <div style="font-size:9px;color:var(--ink-mute);">Rio de Janeiro, RJ</div>
             </div>
           </div>
         </div>
@@ -896,11 +898,11 @@
       </div>
 
       <!-- CONTROLES -->
-      <button id="depoimentosPrev" style="position:absolute;top:50%;left:8px;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:var(--ink);border:1px solid var(--line-strong);color:var(--parchment);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .2s ease;" onmouseover="this.style.background='#3a2f28'" onmouseout="this.style.background='var(--ink)'">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M15 18l-6-6 6-6"/></svg>
+      <button id="depoimentosPrev" style="position:absolute;top:50%;left:4px;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:var(--ink);border:1px solid var(--line-strong);color:var(--parchment);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:all .2s ease;opacity:0.7;" onmouseover="this.style.opacity='1';this.style.background='#3a2f28'" onmouseout="this.style.opacity='0.7';this.style.background='var(--ink)'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <button id="depoimentosNext" style="position:absolute;top:50%;right:8px;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:var(--ink);border:1px solid var(--line-strong);color:var(--parchment);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .2s ease;" onmouseover="this.style.background='#3a2f28'" onmouseout="this.style.background='var(--ink)'">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M9 18l6-6-6-6"/></svg>
+      <button id="depoimentosNext" style="position:absolute;top:50%;right:4px;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:var(--ink);border:1px solid var(--line-strong);color:var(--parchment);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:all .2s ease;opacity:0.7;" onmouseover="this.style.opacity='1';this.style.background='#3a2f28'" onmouseout="this.style.opacity='0.7';this.style.background='var(--ink)'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M9 18l6-6-6-6"/></svg>
       </button>
 
       <!-- DOTS -->
@@ -912,20 +914,20 @@
     </div>
 
     <!-- SELO DE CONFIANÇA -->
-    <div style="text-align:center;margin-top:24px;padding:12px 20px;background:var(--bg-alt2);border-radius:8px;border:1px solid var(--line);">
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-mute);">
-        <span style="display:flex;align-items:center;gap:5px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--citrino)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    <div style="text-align:center;margin-top:20px;padding:10px 16px;background:var(--bg-alt2);border-radius:8px;border:1px solid var(--line);">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:10px;color:var(--ink-mute);">
+        <span style="display:flex;align-items:center;gap:4px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--citrino)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
           <span>+ de <b style="color:var(--parchment);">3.500 leitores</b></span>
         </span>
-        <span style="width:1px;height:14px;background:var(--line-strong);"></span>
-        <span style="display:flex;align-items:center;gap:5px;">
-          <span style="color:var(--gold);">★★★★★</span>
+        <span style="width:1px;height:12px;background:var(--line-strong);"></span>
+        <span style="display:flex;align-items:center;gap:4px;">
+          <span style="color:var(--gold);font-size:10px;">★★★★★</span>
           <span><b style="color:var(--parchment);">4,8/5</b></span>
         </span>
-        <span style="width:1px;height:14px;background:var(--line-strong);"></span>
-        <span style="display:flex;align-items:center;gap:5px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--turmalina)" stroke-width="2"><path d="M12 2C6 6 5 9.5 5 13a7 7 0 0014 0c0-3.5-3-7-7-11z"/></svg>
+        <span style="width:1px;height:12px;background:var(--line-strong);"></span>
+        <span style="display:flex;align-items:center;gap:4px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--turmalina)" stroke-width="2"><path d="M12 2C6 6 5 9.5 5 13a7 7 0 0014 0c0-3.5-3-7-7-11z"/></svg>
           <span><b style="color:var(--parchment);">98%</b> aprovação</span>
         </span>
       </div>
@@ -945,6 +947,9 @@
     var visibleItems = 3;
     var totalItems = items.length;
     var totalSlides = Math.ceil(totalItems / visibleItems);
+    var startX = 0;
+    var currentX = 0;
+    var isDragging = false;
 
     function updateCarrossel() {
       if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
@@ -955,11 +960,14 @@
         dot.classList.toggle('active', i === currentIndex);
         dot.style.background = i === currentIndex ? 'var(--amethyst)' : 'rgba(255,255,255,0.2)';
       });
+      if (prevBtn) prevBtn.style.opacity = currentIndex === 0 ? '0.2' : '0.7';
+      if (nextBtn) nextBtn.style.opacity = currentIndex === totalSlides - 1 ? '0.2' : '0.7';
     }
 
     function updateVisibleItems() {
-      if (window.innerWidth <= 768) visibleItems = 1;
-      else if (window.innerWidth <= 1024) visibleItems = 2;
+      var width = window.innerWidth;
+      if (width <= 768) visibleItems = 1;
+      else if (width <= 1024) visibleItems = 2;
       else visibleItems = 3;
       totalSlides = Math.ceil(totalItems / visibleItems);
       if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
@@ -972,12 +980,56 @@
       updateCarrossel();
     }
 
-    if (prevBtn) prevBtn.addEventListener('click', function() { if (currentIndex > 0) { currentIndex--; updateCarrossel(); } });
-    if (nextBtn) nextBtn.addEventListener('click', function() { if (currentIndex < totalSlides - 1) { currentIndex++; updateCarrossel(); } });
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function() { if (currentIndex > 0) { currentIndex--; updateCarrossel(); } });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function() { if (currentIndex < totalSlides - 1) { currentIndex++; updateCarrossel(); } });
+    }
 
     dots.forEach(function(dot, i) {
       dot.addEventListener('click', function() { currentIndex = i; updateCarrossel(); });
     });
+
+    // DRAG / TOUCH suporte
+    if (track) {
+      // Mouse
+      track.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.clientX;
+        track.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        currentX = e.clientX;
+      });
+      document.addEventListener('mouseup', function(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        track.style.cursor = 'grab';
+        var diff = startX - currentX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0 && currentIndex < totalSlides - 1) { currentIndex++; updateCarrossel(); }
+          else if (diff < 0 && currentIndex > 0) { currentIndex--; updateCarrossel(); }
+        }
+      });
+
+      // Touch
+      var touchStartX = 0;
+      var touchEndX = 0;
+      track.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      track.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        var diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0 && currentIndex < totalSlides - 1) { currentIndex++; updateCarrossel(); }
+          else if (diff < 0 && currentIndex > 0) { currentIndex--; updateCarrossel(); }
+        }
+      }, { passive: true });
+    }
 
     window.addEventListener('resize', updateVisibleItems);
     updateVisibleItems();
