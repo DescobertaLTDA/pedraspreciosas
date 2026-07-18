@@ -383,18 +383,258 @@
   .final-cta h2{font-size:clamp(28px,4vw,42px);color:var(--parchment);max-width:640px;margin:0 auto;}
   .final-cta p{margin-top:16px;color:var(--ink-mute);font-size:16.5px;}
   .final-cta .btn-primary{margin-top:30px;}
-  /* PREVIEW EBOOK */
-  .preview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px;}
-  .preview-page{background:var(--parchment);border-radius:8px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,0.35);position:relative;transition:transform .25s ease, box-shadow .25s ease;}
-  .preview-page:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.45);}
-  .preview-page img{width:100%;height:auto;display:block;aspect-ratio:3/4;object-fit:cover;}
-  .preview-page .page-number{position:absolute;bottom:8px;right:10px;font-family:'Space Mono',monospace;font-size:10px;color:var(--ink-soft);background:rgba(241,231,211,0.85);padding:3px 10px;border-radius:12px;}
-  .preview-page .blur-overlay{position:absolute;inset:0;background:rgba(23,21,27,0.75);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:8px;}
-  .preview-page .blur-overlay .lock-icon{font-size:32px;opacity:0.6;}
-  .preview-page .blur-overlay .blur-label{font-family:'Space Mono',monospace;font-size:11px;color:var(--parchment);letter-spacing:0.05em;text-transform:uppercase;opacity:0.7;}
-  .preview-cta{text-align:center;margin-top:44px;}
-  .preview-note{text-align:center;margin-top:16px;font-family:'Space Mono',monospace;font-size:13px;color:var(--ink-mute);}
-  .preview-note b{color:var(--citrino);}
+  /* SLIDER */
+  .slider-container {
+    position: relative;
+    max-width: 560px;
+    margin: 0 auto;
+    background: var(--parchment);
+    border-radius: 16px;
+    padding: 20px 16px 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .slider-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .slider-counter {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .slider-dots {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .slider-dots .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(42,33,24,0.2);
+    cursor: pointer;
+    transition: all .25s ease;
+  }
+  .slider-dots .dot.active {
+    background: var(--amethyst);
+    width: 20px;
+    border-radius: 4px;
+  }
+  .slider-dots .dot:hover {
+    background: rgba(42,33,24,0.4);
+  }
+  .slider-dots .dot.active:hover {
+    background: var(--amethyst-deep);
+  }
+  .slider-track {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    min-height: 380px;
+  }
+  .slider-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(0.95) rotateY(10deg);
+    transition: all .5s cubic-bezier(.2,.9,.3,1.1);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slider-slide.active {
+    opacity: 1;
+    transform: scale(1) rotateY(0deg);
+    pointer-events: auto;
+    position: relative;
+  }
+  .slider-slide.exit-left {
+    opacity: 0;
+    transform: scale(0.9) rotateY(-15deg) translateX(-40px);
+  }
+  .slider-slide.exit-right {
+    opacity: 0;
+    transform: scale(0.9) rotateY(15deg) translateX(40px);
+  }
+  .slide-page {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    background: #fff;
+  }
+  .slide-page img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+  }
+  .slide-page .slide-number {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    background: rgba(241,231,211,0.9);
+    padding: 3px 12px;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+  }
+  .slide-page .slide-badge {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    background: rgba(241,231,211,0.85);
+    padding: 3px 10px;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+  }
+  .slide-locked {
+    position: absolute;
+    inset: 0;
+    background: rgba(23,21,27,0.82);
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px;
+    text-align: center;
+  }
+  .slide-locked .lock-icon {
+    font-size: 38px;
+    opacity: 0.8;
+    display: block;
+  }
+  .slide-locked .lock-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--parchment);
+  }
+  .slide-locked .lock-sub {
+    font-size: 13px;
+    color: var(--ink-mute);
+  }
+  .slide-locked .lock-divider {
+    width: 40px;
+    height: 1px;
+    background: rgba(240,230,210,0.15);
+    margin: 8px 0 10px;
+  }
+  .slide-locked .lock-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: var(--citrino);
+    color: #241a06;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 8px 24px rgba(227,173,46,0.3);
+  }
+  .slide-locked .lock-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(227,173,46,0.45);
+  }
+  .slide-locked .lock-cta svg {
+    stroke: #241a06;
+  }
+  .slide-locked .lock-note {
+    font-size: 11px;
+    color: var(--ink-mute);
+    font-family: 'Space Mono', monospace;
+    margin-top: 4px;
+  }
+  .slide-locked-page .slide-page {
+    background: var(--bg);
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide-locked-page .slide-page .slide-locked {
+    position: relative;
+    padding: 30px 20px;
+    min-height: 380px;
+    border-radius: 8px;
+  }
+  .slider-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    gap: 12px;
+  }
+  .slider-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 1px solid var(--line-strong);
+    color: var(--parchment);
+    cursor: pointer;
+    transition: all .2s ease;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .slider-btn:hover {
+    background: #3a2f28;
+    transform: scale(1.04);
+  }
+  .slider-btn:active {
+    transform: scale(0.95);
+  }
+  .slider-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--parchment);
+  }
+  .slider-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+  .slider-btn:disabled:hover {
+    background: var(--ink);
+  }
+  .slider-nav .slider-next {
+    margin-left: auto;
+  }
+  .preview-note {
+    text-align: center;
+    margin-top: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-mute);
+  }
+  .preview-note b {
+    color: var(--citrino);
+  }
   /* MOCKUP */
   .mockup-section{background:var(--bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
   .mockup-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
@@ -410,11 +650,36 @@
     .problem-grid,.steps,.testi-grid{grid-template-columns:1fr;}
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr);}
-    .preview-grid{grid-template-columns:repeat(2,1fr);gap:16px;}
     .mockup-grid{grid-template-columns:1fr;gap:32px;}
     .mockup-grid .mockup-image{order:-1;}
+    .slider-track{min-height:300px;}
+    .slide-locked-page .slide-page{min-height:300px;}
+    .slide-locked-page .slide-page .slide-locked{min-height:300px;}
   }
-  @media (max-width:640px){.feat-grid,.catalog-scroller{grid-template-columns:1fr;}section{padding:64px 0;}.preview-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:640px){
+    .feat-grid,.catalog-scroller{grid-template-columns:1fr;}
+    section{padding:64px 0;}
+    .slider-container{padding:14px 12px 12px;border-radius:12px;}
+    .slider-track{min-height:240px;}
+    .slide-page{max-width:100%;}
+    .slide-locked .lock-icon{font-size:30px;}
+    .slide-locked .lock-label{font-size:14px;}
+    .slide-locked .lock-cta{font-size:12px;padding:10px 18px;}
+    .slide-locked-page .slide-page{min-height:240px;}
+    .slide-locked-page .slide-page .slide-locked{min-height:240px;}
+    .slider-dots .dot{width:6px;height:6px;}
+    .slider-dots .dot.active{width:16px;}
+    .slider-btn{width:38px;height:38px;}
+    .slider-btn svg{width:16px;height:16px;}
+    .preview-note{font-size:12px;}
+  }
+  @media (max-width:420px){
+    .slider-track{min-height:200px;}
+    .slide-locked-page .slide-page{min-height:200px;}
+    .slide-locked-page .slide-page .slide-locked{min-height:200px;}
+    .slide-locked .lock-cta{font-size:11px;padding:8px 14px;}
+    .slide-locked .lock-label{font-size:13px;}
+  }
   @media (prefers-reduced-motion: reduce){.strip-track{animation:none;}*{transition:none !important;}}
   /* SALES POPUP */
   .sales-popup{position:fixed;left:20px;bottom:20px;z-index:70;display:flex;align-items:center;gap:13px;max-width:310px;background:var(--parchment);border-radius:12px;padding:13px 16px 13px 13px;box-shadow:0 18px 40px rgba(0,0,0,0.45);transform:translateY(140%) scale(0.96);opacity:0;transition:transform .45s cubic-bezier(.2,.9,.3,1.2), opacity .35s ease;pointer-events:none;}
@@ -471,7 +736,6 @@
         <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
         <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
 
-        <!-- DESKTOP PRODUCT CARD -->
         <div class="product-card">
           <div class="product-card-top">
             <span class="product-badge">🔥 Mais Vendido</span>
@@ -513,7 +777,6 @@
         </div>
       </div>
 
-      <!-- ===== MOBILE VERSION ===== -->
       <div class="hero-copy-mobile">
         <div class="hcm-eyebrow">⭐ 4,8/5 · 3.500+ compras</div>
         <div class="hcm-label">Pedras da sua gaveta<br>podem valer até</div>
@@ -521,7 +784,6 @@
         <div class="hcm-tagline">em sites de colecionadores</div>
         <p class="hcm-sub">Sem curso. Sem termos técnicos de geologia. <b>Identifique em minutos</b> com o guia visual completo — do achado ao valor real de mercado.</p>
 
-        <!-- CARD MOBILE -->
         <div class="product-card" style="max-width:100%;margin:16px 0;">
           <div class="product-card-top">
             <span class="product-badge">🔥 Mais Vendido</span>
@@ -542,12 +804,10 @@
               <span class="stock-dot"></span>
               <span class="stock-text"><b>Em estoque</b> — 47 unidades</span>
             </div>
-
             <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="product-btn" id="heroBtnMobile">
               Comprar agora
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </a>
-
             <div class="product-guarantee">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
               <span>Acesso imediato · Garantia</span>
@@ -596,39 +856,126 @@
   </div>
 </div>
 
-<!-- ============ PRÉVIA DO EBOOK ============ -->
-<section id="preview-ebook">
+<!-- ============ PRÉVIA DO EBOOK COM SLIDER ============ -->
+<section id="preview-ebook" style="background:var(--bg-alt);">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">Prévia do ebook</div>
-      <h2>Veja o que você vai encontrar no guia completo</h2>
-      <p>Folheie as primeiras páginas e veja como é fácil identificar cada pedra — da capa às fichas técnicas.</p>
+      <h2>Folheie as primeiras páginas</h2>
+      <p style="max-width:520px;">Navegue pelas páginas liberadas e veja como é fácil identificar cada pedra — da capa às fichas técnicas.</p>
     </div>
 
-    <div class="preview-grid">
-      <div class="preview-page"><img src="pagina1.png" alt="Página 1 - Capa"><span class="page-number">Pág. 1</span></div>
-      <div class="preview-page"><img src="pagina2.png" alt="Página 2 - Introdução"><span class="page-number">Pág. 2</span></div>
-      <div class="preview-page">
-        <img src="pagina3.png" alt="Página 3 - Conteúdo bloqueado">
-        <div class="blur-overlay"><span class="lock-icon">🔒</span><span class="blur-label">Conteúdo exclusivo</span></div>
-        <span class="page-number">Pág. 3</span>
+    <div class="slider-container">
+      <div class="slider-progress">
+        <span class="slider-counter" id="pageCounter">Página 1 de 9</span>
+        <div class="slider-dots" id="sliderDots">
+          <span class="dot active" data-index="0"></span>
+          <span class="dot" data-index="1"></span>
+          <span class="dot" data-index="2"></span>
+          <span class="dot" data-index="3"></span>
+          <span class="dot" data-index="4"></span>
+          <span class="dot" data-index="5"></span>
+          <span class="dot" data-index="6"></span>
+          <span class="dot" data-index="7"></span>
+          <span class="dot" data-index="8"></span>
+        </div>
       </div>
-      <div class="preview-page"><img src="pagina4.png" alt="Página 4"><span class="page-number">Pág. 4</span></div>
-      <div class="preview-page"><img src="pagina5.png" alt="Página 5"><span class="page-number">Pág. 5</span></div>
-      <div class="preview-page"><img src="pagina6.png" alt="Página 6"><span class="page-number">Pág. 6</span></div>
-      <div class="preview-page"><img src="pagina7.png" alt="Página 7"><span class="page-number">Pág. 7</span></div>
-      <div class="preview-page"><img src="pagina8.png" alt="Página 8"><span class="page-number">Pág. 8</span></div>
+
+      <div class="slider-track" id="sliderTrack">
+        <!-- Página 1 -->
+        <div class="slider-slide active">
+          <div class="slide-page">
+            <img src="pagina1.png" alt="Página 1 - Capa do ebook">
+            <span class="slide-number">Pág. 1</span>
+            <span class="slide-badge">📖 Capa</span>
+          </div>
+        </div>
+        <!-- Página 2 -->
+        <div class="slider-slide">
+          <div class="slide-page">
+            <img src="pagina2.png" alt="Página 2 - Introdução">
+            <span class="slide-number">Pág. 2</span>
+            <span class="slide-badge">📖 Introdução</span>
+          </div>
+        </div>
+        <!-- Página 3 -->
+        <div class="slider-slide">
+          <div class="slide-page">
+            <img src="pagina3.png" alt="Página 3 - Conteúdo bloqueado">
+            <div class="slide-locked">
+              <span class="lock-icon">🔒</span>
+              <span class="lock-label">Página 3 de 200</span>
+              <span class="lock-sub">Conteúdo exclusivo</span>
+            </div>
+            <span class="slide-number">Pág. 3</span>
+          </div>
+        </div>
+        <!-- Página 4 -->
+        <div class="slider-slide">
+          <div class="slide-page">
+            <img src="pagina4.png" alt="Página 4">
+            <span class="slide-number">Pág. 4</span>
+          </div>
+        </div>
+        <!-- Página 5 -->
+        <div class="slider-slide">
+          <div class="slide-page">
+            <img src="pagina5.png" alt="Página 5">
+            <span class="slide-number">Pág. 5</span>
+          </div>
+        </div>
+        <!-- Página 6 -->
+        <div class="slider-slide">
+          <div class="slide-page">
+            <img src="pagina6.png" alt="Página 6">
+            <span class="slide-number">Pág. 6</span>
+          </div>
+        </div>
+        <!-- Página 7 -->
+        <div class="slider-slide">
+          <div class="slide-page">
+            <img src="pagina7.png" alt="Página 7">
+            <span class="slide-number">Pág. 7</span>
+          </div>
+        </div>
+        <!-- Página 8 -->
+        <div class="slider-slide">
+          <div class="slide-page">
+            <img src="pagina8.png" alt="Página 8">
+            <span class="slide-number">Pág. 8</span>
+          </div>
+        </div>
+        <!-- Página 9+ (bloqueadas) -->
+        <div class="slider-slide">
+          <div class="slide-page slide-locked-page">
+            <div class="slide-locked">
+              <span class="lock-icon">🔒</span>
+              <span class="lock-label">Páginas 9 a 200</span>
+              <span class="lock-sub">+192 páginas bloqueadas</span>
+              <div class="lock-divider"></div>
+              <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="lock-cta">
+                Desbloquear tudo — R$19,99
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </a>
+              <span class="lock-note">Acesso imediato após a compra</span>
+            </div>
+            <span class="slide-number">Pág. 9+</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slider-nav">
+        <button class="slider-btn slider-prev" id="sliderPrev" aria-label="Página anterior">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="slider-btn slider-next" id="sliderNext" aria-label="Próxima página">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
     </div>
 
     <div class="preview-note">
-      ⚡ <b>+ de 200 páginas</b> no guia completo — você está vendo apenas 8 páginas de amostra
-    </div>
-
-    <div class="preview-cta">
-      <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="btn-primary btn-primary-large" id="previewCta">
-        Quero o guia completo — R$19,99
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
+      ⚡ <b>+ de 200 páginas</b> no guia completo — você está vendo apenas <b>8 páginas de amostra</b>
     </div>
   </div>
 </section>
@@ -1009,6 +1356,185 @@
         if (!isOpen) { item.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
       });
     });
+
+    // ===== SLIDER =====
+    (function() {
+      var slides = document.querySelectorAll('.slider-slide');
+      var dots = document.querySelectorAll('.slider-dots .dot');
+      var prevBtn = document.getElementById('sliderPrev');
+      var nextBtn = document.getElementById('sliderNext');
+      var counter = document.getElementById('pageCounter');
+      var currentIndex = 0;
+      var totalSlides = slides.length;
+      var isAnimating = false;
+
+      function updateSlider(index, direction) {
+        if (isAnimating) return;
+        if (index < 0 || index >= totalSlides) return;
+        if (index === currentIndex) return;
+
+        isAnimating = true;
+
+        var currentSlide = slides[currentIndex];
+        currentSlide.classList.remove('active');
+        currentSlide.classList.remove('exit-left', 'exit-right');
+
+        if (direction === 'left') {
+          currentSlide.classList.add('exit-left');
+        } else if (direction === 'right') {
+          currentSlide.classList.add('exit-right');
+        }
+
+        var oldIndex = currentIndex;
+        currentIndex = index;
+
+        dots.forEach(function(dot, i) {
+          dot.classList.toggle('active', i === currentIndex);
+        });
+
+        var displayIndex = currentIndex + 1;
+        var totalDisplay = totalSlides;
+        counter.textContent = 'Página ' + displayIndex + ' de ' + totalDisplay;
+
+        setTimeout(function() {
+          currentSlide.classList.remove('exit-left', 'exit-right');
+          currentSlide.style.display = 'none';
+
+          var newSlide = slides[currentIndex];
+          newSlide.style.display = 'flex';
+          void newSlide.offsetHeight;
+          newSlide.classList.add('active');
+
+          prevBtn.disabled = currentIndex === 0;
+          nextBtn.disabled = currentIndex === totalSlides - 1;
+
+          isAnimating = false;
+        }, 400);
+      }
+
+      function initSlider() {
+        slides.forEach(function(slide, i) {
+          if (i === 0) {
+            slide.style.display = 'flex';
+            slide.classList.add('active');
+          } else {
+            slide.style.display = 'none';
+          }
+        });
+        dots.forEach(function(dot, i) {
+          dot.classList.toggle('active', i === 0);
+        });
+        counter.textContent = 'Página 1 de ' + totalSlides;
+        prevBtn.disabled = true;
+        nextBtn.disabled = totalSlides <= 1;
+      }
+
+      if (prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', function() {
+          if (currentIndex > 0) {
+            updateSlider(currentIndex - 1, 'left');
+          }
+        });
+
+        nextBtn.addEventListener('click', function() {
+          if (currentIndex < totalSlides - 1) {
+            updateSlider(currentIndex + 1, 'right');
+          }
+        });
+      }
+
+      dots.forEach(function(dot, index) {
+        dot.addEventListener('click', function() {
+          if (index !== currentIndex) {
+            var direction = index > currentIndex ? 'right' : 'left';
+            updateSlider(index, direction);
+          }
+        });
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (document.getElementById('preview-ebook')) {
+          var rect = document.getElementById('preview-ebook').getBoundingClientRect();
+          var isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+          if (isVisible) {
+            if (e.key === 'ArrowLeft' && currentIndex > 0) {
+              e.preventDefault();
+              updateSlider(currentIndex - 1, 'left');
+            } else if (e.key === 'ArrowRight' && currentIndex < totalSlides - 1) {
+              e.preventDefault();
+              updateSlider(currentIndex + 1, 'right');
+            }
+          }
+        }
+      });
+
+      var startX = 0;
+      var sliderContainer = document.querySelector('.slider-container');
+      if (sliderContainer) {
+        sliderContainer.addEventListener('touchstart', function(e) {
+          startX = e.touches[0].clientX;
+        }, { passive: true });
+
+        sliderContainer.addEventListener('touchend', function(e) {
+          var endX = e.changedTouches[0].clientX;
+          var diff = startX - endX;
+          if (Math.abs(diff) > 40) {
+            if (diff > 0 && currentIndex < totalSlides - 1) {
+              updateSlider(currentIndex + 1, 'right');
+            } else if (diff < 0 && currentIndex > 0) {
+              updateSlider(currentIndex - 1, 'left');
+            }
+          }
+        }, { passive: true });
+      }
+
+      initSlider();
+
+      var autoRotateInterval;
+      var autoRotateDelay = 5000;
+
+      function startAutoRotate() {
+        stopAutoRotate();
+        autoRotateInterval = setInterval(function() {
+          if (currentIndex < totalSlides - 1) {
+            updateSlider(currentIndex + 1, 'right');
+          } else {
+            updateSlider(0, 'left');
+          }
+        }, autoRotateDelay);
+      }
+
+      function stopAutoRotate() {
+        if (autoRotateInterval) {
+          clearInterval(autoRotateInterval);
+          autoRotateInterval = null;
+        }
+      }
+
+      var sliderBtns = document.querySelectorAll('.slider-btn, .slider-dots .dot');
+      sliderBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          stopAutoRotate();
+          setTimeout(startAutoRotate, 8000);
+        });
+      });
+
+      setTimeout(startAutoRotate, 3000);
+
+      if (sliderContainer) {
+        sliderContainer.addEventListener('mouseenter', stopAutoRotate);
+        sliderContainer.addEventListener('mouseleave', function() {
+          setTimeout(startAutoRotate, 2000);
+        });
+      }
+
+      window._slider = {
+        goTo: function(index) { updateSlider(index, index > currentIndex ? 'right' : 'left'); },
+        next: function() { if (currentIndex < totalSlides - 1) updateSlider(currentIndex + 1, 'right'); },
+        prev: function() { if (currentIndex > 0) updateSlider(currentIndex - 1, 'left'); },
+        currentIndex: function() { return currentIndex; }
+      };
+    })();
 
     window._pedrasUtm = { dados: utmData, hasUtm: hasUtm, registrarVenda: registrarVenda };
   })();
