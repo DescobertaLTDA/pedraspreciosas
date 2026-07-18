@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pedras Valiosas — O Guia Completo para Identificar o que Você Pode Ter em Casa</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%2317151b%22/%3E%0A%20%20%3Cpolygon%20points%3D%2232%2C10%2048%2C24%2043%2C54%2021%2C54%2016%2C24%22%20fill%3D%22%239169c9%22/%3E%0A%20%20%3Cpolygon%20points%3D%2232%2C10%2048%2C24%2032%2C30%22%20fill%3D%22%23b18ee0%22/%3E%0A%20%20%3Cpolygon%20points%3D%2216%2C24%2032%2C30%2021%2C54%22%20fill%3D%22%237a4fab%22/%3E%0A%20%20%3Cpolygon%20points%3D%2232%2C30%2048%2C24%2043%2C54%22%20fill%3D%22%23663f96%22/%3E%0A%3C/svg%3E%0A">
+<title>Tesouro Esquecido — Guia para Identificar Pedras que Valem Dinheiro</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%0A  %3Crect width='64' height='64' rx='14' fill='%2317151b'/%3E%0A  %3Cpolygon points='32,10 48,24 43,54 21,54 16,24' fill='%239169c9'/%3E%0A  %3Cpolygon points='32,10 48,24 32,30' fill='%23b18ee0'/%3E%0A  %3Cpolygon points='16,24 32,30 21,54' fill='%237a4fab'/%3E%0A  %3Cpolygon points='32,30 48,24 43,54' fill='%23663f96'/%3E%0A%3C/svg%3E%0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -67,175 +67,36 @@
   .t1{top:0;left:10%;transform:rotate(-7deg);z-index:3;}
   .t2{top:96px;left:44%;transform:rotate(5deg);z-index:4;}
   .t3{top:210px;left:6%;transform:rotate(3deg);z-index:2;}
-  /* PRODUCT CARD */
+  .tag-rating{display:flex;align-items:center;gap:6px;margin-top:6px;font-family:'Space Mono',monospace;font-size:9.5px;color:var(--ink-soft);}
+  .tag-rating .stars{color:var(--gold);font-size:11px;letter-spacing:1px;}
+  .tag-badge{font-family:'Space Mono',monospace;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--amethyst);color:#fff;padding:2px 10px;border-radius:10px;display:inline-block;}
+  /* PRODUCT CARD - ESTILO MERCADO LIVRE */
   .product-card {
     background: var(--parchment);
     border-radius: 12px;
-    padding: 20px 22px 18px;
     max-width: 440px;
-    margin-top: 24px;
+    margin-top: 20px;
+    overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
     border: 1px solid rgba(0,0,0,0.06);
-    position: relative;
     transition: transform .2s ease, box-shadow .2s ease;
   }
   .product-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 28px 60px rgba(0,0,0,0.5);
   }
-  .product-card-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 6px 12px;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(42,33,24,0.08);
-  }
-  .product-badge {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    background: #f5b342;
-    color: #241a06;
-    padding: 3px 12px;
-    border-radius: 12px;
-  }
-  .product-seller {
-    font-size: 12px;
-    color: var(--ink-soft);
-  }
-  .product-seller strong {
-    color: var(--ink);
-  }
-  .product-rating {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .product-rating .stars {
-    color: var(--gold);
-    font-size: 16px;
-    letter-spacing: 1px;
-  }
-  .product-rating .rating-number {
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 16px;
-    color: var(--ink);
-  }
-  .product-rating .rating-count {
-    font-size: 13px;
-    color: var(--ink-soft);
-  }
-  .product-rating .rating-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #22a65e;
-    background: rgba(34,166,94,0.12);
-    padding: 2px 10px;
-    border-radius: 12px;
-  }
-  .product-sales {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 6px;
-    font-size: 13px;
-    color: var(--ink-soft);
-  }
-  .product-sales svg {
-    stroke: var(--turmalina);
-    flex-shrink: 0;
-  }
-  .product-sales b {
-    color: var(--ink);
-  }
-  .product-price {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(42,33,24,0.08);
-  }
-  .price-old {
-    font-family: 'Space Mono', monospace;
-    font-size: 16px;
-    color: var(--ink-soft);
-    text-decoration: line-through;
-  }
-  .price-new {
-    font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-size: 32px;
-    color: var(--ink);
-  }
-  .price-new sup {
-    font-size: 14px;
-    top: -0.8em;
-  }
-  .price-discount {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    background: #22a65e;
-    color: #fff;
-    padding: 2px 12px;
-    border-radius: 12px;
-  }
-  .product-stock {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-    font-size: 13px;
-    color: var(--ink-soft);
-  }
-  .stock-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #22a65e;
-    animation: pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.8);}}
-  .stock-text b {
-    color: var(--ink);
-  }
-  .product-shipping {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-    font-size: 13px;
-    color: var(--ink-soft);
-  }
-  .product-shipping svg {
-    stroke: var(--citrino);
-    flex-shrink: 0;
-  }
-  .product-shipping b {
-    color: var(--ink);
-  }
   .product-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
-    margin-top: 16px;
-    padding: 16px;
+    padding: 14px;
     background: var(--citrino);
     color: #241a06;
     font-family: 'Space Mono', monospace;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -247,22 +108,9 @@
     transform: translateY(-2px);
     box-shadow: 0 12px 32px rgba(227,173,46,0.45);
   }
-  .product-btn svg {
-    stroke: #241a06;
-  }
-  .product-guarantee {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 12px;
-    font-size: 11.5px;
-    color: var(--ink-soft);
-  }
-  .product-guarantee svg {
-    stroke: var(--turmalina);
-    flex-shrink: 0;
-  }
+  .icon-svg{display:inline-block;flex-shrink:0;vertical-align:middle;}
+  .icon-svg svg{display:block;width:100%;height:100%;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.8);}}
 
   /* MOBILE HERO */
   .hero-tag-mobile{display:none;}
@@ -280,15 +128,15 @@
     .hero-copy-mobile{display:block;position:relative;z-index:2;margin-top:16px;padding:0 4px;}
     .hcm-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--citrino);text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;}
     .hcm-eyebrow::before,.hcm-eyebrow::after{content:'';width:18px;height:1px;background:var(--citrino);opacity:0.6;}
-    .hcm-label{margin-top:16px;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-light);text-align:center;}
-    .hcm-number{display:block;text-align:center;margin-top:6px;font-family:'Fraunces',serif;font-weight:700;font-size:clamp(44px,15vw,68px);line-height:1;background:linear-gradient(100deg,var(--citrino),var(--quartzo) 55%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent;}
-    .hcm-tagline{margin-top:8px;font-family:'Space Mono',monospace;font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink-mute);text-align:center;}
-    .hcm-sub{margin-top:20px;text-align:center;font-size:15.5px;color:var(--ink-mute);max-width:380px;margin-left:auto;margin-right:auto;line-height:1.55;}
+    .hcm-label{margin-top:16px;font-family:'Space Mono',monospace;font-weight:700;font-size:13px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-light);text-align:center;}
+    .hcm-number{display:block;text-align:center;margin-top:2px;font-family:'Fraunces',serif;font-weight:700;font-size:clamp(44px,15vw,68px);line-height:1;background:linear-gradient(100deg,var(--citrino),var(--quartzo) 55%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .hcm-tagline{margin-top:4px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink-mute);text-align:center;}
+    .hcm-sub{margin-top:16px;text-align:center;font-size:15px;color:var(--ink-mute);max-width:380px;margin-left:auto;margin-right:auto;line-height:1.55;}
     .hcm-sub b{color:var(--citrino);font-weight:600;}
     .hcm-trust{margin-top:16px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--ink-mute);}
     .hcm-trust span{display:flex;align-items:center;gap:5px;}
     .hcm-trust svg{width:12px;height:12px;stroke:var(--turmalina);stroke-width:2.5;flex-shrink:0;}
-    .product-card{max-width:100%;margin-top:18px;}
+    .product-card{max-width:100%;margin-top:14px;}
   }
   @media (max-width:640px){
     nav{padding:14px 20px;}
@@ -296,10 +144,6 @@
     .nav-cta{font-size:11.5px;padding:9px 14px;white-space:nowrap;}
     .wrap{padding:0 20px;}
     .hero-tag-mobile{max-width:100%;}
-    .product-card{padding:16px;}
-    .price-new{font-size:26px;}
-    .product-btn{font-size:14px;padding:14px;}
-    .product-rating .rating-count{font-size:12px;}
   }
   /* STRIP */
   .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-alt);padding:14px 0;overflow:hidden;}
@@ -384,7 +228,7 @@
   .final-cta p{margin-top:16px;color:var(--ink-mute);font-size:16.5px;}
   .final-cta .btn-primary{margin-top:30px;}
 
-  /* ===== CARROSSEL NORMAL ===== */
+  /* CARROSSEL */
   .carrossel-container {
     max-width: 560px;
     margin: 0 auto;
@@ -395,7 +239,6 @@
     box-shadow: 0 20px 50px rgba(0,0,0,0.35);
     border: 1px solid rgba(0,0,0,0.06);
   }
-
   .carrossel-progress {
     display: flex;
     align-items: center;
@@ -405,13 +248,11 @@
     flex-wrap: wrap;
     padding: 0 4px;
   }
-
   .carrossel-counter {
     font-family: 'Space Mono', monospace;
     font-size: 12px;
     color: var(--ink-soft);
   }
-
   .carrossel-dots {
     display: flex;
     gap: 6px;
@@ -436,14 +277,12 @@
   .carrossel-dots .dot.active:hover {
     background: var(--amethyst-deep);
   }
-
   .carrossel-track {
     position: relative;
     overflow: hidden;
     border-radius: 8px;
     min-height: 380px;
   }
-
   .carrossel-slide {
     position: absolute;
     inset: 0;
@@ -469,7 +308,6 @@
     opacity: 0;
     transform: scale(0.9) translateX(40px);
   }
-
   .slide-page {
     position: relative;
     width: 100%;
@@ -516,15 +354,12 @@
     backdrop-filter: blur(4px);
     z-index: 5;
   }
-
-  /* Navegação */
   .carrossel-nav {
     display: flex;
     justify-content: center;
     gap: 16px;
     margin-top: 16px;
   }
-
   .carrossel-btn {
     display: flex;
     align-items: center;
@@ -559,7 +394,6 @@
   .carrossel-btn:disabled:hover {
     background: var(--ink);
   }
-
   .preview-note {
     text-align: center;
     margin-top: 20px;
@@ -607,6 +441,7 @@
     .carrossel-track{min-height:220px;}
   }
   @media (prefers-reduced-motion: reduce){.strip-track{animation:none;}*{transition:none !important;}}
+
   /* SALES POPUP */
   .sales-popup{position:fixed;left:20px;bottom:20px;z-index:70;display:flex;align-items:center;gap:13px;max-width:310px;background:var(--parchment);border-radius:12px;padding:13px 16px 13px 13px;box-shadow:0 18px 40px rgba(0,0,0,0.45);transform:translateY(140%) scale(0.96);opacity:0;transition:transform .45s cubic-bezier(.2,.9,.3,1.2), opacity .35s ease;pointer-events:none;}
   .sales-popup.show{transform:translateY(0) scale(1);opacity:1;}
@@ -619,6 +454,7 @@
   .sales-popup .sp-meta{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--amethyst-deep);margin-top:4px;display:flex;align-items:center;gap:5px;}
   .sales-popup .sp-meta::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--turmalina);flex-shrink:0;}
   @media (max-width:520px){.sales-popup{left:12px;right:auto;bottom:14px;max-width:min(78vw,250px);padding:11px 14px 11px 11px;gap:10px;}.sales-popup .sp-icon{width:32px;height:32px;}.sales-popup .sp-icon svg{width:15px;height:15px;}.sales-popup .sp-name{font-size:12.5px;}.sales-popup .sp-detail{font-size:11px;}.sales-popup .sp-meta{font-size:10px;}}
+
   /* FLOATING CTA */
   .floating-cta{position:fixed;right:20px;bottom:20px;z-index:65;display:flex;align-items:center;gap:12px;background:var(--parchment);border-radius:50px;padding:8px 20px 8px 8px;box-shadow:0 16px 36px rgba(0,0,0,0.4);text-decoration:none;transform:translateY(120%) scale(0.95);opacity:0;transition:transform .4s cubic-bezier(.2,.9,.3,1.15), opacity .3s ease, box-shadow .15s ease;pointer-events:none;}
   .floating-cta.show{transform:translateY(0) scale(1);opacity:1;pointer-events:auto;}
@@ -629,6 +465,7 @@
   .floating-cta .fc-label{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap;}
   .floating-cta .fc-sub{display:block;font-family:'Space Mono',monospace;font-weight:400;font-size:10px;color:var(--ink-soft);margin-top:1px;}
   @media (max-width:640px){.floating-cta{right:14px;bottom:14px;padding:6px 16px 6px 6px;gap:9px;}.floating-cta .fc-price{width:44px;height:44px;}.floating-cta .fc-price-value{font-size:11px;}.floating-cta .fc-label{font-size:12px;}.floating-cta .fc-sub{font-size:9px;}}
+
   /* FOOTER */
   footer{padding:44px 0;text-align:center;}
   footer .disclaimer{font-size:12.5px;color:var(--ink-mute);max-width:560px;margin:0 auto 18px;line-height:1.6;}
@@ -640,7 +477,7 @@
 
 <header>
   <nav>
-    <div class="logo"><span class="dot"></span>Pedras Valiosas</div>
+    <div class="logo"><span class="dot"></span>Tesouro Esquecido</div>
     <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="nav-cta" id="navCta">Quero o guia →</a>
   </nav>
 </header>
@@ -649,114 +486,220 @@
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
+
+      <!-- MOBILE: capa + título -->
       <div class="hero-tag-mobile">
         <div class="hole"></div>
-        <div class="tag-num">EDIÇÃO DIGITAL</div>
-        <img src="pagina1.png" alt="Capa do Ebook Pedras Valiosas" class="tag-photo">
-        <div class="tag-name">Pedras Valiosas</div>
-        <div class="tag-price">guia completo <b>de identificação</b></div>
+        <div class="tag-num" style="display:flex;align-items:center;gap:8px;justify-content:center;">
+          <span style="color:var(--gold);">★ 4,8</span>
+          <span style="opacity:0.3;">·</span>
+          <span>(3.536 avaliações)</span>
+        </div>
+        <img src="pagina1.png" alt="Capa do Ebook Tesouro Esquecido" class="tag-photo">
+        <div class="tag-name" style="text-align:center;">Tesouro Esquecido</div>
+        <div class="tag-price" style="text-align:center;border-top:none;padding-top:4px;">guia completo de identificação</div>
+        <div style="text-align:center;margin-top:6px;font-family:'Space Mono',monospace;font-size:8.5px;color:var(--amethyst-deep);letter-spacing:0.06em;text-transform:uppercase;border-top:1px dashed rgba(42,33,24,0.12);padding-top:8px;">
+          ★ Mais Vendido · 4,8/5
+        </div>
       </div>
 
+      <!-- DESKTOP: título -->
       <div class="hero-copy-desktop">
         <div class="eyebrow">Guia digital em PDF · 100% em português</div>
-        <h1>Aquela pedra na sua gaveta pode valer <em>mais do que você imagina</em>.</h1>
-        <p class="hero-sub">Um catálogo visual e sem enrolação para identificar as pedras preciosas e semipreciosas mais comuns do Brasil — e descobrir, em minutos, o que elas realmente valem.</p>
+        <h1 style="font-size:clamp(32px,4.4vw,54px);line-height:1.08;">
+          <span style="display:block;font-size:0.65em;font-weight:400;color:var(--citrino);font-family:'Space Mono',monospace;letter-spacing:0.04em;margin-bottom:4px;">
+            UMA PEDRA ESQUECIDA PODE VALER
+          </span>
+          <em style="font-style:italic;font-weight:500;background:linear-gradient(100deg,var(--citrino),var(--quartzo) 60%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.15em;">
+            MAIS DE R$700
+          </em>
+        </h1>
+        <p class="hero-sub" style="margin-top:14px;font-size:17px;max-width:500px;">
+          Descubra se você tem uma em casa com o <strong style="color:var(--parchment);">Tesouro Esquecido</strong> — 
+          o guia que identifica <strong style="color:var(--parchment);">em minutos</strong> o que vale e o que não vale.
+        </p>
 
+        <!-- CARD ESTILO MERCADO LIVRE (DESKTOP) -->
         <div class="product-card">
-          <div class="product-card-top">
-            <span class="product-badge">🔥 Mais Vendido</span>
-            <span class="product-seller">Vendido por <strong>Pedras Valiosas</strong> ★ Loja Oficial</span>
+          <!-- Topo: avaliações + selos -->
+          <div style="background:var(--parchment);padding:10px 16px 6px;border-bottom:1px solid rgba(42,33,24,0.06);">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 8px;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</span>
+                <span style="font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:var(--ink);">4,8</span>
+                <span style="font-size:11px;color:var(--ink-soft);">(3.536)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+                <span style="font-family:'Space Mono',monospace;font-size:7.5px;font-weight:700;text-transform:uppercase;background:#f5b342;color:#241a06;padding:2px 10px;border-radius:10px;">🔥 Mais Vendido</span>
+                <span style="font-family:'Space Mono',monospace;font-size:7px;color:var(--ink-soft);background:rgba(42,33,24,0.06);padding:2px 10px;border-radius:10px;">1º em Gemologia</span>
+              </div>
+            </div>
           </div>
-          <div class="product-card-body">
-            <div class="product-rating">
-              <span class="stars">★★★★★</span>
-              <span class="rating-number">4,8</span>
-              <span class="rating-count">(3.536 avaliações)</span>
-              <span class="rating-label">⭐ Excelente</span>
+
+          <!-- Imagem -->
+          <div style="background:var(--parchment);padding:12px 16px 6px;text-align:center;">
+            <img src="pagina1.png" alt="Capa do Ebook Tesouro Esquecido" style="max-height:150px;width:auto;display:inline-block;border-radius:4px;box-shadow:0 4px 16px rgba(0,0,0,0.12);">
+          </div>
+
+          <!-- Título -->
+          <div style="padding:8px 16px 2px;background:var(--parchment);">
+            <h3 style="font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--ink);margin:0;">Tesouro Esquecido</h3>
+            <p style="font-size:12px;color:var(--ink-soft);margin:1px 0 0;">Guia completo para identificar o que você pode ter em casa</p>
+          </div>
+
+          <!-- Preço e oferta -->
+          <div style="padding:6px 16px 4px;background:var(--parchment);">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:1px;">
+              <span style="font-family:'Space Mono',monospace;font-size:8px;font-weight:700;text-transform:uppercase;color:#e08a2e;background:rgba(224,138,46,0.12);padding:1px 10px;border-radius:8px;">📦 OFERTA DO DIA</span>
             </div>
-            <div class="product-sales">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-              <span><b>+3.500</b> pessoas compraram este guia</span>
+            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+              <span style="font-family:'Space Mono',monospace;font-size:15px;color:var(--ink-soft);text-decoration:line-through;">R$ 47,00</span>
+              <span style="font-family:'Fraunces',serif;font-weight:700;font-size:30px;color:var(--ink);"><sup style="font-size:13px;">R$</sup>19,99</span>
+              <span style="font-family:'Space Mono',monospace;font-size:10px;font-weight:700;background:#22a65e;color:#fff;padding:2px 12px;border-radius:10px;">-57%</span>
             </div>
-            <div class="product-price">
-              <span class="price-old">R$ 47,00</span>
-              <span class="price-new"><sup>R$</sup>19,99</span>
-              <span class="price-discount">-57%</span>
+          </div>
+
+          <!-- Detalhes -->
+          <div style="padding:0 16px 8px;background:var(--parchment);">
+            <div style="display:flex;align-items:center;gap:6px;margin-top:3px;font-size:11px;color:var(--ink-soft);">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#22a65e;animation:pulse 1.8s ease-in-out infinite;"></span>
+              <span><b style="color:var(--ink);">47 unidades</b> com desconto</span>
             </div>
-            <div class="product-stock">
-              <span class="stock-dot"></span>
-              <span class="stock-text"><b>Em estoque</b> — 47 unidades com desconto</span>
+            <div style="display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:2px;font-size:10.5px;color:var(--ink-soft);">
+              <span style="display:flex;align-items:center;gap:4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6 6 5 9.5 5 13a7 7 0 0014 0c0-3.5-3-7-7-11z"/></svg>
+                Acesso imediato
+              </span>
+              <span style="display:flex;align-items:center;gap:4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 4v16"/></svg>
+                PDF digital
+              </span>
+              <span style="display:flex;align-items:center;gap:4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+                Acesso vitalício
+              </span>
             </div>
-            <div class="product-shipping">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h15M12 3v15M12 21l3-6h-6l3 6z"/></svg>
-              <span><b>Frete grátis</b> (envio digital imediato)</span>
+            <div style="margin-top:1px;font-size:10px;color:var(--ink-soft);display:flex;align-items:center;gap:4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h15M12 3v15M12 21l3-6h-6l3 6z"/></svg>
+              <b style="color:var(--ink);">Frete grátis</b> (envio digital)
             </div>
+            <div style="margin-top:1px;font-size:10px;color:#22a65e;display:flex;align-items:center;gap:4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              Devolução grátis · 7 dias de garantia
+            </div>
+          </div>
+
+          <!-- Botão -->
+          <div style="padding:4px 16px 14px;background:var(--parchment);">
             <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="product-btn" id="heroBtnDesktop">
-              Comprar agora
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              Quero identificar a minha → R$ 19,99
             </a>
-            <div class="product-guarantee">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              <span>Compra segura · 7 dias de garantia · Acesso imediato</span>
-            </div>
           </div>
         </div>
       </div>
 
+      <!-- MOBILE: copy + card enxuto -->
       <div class="hero-copy-mobile">
-        <div class="hcm-eyebrow">⭐ 4,8/5 · 3.500+ compras</div>
-        <div class="hcm-label">Pedras da sua gaveta<br>podem valer até</div>
-        <span class="hcm-number">R$700+</span>
-        <div class="hcm-tagline">em sites de colecionadores</div>
-        <p class="hcm-sub">Sem curso. Sem termos técnicos de geologia. <b>Identifique em minutos</b> com o guia visual completo — do achado ao valor real de mercado.</p>
+        <div class="hcm-eyebrow">★ 4,8/5 · 3.500+ compras</div>
 
-        <div class="product-card" style="max-width:100%;margin:16px 0;">
-          <div class="product-card-top">
-            <span class="product-badge">🔥 Mais Vendido</span>
-            <span class="product-seller">★ Loja Oficial</span>
+        <div style="text-align:center;margin:6px 0 2px;">
+          <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--citrino);display:block;">
+            Uma pedra esquecida pode valer
+          </span>
+          <span class="hcm-number" style="font-size:clamp(38px,12vw,56px);">R$700+</span>
+        </div>
+
+        <p class="hcm-sub" style="font-size:15px;max-width:340px;margin:0 auto;">
+          Descubra se você tem uma em casa com o <b>Tesouro Esquecido</b> — 
+          o guia que identifica <b>em minutos</b> o que vale e o que não vale.
+        </p>
+
+        <!-- CARD MOBILE ENXUTO -->
+        <div class="product-card" style="max-width:100%;margin:14px 0 0;border-radius:12px;">
+          <!-- Topo simplificado -->
+          <div style="background:var(--parchment);padding:6px 14px 4px;border-bottom:1px solid rgba(42,33,24,0.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2px 6px;">
+            <div style="display:flex;align-items:center;gap:4px;">
+              <span style="color:var(--gold);font-size:11px;">★★★★★</span>
+              <span style="font-family:'Space Mono',monospace;font-weight:700;font-size:11px;color:var(--ink);">4,8</span>
+              <span style="font-size:9px;color:var(--ink-soft);">(3.536)</span>
+            </div>
+            <span style="font-family:'Space Mono',monospace;font-size:7px;font-weight:700;text-transform:uppercase;background:#f5b342;color:#241a06;padding:1px 8px;border-radius:8px;">🔥 Mais Vendido</span>
           </div>
-          <div class="product-card-body">
-            <div class="product-rating">
-              <span class="stars">★★★★★</span>
-              <span class="rating-number">4,8</span>
-              <span class="rating-count">(3.536 avaliações)</span>
+
+          <!-- Imagem + título lado a lado -->
+          <div style="background:var(--parchment);padding:8px 14px;display:flex;align-items:center;gap:12px;">
+            <img src="pagina1.png" alt="Capa" style="height:64px;width:auto;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,0.1);flex-shrink:0;">
+            <div>
+              <h4 style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--ink);margin:0;">Tesouro Esquecido</h4>
+              <p style="font-size:10px;color:var(--ink-soft);margin:0;">Guia de identificação</p>
             </div>
-            <div class="product-price">
-              <span class="price-old">R$ 47,00</span>
-              <span class="price-new"><sup>R$</sup>19,99</span>
-              <span class="price-discount">-57%</span>
+          </div>
+
+          <!-- Preço + botão -->
+          <div style="padding:4px 14px 12px;background:var(--parchment);">
+            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+              <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-soft);text-decoration:line-through;">R$ 47,00</span>
+              <span style="font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--ink);"><sup style="font-size:11px;">R$</sup>19,99</span>
+              <span style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;background:#22a65e;color:#fff;padding:1px 10px;border-radius:8px;">-57%</span>
             </div>
-            <div class="product-stock">
-              <span class="stock-dot"></span>
-              <span class="stock-text"><b>Em estoque</b> — 47 unidades</span>
+            <div style="display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:2px;font-size:9px;color:var(--ink-soft);">
+              <span style="display:flex;align-items:center;gap:3px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6 6 5 9.5 5 13a7 7 0 0014 0c0-3.5-3-7-7-11z"/></svg>
+                Acesso imediato
+              </span>
+              <span style="display:flex;align-items:center;gap:3px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 4v16"/></svg>
+                PDF
+              </span>
+              <span style="display:flex;align-items:center;gap:3px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+                Vitalício
+              </span>
             </div>
-            <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="product-btn" id="heroBtnMobile">
-              Comprar agora
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="product-btn" id="heroBtnMobile" style="margin-top:6px;padding:11px;font-size:13px;">
+              Quero identificar a minha →
             </a>
-            <div class="product-guarantee">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              <span>Acesso imediato · Garantia</span>
-            </div>
           </div>
         </div>
 
-        <div class="hcm-trust">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Acesso imediato</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Acesso vitalício</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Foco no Brasil</span>
+        <div class="hcm-trust" style="margin-top:12px;">
+          <span style="display:flex;align-items:center;gap:4px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+            Acesso vitalício
+          </span>
+          <span style="display:flex;align-items:center;gap:4px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h15M12 3v15M12 21l3-6h-6l3 6z"/></svg>
+            Foco no Brasil
+          </span>
+          <span style="display:flex;align-items:center;gap:4px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 4v16"/></svg>
+            PDF imediato
+          </span>
         </div>
       </div>
     </div>
 
+    <!-- ============ LADO DIREITO: FICHAS FLUTUANTES ============ -->
     <div class="specimen-stack">
+      <!-- Capa com avaliações -->
       <div class="tag t1" style="background:var(--parchment);padding:20px 18px 18px;">
         <div class="hole"></div>
+        <div class="tag-rating" style="justify-content:center;margin-top:0;margin-bottom:2px;">
+          <span class="stars">★★★★★</span>
+          <span>4,8</span>
+          <span style="opacity:0.3;">·</span>
+          <span>(3.536 avaliações)</span>
+        </div>
         <img src="pagina1.png" alt="Capa do Ebook" class="tag-photo" style="aspect-ratio:4/3;object-fit:contain;background:var(--parchment);">
-        <div class="tag-num">EDIÇÃO DIGITAL</div>
-        <div class="tag-name" style="font-size:16px;">Pedras Valiosas</div>
-        <div class="tag-price">guia completo <b>de identificação</b></div>
+        <div class="tag-num" style="text-align:center;margin-top:4px;">EDIÇÃO DIGITAL</div>
+        <div class="tag-name" style="font-size:16px;text-align:center;">Tesouro Esquecido</div>
+        <div class="tag-price" style="text-align:center;border-top:none;padding-top:2px;">guia completo <b>de identificação</b></div>
+        <div style="text-align:center;margin-top:6px;font-family:'Space Mono',monospace;font-size:8px;color:var(--amethyst-deep);letter-spacing:0.04em;border-top:1px dashed rgba(42,33,24,0.12);padding-top:6px;">
+          ★ Mais Vendido · 4,8/5
+        </div>
       </div>
+
+      <!-- Ametista -->
       <div class="tag t2">
         <div class="hole"></div>
         <img src="pedra2.jpeg" alt="Ametista" class="tag-photo" style="aspect-ratio:1/1;object-fit:cover;">
@@ -764,6 +707,8 @@
         <div class="tag-name">Ametista</div>
         <div class="tag-price">faixa <b>R$20 – R$500</b></div>
       </div>
+
+      <!-- Citrino -->
       <div class="tag t3">
         <div class="hole"></div>
         <img src="pedra3.jpeg" alt="Citrino" class="tag-photo" style="aspect-ratio:1/1;object-fit:cover;">
@@ -775,6 +720,7 @@
   </div>
 </section>
 
+<!-- ============ STRIP ============ -->
 <div class="strip">
   <div class="strip-track">
     <span>QUARTZO ROSA</span><span>AMETISTA</span><span>CITRINO</span><span>TURMALINA</span><span>TOPÁZIO</span>
@@ -782,7 +728,7 @@
   </div>
 </div>
 
-<!-- ============ PRÉVIA DO EBOOK - CARROSSEL NORMAL ============ -->
+<!-- ============ PRÉVIA DO EBOOK - CARROSSEL ============ -->
 <section id="preview-ebook" style="background:var(--bg-alt);">
   <div class="wrap">
     <div class="section-head">
@@ -824,7 +770,7 @@
           </div>
         </div>
 
-        <!-- Slide 3: Página 4 (página 3 removida) -->
+        <!-- Slide 3: Página 4 -->
         <div class="carrossel-slide">
           <div class="slide-page">
             <img src="pagina4.png" alt="Página 4" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
@@ -867,7 +813,6 @@
         <!-- Slide 8: Páginas 9-200 (bloqueadas) -->
         <div class="carrossel-slide">
           <div class="slide-page" style="background:var(--parchment);aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 30px;text-align:center;border-radius:8px;">
-            <!-- Ícone de cadeado SVG -->
             <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;display:block;margin-bottom:12px;stroke:var(--ink);">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
@@ -875,7 +820,6 @@
             <h3 style="font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px;">Páginas 9 a 200</h3>
             <p style="font-size:15px;color:var(--ink-soft);margin-bottom:16px;">+192 páginas bloqueadas</p>
             <div style="width:50px;height:2px;background:rgba(42,33,24,0.12);margin:0 auto 18px;"></div>
-            <!-- Botão PRETO -->
             <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:var(--ink);color:var(--parchment);font-family:'Space Mono',monospace;font-weight:700;font-size:15px;border-radius:6px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
               Desbloquear tudo — R$19,99
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
@@ -897,7 +841,8 @@
     </div>
 
     <div class="preview-note">
-      ⚡ <b>200 páginas</b> no guia completo — você está vendo apenas <b>8 páginas de amostra</b>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <b>200 páginas</b> no guia completo — você está vendo apenas <b>8 páginas de amostra</b>
     </div>
   </div>
 </section>
@@ -906,11 +851,11 @@
 <section class="mockup-section">
   <div class="wrap">
     <div class="mockup-grid">
-      <div class="mockup-image"><img src="mockup_ebook.png" alt="Mockup do ebook Pedras Valiosas"></div>
+      <div class="mockup-image"><img src="mockup_ebook.png" alt="Mockup do ebook Tesouro Esquecido"></div>
       <div class="mockup-info">
         <div class="eyebrow">Formato digital</div>
         <h2>Leia em qualquer dispositivo</h2>
-        <p>O guia completo <strong>Pedras Valiosas</strong> foi pensado para você consultar onde e quando quiser — no celular, tablet ou computador.</p>
+        <p>O guia completo <strong>Tesouro Esquecido</strong> foi pensado para você consultar onde e quando quiser — no celular, tablet ou computador.</p>
         <ul class="mockup-details">
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><b>200 páginas</b> com fichas de identificação</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>PDF otimizado para leitura em qualquer tela</li>
@@ -1094,7 +1039,7 @@
     <div class="receipt">
       <div class="receipt-head">
         <div class="eyebrow">Acesso completo</div>
-        <h2>Pedras Valiosas — Guia Completo</h2>
+        <h2>Tesouro Esquecido — Guia Completo</h2>
       </div>
       <ul class="receipt-list">
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Catálogo completo em PDF, para ler no celular, tablet ou computador</li>
@@ -1157,7 +1102,7 @@
 <footer>
   <div class="wrap">
     <p class="disclaimer">Aviso importante: este é um guia educativo e de curiosidade sobre identificação de pedras. Para avaliações oficiais de alto valor, sempre consulte um gemólogo profissional.</p>
-    <p class="fine">© Pedras Valiosas — todos os direitos reservados</p>
+    <p class="fine">© Tesouro Esquecido — todos os direitos reservados</p>
   </div>
 </footer>
 
@@ -1166,7 +1111,6 @@
   (function() {
     'use strict';
 
-    // ===== UTM =====
     function getUTMParams() {
       var params = new URLSearchParams(window.location.search);
       var utm = {};
@@ -1198,7 +1142,6 @@
     }
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', addUTMToLinks); } else { addUTMToLinks(); }
 
-    // ===== VENDA =====
     function registrarVenda(fonte) {
       var dados = { timestamp: new Date().toISOString(), pagina: window.location.href, utm: utmData, fonte: fonte || 'botao' };
       console.log('🛒 VENDA REGISTRADA:', dados);
@@ -1219,13 +1162,10 @@
     console.log('📊 === UTM ATIVO ===');
     console.log('🏷️ UTM:', utmData);
 
-    // ===== FLOATING CTA =====
     var fab = document.getElementById('floatingCta');
     if (fab) {
       function updateFab() {
         var previewEl = document.getElementById('preview-ebook');
-        var precoEl = document.getElementById('preco');
-        var finalCta = document.querySelector('.final-cta');
         var heroBottom = document.querySelector('.hero') ? document.querySelector('.hero').getBoundingClientRect().bottom : 0;
         var pastHero = heroBottom < 0 || window.scrollY > 500;
         var inCtaZone = previewEl ? previewEl.getBoundingClientRect().top < window.innerHeight * 0.7 : false;
@@ -1236,7 +1176,6 @@
       updateFab();
     }
 
-    // ===== SALES POPUP =====
     var popup = document.getElementById('salesPopup');
     var nameEl = document.getElementById('spName');
     var cityEl = document.getElementById('spCity');
@@ -1268,7 +1207,6 @@
       schedule();
     }
 
-    // ===== FAQ =====
     document.querySelectorAll('.faq-item').forEach(function(item) {
       var q = item.querySelector('.faq-q');
       var a = item.querySelector('.faq-a');
@@ -1279,7 +1217,6 @@
       });
     });
 
-    // ===== CARROSSEL NORMAL =====
     (function() {
       var slides = document.querySelectorAll('.carrossel-slide');
       var dots = document.querySelectorAll('.carrossel-dots .dot');
@@ -1415,7 +1352,6 @@
 
       initCarrossel();
 
-      // Auto-rotate
       var autoRotateInterval;
       var autoRotateDelay = 5000;
 
