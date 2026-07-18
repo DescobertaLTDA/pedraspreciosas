@@ -384,13 +384,19 @@
   .final-cta p{margin-top:16px;color:var(--ink-mute);font-size:16.5px;}
   .final-cta .btn-primary{margin-top:30px;}
 
-  /* ===== BOOK SLIDER ===== */
-  .book-container {
+  /* ===== CARROSSEL NORMAL ===== */
+  .carrossel-container {
     max-width: 560px;
     margin: 0 auto;
+    position: relative;
+    background: var(--parchment);
+    border-radius: 16px;
+    padding: 20px 16px 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    border: 1px solid rgba(0,0,0,0.06);
   }
 
-  .book-progress {
+  .carrossel-progress {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -400,18 +406,18 @@
     padding: 0 4px;
   }
 
-  .book-counter {
+  .carrossel-counter {
     font-family: 'Space Mono', monospace;
     font-size: 12px;
     color: var(--ink-soft);
   }
 
-  .book-dots {
+  .carrossel-dots {
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
   }
-  .book-dots .dot {
+  .carrossel-dots .dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -419,109 +425,67 @@
     cursor: pointer;
     transition: all .25s ease;
   }
-  .book-dots .dot.active {
+  .carrossel-dots .dot.active {
     background: var(--amethyst);
     width: 20px;
     border-radius: 4px;
   }
-  .book-dots .dot:hover {
+  .carrossel-dots .dot:hover {
     background: rgba(42,33,24,0.4);
   }
-  .book-dots .dot.active:hover {
+  .carrossel-dots .dot.active:hover {
     background: var(--amethyst-deep);
   }
 
-  .book-viewer {
+  .carrossel-track {
     position: relative;
-    background: var(--parchment);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
-    border: 1px solid rgba(0,0,0,0.06);
-    min-height: 420px;
-    perspective: 2000px;
     overflow: hidden;
+    border-radius: 8px;
+    min-height: 380px;
   }
 
-  .book-pages {
+  .carrossel-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.5s ease;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .carrossel-slide.active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+    position: relative;
+  }
+  .carrossel-slide.exit-left {
+    opacity: 0;
+    transform: scale(0.9) translateX(-40px);
+  }
+  .carrossel-slide.exit-right {
+    opacity: 0;
+    transform: scale(0.9) translateX(40px);
+  }
+
+  .slide-page {
     position: relative;
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
-    min-height: 370px;
-    transform-style: preserve-3d;
-  }
-
-  .page-folio {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    min-height: 370px;
-    transform-style: preserve-3d;
-    transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
-    transform-origin: left center;
-    cursor: pointer;
-    display: none;
-  }
-  .page-folio.active {
-    display: block;
-    position: relative;
-  }
-  .page-folio.flipped {
-    transform: rotateY(-180deg);
-  }
-  .page-folio.flipping {
-    display: block;
-    position: absolute;
-    z-index: 10;
-    animation: pageFlip 0.8s cubic-bezier(0.4, 0.2, 0.2, 1) forwards;
-  }
-  .page-folio.flipping-back {
-    display: block;
-    position: absolute;
-    z-index: 10;
-    animation: pageFlipBack 0.8s cubic-bezier(0.4, 0.2, 0.2, 1) forwards;
-  }
-
-  @keyframes pageFlip {
-    0% { transform: rotateY(0deg); z-index: 10; }
-    100% { transform: rotateY(-180deg); z-index: 5; }
-  }
-  @keyframes pageFlipBack {
-    0% { transform: rotateY(-180deg); z-index: 10; }
-    100% { transform: rotateY(0deg); z-index: 5; }
-  }
-
-  .page-front,
-  .page-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    min-height: 370px;
-    backface-visibility: hidden;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     background: #fff;
   }
-
-  .page-front {
-    z-index: 2;
-    transform: rotateY(0deg);
-  }
-  .page-back {
-    transform: rotateY(180deg);
-    background: #f8f4ec;
-  }
-
-  .page-front img,
-  .page-back img {
+  .slide-page img {
     width: 100%;
     height: auto;
     display: block;
   }
-
-  .page-number {
+  .slide-page .slide-number {
     position: absolute;
     bottom: 10px;
     right: 12px;
@@ -534,7 +498,7 @@
     backdrop-filter: blur(4px);
     z-index: 5;
   }
-  .page-badge {
+  .slide-page .slide-badge {
     position: absolute;
     top: 10px;
     left: 12px;
@@ -551,7 +515,39 @@
     z-index: 5;
   }
 
-  /* ===== CARIMBO CONFIDENCIAL ===== */
+  /* Slide bloqueado */
+  .slide-locked {
+    position: absolute;
+    inset: 0;
+    background: rgba(23,21,27,0.82);
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    z-index: 3;
+  }
+  .slide-locked .lock-icon {
+    font-size: 38px;
+    opacity: 0.8;
+    display: block;
+  }
+  .slide-locked .lock-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--parchment);
+  }
+  .slide-locked .lock-sub {
+    font-size: 13px;
+    color: var(--ink-mute);
+  }
+
+  /* Carimbo CONFIDENCIAL */
   .stamp-confidencial {
     position: absolute;
     inset: 0;
@@ -579,47 +575,15 @@
     white-space: nowrap;
   }
 
-  /* Página bloqueada */
-  .page-locked {
-    position: absolute;
-    inset: 0;
-    background: rgba(23,21,27,0.82);
-    backdrop-filter: blur(12px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 20px;
-    text-align: center;
-    border-radius: 8px;
-    z-index: 3;
-  }
-  .page-locked .lock-icon {
-    font-size: 38px;
-    opacity: 0.8;
-    display: block;
-  }
-  .page-locked .lock-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--parchment);
-  }
-  .page-locked .lock-sub {
-    font-size: 13px;
-    color: var(--ink-mute);
-  }
-
-  /* Navegação do livro */
-  .book-nav {
+  /* Navegação */
+  .carrossel-nav {
     display: flex;
     justify-content: center;
     gap: 16px;
     margin-top: 16px;
   }
 
-  .book-btn {
+  .carrossel-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -633,24 +597,24 @@
     transition: all .2s ease;
     flex-shrink: 0;
   }
-  .book-btn:hover {
+  .carrossel-btn:hover {
     background: #3a2f28;
     transform: scale(1.05);
   }
-  .book-btn:active {
+  .carrossel-btn:active {
     transform: scale(0.95);
   }
-  .book-btn svg {
+  .carrossel-btn svg {
     width: 20px;
     height: 20px;
     stroke: var(--parchment);
   }
-  .book-btn:disabled {
+  .carrossel-btn:disabled {
     opacity: 0.3;
     cursor: not-allowed;
     transform: none !important;
   }
-  .book-btn:disabled:hover {
+  .carrossel-btn:disabled:hover {
     background: var(--ink);
   }
 
@@ -683,30 +647,26 @@
     .catalog-scroller{grid-template-columns:repeat(2,1fr);}
     .mockup-grid{grid-template-columns:1fr;gap:32px;}
     .mockup-grid .mockup-image{order:-1;}
-    .book-viewer{min-height:340px;}
-    .book-pages{min-height:300px;}
-    .page-front,.page-back{min-height:300px;}
+    .carrossel-track{min-height:320px;}
     .stamp-confidencial span{font-size:22px;padding:8px 20px;}
   }
   @media (max-width:640px){
     .feat-grid,.catalog-scroller{grid-template-columns:1fr;}
     section{padding:64px 0;}
-    .book-viewer{padding:12px;min-height:300px;}
-    .book-pages{min-height:260px;}
-    .page-front,.page-back{min-height:260px;}
-    .book-btn{width:40px;height:40px;}
-    .book-btn svg{width:16px;height:16px;}
-    .book-dots .dot{width:6px;height:6px;}
-    .book-dots .dot.active{width:16px;}
+    .carrossel-container{padding:14px 12px 12px;border-radius:12px;}
+    .carrossel-track{min-height:280px;}
+    .slide-page{max-width:100%;}
+    .slide-locked .lock-icon{font-size:30px;}
+    .slide-locked .lock-label{font-size:14px;}
+    .carrossel-btn{width:40px;height:40px;}
+    .carrossel-btn svg{width:16px;height:16px;}
+    .carrossel-dots .dot{width:6px;height:6px;}
+    .carrossel-dots .dot.active{width:16px;}
     .preview-note{font-size:12px;}
-    .page-locked .lock-icon{font-size:30px;}
-    .page-locked .lock-label{font-size:14px;}
     .stamp-confidencial span{font-size:16px;padding:6px 14px;border-width:3px;letter-spacing:4px;}
   }
   @media (max-width:420px){
-    .book-viewer{min-height:240px;padding:10px;}
-    .book-pages{min-height:200px;}
-    .page-front,.page-back{min-height:200px;}
+    .carrossel-track{min-height:220px;}
     .stamp-confidencial span{font-size:13px;padding:4px 10px;border-width:2px;letter-spacing:3px;}
   }
   @media (prefers-reduced-motion: reduce){.strip-track{animation:none;}*{transition:none !important;}}
@@ -885,7 +845,7 @@
   </div>
 </div>
 
-<!-- ============ PRÉVIA DO EBOOK COM EFEITO VIRAR PÁGINA ============ -->
+<!-- ============ PRÉVIA DO EBOOK - CARROSSEL NORMAL ============ -->
 <section id="preview-ebook" style="background:var(--bg-alt);">
   <div class="wrap">
     <div class="section-head">
@@ -894,126 +854,114 @@
       <p style="max-width:520px;">Navegue pelas páginas liberadas e veja como é fácil identificar cada pedra — da capa às fichas técnicas.</p>
     </div>
 
-    <div class="book-container">
-      <div class="book-progress">
-        <span class="book-counter" id="pageCounter">Página 1 de 200</span>
-        <div class="book-dots" id="sliderDots">
+    <div class="carrossel-container">
+      <div class="carrossel-progress">
+        <span class="carrossel-counter" id="pageCounter">Página 1 de 200</span>
+        <div class="carrossel-dots" id="sliderDots">
           <span class="dot active" data-index="0"></span>
           <span class="dot" data-index="1"></span>
           <span class="dot" data-index="2"></span>
           <span class="dot" data-index="3"></span>
           <span class="dot" data-index="4"></span>
+          <span class="dot" data-index="5"></span>
+          <span class="dot" data-index="6"></span>
         </div>
       </div>
 
-      <div class="book-viewer" id="bookViewer">
-        <div class="book-pages" id="bookPages">
-          <!-- Folio 1: Página 1 (Capa) e Página 2 -->
-          <div class="page-folio" data-index="0">
-            <div class="page-front">
-              <img src="pagina1.png" alt="Página 1 - Capa" style="object-fit:contain;aspect-ratio:auto;background:var(--parchment);width:100%;height:100%;">
-              <span class="page-number">Pág. 1</span>
-              <span class="page-badge">📖 Capa</span>
-            </div>
-            <div class="page-back">
-              <img src="pagina2.png" alt="Página 2 - Introdução" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
-              <span class="page-number">Pág. 2</span>
-              <span class="page-badge">📖 Introdução</span>
-            </div>
-          </div>
-
-          <!-- Folio 2: Página 3 e Página 4 -->
-          <div class="page-folio" data-index="1">
-            <div class="page-front">
-              <div style="position:relative;min-height:370px;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.92);backdrop-filter:blur(12px);border-radius:8px;text-align:center;">
-                <span style="font-size:38px;opacity:0.8;">🔒</span>
-                <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Página 3</span>
-                <span style="font-size:13px;color:var(--ink-mute);">Conteúdo exclusivo</span>
-                <!-- Carimbo CONFIDENCIAL -->
-                <div class="stamp-confidencial">
-                  <span>CONFIDENCIAL</span>
-                </div>
-              </div>
-              <span class="page-number">Pág. 3</span>
-            </div>
-            <div class="page-back">
-              <img src="pagina4.png" alt="Página 4" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
-              <span class="page-number">Pág. 4</span>
-            </div>
-          </div>
-
-          <!-- Folio 3: Página 5 e Página 6 -->
-          <div class="page-folio" data-index="2">
-            <div class="page-front">
-              <img src="pagina5.png" alt="Página 5" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
-              <span class="page-number">Pág. 5</span>
-            </div>
-            <div class="page-back">
-              <img src="pagina6.png" alt="Página 6" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
-              <span class="page-number">Pág. 6</span>
-            </div>
-          </div>
-
-          <!-- Folio 4: Página 7 e Página 8 -->
-          <div class="page-folio" data-index="3">
-            <div class="page-front">
-              <img src="pagina7.png" alt="Página 7" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
-              <span class="page-number">Pág. 7</span>
-            </div>
-            <div class="page-back">
-              <img src="pagina8.png" alt="Página 8" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
-              <span class="page-number">Pág. 8</span>
-            </div>
-          </div>
-
-          <!-- Folio 5: Páginas 9-200 (bloqueadas) -->
-          <div class="page-folio" data-index="4">
-            <div class="page-front">
-              <div style="position:relative;min-height:370px;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.92);backdrop-filter:blur(12px);border-radius:8px;text-align:center;">
-                <span style="font-size:38px;opacity:0.8;">🔒</span>
-                <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Páginas 9 a 200</span>
-                <span style="font-size:13px;color:var(--ink-mute);">+192 páginas bloqueadas</span>
-                <div style="width:40px;height:1px;background:rgba(240,230,210,0.15);margin:8px 0 10px;"></div>
-                <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:var(--citrino);color:#241a06;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;border-radius:6px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 8px 24px rgba(227,173,46,0.3);">
-                  Desbloquear tudo — R$19,99
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-                </a>
-                <span style="font-size:11px;color:var(--ink-mute);font-family:'Space Mono',monospace;margin-top:4px;">Acesso imediato após a compra</span>
-                <!-- Carimbo CONFIDENCIAL -->
-                <div class="stamp-confidencial">
-                  <span>CONFIDENCIAL</span>
-                </div>
-              </div>
-              <span class="page-number">Pág. 9+</span>
-            </div>
-            <div class="page-back">
-              <div style="position:relative;min-height:370px;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.85);backdrop-filter:blur(8px);border-radius:8px;text-align:center;">
-                <span style="font-size:38px;opacity:0.8;">🔒</span>
-                <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Conteúdo exclusivo</span>
-                <span style="font-size:13px;color:var(--ink-mute);">Adquira o guia completo</span>
-                <!-- Carimbo CONFIDENCIAL -->
-                <div class="stamp-confidencial">
-                  <span>CONFIDENCIAL</span>
-                </div>
-              </div>
-              <span class="page-number">Pág. 10+</span>
-            </div>
+      <div class="carrossel-track" id="carrosselTrack">
+        <!-- Slide 1: Capa -->
+        <div class="carrossel-slide active">
+          <div class="slide-page">
+            <img src="pagina1.png" alt="Página 1 - Capa" style="object-fit:contain;aspect-ratio:auto;background:var(--parchment);">
+            <span class="slide-number">Pág. 1</span>
+            <span class="slide-badge">📖 Capa</span>
           </div>
         </div>
 
-        <div class="book-nav">
-          <button class="book-btn book-prev" id="bookPrev" aria-label="Página anterior">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          <button class="book-btn book-next" id="bookNext" aria-label="Próxima página">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
+        <!-- Slide 2: Introdução -->
+        <div class="carrossel-slide">
+          <div class="slide-page">
+            <img src="pagina2.png" alt="Página 2 - Introdução" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <span class="slide-number">Pág. 2</span>
+            <span class="slide-badge">📖 Introdução</span>
+          </div>
+        </div>
+
+        <!-- Slide 3: Página 4 (página 3 foi removida) -->
+        <div class="carrossel-slide">
+          <div class="slide-page">
+            <img src="pagina4.png" alt="Página 4" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <span class="slide-number">Pág. 4</span>
+          </div>
+        </div>
+
+        <!-- Slide 4: Página 5 -->
+        <div class="carrossel-slide">
+          <div class="slide-page">
+            <img src="pagina5.png" alt="Página 5" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <span class="slide-number">Pág. 5</span>
+          </div>
+        </div>
+
+        <!-- Slide 5: Página 6 -->
+        <div class="carrossel-slide">
+          <div class="slide-page">
+            <img src="pagina6.png" alt="Página 6" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <span class="slide-number">Pág. 6</span>
+          </div>
+        </div>
+
+        <!-- Slide 6: Página 7 -->
+        <div class="carrossel-slide">
+          <div class="slide-page">
+            <img src="pagina7.png" alt="Página 7" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <span class="slide-number">Pág. 7</span>
+          </div>
+        </div>
+
+        <!-- Slide 7: Página 8 -->
+        <div class="carrossel-slide">
+          <div class="slide-page">
+            <img src="pagina8.png" alt="Página 8" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <span class="slide-number">Pág. 8</span>
+          </div>
+        </div>
+
+        <!-- Slide 8: Páginas 9-200 (bloqueadas) -->
+        <div class="carrossel-slide">
+          <div class="slide-page">
+            <div style="position:relative;min-height:380px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.92);backdrop-filter:blur(12px);border-radius:8px;text-align:center;">
+              <span style="font-size:38px;opacity:0.8;">🔒</span>
+              <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Páginas 9 a 200</span>
+              <span style="font-size:13px;color:var(--ink-mute);">+192 páginas bloqueadas</span>
+              <div style="width:40px;height:1px;background:rgba(240,230,210,0.15);margin:8px 0 10px;"></div>
+              <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:var(--citrino);color:#241a06;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;border-radius:6px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 8px 24px rgba(227,173,46,0.3);">
+                Desbloquear tudo — R$19,99
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </a>
+              <span style="font-size:11px;color:var(--ink-mute);font-family:'Space Mono',monospace;margin-top:4px;">Acesso imediato após a compra</span>
+              <!-- Carimbo CONFIDENCIAL -->
+              <div class="stamp-confidencial">
+                <span>CONFIDENCIAL</span>
+              </div>
+            </div>
+            <span class="slide-number">Pág. 9+</span>
+          </div>
         </div>
       </div>
 
-      <div class="preview-note">
-        ⚡ <b>200 páginas</b> no guia completo — você está vendo apenas <b>8 páginas de amostra</b>
+      <div class="carrossel-nav">
+        <button class="carrossel-btn carrossel-prev" id="carrosselPrev" aria-label="Página anterior">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="carrossel-btn carrossel-next" id="carrosselNext" aria-label="Próxima página">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
       </div>
+    </div>
+
+    <div class="preview-note">
+      ⚡ <b>200 páginas</b> no guia completo — você está vendo apenas <b>8 páginas de amostra</b>
     </div>
   </div>
 </section>
@@ -1395,239 +1343,186 @@
       });
     });
 
-    // ===== BOOK SLIDER =====
+    // ===== CARROSSEL NORMAL =====
     (function() {
-      var folios = document.querySelectorAll('.page-folio');
-      var dots = document.querySelectorAll('.book-dots .dot');
-      var prevBtn = document.getElementById('bookPrev');
-      var nextBtn = document.getElementById('bookNext');
+      var slides = document.querySelectorAll('.carrossel-slide');
+      var dots = document.querySelectorAll('.carrossel-dots .dot');
+      var prevBtn = document.getElementById('carrosselPrev');
+      var nextBtn = document.getElementById('carrosselNext');
       var counter = document.getElementById('pageCounter');
       var currentIndex = 0;
-      var totalFolios = folios.length;
-      var isFlipping = false;
-      var currentSide = 'front';
+      var totalSlides = slides.length;
+      var isAnimating = false;
 
-      function initBook() {
-        folios.forEach(function(folio, i) {
+      function updateSlider(index, direction) {
+        if (isAnimating) return;
+        if (index < 0 || index >= totalSlides) return;
+        if (index === currentIndex) return;
+
+        isAnimating = true;
+
+        var currentSlide = slides[currentIndex];
+        var newSlide = slides[index];
+
+        currentSlide.classList.remove('active', 'exit-left', 'exit-right');
+        newSlide.classList.remove('active', 'exit-left', 'exit-right');
+
+        if (direction === 'left') {
+          currentSlide.classList.add('exit-left');
+          newSlide.style.display = 'flex';
+          void newSlide.offsetHeight;
+          newSlide.classList.add('active');
+        } else if (direction === 'right') {
+          currentSlide.classList.add('exit-right');
+          newSlide.style.display = 'flex';
+          void newSlide.offsetHeight;
+          newSlide.classList.add('active');
+        }
+
+        currentIndex = index;
+
+        dots.forEach(function(dot, i) {
+          dot.classList.toggle('active', i === currentIndex);
+        });
+
+        var displayIndex = currentIndex + 1;
+        counter.textContent = 'Página ' + displayIndex + ' de 200';
+
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === totalSlides - 1;
+
+        setTimeout(function() {
+          currentSlide.classList.remove('exit-left', 'exit-right');
+          setTimeout(function() {
+            currentSlide.style.display = 'none';
+          }, 50);
+          isAnimating = false;
+        }, 500);
+      }
+
+      function initCarrossel() {
+        slides.forEach(function(slide, i) {
           if (i === 0) {
-            folio.classList.add('active');
-            folio.style.display = 'block';
+            slide.style.display = 'flex';
+            slide.classList.add('active');
           } else {
-            folio.style.display = 'none';
-            folio.classList.remove('active', 'flipped');
+            slide.style.display = 'none';
           }
         });
         dots.forEach(function(dot, i) {
           dot.classList.toggle('active', i === 0);
         });
         counter.textContent = 'Página 1 de 200';
-        updateButtons();
+        prevBtn.disabled = true;
+        nextBtn.disabled = totalSlides <= 1;
       }
 
-      function updateButtons() {
-        var totalPages = 200;
-        var currentPage = currentIndex * 2 + (currentSide === 'front' ? 1 : 2);
-        prevBtn.disabled = currentIndex === 0 && currentSide === 'front';
-        nextBtn.disabled = currentIndex === totalFolios - 1 && currentSide === 'back';
-      }
-
-      function getPageDisplay() {
-        var pageNum = currentIndex * 2 + (currentSide === 'front' ? 1 : 2);
-        return 'Página ' + pageNum + ' de 200';
-      }
-
-      function flipPage(direction) {
-        if (isFlipping) return;
-
-        var currentFolio = folios[currentIndex];
-        var isFront = currentSide === 'front';
-
-        // Avançar (frente → verso)
-        if (direction === 'next' && isFront) {
-          isFlipping = true;
-          currentFolio.classList.add('flipping');
-          currentSide = 'back';
-
-          setTimeout(function() {
-            currentFolio.classList.remove('flipping');
-            currentFolio.classList.add('flipped');
-            isFlipping = false;
-            counter.textContent = getPageDisplay();
-            updateButtons();
-            updateDots();
-          }, 700);
-          return;
-        }
-
-        // Avançar (próximo folio)
-        if (direction === 'next' && !isFront && currentIndex < totalFolios - 1) {
-          isFlipping = true;
-          var nextFolio = folios[currentIndex + 1];
-          nextFolio.style.display = 'block';
-          void nextFolio.offsetHeight;
-          nextFolio.classList.add('flipping-back');
-
-          setTimeout(function() {
-            currentFolio.classList.remove('active', 'flipped');
-            currentFolio.style.display = 'none';
-            nextFolio.classList.remove('flipping-back');
-            nextFolio.classList.add('active');
-            currentIndex++;
-            currentSide = 'front';
-            isFlipping = false;
-            counter.textContent = getPageDisplay();
-            updateButtons();
-            updateDots();
-          }, 700);
-          return;
-        }
-
-        // Voltar (verso → frente)
-        if (direction === 'prev' && !isFront) {
-          isFlipping = true;
-          currentFolio.classList.add('flipping-back');
-
-          setTimeout(function() {
-            currentFolio.classList.remove('flipping-back');
-            currentFolio.classList.remove('flipped');
-            currentSide = 'front';
-            isFlipping = false;
-            counter.textContent = getPageDisplay();
-            updateButtons();
-            updateDots();
-          }, 700);
-          return;
-        }
-
-        // Voltar (folio anterior)
-        if (direction === 'prev' && isFront && currentIndex > 0) {
-          isFlipping = true;
-          var prevFolio = folios[currentIndex - 1];
-          prevFolio.style.display = 'block';
-          void prevFolio.offsetHeight;
-          prevFolio.classList.add('flipping');
-
-          setTimeout(function() {
-            currentFolio.classList.remove('active');
-            currentFolio.style.display = 'none';
-            prevFolio.classList.remove('flipping');
-            prevFolio.classList.add('active', 'flipped');
-            currentIndex--;
-            currentSide = 'back';
-            isFlipping = false;
-            counter.textContent = getPageDisplay();
-            updateButtons();
-            updateDots();
-          }, 700);
-          return;
-        }
-      }
-
-      function updateDots() {
-        dots.forEach(function(dot, i) {
-          dot.classList.toggle('active', i === currentIndex);
-        });
-      }
-
-      // Event listeners
       if (prevBtn && nextBtn) {
-        prevBtn.addEventListener('click', function() { flipPage('prev'); });
-        nextBtn.addEventListener('click', function() { flipPage('next'); });
-      }
-
-      // Clique nas páginas
-      folios.forEach(function(folio) {
-        folio.addEventListener('click', function(e) {
-          if (e.target.closest('a')) return;
-          var rect = folio.getBoundingClientRect();
-          var x = e.clientX - rect.left;
-          var width = rect.width;
-          if (x > width / 2) {
-            flipPage('next');
-          } else {
-            flipPage('prev');
+        prevBtn.addEventListener('click', function() {
+          if (currentIndex > 0) {
+            updateSlider(currentIndex - 1, 'left');
           }
         });
-      });
 
-      // Dots
+        nextBtn.addEventListener('click', function() {
+          if (currentIndex < totalSlides - 1) {
+            updateSlider(currentIndex + 1, 'right');
+          }
+        });
+      }
+
       dots.forEach(function(dot, index) {
         dot.addEventListener('click', function() {
           if (index !== currentIndex) {
-            var oldFolio = folios[currentIndex];
-            oldFolio.classList.remove('active', 'flipped');
-            oldFolio.style.display = 'none';
-            var newFolio = folios[index];
-            newFolio.style.display = 'block';
-            newFolio.classList.add('active');
-            currentIndex = index;
-            currentSide = 'front';
-            counter.textContent = getPageDisplay();
-            updateButtons();
-            updateDots();
+            var direction = index > currentIndex ? 'right' : 'left';
+            updateSlider(index, direction);
           }
         });
       });
 
-      // Teclado
       document.addEventListener('keydown', function(e) {
         var previewSection = document.getElementById('preview-ebook');
         if (previewSection) {
           var rect = previewSection.getBoundingClientRect();
           var isVisible = rect.top < window.innerHeight && rect.bottom > 0;
           if (isVisible) {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            if (e.key === 'ArrowLeft' && currentIndex > 0) {
               e.preventDefault();
-              flipPage('prev');
-            } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              updateSlider(currentIndex - 1, 'left');
+            } else if (e.key === 'ArrowRight' && currentIndex < totalSlides - 1) {
               e.preventDefault();
-              flipPage('next');
+              updateSlider(currentIndex + 1, 'right');
             }
           }
         }
       });
 
-      // Swipe
       var startX = 0;
-      var bookViewer = document.getElementById('bookViewer');
-      if (bookViewer) {
-        bookViewer.addEventListener('touchstart', function(e) {
+      var carrosselContainer = document.querySelector('.carrossel-container');
+      if (carrosselContainer) {
+        carrosselContainer.addEventListener('touchstart', function(e) {
           startX = e.touches[0].clientX;
         }, { passive: true });
 
-        bookViewer.addEventListener('touchend', function(e) {
+        carrosselContainer.addEventListener('touchend', function(e) {
           var endX = e.changedTouches[0].clientX;
           var diff = startX - endX;
-          if (Math.abs(diff) > 50) {
-            if (diff > 0) {
-              flipPage('next');
-            } else {
-              flipPage('prev');
+          if (Math.abs(diff) > 40) {
+            if (diff > 0 && currentIndex < totalSlides - 1) {
+              updateSlider(currentIndex + 1, 'right');
+            } else if (diff < 0 && currentIndex > 0) {
+              updateSlider(currentIndex - 1, 'left');
             }
           }
         }, { passive: true });
       }
 
-      initBook();
+      initCarrossel();
 
-      window._bookSlider = {
-        next: function() { flipPage('next'); },
-        prev: function() { flipPage('prev'); },
-        goTo: function(index) {
-          if (index >= 0 && index < totalFolios) {
-            var oldFolio = folios[currentIndex];
-            oldFolio.classList.remove('active', 'flipped');
-            oldFolio.style.display = 'none';
-            var newFolio = folios[index];
-            newFolio.style.display = 'block';
-            newFolio.classList.add('active');
-            currentIndex = index;
-            currentSide = 'front';
-            counter.textContent = getPageDisplay();
-            updateButtons();
-            updateDots();
+      // Auto-rotate
+      var autoRotateInterval;
+      var autoRotateDelay = 5000;
+
+      function startAutoRotate() {
+        stopAutoRotate();
+        autoRotateInterval = setInterval(function() {
+          if (currentIndex < totalSlides - 1) {
+            updateSlider(currentIndex + 1, 'right');
+          } else {
+            updateSlider(0, 'left');
           }
+        }, autoRotateDelay);
+      }
+
+      function stopAutoRotate() {
+        if (autoRotateInterval) {
+          clearInterval(autoRotateInterval);
+          autoRotateInterval = null;
         }
+      }
+
+      var carrosselBtns = document.querySelectorAll('.carrossel-btn, .carrossel-dots .dot');
+      carrosselBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          stopAutoRotate();
+          setTimeout(startAutoRotate, 8000);
+        });
+      });
+
+      setTimeout(startAutoRotate, 3000);
+
+      if (carrosselContainer) {
+        carrosselContainer.addEventListener('mouseenter', stopAutoRotate);
+        carrosselContainer.addEventListener('mouseleave', function() {
+          setTimeout(startAutoRotate, 2000);
+        });
+      }
+
+      window._carrossel = {
+        goTo: function(index) { updateSlider(index, index > currentIndex ? 'right' : 'left'); },
+        next: function() { if (currentIndex < totalSlides - 1) updateSlider(currentIndex + 1, 'right'); },
+        prev: function() { if (currentIndex > 0) updateSlider(currentIndex - 1, 'left'); },
+        currentIndex: function() { return currentIndex; }
       };
     })();
 
