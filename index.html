@@ -890,11 +890,7 @@
       </button>
 
       <!-- DOTS -->
-      <div id="depoimentosDots" style="display:flex;justify-content:center;gap:6px;margin-top:14px;">
-        <span class="dot active" data-index="0" style="width:8px;height:8px;border-radius:50%;background:var(--amethyst);cursor:pointer;transition:all .3s ease;"></span>
-        <span class="dot" data-index="1" style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;transition:all .3s ease;"></span>
-        <span class="dot" data-index="2" style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;transition:all .3s ease;"></span>
-      </div>
+      <div id="depoimentosDots" style="display:flex;justify-content:center;gap:6px;margin-top:14px;"></div>
     </div>
 
     <!-- SELO DE CONFIANÇA -->
@@ -924,7 +920,8 @@
   (function() {
     var track = document.getElementById('depoimentosTrack');
     var items = document.querySelectorAll('.depoimento-item');
-    var dots = document.querySelectorAll('#depoimentosDots .dot');
+    var dotsContainer = document.getElementById('depoimentosDots');
+    var dots = [];
     var prevBtn = document.getElementById('depoimentosPrev');
     var nextBtn = document.getElementById('depoimentosNext');
     var currentIndex = 0;
@@ -935,10 +932,27 @@
     var currentX = 0;
     var isDragging = false;
 
+    function renderDots() {
+      if (!dotsContainer) return;
+      dotsContainer.innerHTML = '';
+      dots = [];
+      for (var i = 0; i < totalSlides; i++) {
+        var dot = document.createElement('span');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('data-index', i);
+        dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:' + (i === 0 ? 'var(--amethyst)' : 'rgba(255,255,255,0.2)') + ';cursor:pointer;transition:all .3s ease;';
+        (function(idx) {
+          dot.addEventListener('click', function() { currentIndex = idx; updateCarrossel(); });
+        })(i);
+        dotsContainer.appendChild(dot);
+        dots.push(dot);
+      }
+    }
+
     function updateCarrossel() {
       if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
       if (currentIndex < 0) currentIndex = 0;
-      var offset = -currentIndex * (100 / totalSlides);
+      var offset = -currentIndex * 100;
       track.style.transform = 'translateX(' + offset + '%)';
       dots.forEach(function(dot, i) {
         dot.classList.toggle('active', i === currentIndex);
@@ -953,14 +967,18 @@
       if (width <= 768) visibleItems = 1;
       else if (width <= 1024) visibleItems = 2;
       else visibleItems = 3;
-      totalSlides = Math.ceil(totalItems / visibleItems);
+      var newTotalSlides = Math.ceil(totalItems / visibleItems);
+      var slidesChanged = newTotalSlides !== totalSlides;
+      totalSlides = newTotalSlides;
       if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
       if (currentIndex < 0) currentIndex = 0;
       var gap = 16;
-      var itemWidth = (100 / totalSlides) - (totalSlides > 1 ? (gap / 100) * 0.5 : 0);
+      var itemWidth = 100 / visibleItems;
+      var gapAdjust = visibleItems > 1 ? (gap * (visibleItems - 1) / visibleItems) : 0;
       items.forEach(function(item) {
-        item.style.minWidth = 'calc(' + itemWidth + '% - ' + (totalSlides > 1 ? 11 : 0) + 'px)';
+        item.style.minWidth = 'calc(' + itemWidth + '% - ' + gapAdjust + 'px)';
       });
+      if (slidesChanged || dots.length === 0) renderDots();
       updateCarrossel();
     }
 
@@ -970,10 +988,6 @@
     if (nextBtn) {
       nextBtn.addEventListener('click', function() { if (currentIndex < totalSlides - 1) { currentIndex++; updateCarrossel(); } });
     }
-
-    dots.forEach(function(dot, i) {
-      dot.addEventListener('click', function() { currentIndex = i; updateCarrossel(); });
-    });
 
     // DRAG / TOUCH suporte
     if (track) {
