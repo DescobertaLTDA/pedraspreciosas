@@ -438,7 +438,7 @@
     padding: 16px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.35);
     border: 1px solid rgba(0,0,0,0.06);
-    min-height: 400px;
+    min-height: 420px;
     perspective: 2000px;
     overflow: hidden;
   }
@@ -448,7 +448,7 @@
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
-    min-height: 350px;
+    min-height: 370px;
     transform-style: preserve-3d;
   }
 
@@ -456,7 +456,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    min-height: 350px;
+    min-height: 370px;
     transform-style: preserve-3d;
     transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
     transform-origin: left center;
@@ -497,7 +497,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    min-height: 350px;
+    min-height: 370px;
     backface-visibility: hidden;
     border-radius: 8px;
     overflow: hidden;
@@ -519,8 +519,6 @@
     width: 100%;
     height: auto;
     display: block;
-    aspect-ratio: 3/4;
-    object-fit: cover;
   }
 
   .page-number {
@@ -551,6 +549,34 @@
     border-radius: 12px;
     backdrop-filter: blur(4px);
     z-index: 5;
+  }
+
+  /* ===== CARIMBO CONFIDENCIAL ===== */
+  .stamp-confidencial {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  .stamp-confidencial span {
+    font-family: 'Space Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(180, 30, 30, 0.25);
+    transform: rotate(-25deg) scale(1.2);
+    letter-spacing: 6px;
+    border: 4px solid rgba(180, 30, 30, 0.2);
+    padding: 12px 30px;
+    border-radius: 4px;
+    text-shadow: 0 0 20px rgba(180, 30, 30, 0.1);
+    user-select: none;
+    white-space: nowrap;
   }
 
   /* Página bloqueada */
@@ -660,6 +686,7 @@
     .book-viewer{min-height:340px;}
     .book-pages{min-height:300px;}
     .page-front,.page-back{min-height:300px;}
+    .stamp-confidencial span{font-size:22px;padding:8px 20px;}
   }
   @media (max-width:640px){
     .feat-grid,.catalog-scroller{grid-template-columns:1fr;}
@@ -674,11 +701,13 @@
     .preview-note{font-size:12px;}
     .page-locked .lock-icon{font-size:30px;}
     .page-locked .lock-label{font-size:14px;}
+    .stamp-confidencial span{font-size:16px;padding:6px 14px;border-width:3px;letter-spacing:4px;}
   }
   @media (max-width:420px){
     .book-viewer{min-height:240px;padding:10px;}
     .book-pages{min-height:200px;}
     .page-front,.page-back{min-height:200px;}
+    .stamp-confidencial span{font-size:13px;padding:4px 10px;border-width:2px;letter-spacing:3px;}
   }
   @media (prefers-reduced-motion: reduce){.strip-track{animation:none;}*{transition:none !important;}}
   /* SALES POPUP */
@@ -867,7 +896,7 @@
 
     <div class="book-container">
       <div class="book-progress">
-        <span class="book-counter" id="pageCounter">Página 1 de 8</span>
+        <span class="book-counter" id="pageCounter">Página 1 de 200</span>
         <div class="book-dots" id="sliderDots">
           <span class="dot active" data-index="0"></span>
           <span class="dot" data-index="1"></span>
@@ -879,87 +908,95 @@
 
       <div class="book-viewer" id="bookViewer">
         <div class="book-pages" id="bookPages">
-          <!-- Folio 1: Páginas 1 e 2 -->
+          <!-- Folio 1: Página 1 (Capa) e Página 2 -->
           <div class="page-folio" data-index="0">
             <div class="page-front">
-              <img src="pagina1.png" alt="Página 1 - Capa">
+              <img src="pagina1.png" alt="Página 1 - Capa" style="object-fit:contain;aspect-ratio:auto;background:var(--parchment);width:100%;height:100%;">
               <span class="page-number">Pág. 1</span>
               <span class="page-badge">📖 Capa</span>
             </div>
             <div class="page-back">
-              <img src="pagina2.png" alt="Página 2 - Introdução">
+              <img src="pagina2.png" alt="Página 2 - Introdução" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
               <span class="page-number">Pág. 2</span>
               <span class="page-badge">📖 Introdução</span>
             </div>
           </div>
 
-          <!-- Folio 2: Páginas 3 e 4 -->
+          <!-- Folio 2: Página 3 e Página 4 -->
           <div class="page-folio" data-index="1">
             <div class="page-front">
-              <img src="pagina4.png" alt="Página 4">
-              <span class="page-number">Pág. 4</span>
-            </div>
-            <div class="page-back">
-              <img src="pagina5.png" alt="Página 5">
-              <span class="page-number">Pág. 5</span>
-            </div>
-          </div>
-
-          <!-- Folio 3: Páginas 6 e 7 -->
-          <div class="page-folio" data-index="2">
-            <div class="page-front">
-              <img src="pagina6.png" alt="Página 6">
-              <span class="page-number">Pág. 6</span>
-            </div>
-            <div class="page-back">
-              <img src="pagina7.png" alt="Página 7">
-              <span class="page-number">Pág. 7</span>
-            </div>
-          </div>
-
-          <!-- Folio 4: Páginas 8 e 9 (bloqueada) -->
-          <div class="page-folio" data-index="3">
-            <div class="page-front">
-              <img src="pagina8.png" alt="Página 8">
-              <span class="page-number">Pág. 8</span>
-            </div>
-            <div class="page-back">
-              <div style="background:var(--bg-alt);min-height:350px;display:flex;align-items:center;justify-content:center;border-radius:8px;padding:20px;text-align:center;">
-                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-                  <span style="font-size:38px;opacity:0.8;">🔒</span>
-                  <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Página 9</span>
-                  <span style="font-size:13px;color:var(--ink-mute);">Conteúdo exclusivo</span>
+              <div style="position:relative;min-height:370px;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.92);backdrop-filter:blur(12px);border-radius:8px;text-align:center;">
+                <span style="font-size:38px;opacity:0.8;">🔒</span>
+                <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Página 3</span>
+                <span style="font-size:13px;color:var(--ink-mute);">Conteúdo exclusivo</span>
+                <!-- Carimbo CONFIDENCIAL -->
+                <div class="stamp-confidencial">
+                  <span>CONFIDENCIAL</span>
                 </div>
               </div>
-              <span class="page-number">Pág. 9</span>
+              <span class="page-number">Pág. 3</span>
+            </div>
+            <div class="page-back">
+              <img src="pagina4.png" alt="Página 4" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
+              <span class="page-number">Pág. 4</span>
             </div>
           </div>
 
-          <!-- Folio 5: Páginas 10-200 (bloqueadas) -->
+          <!-- Folio 3: Página 5 e Página 6 -->
+          <div class="page-folio" data-index="2">
+            <div class="page-front">
+              <img src="pagina5.png" alt="Página 5" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
+              <span class="page-number">Pág. 5</span>
+            </div>
+            <div class="page-back">
+              <img src="pagina6.png" alt="Página 6" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
+              <span class="page-number">Pág. 6</span>
+            </div>
+          </div>
+
+          <!-- Folio 4: Página 7 e Página 8 -->
+          <div class="page-folio" data-index="3">
+            <div class="page-front">
+              <img src="pagina7.png" alt="Página 7" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
+              <span class="page-number">Pág. 7</span>
+            </div>
+            <div class="page-back">
+              <img src="pagina8.png" alt="Página 8" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
+              <span class="page-number">Pág. 8</span>
+            </div>
+          </div>
+
+          <!-- Folio 5: Páginas 9-200 (bloqueadas) -->
           <div class="page-folio" data-index="4">
             <div class="page-front">
-              <div style="min-height:350px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.92);backdrop-filter:blur(12px);border-radius:8px;text-align:center;">
+              <div style="position:relative;min-height:370px;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.92);backdrop-filter:blur(12px);border-radius:8px;text-align:center;">
                 <span style="font-size:38px;opacity:0.8;">🔒</span>
-                <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Páginas 10 a 200</span>
-                <span style="font-size:13px;color:var(--ink-mute);">+191 páginas bloqueadas</span>
+                <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Páginas 9 a 200</span>
+                <span style="font-size:13px;color:var(--ink-mute);">+192 páginas bloqueadas</span>
                 <div style="width:40px;height:1px;background:rgba(240,230,210,0.15);margin:8px 0 10px;"></div>
                 <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:var(--citrino);color:#241a06;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;border-radius:6px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 8px 24px rgba(227,173,46,0.3);">
                   Desbloquear tudo — R$19,99
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
                 </a>
                 <span style="font-size:11px;color:var(--ink-mute);font-family:'Space Mono',monospace;margin-top:4px;">Acesso imediato após a compra</span>
-              </div>
-              <span class="page-number">Pág. 10+</span>
-            </div>
-            <div class="page-back">
-              <div style="background:var(--bg-alt);min-height:350px;display:flex;align-items:center;justify-content:center;border-radius:8px;padding:20px;text-align:center;">
-                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-                  <span style="font-size:38px;opacity:0.8;">🔒</span>
-                  <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Conteúdo exclusivo</span>
-                  <span style="font-size:13px;color:var(--ink-mute);">Adquira o guia completo</span>
+                <!-- Carimbo CONFIDENCIAL -->
+                <div class="stamp-confidencial">
+                  <span>CONFIDENCIAL</span>
                 </div>
               </div>
-              <span class="page-number">Pág. 11+</span>
+              <span class="page-number">Pág. 9+</span>
+            </div>
+            <div class="page-back">
+              <div style="position:relative;min-height:370px;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.85);backdrop-filter:blur(8px);border-radius:8px;text-align:center;">
+                <span style="font-size:38px;opacity:0.8;">🔒</span>
+                <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Conteúdo exclusivo</span>
+                <span style="font-size:13px;color:var(--ink-mute);">Adquira o guia completo</span>
+                <!-- Carimbo CONFIDENCIAL -->
+                <div class="stamp-confidencial">
+                  <span>CONFIDENCIAL</span>
+                </div>
+              </div>
+              <span class="page-number">Pág. 10+</span>
             </div>
           </div>
         </div>
@@ -975,7 +1012,7 @@
       </div>
 
       <div class="preview-note">
-        ⚡ <b>+ de 200 páginas</b> no guia completo — você está vendo apenas <b>8 páginas de amostra</b>
+        ⚡ <b>200 páginas</b> no guia completo — você está vendo apenas <b>8 páginas de amostra</b>
       </div>
     </div>
   </div>
@@ -991,7 +1028,7 @@
         <h2>Leia em qualquer dispositivo</h2>
         <p>O guia completo <strong>Pedras Valiosas</strong> foi pensado para você consultar onde e quando quiser — no celular, tablet ou computador.</p>
         <ul class="mockup-details">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><b>+ de 200 páginas</b> com fichas de identificação</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><b>200 páginas</b> com fichas de identificação</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>PDF otimizado para leitura em qualquer tela</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Fotos reais para comparação visual</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Faixas de preço atualizadas do mercado</li>
@@ -1383,12 +1420,12 @@
         dots.forEach(function(dot, i) {
           dot.classList.toggle('active', i === 0);
         });
-        counter.textContent = 'Página 1 de ' + (totalFolios * 2);
+        counter.textContent = 'Página 1 de 200';
         updateButtons();
       }
 
       function updateButtons() {
-        var totalPages = totalFolios * 2;
+        var totalPages = 200;
         var currentPage = currentIndex * 2 + (currentSide === 'front' ? 1 : 2);
         prevBtn.disabled = currentIndex === 0 && currentSide === 'front';
         nextBtn.disabled = currentIndex === totalFolios - 1 && currentSide === 'back';
@@ -1396,8 +1433,7 @@
 
       function getPageDisplay() {
         var pageNum = currentIndex * 2 + (currentSide === 'front' ? 1 : 2);
-        var totalPages = totalFolios * 2;
-        return 'Página ' + pageNum + ' de ' + totalPages;
+        return 'Página ' + pageNum + ' de 200';
       }
 
       function flipPage(direction) {
@@ -1419,7 +1455,7 @@
             counter.textContent = getPageDisplay();
             updateButtons();
             updateDots();
-          }, 800);
+          }, 700);
           return;
         }
 
@@ -1428,6 +1464,7 @@
           isFlipping = true;
           var nextFolio = folios[currentIndex + 1];
           nextFolio.style.display = 'block';
+          void nextFolio.offsetHeight;
           nextFolio.classList.add('flipping-back');
 
           setTimeout(function() {
@@ -1441,7 +1478,7 @@
             counter.textContent = getPageDisplay();
             updateButtons();
             updateDots();
-          }, 800);
+          }, 700);
           return;
         }
 
@@ -1458,7 +1495,7 @@
             counter.textContent = getPageDisplay();
             updateButtons();
             updateDots();
-          }, 800);
+          }, 700);
           return;
         }
 
@@ -1467,6 +1504,7 @@
           isFlipping = true;
           var prevFolio = folios[currentIndex - 1];
           prevFolio.style.display = 'block';
+          void prevFolio.offsetHeight;
           prevFolio.classList.add('flipping');
 
           setTimeout(function() {
@@ -1480,7 +1518,7 @@
             counter.textContent = getPageDisplay();
             updateButtons();
             updateDots();
-          }, 800);
+          }, 700);
           return;
         }
       }
