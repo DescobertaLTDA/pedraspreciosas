@@ -919,18 +919,40 @@
 <script>
   (function() {
     var track = document.getElementById('depoimentosTrack');
-    var items = document.querySelectorAll('.depoimento-item');
     var dotsContainer = document.getElementById('depoimentosDots');
     var dots = [];
     var prevBtn = document.getElementById('depoimentosPrev');
     var nextBtn = document.getElementById('depoimentosNext');
-    var currentIndex = 0;
     var visibleItems = 3;
-    var totalItems = items.length;
-    var totalSlides = Math.ceil(totalItems / visibleItems);
     var startX = 0;
     var currentX = 0;
     var isDragging = false;
+
+    // Itens reais originais (antes de qualquer clone)
+    var realItems = Array.prototype.slice.call(track.querySelectorAll('.depoimento-item'));
+    var totalReal = realItems.length;
+
+    // Clona o bloco inteiro antes e depois, criando: [clone][reais][clone]
+    // Assim sempre há itens "de verdade" para preencher a tela ao dar a volta.
+    var leadingClones = realItems.map(function(el) { return el.cloneNode(true); });
+    var trailingClones = realItems.map(function(el) { return el.cloneNode(true); });
+    // Monta a ordem final: leadingClones, realItems, trailingClones
+    track.innerHTML = '';
+    leadingClones.forEach(function(el) { track.appendChild(el); });
+    realItems.forEach(function(el) { track.appendChild(el); });
+    trailingClones.forEach(function(el) { track.appendChild(el); });
+
+    var items = Array.prototype.slice.call(track.querySelectorAll('.depoimento-item'));
+    var totalSlides = 1; // recalculado em updateVisibleItems
+
+    // currentIndex é um índice dentro da lista combinada (clones+reais+clones).
+    // Começa no primeiro item real (início do bloco do meio).
+    var currentIndex = totalReal;
+
+    function homePageIndex() {
+      var rel = ((currentIndex - totalReal) % totalReal + totalReal) % totalReal;
+      return Math.floor(rel / visibleItems);
+    }
 
     function renderDots() {
       if (!dotsContainer) return;
@@ -942,35 +964,61 @@
         dot.setAttribute('data-index', i);
         dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:' + (i === 0 ? 'var(--amethyst)' : 'rgba(255,255,255,0.2)') + ';cursor:pointer;transition:all .3s ease;';
         (function(idx) {
-          dot.addEventListener('click', function() { currentIndex = idx; updateCarrossel(); });
+          dot.addEventListener('click', function() { goToPage(idx); });
         })(i);
         dotsContainer.appendChild(dot);
         dots.push(dot);
       }
     }
 
-    function updateCarrossel() {
-      if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
-      if (currentIndex < 0) currentIndex = 0;
-      var offset = -currentIndex * 100;
-      track.style.transform = 'translateX(' + offset + '%)';
+    function renderPosition(withTransition) {
+      var targetItem = items[currentIndex];
+      var offsetPx = targetItem ? -targetItem.offsetLeft : 0;
+      track.style.transition = withTransition ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
+      track.style.transform = 'translateX(' + offsetPx + 'px)';
+    }
+
+    function updateDots() {
+      var page = homePageIndex();
       dots.forEach(function(dot, i) {
-        dot.classList.toggle('active', i === currentIndex);
-        dot.style.background = i === currentIndex ? 'var(--amethyst)' : 'rgba(255,255,255,0.2)';
+        dot.classList.toggle('active', i === page);
+        dot.style.background = i === page ? 'var(--amethyst)' : 'rgba(255,255,255,0.2)';
       });
-      if (prevBtn) prevBtn.style.opacity = '0.7';
-      if (nextBtn) nextBtn.style.opacity = '0.7';
+    }
+
+    function normalizeIfNeeded() {
+      // Se saiu do bloco "real" do meio, salta sem transição pro equivalente,
+      // já que os clones mostram exatamente o mesmo conteúdo.
+      if (currentIndex >= totalReal * 2) {
+        currentIndex -= totalReal;
+        renderPosition(false);
+      } else if (currentIndex < totalReal) {
+        currentIndex += totalReal;
+        renderPosition(false);
+      }
+    }
+
+    function step(direction) {
+      currentIndex += direction * visibleItems;
+      renderPosition(true);
+      updateDots();
+      clearTimeout(track._normalizeTimeout);
+      track._normalizeTimeout = setTimeout(normalizeIfNeeded, 520);
+    }
+
+    function goToPage(pageIdx) {
+      currentIndex = totalReal + pageIdx * visibleItems;
+      renderPosition(true);
+      updateDots();
     }
 
     function updateVisibleItems() {
       var width = window.innerWidth;
       if (width <= 768) visibleItems = 2;
       else visibleItems = 3;
-      var newTotalSlides = Math.ceil(totalItems / visibleItems);
+      var newTotalSlides = Math.ceil(totalReal / visibleItems);
       var slidesChanged = newTotalSlides !== totalSlides;
       totalSlides = newTotalSlides;
-      if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
-      if (currentIndex < 0) currentIndex = 0;
       var gap = 16;
       var itemWidth = (100 / visibleItems) * 0.8;
       var gapAdjust = visibleItems > 1 ? (gap * (visibleItems - 1) / visibleItems) : 0;
@@ -980,14 +1028,16 @@
         item.style.maxWidth = 'calc(' + itemWidth + '% - ' + gapAdjust + 'px)';
       });
       if (slidesChanged || dots.length === 0) renderDots();
-      updateCarrossel();
+      // reflow já aconteceu acima, então offsetLeft abaixo é preciso
+      renderPosition(false);
+      updateDots();
     }
 
     if (prevBtn) {
-      prevBtn.addEventListener('click', function() { currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; updateCarrossel(); });
+      prevBtn.addEventListener('click', function() { step(-1); });
     }
     if (nextBtn) {
-      nextBtn.addEventListener('click', function() { currentIndex = (currentIndex + 1) % totalSlides; updateCarrossel(); });
+      nextBtn.addEventListener('click', function() { step(1); });
     }
 
     // DRAG / TOUCH suporte
@@ -1009,8 +1059,8 @@
         track.style.cursor = 'grab';
         var diff = startX - currentX;
         if (Math.abs(diff) > 50) {
-          if (diff > 0) { currentIndex = (currentIndex + 1) % totalSlides; updateCarrossel(); }
-          else { currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; updateCarrossel(); }
+          if (diff > 0) { step(1); }
+          else { step(-1); }
         }
       });
 
@@ -1024,8 +1074,8 @@
         touchEndX = e.changedTouches[0].screenX;
         var diff = touchStartX - touchEndX;
         if (Math.abs(diff) > 50) {
-          if (diff > 0) { currentIndex = (currentIndex + 1) % totalSlides; updateCarrossel(); }
-          else { currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; updateCarrossel(); }
+          if (diff > 0) { step(1); }
+          else { step(-1); }
         }
       }, { passive: true });
     }
@@ -1034,19 +1084,13 @@
     updateVisibleItems();
 
     // Auto-play
-    var autoPlay = setInterval(function() {
-      if (currentIndex < totalSlides - 1) { currentIndex++; } else { currentIndex = 0; }
-      updateCarrossel();
-    }, 6000);
+    var autoPlay = setInterval(function() { step(1); }, 6000);
 
-    var container = document.querySelector('#depoimentosTrack').parentElement;
+    var container = track.parentElement;
     if (container) {
       container.addEventListener('mouseenter', function() { clearInterval(autoPlay); });
       container.addEventListener('mouseleave', function() {
-        autoPlay = setInterval(function() {
-          if (currentIndex < totalSlides - 1) { currentIndex++; } else { currentIndex = 0; }
-          updateCarrossel();
-        }, 6000);
+        autoPlay = setInterval(function() { step(1); }, 6000);
       });
     }
   })();
