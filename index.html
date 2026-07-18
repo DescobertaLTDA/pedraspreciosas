@@ -419,7 +419,7 @@
 
   /* RESPONSIVE */
   @media (max-width:980px){
-    .problem-grid,.steps,.testi-grid{grid-template-columns:1fr 1fr;}
+    .problem-grid,.steps{grid-template-columns:1fr;}
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr);}
     .mockup-grid{grid-template-columns:1fr;gap:32px;}
@@ -427,7 +427,7 @@
     .carrossel-track{min-height:320px;}
   }
   @media (max-width:640px){
-    .problem-grid,.steps,.testi-grid{grid-template-columns:1fr;}
+    .problem-grid,.steps{grid-template-columns:1fr;}
     .feat-grid,.catalog-scroller{grid-template-columns:1fr;}
     section{padding:64px 0;}
     .carrossel-container{padding:14px 12px 12px;border-radius:12px;}
@@ -750,6 +750,256 @@
   </div>
 </div>
 
+<!-- ============ CARROSSEL DE DEPOIMENTOS ============ -->
+<section style="padding:60px 0;background:var(--bg-alt);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="eyebrow" style="justify-content:center;">Depoimentos Reais</div>
+      <h2 style="font-size:clamp(26px,3vw,36px);color:var(--parchment);margin-top:10px;">Pessoas como você já encontraram tesouros</h2>
+      <p style="color:var(--ink-mute);font-size:16px;max-width:500px;margin:10px auto 0;">Fotos reais de leitores que identificaram pedras com o guia</p>
+    </div>
+
+    <!-- CARROSSEL -->
+    <div style="position:relative;overflow:hidden;border-radius:12px;">
+
+      <!-- TRACK -->
+      <div id="depoimentosTrack" style="display:flex;transition:transform 0.5s ease;gap:20px;">
+
+        <!-- Depoimento 1 -->
+        <div class="depoimento-item" style="min-width:calc(33.333% - 14px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento1.jpeg" alt="Carlos E. - Ametista" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:12px;>📷 Carlos E.</span>'">
+          </div>
+          <div class="stars" style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:14px;color:var(--ink-light);line-height:1.5;margin:0;">"Achei essa pedra no quintal. O guia me ajudou a identificar que era ametista. Nunca imaginei!"</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:auto;">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--amethyst-deep);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:12px;color:#fff;flex-shrink:0;">C</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--parchment);">Carlos E.</div>
+              <div style="font-size:11px;color:var(--ink-mute);">Ouro Preto, MG</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depoimento 2 -->
+        <div class="depoimento-item" style="min-width:calc(33.333% - 14px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento2.jpeg" alt="Mariana C. - Quartzo Rosa" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:12px;>📷 Mariana C.</span>'">
+          </div>
+          <div class="stars" style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:14px;color:var(--ink-light);line-height:1.5;margin:0;">"Comprei o PDF e no mesmo dia identifiquei um quartzo rosa que estava na gaveta da minha avó."</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:auto;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#c8901c;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:12px;color:#fff;flex-shrink:0;">M</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--parchment);">Mariana C.</div>
+              <div style="font-size:11px;color:var(--ink-mute);">São Paulo, SP</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depoimento 3 -->
+        <div class="depoimento-item" style="min-width:calc(33.333% - 14px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento3.jpeg" alt="Renata M. - Pedras herdadas" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:12px;>📷 Renata M.</span>'">
+          </div>
+          <div class="stars" style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:14px;color:var(--ink-light);line-height:1.5;margin:0;">"Herdei uma caixa de pedras do meu avô. Em uma tarde, identifiquei quase todas com o guia."</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:auto;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#3d7d5b;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:12px;color:#fff;flex-shrink:0;">R</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--parchment);">Renata M.</div>
+              <div style="font-size:11px;color:var(--ink-mute);">Belo Horizonte, MG</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depoimento 5 -->
+        <div class="depoimento-item" style="min-width:calc(33.333% - 14px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento5.jpeg" alt="Fernanda R. - Turmalina" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:12px;>📷 Fernanda R.</span>'">
+          </div>
+          <div class="stars" style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:14px;color:var(--ink-light);line-height:1.5;margin:0;">"Pensei que era só uma pedra comum. O guia mostrou que era turmalina. Valeu muito a pena!"</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:auto;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#7a4fab;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:12px;color:#fff;flex-shrink:0;">F</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--parchment);">Fernanda R.</div>
+              <div style="font-size:11px;color:var(--ink-mute);">Porto Alegre, RS</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depoimento 6 -->
+        <div class="depoimento-item" style="min-width:calc(33.333% - 14px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento6.jpeg" alt="Diego S. - Citrino" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:12px;>📷 Diego S.</span>'">
+          </div>
+          <div class="stars" style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:14px;color:var(--ink-light);line-height:1.5;margin:0;">"Encontrei uma pedra estranha na beira do rio. O guia me ajudou a identificar que era citrino!"</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:auto;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#e08a2e;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:12px;color:#fff;flex-shrink:0;">D</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--parchment);">Diego S.</div>
+              <div style="font-size:11px;color:var(--ink-mute);">Curitiba, PR</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depoimento 7 -->
+        <div class="depoimento-item" style="min-width:calc(33.333% - 14px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento7.jpeg" alt="Luciana F. - Pedra no sítio" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:12px;>📷 Luciana F.</span>'">
+          </div>
+          <div class="stars" style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:14px;color:var(--ink-light);line-height:1.5;margin:0;">"Linguagem simples e direta. Em 10 minutos já sabia o que era a pedra que achei no sítio."</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:auto;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#4f9a72;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:12px;color:#fff;flex-shrink:0;">L</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--parchment);">Luciana F.</div>
+              <div style="font-size:11px;color:var(--ink-mute);">Salvador, BA</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depoimento 9 -->
+        <div class="depoimento-item" style="min-width:calc(33.333% - 14px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento9.jpeg" alt="André L. - Pedras no jardim" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:12px;>📷 André L.</span>'">
+          </div>
+          <div class="stars" style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:14px;color:var(--ink-light);line-height:1.5;margin:0;">"Nunca tinha reparado nas pedras do meu jardim. Com o guia descobri que algumas valem dinheiro!"</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:auto;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#8a4f9a;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:12px;color:#fff;flex-shrink:0;">A</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--parchment);">André L.</div>
+              <div style="font-size:11px;color:var(--ink-mute);">Brasília, DF</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depoimento 10 -->
+        <div class="depoimento-item" style="min-width:calc(33.333% - 14px);flex-shrink:0;background:var(--bg-alt2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+            <img src="depoimento10.jpeg" alt="Paula R. - Pedra da família" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=color:var(--ink-mute);font-size:12px;>📷 Paula R.</span>'">
+          </div>
+          <div class="stars" style="color:var(--gold);font-size:13px;letter-spacing:1px;">★★★★★</div>
+          <p style="font-size:14px;color:var(--ink-light);line-height:1.5;margin:0;">"Comprei o guia por curiosidade e acabei identificando uma pedra que estava na família há anos!"</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:auto;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#d48a3a;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:12px;color:#fff;flex-shrink:0;">P</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--parchment);">Paula R.</div>
+              <div style="font-size:11px;color:var(--ink-mute);">Rio de Janeiro, RJ</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CONTROLES -->
+      <button id="depoimentosPrev" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--ink);border:1px solid var(--line-strong);color:var(--parchment);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .2s ease;" onmouseover="this.style.background='#3a2f28'" onmouseout="this.style.background='var(--ink)'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button id="depoimentosNext" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--ink);border:1px solid var(--line-strong);color:var(--parchment);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .2s ease;" onmouseover="this.style.background='#3a2f28'" onmouseout="this.style.background='var(--ink)'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <!-- DOTS -->
+      <div id="depoimentosDots" style="display:flex;justify-content:center;gap:8px;margin-top:20px;">
+        <span class="dot active" data-index="0" style="width:10px;height:10px;border-radius:50%;background:var(--amethyst);cursor:pointer;transition:all .3s ease;"></span>
+        <span class="dot" data-index="1" style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;transition:all .3s ease;"></span>
+        <span class="dot" data-index="2" style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;transition:all .3s ease;"></span>
+      </div>
+    </div>
+
+    <!-- SELO DE CONFIANÇA -->
+    <div style="text-align:center;margin-top:30px;padding:16px 24px;background:var(--bg-alt2);border-radius:10px;border:1px solid var(--line);">
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-mute);">
+        <span style="display:flex;align-items:center;gap:6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--citrino)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>+ de <b style="color:var(--parchment);">3.500 leitores</b></span>
+        </span>
+        <span style="width:1px;height:16px;background:var(--line-strong);"></span>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--gold);">★★★★★</span>
+          <span><b style="color:var(--parchment);">4,8/5</b> de média</span>
+        </span>
+        <span style="width:1px;height:16px;background:var(--line-strong);"></span>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--turmalina)" stroke-width="2"><path d="M12 2C6 6 5 9.5 5 13a7 7 0 0014 0c0-3.5-3-7-7-11z"/></svg>
+          <span><b style="color:var(--parchment);">98%</b> de aprovação</span>
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function() {
+    var track = document.getElementById('depoimentosTrack');
+    var items = document.querySelectorAll('.depoimento-item');
+    var dots = document.querySelectorAll('#depoimentosDots .dot');
+    var prevBtn = document.getElementById('depoimentosPrev');
+    var nextBtn = document.getElementById('depoimentosNext');
+    var currentIndex = 0;
+    var visibleItems = 3;
+    var totalItems = items.length;
+    var totalSlides = Math.ceil(totalItems / visibleItems);
+
+    function updateCarrossel() {
+      if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
+      if (currentIndex < 0) currentIndex = 0;
+      var offset = -currentIndex * (100 / totalSlides);
+      track.style.transform = 'translateX(' + offset + '%)';
+      dots.forEach(function(dot, i) {
+        dot.classList.toggle('active', i === currentIndex);
+        dot.style.background = i === currentIndex ? 'var(--amethyst)' : 'rgba(255,255,255,0.2)';
+      });
+    }
+
+    function updateVisibleItems() {
+      if (window.innerWidth <= 768) visibleItems = 1;
+      else if (window.innerWidth <= 1024) visibleItems = 2;
+      else visibleItems = 3;
+      totalSlides = Math.ceil(totalItems / visibleItems);
+      if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
+      if (currentIndex < 0) currentIndex = 0;
+      var itemWidth = (100 / totalSlides) - (totalSlides > 1 ? 2 : 0);
+      items.forEach(function(item) {
+        item.style.minWidth = 'calc(' + itemWidth + '% - ' + (totalSlides > 1 ? 14 : 0) + 'px)';
+      });
+      updateCarrossel();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', function() { if (currentIndex > 0) { currentIndex--; updateCarrossel(); } });
+    if (nextBtn) nextBtn.addEventListener('click', function() { if (currentIndex < totalSlides - 1) { currentIndex++; updateCarrossel(); } });
+
+    dots.forEach(function(dot, i) {
+      dot.addEventListener('click', function() { currentIndex = i; updateCarrossel(); });
+    });
+
+    window.addEventListener('resize', updateVisibleItems);
+    updateVisibleItems();
+
+    // Auto-play
+    var autoPlay = setInterval(function() {
+      if (currentIndex < totalSlides - 1) { currentIndex++; } else { currentIndex = 0; }
+      updateCarrossel();
+    }, 6000);
+
+    var container = document.querySelector('#depoimentosTrack').parentElement;
+    if (container) {
+      container.addEventListener('mouseenter', function() { clearInterval(autoPlay); });
+      container.addEventListener('mouseleave', function() {
+        autoPlay = setInterval(function() {
+          if (currentIndex < totalSlides - 1) { currentIndex++; } else { currentIndex = 0; }
+          updateCarrossel();
+        }, 6000);
+      });
+    }
+  })();
+</script>
+
 <!-- ============ PRÉVIA DO EBOOK - CARROSSEL ============ -->
 <section id="preview-ebook" style="background:var(--bg-alt);">
   <div class="wrap">
@@ -1025,168 +1275,6 @@
       <div class="step"><div class="step-num">02</div><h3>Confira a faixa de valor</h3><p>Veja quanto peças parecidas costumam valer no mercado — bruta, polida ou lapidada.</p></div>
       <div class="step"><div class="step-num">03</div><h3>Decida o próximo passo</h3><p>Guarde, venda ou leve a um gemólogo para uma avaliação oficial, com mais segurança sobre o que tem em mãos.</p></div>
     </div>
-  </div>
-</section>
-
-<!-- ============ DEPOIMENTOS REAIS ============ -->
-<section class="testi">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Depoimentos Reais</div>
-      <h2>Pessoas como você já encontraram tesouros com o guia</h2>
-      <p>Veja o que nossos leitores estão dizendo — fotos reais de pessoas que identificaram pedras com o <strong>Tesouro Esquecido</strong>.</p>
-    </div>
-
-    <div class="testi-grid">
-      <!-- Depoimento 1 -->
-      <div class="testi-card">
-        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
-          <img src="depoimento1.jpeg" alt="Cliente segurando pedra encontrada" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="stars">★★★★★</div>
-        <p>"Achei essa pedra no quintal de casa. O guia me ajudou a identificar que era ametista. Nunca imaginei!"</p>
-        <div class="testi-who">
-          <div class="avatar" style="background:var(--amethyst-deep)">C</div>
-          <div>
-            <div class="name">Carlos E.</div>
-            <div class="loc">Ouro Preto, MG</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Depoimento 2 -->
-      <div class="testi-card">
-        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
-          <img src="depoimento2.jpeg" alt="Cliente com pedra na mão" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="stars">★★★★★</div>
-        <p>"Comprei o PDF e no mesmo dia identifiquei um quartzo rosa que estava na gaveta da minha avó."</p>
-        <div class="testi-who">
-          <div class="avatar" style="background:#c8901c">M</div>
-          <div>
-            <div class="name">Mariana C.</div>
-            <div class="loc">São Paulo, SP</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Depoimento 3 -->
-      <div class="testi-card">
-        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
-          <img src="depoimento3.jpeg" alt="Cliente mostrando pedra" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="stars">★★★★★</div>
-        <p>"Herdei uma caixa de pedras do meu avô. Em uma tarde, identifiquei quase todas com o guia."</p>
-        <div class="testi-who">
-          <div class="avatar" style="background:#3d7d5b">R</div>
-          <div>
-            <div class="name">Renata M.</div>
-            <div class="loc">Belo Horizonte, MG</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Depoimento 5 -->
-      <div class="testi-card">
-        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
-          <img src="depoimento5.jpeg" alt="Cliente com cristal encontrado" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="stars">★★★★★</div>
-        <p>"Pensei que era só uma pedra comum. O guia mostrou que era turmalina. Valeu muito a pena!"</p>
-        <div class="testi-who">
-          <div class="avatar" style="background:#7a4fab">F</div>
-          <div>
-            <div class="name">Fernanda R.</div>
-            <div class="loc">Porto Alegre, RS</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Depoimento 6 -->
-      <div class="testi-card">
-        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
-          <img src="depoimento6.jpeg" alt="Cliente segurando pedra preciosa" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="stars">★★★★★</div>
-        <p>"Encontrei uma pedra estranha na beira do rio. O guia me ajudou a identificar que era citrino!"</p>
-        <div class="testi-who">
-          <div class="avatar" style="background:#e08a2e">D</div>
-          <div>
-            <div class="name">Diego S.</div>
-            <div class="loc">Curitiba, PR</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Depoimento 7 -->
-      <div class="testi-card">
-        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
-          <img src="depoimento7.jpeg" alt="Cliente com pedra na natureza" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="stars">★★★★★</div>
-        <p>"Linguagem simples e direta. Em 10 minutos já sabia o que era a pedra que achei no sítio da família."</p>
-        <div class="testi-who">
-          <div class="avatar" style="background:#4f9a72">L</div>
-          <div>
-            <div class="name">Luciana F.</div>
-            <div class="loc">Salvador, BA</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Depoimento 9 -->
-      <div class="testi-card">
-        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
-          <img src="depoimento9.jpeg" alt="Cliente com pedra encontrada na natureza" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="stars">★★★★★</div>
-        <p>"Nunca tinha reparado nas pedras do meu jardim. Com o guia descobri que algumas valem dinheiro!"</p>
-        <div class="testi-who">
-          <div class="avatar" style="background:#8a4f9a">A</div>
-          <div>
-            <div class="name">André L.</div>
-            <div class="loc">Brasília, DF</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Depoimento 10 -->
-      <div class="testi-card">
-        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
-          <img src="depoimento10.jpeg" alt="Cliente mostrando pedra encontrada" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="stars">★★★★★</div>
-        <p>"Comprei o guia por curiosidade e acabei identificando uma pedra que estava na família há anos!"</p>
-        <div class="testi-who">
-          <div class="avatar" style="background:#d48a3a">P</div>
-          <div>
-            <div class="name">Paula R.</div>
-            <div class="loc">Rio de Janeiro, RJ</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Selo de confiança -->
-    <div style="text-align:center;margin-top:40px;padding:24px;background:var(--bg-alt);border-radius:12px;border:1px solid var(--line);">
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:13px;color:var(--ink-mute);">
-        <span style="display:flex;align-items:center;gap:6px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--citrino)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          <span>+ de <b style="color:var(--parchment);">3.500 leitores</b></span>
-        </span>
-        <span style="width:1px;height:20px;background:var(--line-strong);"></span>
-        <span style="display:flex;align-items:center;gap:6px;">
-          <span style="color:var(--gold);">★★★★★</span>
-          <span><b style="color:var(--parchment);">4,8/5</b> de média</span>
-        </span>
-        <span style="width:1px;height:20px;background:var(--line-strong);"></span>
-        <span style="display:flex;align-items:center;gap:6px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--turmalina)" stroke-width="2"><path d="M12 2C6 6 5 9.5 5 13a7 7 0 0014 0c0-3.5-3-7-7-11z"/></svg>
-          <span><b style="color:var(--parchment);">98%</b> de aprovação</span>
-        </span>
-      </div>
-    </div>
-
   </div>
 </section>
 
