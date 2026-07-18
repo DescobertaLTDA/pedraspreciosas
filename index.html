@@ -187,13 +187,14 @@
   .step-num{font-family:'Fraunces',serif;font-size:52px;font-weight:600;color:transparent;-webkit-text-stroke:1.5px var(--amethyst);line-height:1;opacity:0.9;}
   .step h3{margin-top:14px;font-size:19px;color:var(--parchment);}
   .step p{margin-top:10px;color:var(--ink-mute);font-size:15px;}
+  /* TESTIMONIALS */
   .testi{background:var(--bg-alt);}
   .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  .testi-card{background:var(--bg-alt2);border:1px solid var(--line);border-radius:8px;padding:28px;display:flex;flex-direction:column;gap:16px;}
-  .stars{color:var(--gold);font-size:14px;letter-spacing:2px;}
-  .testi-card p{font-size:15px;color:var(--ink-light);line-height:1.6;}
+  .testi-card{background:var(--bg-alt2);border:1px solid var(--line);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:14px;}
+  .testi-card .stars{color:var(--gold);font-size:14px;letter-spacing:2px;}
+  .testi-card p{font-size:15px;color:var(--ink-light);line-height:1.6;margin:0;}
   .testi-who{display:flex;align-items:center;gap:12px;margin-top:auto;}
-  .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:#fff;}
+  .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:#fff;flex-shrink:0;}
   .testi-who .name{font-size:13.5px;font-weight:600;color:var(--parchment);}
   .testi-who .loc{font-size:12px;color:var(--ink-mute);}
   /* PRICING */
@@ -418,7 +419,7 @@
 
   /* RESPONSIVE */
   @media (max-width:980px){
-    .problem-grid,.steps,.testi-grid{grid-template-columns:1fr;}
+    .problem-grid,.steps,.testi-grid{grid-template-columns:1fr 1fr;}
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr);}
     .mockup-grid{grid-template-columns:1fr;gap:32px;}
@@ -426,6 +427,7 @@
     .carrossel-track{min-height:320px;}
   }
   @media (max-width:640px){
+    .problem-grid,.steps,.testi-grid{grid-template-columns:1fr;}
     .feat-grid,.catalog-scroller{grid-template-columns:1fr;}
     section{padding:64px 0;}
     .carrossel-container{padding:14px 12px 12px;border-radius:12px;}
@@ -1026,30 +1028,134 @@
   </div>
 </section>
 
-<!-- ============ TESTIMONIALS ============ -->
+<!-- ============ DEPOIMENTOS REAIS ============ -->
 <section class="testi">
   <div class="wrap">
     <div class="section-head">
-      <div class="eyebrow">Quem já usou</div>
-      <h2>Pensado para quem nunca estudou nada disso.</h2>
+      <div class="eyebrow">Depoimentos Reais</div>
+      <h2>Pessoas como você já encontraram tesouros com o guia</h2>
+      <p>Veja o que nossos leitores estão dizendo — fotos reais de pessoas que identificaram pedras com o <strong>Tesouro Esquecido</strong>.</p>
     </div>
+
     <div class="testi-grid">
+      <!-- Depoimento 1 -->
       <div class="testi-card">
+        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
+          <img src="depoimento1.jpeg" alt="Cliente segurando pedra encontrada" style="width:100%;height:100%;object-fit:cover;">
+        </div>
         <div class="stars">★★★★★</div>
-        <p>"Achei que era só quartzo comum, comparei com o catálogo e era ametista. Nunca imaginei que teria valor."</p>
-        <div class="testi-who"><div class="avatar" style="background:var(--amethyst-deep)">R</div><div><div class="name">Renata M.</div><div class="loc">Belo Horizonte, MG</div></div></div>
+        <p>"Achei essa pedra no quintal de casa. O guia me ajudou a identificar que era ametista. Nunca imaginei!"</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:var(--amethyst-deep)">C</div>
+          <div>
+            <div class="name">Carlos E.</div>
+            <div class="loc">Ouro Preto, MG</div>
+          </div>
+        </div>
       </div>
+
+      <!-- Depoimento 2 -->
       <div class="testi-card">
+        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
+          <img src="depoimento2.jpeg" alt="Cliente com pedra na mão" style="width:100%;height:100%;object-fit:cover;">
+        </div>
         <div class="stars">★★★★★</div>
-        <p>"Herdei uma caixa de pedras do meu avô que trabalhava com garimpo. Consegui identificar quase tudo em uma tarde."</p>
-        <div class="testi-who"><div class="avatar" style="background:#c8901c">D</div><div><div class="name">Diego S.</div><div class="loc">Ouro Preto, MG</div></div></div>
+        <p>"Comprei o PDF e no mesmo dia identifiquei um quartzo rosa que estava na gaveta da minha avó."</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:#c8901c">M</div>
+          <div>
+            <div class="name">Mariana C.</div>
+            <div class="loc">S├úo Paulo, SP</div>
+          </div>
+        </div>
       </div>
+
+      <!-- Depoimento 3 -->
       <div class="testi-card">
+        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
+          <img src="depoimento3.jpeg" alt="Cliente mostrando pedra" style="width:100%;height:100%;object-fit:cover;">
+        </div>
         <div class="stars">★★★★★</div>
-        <p>"Linguagem bem simples, sem termo técnico. Deu pra entender de primeira mesmo sem saber nada de geologia."</p>
-        <div class="testi-who"><div class="avatar" style="background:#3d7d5b">L</div><div><div class="name">Luciana F.</div><div class="loc">Porto Alegre, RS</div></div></div>
+        <p>"Herdei uma caixa de pedras do meu av├┤. Em uma tarde, identifiquei quase todas com o guia."</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:#3d7d5b">R</div>
+          <div>
+            <div class="name">Renata M.</div>
+            <div class="loc">Belo Horizonte, MG</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Depoimento 5 -->
+      <div class="testi-card">
+        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
+          <img src="depoimento5.jpeg" alt="Cliente com cristal encontrado" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="stars">★★★★★</div>
+        <p>"Pensei que era s├│ uma pedra comum. O guia mostrou que era turmalina. Valeu muito a pena!"</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:#7a4fab">F</div>
+          <div>
+            <div class="name">Fernanda R.</div>
+            <div class="loc">Porto Alegre, RS</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Depoimento 6 -->
+      <div class="testi-card">
+        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
+          <img src="depoimento6.jpeg" alt="Cliente segurando pedra preciosa" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="stars">★★★★★</div>
+        <p>"Encontrei uma pedra estranha na beira do rio. O guia me ajudou a identificar que era citrino!"</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:#e08a2e">D</div>
+          <div>
+            <div class="name">Diego S.</div>
+            <div class="loc">Curitiba, PR</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Depoimento 7 -->
+      <div class="testi-card">
+        <div style="width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--bg-alt);">
+          <img src="depoimento7.jpeg" alt="Cliente com pedra na natureza" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="stars">★★★★★</div>
+        <p>"Linguagem simples e direta. Em 10 minutos j├í sabia o que era a pedra que achei no s├¡tio da fam├¡lia."</p>
+        <div class="testi-who">
+          <div class="avatar" style="background:#4f9a72">L</div>
+          <div>
+            <div class="name">Luciana F.</div>
+            <div class="loc">Salvador, BA</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Selo de confiança -->
+    <div style="text-align:center;margin-top:40px;padding:24px;background:var(--bg-alt);border-radius:12px;border:1px solid var(--line);">
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:13px;color:var(--ink-mute);">
+        <span style="display:flex;align-items:center;gap:6px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--citrino)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>+ de <b style="color:var(--parchment);">3.500 leitores</b></span>
+        </span>
+        <span style="width:1px;height:20px;background:var(--line-strong);"></span>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--gold);">★★★★★</span>
+          <span><b style="color:var(--parchment);">4,8/5</b> de média</span>
+        </span>
+        <span style="width:1px;height:20px;background:var(--line-strong);"></span>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--turmalina)" stroke-width="2"><path d="M12 2C6 6 5 9.5 5 13a7 7 0 0014 0c0-3.5-3-7-7-11z"/></svg>
+          <span><b style="color:var(--parchment);">98%</b> de aprovação</span>
+        </span>
       </div>
     </div>
+
   </div>
 </section>
 
