@@ -479,11 +479,13 @@
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     background: #fff;
+    aspect-ratio: 3/4;
   }
   .slide-page img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
+    object-fit: cover;
   }
   .slide-page .slide-number {
     position: absolute;
@@ -513,66 +515,6 @@
     border-radius: 12px;
     backdrop-filter: blur(4px);
     z-index: 5;
-  }
-
-  /* Slide bloqueado */
-  .slide-locked {
-    position: absolute;
-    inset: 0;
-    background: rgba(23,21,27,0.82);
-    backdrop-filter: blur(12px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 20px;
-    text-align: center;
-    border-radius: 8px;
-    z-index: 3;
-  }
-  .slide-locked .lock-icon {
-    font-size: 38px;
-    opacity: 0.8;
-    display: block;
-  }
-  .slide-locked .lock-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--parchment);
-  }
-  .slide-locked .lock-sub {
-    font-size: 13px;
-    color: var(--ink-mute);
-  }
-
-  /* Carimbo CONFIDENCIAL */
-  .stamp-confidencial {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 10;
-    overflow: hidden;
-    border-radius: 8px;
-  }
-  .stamp-confidencial span {
-    font-family: 'Space Mono', monospace;
-    font-size: 28px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: rgba(180, 30, 30, 0.25);
-    transform: rotate(-25deg) scale(1.2);
-    letter-spacing: 6px;
-    border: 4px solid rgba(180, 30, 30, 0.2);
-    padding: 12px 30px;
-    border-radius: 4px;
-    text-shadow: 0 0 20px rgba(180, 30, 30, 0.1);
-    user-select: none;
-    white-space: nowrap;
   }
 
   /* Navegação */
@@ -648,7 +590,6 @@
     .mockup-grid{grid-template-columns:1fr;gap:32px;}
     .mockup-grid .mockup-image{order:-1;}
     .carrossel-track{min-height:320px;}
-    .stamp-confidencial span{font-size:22px;padding:8px 20px;}
   }
   @media (max-width:640px){
     .feat-grid,.catalog-scroller{grid-template-columns:1fr;}
@@ -656,18 +597,14 @@
     .carrossel-container{padding:14px 12px 12px;border-radius:12px;}
     .carrossel-track{min-height:280px;}
     .slide-page{max-width:100%;}
-    .slide-locked .lock-icon{font-size:30px;}
-    .slide-locked .lock-label{font-size:14px;}
     .carrossel-btn{width:40px;height:40px;}
     .carrossel-btn svg{width:16px;height:16px;}
     .carrossel-dots .dot{width:6px;height:6px;}
     .carrossel-dots .dot.active{width:16px;}
     .preview-note{font-size:12px;}
-    .stamp-confidencial span{font-size:16px;padding:6px 14px;border-width:3px;letter-spacing:4px;}
   }
   @media (max-width:420px){
     .carrossel-track{min-height:220px;}
-    .stamp-confidencial span{font-size:13px;padding:4px 10px;border-width:2px;letter-spacing:3px;}
   }
   @media (prefers-reduced-motion: reduce){.strip-track{animation:none;}*{transition:none !important;}}
   /* SALES POPUP */
@@ -872,7 +809,7 @@
         <!-- Slide 1: Capa -->
         <div class="carrossel-slide active">
           <div class="slide-page">
-            <img src="pagina1.png" alt="Página 1 - Capa" style="object-fit:contain;aspect-ratio:auto;background:var(--parchment);">
+            <img src="pagina1.png" alt="Página 1 - Capa" style="object-fit:contain;aspect-ratio:auto;background:var(--parchment);width:100%;height:100%;">
             <span class="slide-number">Pág. 1</span>
             <span class="slide-badge">📖 Capa</span>
           </div>
@@ -881,16 +818,16 @@
         <!-- Slide 2: Introdução -->
         <div class="carrossel-slide">
           <div class="slide-page">
-            <img src="pagina2.png" alt="Página 2 - Introdução" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <img src="pagina2.png" alt="Página 2 - Introdução" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
             <span class="slide-number">Pág. 2</span>
             <span class="slide-badge">📖 Introdução</span>
           </div>
         </div>
 
-        <!-- Slide 3: Página 4 (página 3 foi removida) -->
+        <!-- Slide 3: Página 4 (página 3 removida) -->
         <div class="carrossel-slide">
           <div class="slide-page">
-            <img src="pagina4.png" alt="Página 4" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <img src="pagina4.png" alt="Página 4" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
             <span class="slide-number">Pág. 4</span>
           </div>
         </div>
@@ -898,7 +835,7 @@
         <!-- Slide 4: Página 5 -->
         <div class="carrossel-slide">
           <div class="slide-page">
-            <img src="pagina5.png" alt="Página 5" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <img src="pagina5.png" alt="Página 5" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
             <span class="slide-number">Pág. 5</span>
           </div>
         </div>
@@ -906,7 +843,7 @@
         <!-- Slide 5: Página 6 -->
         <div class="carrossel-slide">
           <div class="slide-page">
-            <img src="pagina6.png" alt="Página 6" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <img src="pagina6.png" alt="Página 6" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
             <span class="slide-number">Pág. 6</span>
           </div>
         </div>
@@ -914,7 +851,7 @@
         <!-- Slide 6: Página 7 -->
         <div class="carrossel-slide">
           <div class="slide-page">
-            <img src="pagina7.png" alt="Página 7" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <img src="pagina7.png" alt="Página 7" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
             <span class="slide-number">Pág. 7</span>
           </div>
         </div>
@@ -922,29 +859,28 @@
         <!-- Slide 7: Página 8 -->
         <div class="carrossel-slide">
           <div class="slide-page">
-            <img src="pagina8.png" alt="Página 8" style="object-fit:cover;aspect-ratio:3/4;background:#fff;">
+            <img src="pagina8.png" alt="Página 8" style="object-fit:cover;aspect-ratio:3/4;background:#fff;width:100%;height:100%;">
             <span class="slide-number">Pág. 8</span>
           </div>
         </div>
 
         <!-- Slide 8: Páginas 9-200 (bloqueadas) -->
         <div class="carrossel-slide">
-          <div class="slide-page">
-            <div style="position:relative;min-height:380px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 20px;background:rgba(23,21,27,0.92);backdrop-filter:blur(12px);border-radius:8px;text-align:center;">
-              <span style="font-size:38px;opacity:0.8;">🔒</span>
-              <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--parchment);">Páginas 9 a 200</span>
-              <span style="font-size:13px;color:var(--ink-mute);">+192 páginas bloqueadas</span>
-              <div style="width:40px;height:1px;background:rgba(240,230,210,0.15);margin:8px 0 10px;"></div>
-              <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:var(--citrino);color:#241a06;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;border-radius:6px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 8px 24px rgba(227,173,46,0.3);">
-                Desbloquear tudo — R$19,99
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-              </a>
-              <span style="font-size:11px;color:var(--ink-mute);font-family:'Space Mono',monospace;margin-top:4px;">Acesso imediato após a compra</span>
-              <!-- Carimbo CONFIDENCIAL -->
-              <div class="stamp-confidencial">
-                <span>CONFIDENCIAL</span>
-              </div>
-            </div>
+          <div class="slide-page" style="background:var(--parchment);aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 30px;text-align:center;border-radius:8px;">
+            <!-- Ícone de cadeado SVG -->
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;display:block;margin-bottom:12px;stroke:var(--ink);">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <h3 style="font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px;">Páginas 9 a 200</h3>
+            <p style="font-size:15px;color:var(--ink-soft);margin-bottom:16px;">+192 páginas bloqueadas</p>
+            <div style="width:50px;height:2px;background:rgba(42,33,24,0.12);margin:0 auto 18px;"></div>
+            <!-- Botão PRETO -->
+            <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:var(--ink);color:var(--parchment);font-family:'Space Mono',monospace;font-weight:700;font-size:15px;border-radius:6px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+              Desbloquear tudo — R$19,99
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+            <span style="font-size:12px;color:var(--ink-soft);font-family:'Space Mono',monospace;margin-top:12px;">Acesso imediato após a compra</span>
             <span class="slide-number">Pág. 9+</span>
           </div>
         </div>
