@@ -264,276 +264,6 @@
     flex-shrink: 0;
   }
 
-  /* ===== AVALIAR PEDRA BUTTON ===== */
-  .evaluate-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    margin-top: 12px;
-    padding: 14px;
-    background: var(--ink);
-    color: var(--parchment);
-    font-family: 'Space Mono', monospace;
-    font-weight: 600;
-    font-size: 13px;
-    border: 1px solid var(--line-strong);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all .2s ease;
-    text-decoration: none;
-  }
-  .evaluate-btn:hover {
-    background: #3a2f28;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  }
-  .evaluate-btn:active {
-    transform: translateY(0);
-  }
-  .evaluate-btn svg {
-    stroke: var(--parchment);
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-  }
-
-  /* ===== MODAL / POPUP ===== */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px);
-    z-index: 999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    animation: fadeIn .3s ease;
-  }
-  .modal-overlay.active {
-    display: flex;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  .modal-box {
-    background: var(--parchment);
-    border-radius: 16px;
-    max-width: 480px;
-    width: 100%;
-    padding: 32px 28px 28px;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.5);
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .modal-close {
-    position: absolute;
-    top: 14px;
-    right: 18px;
-    font-size: 24px;
-    color: var(--ink-soft);
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-family: 'Inter', sans-serif;
-    transition: transform .2s ease;
-  }
-  .modal-close:hover {
-    transform: rotate(90deg);
-  }
-  .modal-box h3 {
-    font-family: 'Fraunces', serif;
-    font-size: 22px;
-    color: var(--ink);
-    margin-bottom: 6px;
-  }
-  .modal-box .modal-sub {
-    font-size: 14px;
-    color: var(--ink-soft);
-    margin-bottom: 20px;
-  }
-  .modal-box .modal-sub b {
-    color: var(--amethyst-deep);
-  }
-  .modal-upload-area {
-    border: 2px dashed var(--amethyst);
-    border-radius: 12px;
-    padding: 30px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all .2s ease;
-    background: rgba(145,105,201,0.04);
-    position: relative;
-  }
-  .modal-upload-area:hover {
-    background: rgba(145,105,201,0.08);
-    border-color: var(--amethyst-deep);
-  }
-  .modal-upload-area .icon {
-    display: block;
-    margin: 0 auto 8px;
-  }
-  .modal-upload-area .icon svg {
-    width: 48px;
-    height: 48px;
-    stroke: var(--amethyst);
-  }
-  .modal-upload-area .label {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--ink-soft);
-  }
-  .modal-upload-area .label b {
-    color: var(--amethyst-deep);
-  }
-  .modal-upload-area input[type="file"] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-  }
-  .modal-preview {
-    display: none;
-    margin-top: 16px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  }
-  .modal-preview img {
-    width: 100%;
-    max-height: 300px;
-    object-fit: contain;
-    background: #fff;
-  }
-  .modal-preview.active {
-    display: block;
-  }
-  .modal-analyzing {
-    display: none;
-    text-align: center;
-    padding: 20px 0;
-  }
-  .modal-analyzing.active {
-    display: block;
-  }
-  .modal-analyzing .spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid var(--parchment-dim);
-    border-top-color: var(--amethyst);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  .modal-analyzing .status {
-    font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    color: var(--ink-soft);
-  }
-  .modal-analyzing .status b {
-    color: var(--ink);
-  }
-  .modal-result {
-    display: none;
-    text-align: center;
-    padding: 16px 0 8px;
-  }
-  .modal-result.active {
-    display: block;
-  }
-  .modal-result .result-icon {
-    display: block;
-    margin: 0 auto 8px;
-  }
-  .modal-result .result-icon svg {
-    width: 56px;
-    height: 56px;
-    stroke: var(--amethyst);
-  }
-  .modal-result .result-title {
-    font-family: 'Fraunces', serif;
-    font-size: 20px;
-    color: var(--ink);
-    margin-bottom: 4px;
-  }
-  .modal-result .result-text {
-    font-size: 14px;
-    color: var(--ink-soft);
-    line-height: 1.6;
-  }
-  .modal-result .result-text b {
-    color: var(--amethyst-deep);
-  }
-  .modal-result .result-divider {
-    margin: 18px 0 14px;
-    border: none;
-    border-top: 1px dashed rgba(42,33,24,0.15);
-  }
-  .modal-result .result-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .modal-result .result-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 14px 28px;
-    background: var(--citrino);
-    color: #241a06;
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 14px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: transform .15s ease, box-shadow .15s ease;
-    box-shadow: 0 8px 24px rgba(227,173,46,0.3);
-    width: 100%;
-    border: none;
-    cursor: pointer;
-  }
-  .modal-result .result-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(227,173,46,0.45);
-  }
-  .modal-result .result-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 14px 28px;
-    background: transparent;
-    color: var(--ink-soft);
-    font-family: 'Space Mono', monospace;
-    font-weight: 600;
-    font-size: 13px;
-    border-radius: 6px;
-    border: 1px solid rgba(42,33,24,0.15);
-    text-decoration: none;
-    transition: all .15s ease;
-    width: 100%;
-    cursor: pointer;
-    background: none;
-  }
-  .modal-result .result-secondary:hover {
-    background: rgba(42,33,24,0.05);
-    border-color: var(--ink-soft);
-    color: var(--ink);
-  }
-  .modal-result .result-secondary svg {
-    stroke: var(--ink-soft);
-    width: 16px;
-    height: 16px;
-  }
-
   /* MOBILE HERO */
   .hero-tag-mobile{display:none;}
   .hero-copy-mobile{display:none;}
@@ -570,7 +300,6 @@
     .price-new{font-size:26px;}
     .product-btn{font-size:14px;padding:14px;}
     .product-rating .rating-count{font-size:12px;}
-    .modal-box{padding:24px 20px;}
   }
   /* STRIP */
   .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-alt);padding:14px 0;overflow:hidden;}
@@ -784,7 +513,7 @@
         </div>
       </div>
 
-      <!-- ===== MOBILE VERSION COM BOTÃO "AVALIAR MINHA PEDRA" ===== -->
+      <!-- ===== MOBILE VERSION ===== -->
       <div class="hero-copy-mobile">
         <div class="hcm-eyebrow">⭐ 4,8/5 · 3.500+ compras</div>
         <div class="hcm-label">Pedras da sua gaveta<br>podem valer até</div>
@@ -792,7 +521,7 @@
         <div class="hcm-tagline">em sites de colecionadores</div>
         <p class="hcm-sub">Sem curso. Sem termos técnicos de geologia. <b>Identifique em minutos</b> com o guia visual completo — do achado ao valor real de mercado.</p>
 
-        <!-- CARD MOBILE COM "AVALIAR MINHA PEDRA" -->
+        <!-- CARD MOBILE -->
         <div class="product-card" style="max-width:100%;margin:16px 0;">
           <div class="product-card-top">
             <span class="product-badge">🔥 Mais Vendido</span>
@@ -814,20 +543,10 @@
               <span class="stock-text"><b>Em estoque</b> — 47 unidades</span>
             </div>
 
-            <!-- BOTÃO COMPRAR -->
             <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="product-btn" id="heroBtnMobile">
               Comprar agora
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </a>
-
-            <!-- BOTÃO AVALIAR MINHA PEDRA (PRETO COM ÍCONE) -->
-            <button class="evaluate-btn" id="openEvaluateModal">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                <circle cx="12" cy="13" r="4"/>
-              </svg>
-              Avaliar minha pedra agora
-            </button>
 
             <div class="product-guarantee">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
@@ -869,72 +588,6 @@
     </div>
   </div>
 </section>
-
-<!-- ===== MODAL / POPUP "AVALIAR MINHA PEDRA" ===== -->
-<div class="modal-overlay" id="evaluateModal">
-  <div class="modal-box">
-    <button class="modal-close" id="closeModal">✕</button>
-
-    <!-- Estado 1: Upload -->
-    <div id="modalStateUpload">
-      <h3>Avalie sua pedra</h3>
-      <p class="modal-sub">Tire uma foto da sua pedra com a câmera do celular ou escolha uma da galeria. Vamos analisar!</p>
-      <div class="modal-upload-area" id="uploadArea">
-        <span class="icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
-          </svg>
-        </span>
-        <span class="label">Toque para <b>tirar foto</b> ou <b>escolher da galeria</b></span>
-        <input type="file" id="fileInput" accept="image/*" capture="environment">
-      </div>
-      <div class="modal-preview" id="previewContainer">
-        <img id="previewImage" src="" alt="Prévia da sua pedra">
-      </div>
-    </div>
-
-    <!-- Estado 2: Analisando -->
-    <div class="modal-analyzing" id="modalStateAnalyzing">
-      <div class="spinner"></div>
-      <p class="status">🔍 <b>Analisando</b> sua pedra...</p>
-      <p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">Comparando com nosso banco de dados de gemas</p>
-    </div>
-
-    <!-- Estado 3: Resultado -->
-    <div class="modal-result" id="modalStateResult">
-      <span class="result-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2a8 8 0 0 0-8 8c0 5 8 12 8 12s8-7 8-12a8 8 0 0 0-8-8z"/>
-          <circle cx="12" cy="10" r="3"/>
-        </svg>
-      </span>
-      <p class="result-title">Sua pedra pode ser valiosa!</p>
-      <p class="result-text">
-        Com base na análise visual, sua pedra tem características compatíveis com <b>gemas de médio a alto valor</b>.
-        <br><br>
-        Para saber <b>exatamente</b> o que você tem em mãos e quanto vale, você pode:
-      </p>
-
-      <hr class="result-divider">
-
-      <div class="result-buttons">
-        <a href="https://pay.cakto.com.br/kduxrpm_985115" target="_blank" rel="noopener" class="result-cta">
-          📖 Quero o guia completo — R$19,99
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </a>
-
-        <button class="result-secondary" id="closeResult">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          Obrigado, vou falar com um gemólogo na minha cidade
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="strip">
   <div class="strip-track">
@@ -1356,85 +1009,6 @@
         if (!isOpen) { item.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
       });
     });
-
-    // ===== MODAL "AVALIAR MINHA PEDRA" =====
-    var modal = document.getElementById('evaluateModal');
-    var openBtn = document.getElementById('openEvaluateModal');
-    var closeBtn = document.getElementById('closeModal');
-    var closeResultBtn = document.getElementById('closeResult');
-    var fileInput = document.getElementById('fileInput');
-    var previewContainer = document.getElementById('previewContainer');
-    var previewImage = document.getElementById('previewImage');
-    var stateUpload = document.getElementById('modalStateUpload');
-    var stateAnalyzing = document.getElementById('modalStateAnalyzing');
-    var stateResult = document.getElementById('modalStateResult');
-
-    function openModal() {
-      modal.classList.add('active');
-      stateUpload.style.display = 'block';
-      stateAnalyzing.classList.remove('active');
-      stateResult.classList.remove('active');
-      previewContainer.classList.remove('active');
-      fileInput.value = '';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    if (openBtn) {
-      openBtn.addEventListener('click', openModal);
-    }
-
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeModal);
-    }
-
-    if (closeResultBtn) {
-      closeResultBtn.addEventListener('click', function() {
-        stateResult.classList.remove('active');
-        stateUpload.style.display = 'block';
-        stateAnalyzing.classList.remove('active');
-        previewContainer.classList.remove('active');
-        fileInput.value = '';
-        closeModal();
-      });
-    }
-
-    // Fechar ao clicar fora
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) closeModal();
-    });
-
-    // Upload de imagem
-    if (fileInput) {
-      fileInput.addEventListener('change', function(e) {
-        var file = e.target.files[0];
-        if (!file) return;
-
-        var reader = new FileReader();
-        reader.onload = function(event) {
-          previewImage.src = event.target.result;
-          previewContainer.classList.add('active');
-
-          // Mostrar análise
-          stateUpload.style.display = 'none';
-          stateAnalyzing.classList.add('active');
-
-          // Simular análise (2.5 - 4 segundos)
-          var delay = 2500 + Math.random() * 1500;
-          setTimeout(function() {
-            stateAnalyzing.classList.remove('active');
-            stateResult.classList.add('active');
-            // Registrar que o usuário usou a ferramenta
-            console.log('🔍 USUÁRIO AVALIOU UMA PEDRA');
-          }, delay);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
 
     window._pedrasUtm = { dados: utmData, hasUtm: hasUtm, registrarVenda: registrarVenda };
   })();
