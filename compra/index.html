@@ -40,9 +40,8 @@
   .book-card{background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:26px;display:grid;grid-template-columns:90px 1fr auto;gap:22px;align-items:center;transition:border-color .2s ease, transform .2s ease;}
   .book-card:hover{border-color:var(--line-strong);transform:translateY(-2px);}
 
-  .book-cover{width:90px;height:120px;border-radius:5px;background:linear-gradient(160deg,#1c3a52,#0f2333);border:1px solid rgba(255,255,255,0.08);box-shadow:0 10px 22px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .book-cover.bonus{background:linear-gradient(160deg,#5a1f22,#2f0e10);}
-  .book-cover svg{width:34px;height:34px;stroke:var(--citrino);stroke-width:1.6;fill:none;}
+  .book-cover{width:90px;height:120px;border-radius:5px;overflow:hidden;box-shadow:0 10px 22px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
+  .book-cover img{width:100%;height:100%;object-fit:cover;display:block;}
 
   .book-info .tag-badge{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--citrino);}
   .book-info h2{margin-top:6px;font-size:19px;color:var(--parchment);}
@@ -51,6 +50,7 @@
   .dl-btn{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;background:var(--citrino);color:#241a06;padding:13px 20px;border-radius:4px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap;box-shadow:0 8px 22px rgba(227,173,46,0.25);transition:transform .15s ease, box-shadow .15s ease;}
   .dl-btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(227,173,46,0.32);}
   .dl-btn svg{width:16px;height:16px;stroke:#241a06;stroke-width:2.4;fill:none;}
+  .dl-btn.loading{opacity:0.7;pointer-events:none;}
 
   .note{margin-top:36px;text-align:center;font-size:13.5px;color:var(--ink-soft);font-family:'Space Mono',monospace;}
 
@@ -89,29 +89,29 @@
 
     <div class="book-card">
       <div class="book-cover">
-        <svg viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v16.5A2.5 2.5 0 0117.5 21H6.5A2.5 2.5 0 004 18.5v-14z"/></svg>
+        <img src="../mockup_ebook.png" alt="Capa do ebook Catálogo das Pedras">
       </div>
       <div class="book-info">
         <span class="tag-badge">Guia principal</span>
         <h2>Catálogo das Pedras</h2>
         <p>200 páginas com fichas de identificação, fotos reais e faixas de preço do mercado.</p>
       </div>
-      <a class="dl-btn" href="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_catalogo_de_pedras.pdf" download target="_blank" rel="noopener">
+      <a class="dl-btn" data-file="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_catalogo_de_pedras.pdf" data-name="catalogo-das-pedras.pdf" href="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_catalogo_de_pedras.pdf" rel="noopener">
         Baixar PDF
         <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
       </a>
     </div>
 
     <div class="book-card">
-      <div class="book-cover bonus">
-        <svg viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v16.5A2.5 2.5 0 0117.5 21H6.5A2.5 2.5 0 004 18.5v-14z"/></svg>
+      <div class="book-cover">
+        <img src="../capa_onde_vender_3d.png" alt="Capa do ebook Onde Vender Suas Pedras">
       </div>
       <div class="book-info">
         <span class="tag-badge" style="color:var(--emerald);">Bônus grátis</span>
         <h2>Onde Vender Suas Pedras</h2>
         <p>Lista de canais e contatos para transformar suas pedras identificadas em dinheiro.</p>
       </div>
-      <a class="dl-btn" href="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_onde_vender.pdf" download target="_blank" rel="noopener">
+      <a class="dl-btn" data-file="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_onde_vender.pdf" data-name="onde-vender-suas-pedras.pdf" href="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_onde_vender.pdf" rel="noopener">
         Baixar PDF
         <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
       </a>
@@ -166,6 +166,49 @@
   // Se o bucket do Supabase virar privado no futuro (RLS ativado),
   // é aqui que entra a chamada ao Supabase JS SDK pra gerar
   // signed URLs a partir da "chave" antes de exibir os botões.
+
+  // ============================================================
+  // FORÇA O DOWNLOAD DE VERDADE
+  // Como o PDF está em outro domínio (Supabase), o navegador
+  // ignora o atributo "download" e só abre o arquivo numa aba
+  // nova. Aqui a gente busca o arquivo como blob e força o
+  // navegador a salvar, com o nome certo.
+  // ============================================================
+  document.querySelectorAll('.dl-btn[data-file]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      var url = btn.getAttribute('data-file');
+      var nome = btn.getAttribute('data-name') || 'ebook.pdf';
+      var textoOriginal = btn.innerHTML;
+
+      btn.classList.add('loading');
+      btn.innerHTML = 'Baixando...';
+
+      fetch(url)
+        .then(function(res){
+          if (!res.ok) throw new Error('Falha ao baixar');
+          return res.blob();
+        })
+        .then(function(blob){
+          var blobUrl = window.URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = nome;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(blobUrl);
+        })
+        .catch(function(){
+          // Se o navegador bloquear o fetch (raro), cai pro comportamento antigo
+          window.open(url, '_blank');
+        })
+        .finally(function(){
+          btn.classList.remove('loading');
+          btn.innerHTML = textoOriginal;
+        });
+    });
+  });
 </script>
 </body>
 </html>
