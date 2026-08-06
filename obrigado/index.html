@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compra confirmada — Tesouro Esquecido</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#17151b;
+    --bg-alt:#1e1a23;
+    --bg-alt2:#211c28;
+    --parchment:#f1e7d3;
+    --parchment-dim:#e7dabf;
+    --ink:#2a2118;
+    --ink-soft:#5a4c3a;
+    --ink-light:#efe6d8;
+    --ink-mute:#b4a99a;
+    --citrino:#e3ad2e;
+    --emerald:#2f9e6e;
+    --ruby:#c24545;
+    --line:rgba(240,230,210,0.14);
+    --line-strong:rgba(240,230,210,0.28);
+    --shadow:0 24px 60px rgba(0,0,0,0.45);
+  }
+  body{background:var(--bg);color:var(--ink-light);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 700px 420px at 50% 0%, rgba(227,173,46,0.10), transparent 65%);pointer-events:none;}
+  h1,h2{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--citrino);display:flex;align-items:center;justify-content:center;gap:10px;}
+  .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--citrino);}
+
+  /* ===== CARTÃO RECIBO (estampa de autenticação) ===== */
+  .receipt{position:relative;width:100%;max-width:460px;background:var(--parchment);border-radius:6px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.06);padding:44px 36px 36px;text-align:center;opacity:0;transform:translateY(18px) scale(0.98);animation:rise .6s cubic-bezier(.2,.8,.3,1) forwards;}
+  .receipt::before{content:'';position:absolute;top:0;left:0;right:0;height:16px;background-image:radial-gradient(circle at 16px 8px, var(--bg) 6px, transparent 6.5px);background-size:32px 16px;background-repeat:repeat-x;}
+  @keyframes rise{to{opacity:1;transform:translateY(0) scale(1);}}
+
+  .seal{width:78px;height:78px;border-radius:50%;background:radial-gradient(circle at 32% 28%, #3fc082, var(--emerald) 60%, #1f7a53);margin:0 auto 22px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(47,158,110,0.35), inset 0 2px 4px rgba(255,255,255,0.25);transform:scale(0.4) rotate(-25deg);opacity:0;animation:stamp .5s .35s cubic-bezier(.3,1.6,.4,1) forwards;}
+  .seal svg{width:36px;height:36px;stroke:#fff;stroke-width:3;fill:none;}
+  @keyframes stamp{to{transform:scale(1) rotate(0deg);opacity:1;}}
+
+  .receipt h1{font-size:clamp(24px,4vw,30px);color:var(--ink);margin-top:18px;}
+  .receipt .sub{margin-top:10px;color:var(--ink-soft);font-size:15px;max-width:340px;margin-left:auto;margin-right:auto;}
+
+  .receipt-divider{margin:26px 0;border-top:1px dashed rgba(42,33,24,0.28);}
+
+  .order-line{display:flex;justify-content:space-between;align-items:center;font-family:'Space Mono',monospace;font-size:12.5px;color:var(--ink-soft);text-align:left;}
+  .order-line + .order-line{margin-top:8px;}
+  .order-line b{color:var(--ink);}
+
+  .cta{margin-top:28px;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;font-family:'Space Mono',monospace;font-weight:700;font-size:14.5px;background:var(--citrino);color:#241a06;padding:16px 20px;border-radius:4px;text-decoration:none;box-shadow:0 10px 30px rgba(227,173,46,0.28);transition:transform .15s ease, box-shadow .15s ease;}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(227,173,46,0.35);}
+  .cta svg{width:18px;height:18px;stroke:#241a06;stroke-width:2.5;fill:none;}
+
+  .foot-note{margin-top:18px;font-size:12.5px;color:var(--ink-soft);}
+
+  /* ===== ESTADO BLOQUEADO (chave ausente/inválida) ===== */
+  .blocked{width:100%;max-width:460px;background:var(--bg-alt2);border:1px solid var(--line);border-radius:8px;padding:44px 32px;text-align:center;}
+  .blocked .lock{width:64px;height:64px;border-radius:50%;background:var(--bg-alt);border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+  .blocked .lock svg{width:26px;height:26px;stroke:var(--ruby);stroke-width:2;fill:none;}
+  .blocked h1{font-size:22px;color:var(--parchment);}
+  .blocked p{margin-top:12px;color:var(--ink-mute);font-size:14.5px;max-width:340px;margin-left:auto;margin-right:auto;}
+  .blocked .zap{margin-top:26px;display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#1f2c22;background:#25d366;padding:13px 22px;border-radius:4px;text-decoration:none;}
+
+  [data-state]{display:none;}
+  [data-state].active{display:block;}
+</style>
+</head>
+<body>
+
+  <!-- Estado: chave válida -->
+  <div data-state="ok" class="receipt">
+    <div class="seal"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <div class="eyebrow">Compra aprovada</div>
+    <h1>Sua chave abriu o cofre.</h1>
+    <p class="sub">O acesso ao <strong>Tesouro Esquecido</strong> e ao bônus <strong>Onde Vender Suas Pedras</strong> já está liberado.</p>
+
+    <div class="receipt-divider"></div>
+
+    <div class="order-line"><span>Produto</span><b>Tesouro Esquecido + bônus</b></div>
+    <div class="order-line"><span>Status</span><b style="color:var(--emerald)">Confirmado</b></div>
+    <div class="order-line"><span>Acesso</span><b>Imediato, sem expiração</b></div>
+
+    <a href="#" id="ctaAcessar" class="cta">
+      Acessar meus ebooks agora
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <p class="foot-note">Guarde esta página ou o e-mail de confirmação para acessar quando quiser.</p>
+  </div>
+
+  <!-- Estado: sem chave válida -->
+  <div data-state="blocked" class="blocked">
+    <div class="lock"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div>
+    <h1>Não encontramos sua compra por aqui.</h1>
+    <p>Este link de acesso é pessoal e chega por e-mail logo após a confirmação do pagamento. Confira sua caixa de entrada (e o spam) ou fale com o suporte.</p>
+    <a href="https://wa.me/SEUNUMEROAQUI" class="zap">Falar com o suporte</a>
+  </div>
+
+<script>
+  // ============================================================
+  // CONTROLE DE ACESSO — VERSÃO SIMPLES (lista fixa de chaves)
+  // Troque/adicione chaves aqui manualmente por enquanto.
+  // Quando a Cakto/Kiwify + Supabase estiverem prontos,
+  // troque este bloco por uma consulta real na tabela de chaves.
+  // ============================================================
+  var CHAVES_VALIDAS = [
+    "TESOURO2024",
+    "PEDRAVIP"
+  ];
+
+  var LINK_COMPRA = "../compra/"; // pasta de download dos ebooks
+
+  var params = new URLSearchParams(window.location.search);
+  var chave = params.get('chave');
+  var chaveValida = !!chave && CHAVES_VALIDAS.indexOf(chave) !== -1;
+
+  function showState(name){
+    document.querySelectorAll('[data-state]').forEach(function(el){
+      el.classList.toggle('active', el.getAttribute('data-state') === name);
+    });
+  }
+
+  if (chaveValida) {
+    showState('ok');
+
+    // Encaminha a chave para a tela de compra/download
+    document.getElementById('ctaAcessar').href = LINK_COMPRA + '?chave=' + encodeURIComponent(chave);
+
+    // ============================================================
+    // PIXEL DE CONVERSÃO — só dispara com chave válida
+    // Cole aqui o código do Meta Pixel / GA4 / TikTok Pixel.
+    // Exemplo Meta Pixel:
+    //
+    // !function(f,b,e,v,n,t,s){...}(window, document,'script',
+    // 'https://connect.facebook.net/en_US/fbevents.js');
+    // fbq('init', 'SEU_PIXEL_ID');
+    // fbq('track', 'Purchase', { value: 27.00, currency: 'BRL' });
+    // ============================================================
+  } else {
+    showState('blocked');
+  }
+</script>
+</body>
+</html>
