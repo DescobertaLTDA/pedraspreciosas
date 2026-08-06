@@ -750,6 +750,35 @@
   </div>
 </section>
 
+<!-- ============ VÍDEO DO LIVRO FÍSICO ============ -->
+<section style="padding:56px 0 60px;background:var(--bg-alt);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:28px;">
+      <div class="eyebrow" style="justify-content:center;">Por Dentro do Guia</div>
+      <h2 style="font-size:clamp(24px,3.4vw,34px);color:var(--ink-light);margin-top:10px;">Veja o <em style="font-style:italic;font-weight:500;background:linear-gradient(100deg,var(--citrino),var(--quartzo) 60%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent;">Tesouro Esquecido</em> nas mãos de quem já garantiu o seu</h2>
+      <p style="margin-top:12px;font-size:15.5px;color:var(--ink-mute);max-width:520px;margin-left:auto;margin-right:auto;">Um guia físico, robusto, feito para folhear e consultar sempre que encontrar uma pedra desconhecida.</p>
+    </div>
+
+    <div style="max-width:420px;margin:0 auto;position:relative;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(240,230,210,0.1);aspect-ratio:9/16;background:#000;">
+      <video class="book-video active" src="amostra4.mp4" autoplay muted loop playsinline disablepictureinpicture style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;transition:opacity .6s ease;"></video>
+      <video class="book-video" src="amostra2.mp4" autoplay muted loop playsinline disablepictureinpicture style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s ease;"></video>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var vids = document.querySelectorAll('.book-video');
+  if (!vids.length) return;
+  var current = 0;
+  setInterval(function(){
+    vids[current].style.opacity = '0';
+    current = (current + 1) % vids.length;
+    vids[current].style.opacity = '1';
+  }, 5000);
+})();
+</script>
+
 <!-- ============ STRIP ============ -->
 <div class="strip">
   <div class="strip-track">
