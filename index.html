@@ -423,7 +423,7 @@
     .feat-grid{grid-template-columns:repeat(2,1fr);}
     .catalog-scroller{grid-template-columns:repeat(2,1fr);}
     .mockup-grid{grid-template-columns:1fr;gap:32px;}
-    .mockup-grid .mockup-image{order:-1;}
+    .mockup-grid .mockup-image-col{order:-1;}
     .carrossel-track{min-height:320px;}
   }
   @media (max-width:640px){
@@ -501,7 +501,6 @@
           <img src="amostra.png" alt="Tesouro Esquecido + bônus Onde Vender Suas Pedras" style="width:100%;height:auto;display:block;">
           <span style="position:absolute;top:8%;right:6%;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;background:#22a65e;color:#fff;padding:4px 12px;border-radius:20px;box-shadow:0 3px 8px rgba(0,0,0,0.3);transform:rotate(8deg);">Grátis</span>
         </div>
-        <img src="capa_onde_vender_3d.png" alt="Capa 3D do bônus: Pedras Preciosas - Onde e Como Vender Sua Pedra" style="width:100%;max-width:200px;height:auto;display:block;margin:10px auto 0;">
         <div class="tag-name" style="text-align:center;">COMPRE 1 E LEVE 2 <span style="display:block;font-size:0.6em;font-weight:500;">(o guia para te ajudar a vender)</span></div>
         <div class="tag-price" style="text-align:center;border-top:none;padding-top:4px;">+ bônus <b>Onde e Como Vender Sua Pedra</b></div>
         <div style="text-align:center;margin-top:6px;font-family:'Space Mono',monospace;font-size:8.5px;color:var(--amethyst-deep);letter-spacing:0.06em;text-transform:uppercase;border-top:1px dashed rgba(42,33,24,0.12);padding-top:8px;">
@@ -722,7 +721,6 @@
           <img src="amostra.png" alt="Tesouro Esquecido + bônus Onde Vender Suas Pedras" style="width:100%;height:auto;display:block;">
           <span style="position:absolute;top:8%;right:6%;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;background:#22a65e;color:#fff;padding:4px 12px;border-radius:20px;box-shadow:0 3px 8px rgba(0,0,0,0.3);transform:rotate(8deg);">Grátis</span>
         </div>
-        <img src="capa_onde_vender_3d.png" alt="Capa 3D do bônus: Pedras Preciosas - Onde e Como Vender Sua Pedra" style="width:100%;max-width:180px;height:auto;display:block;margin:10px auto 0;">
         <div class="tag-num" style="text-align:center;margin-top:4px;">EDIÇÃO DIGITAL</div>
         <div class="tag-name" style="font-size:16px;text-align:center;">COMPRE 1 E LEVE 2 <span style="display:block;font-size:0.65em;font-weight:500;">(o guia para te ajudar a vender)</span></div>
         <div class="tag-price" style="text-align:center;border-top:none;padding-top:2px;">+ bônus <b>Onde e Como Vender Sua Pedra</b></div>
@@ -1227,7 +1225,15 @@
 <section class="mockup-section">
   <div class="wrap">
     <div class="mockup-grid">
-      <div class="mockup-image"><img src="mockup_ebook.png" alt="Mockup do ebook Tesouro Esquecido"></div>
+      <div class="mockup-image-col">
+        <div class="mockup-image">
+          <img src="mockup_ebook.png" alt="Mockup do ebook Tesouro Esquecido">
+        </div>
+        <div style="position:relative;max-width:220px;margin:16px auto 0;">
+          <img src="capa_onde_vender_3d.png" alt="Capa 3D do bônus grátis: Pedras Preciosas - Onde e Como Vender Sua Pedra" style="width:100%;height:auto;display:block;border-radius:8px;box-shadow:0 10px 24px rgba(0,0,0,0.4);">
+          <span style="position:absolute;top:-8px;right:-8px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;background:#22a65e;color:#fff;padding:4px 12px;border-radius:20px;box-shadow:0 3px 8px rgba(0,0,0,0.3);transform:rotate(8deg);">+ Grátis</span>
+        </div>
+      </div>
       <div class="mockup-info">
         <div class="eyebrow">Formato digital</div>
         <h2>Leia em qualquer dispositivo</h2>
