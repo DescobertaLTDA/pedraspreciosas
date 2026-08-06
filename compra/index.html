@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seus ebooks — Tesouro Esquecido</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#17151b;
+    --bg-alt:#1e1a23;
+    --bg-alt2:#211c28;
+    --parchment:#f1e7d3;
+    --ink:#2a2118;
+    --ink-soft:#5a4c3a;
+    --ink-light:#efe6d8;
+    --ink-mute:#b4a99a;
+    --citrino:#e3ad2e;
+    --emerald:#2f9e6e;
+    --line:rgba(240,230,210,0.14);
+    --line-strong:rgba(240,230,210,0.28);
+    --shadow:0 24px 60px rgba(0,0,0,0.45);
+  }
+  body{background:var(--bg);color:var(--ink-light);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:64px 20px 80px;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 700px 420px at 50% 0%, rgba(227,173,46,0.10), transparent 65%);pointer-events:none;}
+  h1,h2{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  .wrap{max-width:760px;margin:0 auto;position:relative;}
+
+  .head{text-align:center;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--citrino);display:flex;align-items:center;justify-content:center;gap:10px;}
+  .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--citrino);}
+  .head h1{margin-top:16px;font-size:clamp(28px,4.4vw,40px);color:var(--parchment);}
+  .head p{margin-top:14px;color:var(--ink-mute);font-size:16px;max-width:440px;margin-left:auto;margin-right:auto;}
+
+  .books{margin-top:48px;display:grid;gap:22px;}
+
+  .book-card{background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:26px;display:grid;grid-template-columns:90px 1fr auto;gap:22px;align-items:center;transition:border-color .2s ease, transform .2s ease;}
+  .book-card:hover{border-color:var(--line-strong);transform:translateY(-2px);}
+
+  .book-cover{width:90px;height:120px;border-radius:5px;background:linear-gradient(160deg,#1c3a52,#0f2333);border:1px solid rgba(255,255,255,0.08);box-shadow:0 10px 22px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .book-cover.bonus{background:linear-gradient(160deg,#5a1f22,#2f0e10);}
+  .book-cover svg{width:34px;height:34px;stroke:var(--citrino);stroke-width:1.6;fill:none;}
+
+  .book-info .tag-badge{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--citrino);}
+  .book-info h2{margin-top:6px;font-size:19px;color:var(--parchment);}
+  .book-info p{margin-top:6px;color:var(--ink-mute);font-size:14px;max-width:360px;}
+
+  .dl-btn{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;background:var(--citrino);color:#241a06;padding:13px 20px;border-radius:4px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap;box-shadow:0 8px 22px rgba(227,173,46,0.25);transition:transform .15s ease, box-shadow .15s ease;}
+  .dl-btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(227,173,46,0.32);}
+  .dl-btn svg{width:16px;height:16px;stroke:#241a06;stroke-width:2.4;fill:none;}
+
+  .note{margin-top:36px;text-align:center;font-size:13.5px;color:var(--ink-soft);font-family:'Space Mono',monospace;}
+
+  @media(max-width:560px){
+    .book-card{grid-template-columns:64px 1fr;grid-template-areas:"cover info" "cover btn";}
+    .book-cover{grid-area:cover;width:64px;height:86px;}
+    .book-info{grid-area:info;}
+    .dl-btn{grid-area:btn;margin-top:14px;width:100%;justify-content:center;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="eyebrow">Acesso liberado</div>
+    <h1>Seus ebooks estão prontos</h1>
+    <p>Baixe os dois arquivos abaixo. Eles ficam salvos no seu dispositivo, sem prazo de expiração.</p>
+  </div>
+
+  <div class="books">
+
+    <div class="book-card">
+      <div class="book-cover">
+        <svg viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v16.5A2.5 2.5 0 0117.5 21H6.5A2.5 2.5 0 004 18.5v-14z"/></svg>
+      </div>
+      <div class="book-info">
+        <span class="tag-badge">Guia principal</span>
+        <h2>Catálogo das Pedras</h2>
+        <p>200 páginas com fichas de identificação, fotos reais e faixas de preço do mercado.</p>
+      </div>
+      <a class="dl-btn" href="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_catalogo_de_pedras.pdf" download target="_blank" rel="noopener">
+        Baixar PDF
+        <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+      </a>
+    </div>
+
+    <div class="book-card">
+      <div class="book-cover bonus">
+        <svg viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v16.5A2.5 2.5 0 0117.5 21H6.5A2.5 2.5 0 004 18.5v-14z"/></svg>
+      </div>
+      <div class="book-info">
+        <span class="tag-badge" style="color:var(--emerald);">Bônus grátis</span>
+        <h2>Onde Vender Suas Pedras</h2>
+        <p>Lista de canais e contatos para transformar suas pedras identificadas em dinheiro.</p>
+      </div>
+      <a class="dl-btn" href="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_onde_vender.pdf" download target="_blank" rel="noopener">
+        Baixar PDF
+        <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+      </a>
+    </div>
+
+  </div>
+
+  <p class="note">Problemas para abrir os arquivos? Fale com o suporte pelo WhatsApp.</p>
+</div>
+
+<script>
+  // ============================================================
+  // Por enquanto os PDFs são links públicos do Supabase Storage,
+  // então esta página não precisa de checagem para funcionar.
+  //
+  // Se um dia o bucket virar privado (RLS ativado), essa é a hora
+  // de trocar os href acima por uma chamada ao Supabase JS SDK
+  // gerando signed URLs a partir da ?chave= abaixo.
+  // ============================================================
+  var params = new URLSearchParams(window.location.search);
+  var chave = params.get('chave'); // hoje só é repassada da tela de obrigado, sem uso aqui ainda
+</script>
+</body>
+</html>
