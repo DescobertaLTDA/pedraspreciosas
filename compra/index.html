@@ -168,11 +168,12 @@
   // signed URLs a partir da "chave" antes de exibir os botões.
 
   // ============================================================
-  // FORÇA O DOWNLOAD DE VERDADE
+  // FORÇA O DOWNLOAD DE VERDADE, COM PROGRESSO REAL
   // Como o PDF está em outro domínio (Supabase), o navegador
   // ignora o atributo "download" e só abre o arquivo numa aba
-  // nova. Aqui a gente busca o arquivo como blob e força o
-  // navegador a salvar, com o nome certo.
+  // nova. Aqui a gente lê o arquivo em pedaços (stream),
+  // mostrando o % baixado, e só depois salva — assim o botão
+  // não fica "travado" durante o carregamento de arquivos grandes.
   // ============================================================
   document.querySelectorAll('.dl-btn[data-file]').forEach(function(btn){
     btn.addEventListener('click', function(e){
@@ -182,12 +183,42 @@
       var textoOriginal = btn.innerHTML;
 
       btn.classList.add('loading');
-      btn.innerHTML = 'Baixando...';
+      btn.innerHTML = 'Baixando... 0%';
 
       fetch(url)
         .then(function(res){
           if (!res.ok) throw new Error('Falha ao baixar');
-          return res.blob();
+
+          var total = parseInt(res.headers.get('Content-Length') || '0', 10);
+
+          // Sem suporte a stream (navegador antigo) → cai pro método simples
+          if (!res.body || !res.body.getReader) {
+            return res.blob();
+          }
+
+          var reader = res.body.getReader();
+          var chunks = [];
+          var recebido = 0;
+
+          function ler(){
+            return reader.read().then(function(resultado){
+              if (resultado.done) {
+                return new Blob(chunks);
+              }
+              chunks.push(resultado.value);
+              recebido += resultado.value.length;
+
+              if (total) {
+                var pct = Math.round((recebido / total) * 100);
+                btn.innerHTML = 'Baixando... ' + pct + '%';
+              } else {
+                var mb = (recebido / 1048576).toFixed(1);
+                btn.innerHTML = 'Baixando... ' + mb + 'MB';
+              }
+              return ler();
+            });
+          }
+          return ler();
         })
         .then(function(blob){
           var blobUrl = window.URL.createObjectURL(blob);
