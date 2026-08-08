@@ -7,6 +7,23 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%0A  %3Crect width='64' height='64' rx='14' fill='%2317151b'/%3E%0A  %3Cpolygon points='32,10 48,24 43,54 21,54 16,24' fill='%239169c9'/%3E%0A  %3Cpolygon points='32,10 48,24 32,30' fill='%23b18ee0'/%3E%0A  %3Cpolygon points='16,24 32,30 21,54' fill='%237a4fab'/%3E%0A  %3Cpolygon points='32,30 48,24 43,54' fill='%23663f96'/%3E%0A%3C/svg%3E%0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '940556475332489');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=940556475332489&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <style>
   :root {
     --bg:#17151b;
@@ -1667,6 +1684,24 @@
 
     window._pedrasUtm = { dados: utmData, hasUtm: hasUtm, registrarVenda: registrarVenda };
   })();
+</script>
+
+<!-- Meta Pixel: InitiateCheckout em todos os botões de compra -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var botoesCompra = document.querySelectorAll('a[href*="pay.cakto.com.br"]');
+    botoesCompra.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (typeof fbq === 'function') {
+          fbq('track', 'InitiateCheckout', {
+            value: 59.00,
+            currency: 'BRL',
+            content_name: 'Tesouro Esquecido'
+          });
+        }
+      });
+    });
+  });
 </script>
 
 </body>
