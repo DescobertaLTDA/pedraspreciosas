@@ -1,372 +1,231 @@
-import { useState, useRef } from "react";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identificador de Pedras com IA — Tesouro Esquecido</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#17151b;
+    --bg-alt2:#211c28;
+    --parchment:#f1e7d3;
+    --ink-light:#efe6d8;
+    --ink-mute:#b4a99a;
+    --ink-soft:#5a4c3a;
+    --citrino:#e3ad2e;
+    --emerald:#2f9e6e;
+    --danger:#c24545;
+    --line:rgba(240,230,210,0.14);
+    --line-strong:rgba(240,230,210,0.28);
+  }
+  body{background:var(--bg);color:var(--ink-light);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:56px 20px 80px;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 700px 420px at 50% 0%, rgba(227,173,46,0.10), transparent 65%);pointer-events:none;}
+  h1,h2{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  .wrap{max-width:560px;margin:0 auto;position:relative;}
 
-export default function IdentificadorPedras() {
-  const [imagem, setImagem] = useState(null);
-  const [base64, setBase64] = useState(null);
-  const [mediaType, setMediaType] = useState(null);
-  const [carregando, setCarregando] = useState(false);
-  const [resultado, setResultado] = useState(null);
-  const [erro, setErro] = useState(null);
-  const inputRef = useRef(null);
+  .head{text-align:center;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--citrino);display:flex;align-items:center;justify-content:center;gap:10px;}
+  .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--citrino);}
+  .head h1{margin-top:16px;font-size:clamp(26px,4vw,36px);color:var(--parchment);}
+  .head p{margin-top:12px;color:var(--ink-mute);font-size:15px;max-width:420px;margin-left:auto;margin-right:auto;}
 
-  function handleArquivo(e) {
-    const file = e.target.files[0];
+  .card{margin-top:40px;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:26px;}
+
+  .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:48px 20px;border:1.5px dashed var(--line-strong);border-radius:8px;cursor:pointer;transition:border-color .2s ease;}
+  .dropzone:hover{border-color:var(--citrino);}
+  .dropzone svg{width:34px;height:34px;stroke:var(--citrino);stroke-width:1.6;fill:none;}
+  .dropzone span{font-size:14px;color:var(--ink-mute);text-align:center;}
+  input[type=file]{display:none;}
+
+  .preview{width:100%;max-height:320px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+  .preview img{width:100%;display:block;object-fit:cover;}
+
+  .actions{display:flex;gap:12px;margin-top:18px;}
+  .btn{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;border-radius:4px;padding:13px 18px;cursor:pointer;border:none;}
+  .btn-secondary{flex:1;background:transparent;color:var(--ink-mute);border:1px solid var(--line-strong);}
+  .btn-primary{flex:2;background:var(--citrino);color:#241a06;}
+  .btn-primary:disabled{opacity:0.6;cursor:default;}
+
+  .erro{margin-top:16px;font-size:13.5px;color:var(--danger);text-align:center;}
+
+  .resultado{margin-top:22px;background:var(--bg-alt2);border:1px solid rgba(47,158,110,0.35);border-radius:10px;padding:26px;display:none;}
+  .resultado.active{display:block;}
+  .resultado-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .resultado-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--emerald);}
+  .resultado h2{margin-top:6px;font-size:22px;color:var(--parchment);}
+  .confianca{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;border-radius:20px;padding:4px 10px;white-space:nowrap;border:1px solid currentColor;}
+  .alternativos{margin-top:10px;font-size:13.5px;color:var(--ink-mute);}
+  .caracteristicas{margin-top:16px;padding-left:18px;font-size:14px;}
+  .caracteristicas li{margin-bottom:6px;}
+  .preco-box{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .preco-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--citrino);}
+  .preco-valor{margin-top:6px;font-size:15px;color:var(--parchment);}
+  .observacao{margin-top:16px;font-size:12.5px;color:var(--ink-soft);}
+
+  .carregando .btn-primary{background:rgba(227,173,46,0.5);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="eyebrow">Identificador com IA</div>
+    <h1>Descubra o que é sua pedra</h1>
+    <p>Envie uma foto e nossa inteligência artificial analisa cor, brilho e textura para te dar uma primeira identificação.</p>
+  </div>
+
+  <div class="card">
+    <div class="dropzone" id="dropzone">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+      <span>Toque para enviar a foto da sua pedra</span>
+      <input type="file" id="input-foto" accept="image/*">
+    </div>
+
+    <div class="preview" id="preview" style="display:none;">
+      <img id="preview-img" alt="Foto da pedra enviada">
+    </div>
+
+    <div class="actions" id="actions" style="display:none;">
+      <button class="btn btn-secondary" id="btn-trocar">Trocar foto</button>
+      <button class="btn btn-primary" id="btn-identificar">Identificar pedra</button>
+    </div>
+
+    <p class="erro" id="erro" style="display:none;"></p>
+  </div>
+
+  <div class="resultado" id="resultado">
+    <div class="resultado-head">
+      <div>
+        <div class="resultado-tag">Resultado da análise</div>
+        <h2 id="res-nome"></h2>
+      </div>
+      <span class="confianca" id="res-confianca"></span>
+    </div>
+    <p class="alternativos" id="res-alternativos" style="display:none;"></p>
+    <ul class="caracteristicas" id="res-caracteristicas"></ul>
+    <div class="preco-box">
+      <div class="preco-label">Faixa de preço estimada</div>
+      <p class="preco-valor" id="res-preco"></p>
+    </div>
+    <p class="observacao" id="res-observacao"></p>
+  </div>
+
+</div>
+
+<script>
+  var dropzone = document.getElementById('dropzone');
+  var inputFoto = document.getElementById('input-foto');
+  var preview = document.getElementById('preview');
+  var previewImg = document.getElementById('preview-img');
+  var actions = document.getElementById('actions');
+  var btnTrocar = document.getElementById('btn-trocar');
+  var btnIdentificar = document.getElementById('btn-identificar');
+  var erroEl = document.getElementById('erro');
+  var resultadoEl = document.getElementById('resultado');
+
+  var base64Atual = null;
+  var mediaTypeAtual = null;
+
+  var confiancaCores = { alta: '#2f9e6e', media: '#e3ad2e', baixa: '#c24545' };
+
+  dropzone.addEventListener('click', function(){ inputFoto.click(); });
+
+  inputFoto.addEventListener('change', function(e){
+    var file = e.target.files[0];
     if (!file) return;
-    setResultado(null);
-    setErro(null);
-    setMediaType(file.type);
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result;
-      setImagem(dataUrl);
-      setBase64(dataUrl.split(",")[1]);
+    resultadoEl.classList.remove('active');
+    erroEl.style.display = 'none';
+    mediaTypeAtual = file.type;
+
+    var reader = new FileReader();
+    reader.onload = function(){
+      var dataUrl = reader.result;
+      previewImg.src = dataUrl;
+      base64Atual = dataUrl.split(',')[1];
+
+      dropzone.style.display = 'none';
+      preview.style.display = 'block';
+      actions.style.display = 'flex';
     };
     reader.readAsDataURL(file);
-  }
+  });
 
-  async function identificar() {
-    if (!base64) return;
-    setCarregando(true);
-    setErro(null);
-    setResultado(null);
+  btnTrocar.addEventListener('click', function(){
+    base64Atual = null;
+    mediaTypeAtual = null;
+    inputFoto.value = '';
+    dropzone.style.display = 'flex';
+    preview.style.display = 'none';
+    actions.style.display = 'none';
+    resultadoEl.classList.remove('active');
+    erroEl.style.display = 'none';
+  });
 
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          messages: [
-            {
-              role: "user",
-              content: [
-                {
-                  type: "image",
-                  source: { type: "base64", media_type: mediaType, data: base64 },
-                },
-                {
-                  type: "text",
-                  text:
-                    "Você é um especialista em gemologia e mineralogia. Olhe a foto dessa pedra e responda em português do Brasil, em formato JSON puro (sem markdown, sem crases), com as chaves: nome_provavel (string), nomes_alternativos (array de até 3 strings, outras possibilidades), caracteristicas (array de até 4 strings curtas sobre cor, brilho, textura), faixa_preco_brasil (string, estimativa em reais por grama ou por peça, deixando claro que é uma estimativa), confianca (string: alta, media ou baixa), observacao (string curta, avisando que uma avaliação profissional presencial é recomendada para confirmar autenticidade e valor).",
-                },
-              ],
-            },
-          ],
-        }),
-      });
+  btnIdentificar.addEventListener('click', function(){
+    if (!base64Atual) return;
 
-      const data = await response.json();
-      const textBlock = data?.content?.find((b) => b.type === "text");
-      if (!textBlock) throw new Error("Sem resposta de texto da API.");
+    btnIdentificar.disabled = true;
+    btnIdentificar.textContent = 'Analisando...';
+    erroEl.style.display = 'none';
+    resultadoEl.classList.remove('active');
 
-      const clean = textBlock.text.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
-      setResultado(parsed);
-    } catch (e) {
-      setErro("Não foi possível identificar a pedra agora. Tente novamente com outra foto.");
-    } finally {
-      setCarregando(false);
+    fetch('/api/identificar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ base64: base64Atual, mediaType: mediaTypeAtual })
+    })
+    .then(function(res){
+      if (!res.ok) throw new Error('Falha na resposta');
+      return res.json();
+    })
+    .then(function(data){
+      if (data.error) throw new Error(data.error);
+      mostrarResultado(data);
+    })
+    .catch(function(){
+      erroEl.textContent = 'Não foi possível identificar a pedra agora. Tente novamente com outra foto.';
+      erroEl.style.display = 'block';
+    })
+    .finally(function(){
+      btnIdentificar.disabled = false;
+      btnIdentificar.textContent = 'Identificar pedra';
+    });
+  });
+
+  function mostrarResultado(data){
+    document.getElementById('res-nome').textContent = data.nome_provavel || '';
+
+    var confEl = document.getElementById('res-confianca');
+    var cor = confiancaCores[data.confianca] || '#b4a99a';
+    confEl.textContent = 'confiança ' + (data.confianca || '');
+    confEl.style.color = cor;
+
+    var altEl = document.getElementById('res-alternativos');
+    if (data.nomes_alternativos && data.nomes_alternativos.length > 0) {
+      altEl.textContent = 'Também pode ser: ' + data.nomes_alternativos.join(', ');
+      altEl.style.display = 'block';
+    } else {
+      altEl.style.display = 'none';
     }
+
+    var listaEl = document.getElementById('res-caracteristicas');
+    listaEl.innerHTML = '';
+    (data.caracteristicas || []).forEach(function(c){
+      var li = document.createElement('li');
+      li.textContent = c;
+      listaEl.appendChild(li);
+    });
+
+    document.getElementById('res-preco').textContent = data.faixa_preco_brasil || '';
+    document.getElementById('res-observacao').textContent = data.observacao || '';
+
+    resultadoEl.classList.add('active');
   }
-
-  function limpar() {
-    setImagem(null);
-    setBase64(null);
-    setResultado(null);
-    setErro(null);
-    if (inputRef.current) inputRef.current.value = "";
-  }
-
-  const confiancaCor = {
-    alta: "#2f9e6e",
-    media: "#e3ad2e",
-    baixa: "#c24545",
-  };
-
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#17151b",
-        color: "#efe6d8",
-        fontFamily: "Inter, sans-serif",
-        padding: "56px 20px 80px",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "radial-gradient(ellipse 700px 420px at 50% 0%, rgba(227,173,46,0.10), transparent 65%)",
-          pointerEvents: "none",
-        }}
-      />
-
-      <div style={{ maxWidth: 560, margin: "0 auto", position: "relative" }}>
-        <div style={{ textAlign: "center" }}>
-          <div
-            style={{
-              fontFamily: "'Space Mono', monospace",
-              fontSize: 12.5,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "#e3ad2e",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 10,
-            }}
-          >
-            <span style={{ width: 22, height: 1, background: "#e3ad2e" }} />
-            Identificador com IA
-            <span style={{ width: 22, height: 1, background: "#e3ad2e" }} />
-          </div>
-          <h1
-            style={{
-              marginTop: 16,
-              fontFamily: "Georgia, serif",
-              fontWeight: 600,
-              fontSize: "clamp(26px,4vw,36px)",
-              color: "#f1e7d3",
-            }}
-          >
-            Descubra o que é sua pedra
-          </h1>
-          <p
-            style={{
-              marginTop: 12,
-              color: "#b4a99a",
-              fontSize: 15,
-              maxWidth: 420,
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            Envie uma foto e nossa inteligência artificial analisa cor, brilho e
-            textura para te dar uma primeira identificação.
-          </p>
-        </div>
-
-        <div
-          style={{
-            marginTop: 40,
-            background: "#211c28",
-            border: "1px solid rgba(240,230,210,0.14)",
-            borderRadius: 10,
-            padding: 26,
-          }}
-        >
-          {!imagem && (
-            <label
-              htmlFor="foto-pedra"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 12,
-                padding: "48px 20px",
-                border: "1.5px dashed rgba(240,230,210,0.28)",
-                borderRadius: 8,
-                cursor: "pointer",
-              }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                style={{ width: 34, height: 34, stroke: "#e3ad2e", strokeWidth: 1.6, fill: "none" }}
-              >
-                <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
-              </svg>
-              <span style={{ fontSize: 14, color: "#b4a99a" }}>
-                Toque para enviar a foto da sua pedra
-              </span>
-              <input
-                ref={inputRef}
-                id="foto-pedra"
-                type="file"
-                accept="image/*"
-                onChange={handleArquivo}
-                style={{ display: "none" }}
-              />
-            </label>
-          )}
-
-          {imagem && (
-            <div>
-              <div
-                style={{
-                  width: "100%",
-                  maxHeight: 320,
-                  borderRadius: 8,
-                  overflow: "hidden",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
-              >
-                <img
-                  src={imagem}
-                  alt="Foto da pedra enviada"
-                  style={{ width: "100%", display: "block", objectFit: "cover" }}
-                />
-              </div>
-
-              <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
-                <button
-                  onClick={limpar}
-                  style={{
-                    flex: 1,
-                    fontFamily: "'Space Mono', monospace",
-                    fontWeight: 700,
-                    fontSize: 13,
-                    background: "transparent",
-                    color: "#b4a99a",
-                    border: "1px solid rgba(240,230,210,0.28)",
-                    borderRadius: 4,
-                    padding: "13px 18px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Trocar foto
-                </button>
-                <button
-                  onClick={identificar}
-                  disabled={carregando}
-                  style={{
-                    flex: 2,
-                    fontFamily: "'Space Mono', monospace",
-                    fontWeight: 700,
-                    fontSize: 13,
-                    background: carregando ? "rgba(227,173,46,0.5)" : "#e3ad2e",
-                    color: "#241a06",
-                    border: "none",
-                    borderRadius: 4,
-                    padding: "13px 18px",
-                    cursor: carregando ? "default" : "pointer",
-                  }}
-                >
-                  {carregando ? "Analisando..." : "Identificar pedra"}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {erro && (
-            <p style={{ marginTop: 16, fontSize: 13.5, color: "#c24545", textAlign: "center" }}>
-              {erro}
-            </p>
-          )}
-        </div>
-
-        {resultado && (
-          <div
-            style={{
-              marginTop: 22,
-              background: "#211c28",
-              border: "1px solid rgba(47,158,110,0.35)",
-              borderRadius: 10,
-              padding: 26,
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                gap: 12,
-              }}
-            >
-              <div>
-                <span
-                  style={{
-                    fontFamily: "'Space Mono', monospace",
-                    fontSize: 10,
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.06em",
-                    color: "#2f9e6e",
-                  }}
-                >
-                  Resultado da análise
-                </span>
-                <h2
-                  style={{
-                    marginTop: 6,
-                    fontFamily: "Georgia, serif",
-                    fontSize: 22,
-                    color: "#f1e7d3",
-                  }}
-                >
-                  {resultado.nome_provavel}
-                </h2>
-              </div>
-              <span
-                style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: confiancaCor[resultado.confianca] || "#b4a99a",
-                  border: `1px solid ${confiancaCor[resultado.confianca] || "#b4a99a"}`,
-                  borderRadius: 20,
-                  padding: "4px 10px",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                confiança {resultado.confianca}
-              </span>
-            </div>
-
-            {resultado.nomes_alternativos?.length > 0 && (
-              <p style={{ marginTop: 10, fontSize: 13.5, color: "#b4a99a" }}>
-                Também pode ser: {resultado.nomes_alternativos.join(", ")}
-              </p>
-            )}
-
-            {resultado.caracteristicas?.length > 0 && (
-              <ul style={{ marginTop: 16, paddingLeft: 18, color: "#efe6d8", fontSize: 14 }}>
-                {resultado.caracteristicas.map((c, i) => (
-                  <li key={i} style={{ marginBottom: 6 }}>
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <div
-              style={{
-                marginTop: 18,
-                paddingTop: 16,
-                borderTop: "1px solid rgba(240,230,210,0.14)",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                  color: "#e3ad2e",
-                }}
-              >
-                Faixa de preço estimada
-              </span>
-              <p style={{ marginTop: 6, fontSize: 15, color: "#f1e7d3" }}>
-                {resultado.faixa_preco_brasil}
-              </p>
-            </div>
-
-            {resultado.observacao && (
-              <p style={{ marginTop: 16, fontSize: 12.5, color: "#5a4c3a" }}>
-                {resultado.observacao}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+</script>
+</body>
+</html>
