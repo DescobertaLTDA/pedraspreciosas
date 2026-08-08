@@ -96,7 +96,7 @@
         <h2>Catálogo das Pedras</h2>
         <p>200 páginas com fichas de identificação, fotos reais e faixas de preço do mercado.</p>
       </div>
-      <a class="dl-btn" data-file="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_catalogo_de_pedras.pdf" data-name="catalogo-das-pedras.pdf" href="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_catalogo_de_pedras.pdf" rel="noopener">
+      <a class="dl-btn" data-file="https://drive.google.com/uc?export=download&id=1vEyv6_-sKJB0lOHPes-gzjgWxlO7byyP" data-name="catalogo-das-pedras.pdf" href="https://drive.google.com/uc?export=download&id=1vEyv6_-sKJB0lOHPes-gzjgWxlO7byyP" target="_blank" rel="noopener">
         Baixar PDF
         <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
       </a>
@@ -111,7 +111,7 @@
         <h2>Onde Vender Suas Pedras</h2>
         <p>Lista de canais e contatos para transformar suas pedras identificadas em dinheiro.</p>
       </div>
-      <a class="dl-btn" data-file="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_onde_vender.pdf" data-name="onde-vender-suas-pedras.pdf" href="https://xnponpaibjftykfmxiyo.supabase.co/storage/v1/object/public/ebook/ebook_onde_vender.pdf" rel="noopener">
+      <a class="dl-btn" data-file="https://drive.google.com/uc?export=download&id=1EMQ-mGYjZ0U9LrykekKKf0zIjk6sttQC" data-name="onde-vender-suas-pedras.pdf" href="https://drive.google.com/uc?export=download&id=1EMQ-mGYjZ0U9LrykekKKf0zIjk6sttQC" target="_blank" rel="noopener">
         Baixar PDF
         <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
       </a>
@@ -168,76 +168,27 @@
   // signed URLs a partir da "chave" antes de exibir os botões.
 
   // ============================================================
-  // FORÇA O DOWNLOAD DE VERDADE, COM PROGRESSO REAL
-  // Como o PDF está em outro domínio (Supabase), o navegador
-  // ignora o atributo "download" e só abre o arquivo numa aba
-  // nova. Aqui a gente lê o arquivo em pedaços (stream),
-  // mostrando o % baixado, e só depois salva — assim o botão
-  // não fica "travado" durante o carregamento de arquivos grandes.
+  // DOWNLOAD VIA GOOGLE DRIVE
+  // Os arquivos agora estão hospedados no Google Drive, que NÃO
+  // permite fetch() a partir de outro domínio (bloqueio CORS), então
+  // não é mais possível mostrar um progresso real de download lendo
+  // o arquivo em pedaços. Em vez disso, deixamos o próprio Drive
+  // cuidar do download: o link "uc?export=download&id=..." faz o
+  // navegador baixar o arquivo direto (ou, se o Drive considerar o
+  // arquivo grande, mostrar a tela própria de confirmação de
+  // download — isso é normal e não é um erro).
   // ============================================================
   document.querySelectorAll('.dl-btn[data-file]').forEach(function(btn){
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      var url = btn.getAttribute('data-file');
-      var nome = btn.getAttribute('data-name') || 'ebook.pdf';
+    btn.addEventListener('click', function(){
       var textoOriginal = btn.innerHTML;
-
       btn.classList.add('loading');
-      btn.innerHTML = 'Baixando... 0%';
-
-      fetch(url)
-        .then(function(res){
-          if (!res.ok) throw new Error('Falha ao baixar');
-
-          var total = parseInt(res.headers.get('Content-Length') || '0', 10);
-
-          // Sem suporte a stream (navegador antigo) → cai pro método simples
-          if (!res.body || !res.body.getReader) {
-            return res.blob();
-          }
-
-          var reader = res.body.getReader();
-          var chunks = [];
-          var recebido = 0;
-
-          function ler(){
-            return reader.read().then(function(resultado){
-              if (resultado.done) {
-                return new Blob(chunks);
-              }
-              chunks.push(resultado.value);
-              recebido += resultado.value.length;
-
-              if (total) {
-                var pct = Math.round((recebido / total) * 100);
-                btn.innerHTML = 'Baixando... ' + pct + '%';
-              } else {
-                var mb = (recebido / 1048576).toFixed(1);
-                btn.innerHTML = 'Baixando... ' + mb + 'MB';
-              }
-              return ler();
-            });
-          }
-          return ler();
-        })
-        .then(function(blob){
-          var blobUrl = window.URL.createObjectURL(blob);
-          var a = document.createElement('a');
-          a.href = blobUrl;
-          a.download = nome;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(blobUrl);
-        })
-        .catch(function(){
-          // Se o navegador bloquear o fetch (raro), cai pro comportamento antigo
-          window.open(url, '_blank');
-        })
-        .finally(function(){
-          btn.classList.remove('loading');
-          btn.innerHTML = textoOriginal;
-        });
+      btn.innerHTML = 'Abrindo download...';
+      setTimeout(function(){
+        btn.classList.remove('loading');
+        btn.innerHTML = textoOriginal;
+      }, 1500);
+      // O navegador segue o href normalmente (target="_blank"),
+      // não usamos e.preventDefault() aqui.
     });
   });
 </script>
