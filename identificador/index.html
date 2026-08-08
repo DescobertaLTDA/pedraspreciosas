@@ -1,0 +1,372 @@
+import { useState, useRef } from "react";
+
+export default function IdentificadorPedras() {
+  const [imagem, setImagem] = useState(null);
+  const [base64, setBase64] = useState(null);
+  const [mediaType, setMediaType] = useState(null);
+  const [carregando, setCarregando] = useState(false);
+  const [resultado, setResultado] = useState(null);
+  const [erro, setErro] = useState(null);
+  const inputRef = useRef(null);
+
+  function handleArquivo(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    setResultado(null);
+    setErro(null);
+    setMediaType(file.type);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result;
+      setImagem(dataUrl);
+      setBase64(dataUrl.split(",")[1]);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function identificar() {
+    if (!base64) return;
+    setCarregando(true);
+    setErro(null);
+    setResultado(null);
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 1000,
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "image",
+                  source: { type: "base64", media_type: mediaType, data: base64 },
+                },
+                {
+                  type: "text",
+                  text:
+                    "Você é um especialista em gemologia e mineralogia. Olhe a foto dessa pedra e responda em português do Brasil, em formato JSON puro (sem markdown, sem crases), com as chaves: nome_provavel (string), nomes_alternativos (array de até 3 strings, outras possibilidades), caracteristicas (array de até 4 strings curtas sobre cor, brilho, textura), faixa_preco_brasil (string, estimativa em reais por grama ou por peça, deixando claro que é uma estimativa), confianca (string: alta, media ou baixa), observacao (string curta, avisando que uma avaliação profissional presencial é recomendada para confirmar autenticidade e valor).",
+                },
+              ],
+            },
+          ],
+        }),
+      });
+
+      const data = await response.json();
+      const textBlock = data?.content?.find((b) => b.type === "text");
+      if (!textBlock) throw new Error("Sem resposta de texto da API.");
+
+      const clean = textBlock.text.replace(/```json|```/g, "").trim();
+      const parsed = JSON.parse(clean);
+      setResultado(parsed);
+    } catch (e) {
+      setErro("Não foi possível identificar a pedra agora. Tente novamente com outra foto.");
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  function limpar() {
+    setImagem(null);
+    setBase64(null);
+    setResultado(null);
+    setErro(null);
+    if (inputRef.current) inputRef.current.value = "";
+  }
+
+  const confiancaCor = {
+    alta: "#2f9e6e",
+    media: "#e3ad2e",
+    baixa: "#c24545",
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#17151b",
+        color: "#efe6d8",
+        fontFamily: "Inter, sans-serif",
+        padding: "56px 20px 80px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse 700px 420px at 50% 0%, rgba(227,173,46,0.10), transparent 65%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div style={{ maxWidth: 560, margin: "0 auto", position: "relative" }}>
+        <div style={{ textAlign: "center" }}>
+          <div
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 12.5,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "#e3ad2e",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            <span style={{ width: 22, height: 1, background: "#e3ad2e" }} />
+            Identificador com IA
+            <span style={{ width: 22, height: 1, background: "#e3ad2e" }} />
+          </div>
+          <h1
+            style={{
+              marginTop: 16,
+              fontFamily: "Georgia, serif",
+              fontWeight: 600,
+              fontSize: "clamp(26px,4vw,36px)",
+              color: "#f1e7d3",
+            }}
+          >
+            Descubra o que é sua pedra
+          </h1>
+          <p
+            style={{
+              marginTop: 12,
+              color: "#b4a99a",
+              fontSize: 15,
+              maxWidth: 420,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            Envie uma foto e nossa inteligência artificial analisa cor, brilho e
+            textura para te dar uma primeira identificação.
+          </p>
+        </div>
+
+        <div
+          style={{
+            marginTop: 40,
+            background: "#211c28",
+            border: "1px solid rgba(240,230,210,0.14)",
+            borderRadius: 10,
+            padding: 26,
+          }}
+        >
+          {!imagem && (
+            <label
+              htmlFor="foto-pedra"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 12,
+                padding: "48px 20px",
+                border: "1.5px dashed rgba(240,230,210,0.28)",
+                borderRadius: 8,
+                cursor: "pointer",
+              }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                style={{ width: 34, height: 34, stroke: "#e3ad2e", strokeWidth: 1.6, fill: "none" }}
+              >
+                <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
+              </svg>
+              <span style={{ fontSize: 14, color: "#b4a99a" }}>
+                Toque para enviar a foto da sua pedra
+              </span>
+              <input
+                ref={inputRef}
+                id="foto-pedra"
+                type="file"
+                accept="image/*"
+                onChange={handleArquivo}
+                style={{ display: "none" }}
+              />
+            </label>
+          )}
+
+          {imagem && (
+            <div>
+              <div
+                style={{
+                  width: "100%",
+                  maxHeight: 320,
+                  borderRadius: 8,
+                  overflow: "hidden",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                <img
+                  src={imagem}
+                  alt="Foto da pedra enviada"
+                  style={{ width: "100%", display: "block", objectFit: "cover" }}
+                />
+              </div>
+
+              <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
+                <button
+                  onClick={limpar}
+                  style={{
+                    flex: 1,
+                    fontFamily: "'Space Mono', monospace",
+                    fontWeight: 700,
+                    fontSize: 13,
+                    background: "transparent",
+                    color: "#b4a99a",
+                    border: "1px solid rgba(240,230,210,0.28)",
+                    borderRadius: 4,
+                    padding: "13px 18px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Trocar foto
+                </button>
+                <button
+                  onClick={identificar}
+                  disabled={carregando}
+                  style={{
+                    flex: 2,
+                    fontFamily: "'Space Mono', monospace",
+                    fontWeight: 700,
+                    fontSize: 13,
+                    background: carregando ? "rgba(227,173,46,0.5)" : "#e3ad2e",
+                    color: "#241a06",
+                    border: "none",
+                    borderRadius: 4,
+                    padding: "13px 18px",
+                    cursor: carregando ? "default" : "pointer",
+                  }}
+                >
+                  {carregando ? "Analisando..." : "Identificar pedra"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {erro && (
+            <p style={{ marginTop: 16, fontSize: 13.5, color: "#c24545", textAlign: "center" }}>
+              {erro}
+            </p>
+          )}
+        </div>
+
+        {resultado && (
+          <div
+            style={{
+              marginTop: 22,
+              background: "#211c28",
+              border: "1px solid rgba(47,158,110,0.35)",
+              borderRadius: 10,
+              padding: 26,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                gap: 12,
+              }}
+            >
+              <div>
+                <span
+                  style={{
+                    fontFamily: "'Space Mono', monospace",
+                    fontSize: 10,
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    color: "#2f9e6e",
+                  }}
+                >
+                  Resultado da análise
+                </span>
+                <h2
+                  style={{
+                    marginTop: 6,
+                    fontFamily: "Georgia, serif",
+                    fontSize: 22,
+                    color: "#f1e7d3",
+                  }}
+                >
+                  {resultado.nome_provavel}
+                </h2>
+              </div>
+              <span
+                style={{
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: confiancaCor[resultado.confianca] || "#b4a99a",
+                  border: `1px solid ${confiancaCor[resultado.confianca] || "#b4a99a"}`,
+                  borderRadius: 20,
+                  padding: "4px 10px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                confiança {resultado.confianca}
+              </span>
+            </div>
+
+            {resultado.nomes_alternativos?.length > 0 && (
+              <p style={{ marginTop: 10, fontSize: 13.5, color: "#b4a99a" }}>
+                Também pode ser: {resultado.nomes_alternativos.join(", ")}
+              </p>
+            )}
+
+            {resultado.caracteristicas?.length > 0 && (
+              <ul style={{ marginTop: 16, paddingLeft: 18, color: "#efe6d8", fontSize: 14 }}>
+                {resultado.caracteristicas.map((c, i) => (
+                  <li key={i} style={{ marginBottom: 6 }}>
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div
+              style={{
+                marginTop: 18,
+                paddingTop: 16,
+                borderTop: "1px solid rgba(240,230,210,0.14)",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  color: "#e3ad2e",
+                }}
+              >
+                Faixa de preço estimada
+              </span>
+              <p style={{ marginTop: 6, fontSize: 15, color: "#f1e7d3" }}>
+                {resultado.faixa_preco_brasil}
+              </p>
+            </div>
+
+            {resultado.observacao && (
+              <p style={{ marginTop: 16, fontSize: 12.5, color: "#5a4c3a" }}>
+                {resultado.observacao}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
