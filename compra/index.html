@@ -54,6 +54,34 @@
 
   .note{margin-top:36px;text-align:center;font-size:13.5px;color:var(--ink-soft);font-family:'Space Mono',monospace;}
 
+  /* ===== BÔNUS SURPRESA ===== */
+  .extra-head{margin-top:64px;text-align:center;}
+  .extra-head .eyebrow{color:var(--emerald);}
+  .extra-head .eyebrow::before,.extra-head .eyebrow::after{background:var(--emerald);}
+  .extra-head h2{margin-top:14px;font-size:clamp(22px,3.6vw,28px);color:var(--parchment);}
+  .extra-head p{margin-top:10px;color:var(--ink-mute);font-size:15px;max-width:440px;margin-left:auto;margin-right:auto;}
+
+  .tools{margin-top:32px;display:grid;gap:18px;}
+
+  .tool-card{position:relative;background:linear-gradient(180deg, rgba(47,158,110,0.08), var(--bg-alt2) 55%);border:1px solid rgba(47,158,110,0.35);border-radius:10px;padding:24px 26px;display:grid;grid-template-columns:52px 1fr auto;gap:20px;align-items:center;overflow:hidden;}
+  .tool-card::before{content:'PRESENTE';position:absolute;top:-1px;right:18px;background:var(--emerald);color:#0f2117;font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:0.08em;padding:4px 10px 5px;border-radius:0 0 5px 5px;}
+
+  .tool-icon{width:52px;height:52px;border-radius:50%;background:rgba(47,158,110,0.14);border:1px solid rgba(47,158,110,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .tool-icon svg{width:24px;height:24px;stroke:var(--emerald);stroke-width:2;fill:none;}
+
+  .tool-info h2{font-size:17px;color:var(--parchment);margin-top:0;}
+  .tool-info p{margin-top:5px;color:var(--ink-mute);font-size:13.5px;max-width:340px;}
+
+  .tool-btn{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;background:var(--emerald);color:#0f2117;padding:12px 18px;border-radius:4px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap;box-shadow:0 8px 22px rgba(47,158,110,0.25);transition:transform .15s ease, box-shadow .15s ease;}
+  .tool-btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(47,158,110,0.32);}
+  .tool-btn svg{width:14px;height:14px;stroke:#0f2117;stroke-width:2.4;fill:none;}
+
+  @media(max-width:560px){
+    .tool-card{grid-template-columns:1fr;text-align:center;}
+    .tool-icon{margin:0 auto;}
+    .tool-btn{width:100%;justify-content:center;}
+  }
+
   @media(max-width:560px){
     .book-card{grid-template-columns:64px 1fr;grid-template-areas:"cover info" "cover btn";}
     .book-cover{grid-area:cover;width:64px;height:86px;}
@@ -119,7 +147,41 @@
 
   </div>
 
-  <p class="note">Problemas para abrir os arquivos? Fale com o suporte pelo WhatsApp.</p>
+  <div class="extra-head">
+    <div class="eyebrow">Bônus surpresa</div>
+    <h2>Ah, e tem mais um presente pra você</h2>
+    <p>Além dos dois ebooks, liberamos acesso a duas ferramentas que facilitam (e muito) a identificação das suas pedras no dia a dia.</p>
+  </div>
+
+  <div class="tools">
+
+    <div class="tool-card">
+      <div class="tool-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6-4-9s1.5-6.3 4-9z"/></svg></div>
+      <div class="tool-info">
+        <h2>Identificador de pedras online</h2>
+        <p>Ferramenta gratuita que te ajuda a reconhecer o tipo de pedra direto pelo navegador, sem precisar instalar nada.</p>
+      </div>
+      <a class="tool-btn" href="https://www.identifyrock.net/pt/tools/stone-identifier" target="_blank" rel="noopener">
+        Acessar site
+        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+      </a>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-icon"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+      <div class="tool-info">
+        <h2>App de identificação pelo celular</h2>
+        <p>Baixe o app gratuito, tire uma foto da pedra e receba sugestões de identificação na hora, direto do bolso.</p>
+      </div>
+      <a class="tool-btn" href="https://play.google.com/store/apps/details?id=com.picturerock.rock&hl=pt_BR" target="_blank" rel="noopener">
+        Baixar app
+        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+      </a>
+    </div>
+
+  </div>
+
+  <p class="note">Problemas para abrir os arquivos ou acessar os bônus? Fale com o suporte pelo WhatsApp.</p>
 
   </div>
   <!-- fim do estado "ok" -->
