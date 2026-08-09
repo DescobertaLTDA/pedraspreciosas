@@ -78,7 +78,11 @@
     <p>Envie uma foto e nossa inteligência artificial analisa cor, brilho e textura para te dar uma primeira identificação.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="acesso-negado" style="display:none;text-align:center;">
+    <p style="font-size:15px;color:var(--ink-mute);">Este link é exclusivo para quem adquiriu o identificador de pedras. Se você já comprou, use o link enviado no seu e-mail de confirmação.</p>
+  </div>
+
+  <div class="card" id="area-principal">
     <div class="dropzone" id="dropzone">
       <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
       <span>Toque para enviar a foto da sua pedra</span>
@@ -97,7 +101,7 @@
     <p class="erro" id="erro" style="display:none;"></p>
   </div>
 
-  <div class="resultado" id="resultado">
+  <div class="resultado" id="resultado" style="display:none;">
     <div class="resultado-head">
       <div>
         <div class="resultado-tag">Resultado da análise</div>
@@ -117,6 +121,32 @@
 </div>
 
 <script>
+  // ---- Verificação de acesso: reivindica o crédito da compra mais recente via cookie de sessão ----
+  var areaPrincipal = document.getElementById('area-principal');
+  var acessoNegadoEl = document.getElementById('acesso-negado');
+  var usosRestantesGlobal = null;
+  var limiteGlobal = null;
+
+  areaPrincipal.style.display = 'none';
+  acessoNegadoEl.style.display = 'none';
+
+  fetch('/api/reivindicar', { method: 'POST' })
+    .then(function(res){
+      return res.json().then(function(data){
+        if (!res.ok || data.error) throw new Error(data.error || 'Acesso negado');
+        return data;
+      });
+    })
+    .then(function(data){
+      usosRestantesGlobal = data.limite - data.usos;
+      limiteGlobal = data.limite;
+      areaPrincipal.style.display = 'block';
+    })
+    .catch(function(err){
+      acessoNegadoEl.querySelector('p').textContent = err.message;
+      acessoNegadoEl.style.display = 'block';
+    });
+
   var dropzone = document.getElementById('dropzone');
   var inputFoto = document.getElementById('input-foto');
   var preview = document.getElementById('preview');
@@ -180,15 +210,18 @@
       body: JSON.stringify({ base64: base64Atual, mediaType: mediaTypeAtual })
     })
     .then(function(res){
-      if (!res.ok) throw new Error('Falha na resposta');
-      return res.json();
+      return res.json().then(function(data){
+        if (!res.ok || data.error) {
+          throw new Error(data.error || 'Falha na resposta');
+        }
+        return data;
+      });
     })
     .then(function(data){
-      if (data.error) throw new Error(data.error);
       mostrarResultado(data);
     })
-    .catch(function(){
-      erroEl.textContent = 'Não foi possível identificar a pedra agora. Tente novamente com outra foto.';
+    .catch(function(err){
+      erroEl.textContent = err.message || 'Não foi possível identificar a pedra agora. Tente novamente com outra foto.';
       erroEl.style.display = 'block';
     })
     .finally(function(){
@@ -223,6 +256,14 @@
 
     document.getElementById('res-preco').textContent = data.faixa_preco_brasil || '';
     document.getElementById('res-observacao').textContent = data.observacao || '';
+
+    if (typeof data.usos_restantes === 'number') {
+      var obsEl = document.getElementById('res-observacao');
+      var contadorTexto = data.usos_restantes > 0
+        ? 'Você ainda tem ' + data.usos_restantes + ' avaliação(ões) disponível(is).'
+        : 'Essa era sua última avaliação disponível.';
+      obsEl.textContent += ' ' + contadorTexto;
+    }
 
     resultadoEl.classList.add('active');
   }

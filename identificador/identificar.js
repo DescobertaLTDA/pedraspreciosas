@@ -1,29 +1,35 @@
 // /api/identificar.js
 // Endpoint serverless (Vercel) para identificação de pedras via IA (Claude API)
-// Controla acesso por token de comprador + limite de usos via Supabase
+// Controla acesso via cookie de sessão (vinculado a uma compra pela rota /api/reivindicar)
 
 const { createClient } = require('@supabase/supabase-js');
 
-const LIMITE_PADRAO = 3; // quantas identificações cada comprador pode fazer
-
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY // service_role, nunca a anon key aqui
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
+
+function lerCookie(req, nome) {
+  const cabecalho = req.headers.cookie || '';
+  const partes = cabecalho.split(';').map(function (p) { return p.trim(); });
+  for (const parte of partes) {
+    if (parte.indexOf(nome + '=') === 0) {
+      return decodeURIComponent(parte.slice(nome.length + 1));
+    }
+  }
+  return null;
+}
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  const { base64, mediaType, token } = req.body || {};
+  const { base64, mediaType } = req.body || {};
 
   // ---- 1. Validações básicas de entrada ----
   if (!base64 || !mediaType) {
     return res.status(400).json({ error: 'Foto não enviada corretamente' });
-  }
-  if (!token) {
-    return res.status(401).json({ error: 'Acesso não autorizado' });
   }
 
   const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
@@ -31,44 +37,32 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Formato de imagem não suportado' });
   }
 
-  // limite simples de tamanho (evita base64 gigante — ~8MB antes de encode)
   if (base64.length > 11_000_000) {
     return res.status(400).json({ error: 'Imagem muito grande. Envie uma foto menor.' });
   }
 
+  const sessaoId = lerCookie(req, 'sessao_pedra');
+  if (!sessaoId) {
+    return res.status(401).json({ error: 'Acesso não autorizado. Volte para a página inicial.' });
+  }
+
   try {
-    // ---- 2. Verificar/criar registro de uso desse token ----
-    let { data: registro, error: erroBusca } = await supabase
-      .from('identificacoes_uso')
+    // ---- 2. Buscar o crédito vinculado a essa sessão ----
+    const { data: registro, error: erroBusca } = await supabase
+      .from('creditos_avaliacao')
       .select('*')
-      .eq('token_comprador', token)
+      .eq('sessao_id', sessaoId)
+      .eq('status', 'reivindicado')
       .single();
 
-    if (erroBusca && erroBusca.code !== 'PGRST116') {
-      // erro real de banco (PGRST116 = não encontrado, esse é esperado na 1ª vez)
-      console.error('Erro Supabase (busca):', erroBusca);
-      return res.status(500).json({ error: 'Erro ao verificar acesso' });
-    }
-
-    if (!registro) {
-      // primeiro acesso desse token — cria o registro
-      const { data: novoRegistro, error: erroInsert } = await supabase
-        .from('identificacoes_uso')
-        .insert({ token_comprador: token, usos: 0, limite: LIMITE_PADRAO })
-        .select()
-        .single();
-
-      if (erroInsert) {
-        console.error('Erro Supabase (insert):', erroInsert);
-        return res.status(500).json({ error: 'Erro ao registrar acesso' });
-      }
-      registro = novoRegistro;
+    if (erroBusca || !registro) {
+      return res.status(401).json({ error: 'Acesso não autorizado. Volte para a página inicial.' });
     }
 
     // ---- 3. Checar limite ----
     if (registro.usos >= registro.limite) {
       return res.status(403).json({
-        error: `Você já usou suas ${registro.limite} identificações disponíveis.`
+        error: 'Você já usou suas ' + registro.limite + ' identificações disponíveis.'
       });
     }
 
@@ -139,18 +133,15 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
 
     // ---- 5. Incrementar contador de uso (só depois de sucesso) ----
     const { error: erroUpdate } = await supabase
-      .from('identificacoes_uso')
-      .update({
-        usos: registro.usos + 1,
-        ultimo_uso: new Date().toISOString()
-      })
-      .eq('token_comprador', token);
+      .from('creditos_avaliacao')
+      .update({ usos: registro.usos + 1 })
+      .eq('sessao_id', sessaoId);
 
     if (erroUpdate) {
       console.error('Erro Supabase (update):', erroUpdate);
-      // não bloqueia a resposta ao usuário por causa disso, só loga
     }
 
+    resultado.usos_restantes = registro.limite - (registro.usos + 1);
     return res.status(200).json(resultado);
 
   } catch (err) {
