@@ -36,6 +36,7 @@
   .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--citrino);box-shadow:0 0 10px var(--citrino);}
   .nav-cta{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;background:var(--citrino);color:#241a06;padding:9px 16px;border-radius:4px;border:none;cursor:pointer;}
   .nav-user{font-family:'Space Mono',monospace;font-size:11.5px;color:var(--ink-mute);display:flex;align-items:center;gap:10px;}
+  .nav-saldo{color:var(--citrino);font-weight:700;white-space:nowrap;}
   .nav-user .nav-sair{background:transparent;border:1px solid var(--line-strong);color:var(--ink-mute);font-family:'Space Mono',monospace;font-size:11px;padding:7px 12px;border-radius:4px;cursor:pointer;}
   .nav-hidden{display:none;}
 
@@ -218,13 +219,18 @@
     painelPagar.classList.remove('active');
   }
 
-  // ---- Header: mostra "Entrar / Registrar" ou e-mail + "Sair" ----
+  // ---- Header: mostra "Entrar / Registrar" ou e-mail + saldo + "Sair" ----
+  function formatarReais(valor){
+    return 'R$ ' + Number(valor).toFixed(2).replace('.', ',');
+  }
+
   function atualizarHeader(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
       if (sessao && sessao.user) {
         headerAuthArea.innerHTML =
           '<div class="nav-user"><span>' + sessao.user.email + '</span>' +
+          '<span class="nav-saldo" id="nav-saldo">···</span>' +
           '<button class="nav-sair" id="btn-header-sair">Sair</button></div>';
         document.getElementById('btn-header-sair').addEventListener('click', function(){
           supa.auth.signOut().then(function(){
@@ -232,6 +238,18 @@
             atualizarHeader();
           });
         });
+
+        fetch('/api/status', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + sessao.access_token }
+        })
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          var saldoEl = document.getElementById('nav-saldo');
+          if (!saldoEl) return;
+          saldoEl.textContent = data.pago ? formatarReais(data.saldo) + ' de saldo' : 'sem saldo';
+        })
+        .catch(function(){});
       } else {
         headerAuthArea.innerHTML = '<button class="nav-cta" id="btn-header-entrar">Entrar / Registrar</button>';
         document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
@@ -398,6 +416,7 @@
     })
     .then(function(data){
       mostrarResultado(data);
+      atualizarHeader();
     })
     .catch(function(err){
       erroEl.textContent = err.message || 'Não foi possível identificar a pedra agora. Tente novamente.';
