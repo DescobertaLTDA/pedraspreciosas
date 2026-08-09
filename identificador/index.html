@@ -523,6 +523,7 @@
   var btnJaPaguei = document.getElementById('btn-ja-paguei');
   var premiumConteudo = document.getElementById('premium-conteudo');
   var premiumPreview = document.getElementById('premium-preview');
+  var areaOferta = document.getElementById('area-oferta');
   var identificacaoIdAtual = null;
 
   var sidebar = document.getElementById('sidebar');
@@ -614,11 +615,15 @@
           if (saldoEl) saldoEl.textContent = valorSaldo;
           var saldoDropdownEl = document.getElementById('nav-dropdown-saldo');
           if (saldoDropdownEl) saldoDropdownEl.innerHTML = '<strong>' + valorSaldo + '</strong> de saldo';
+
+          // Já tem pacote com leituras disponíveis: some com o card de compra
+          if (areaOferta) areaOferta.style.display = (data.pago && data.saldo > 0) ? 'none' : '';
         })
         .catch(function(){});
       } else {
         headerAuthArea.innerHTML = '<button class="nav-cta" id="btn-header-entrar">Entrar / Registrar</button>';
         document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
+        if (areaOferta) areaOferta.style.display = '';
       }
     });
   }
