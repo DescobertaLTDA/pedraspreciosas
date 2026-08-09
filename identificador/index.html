@@ -11,122 +11,178 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{
-    --bg:#17151b;
-    --bg-alt2:#211c28;
-    --parchment:#f1e7d3;
-    --ink:#2a2118;
-    --ink-light:#efe6d8;
-    --ink-mute:#b4a99a;
-    --ink-mute2:#7a6c58;
-    --ink-soft:#5a4c3a;
-    --citrino:#e3ad2e;
-    --emerald:#2f9e6e;
-    --danger:#c24545;
-    --line:rgba(240,230,210,0.14);
-    --line-strong:rgba(240,230,210,0.28);
+    --bg:#f7f2e7;
+    --card:#ffffff;
+    --card-alt:#f2ece0;
+    --ink:#241c12;
+    --ink-light:#241c12;
+    --ink-mute:#6b5c47;
+    --ink-mute2:#8c7d66;
+    --ink-soft:#4a3c29;
+    --accent:#a8502a;
+    --accent-dark:#7c3a1e;
+    --accent-light:#f4e2ce;
+    --emerald:#2f8f5e;
+    --danger:#c0392b;
+    --line:rgba(36,28,18,0.12);
+    --line-strong:rgba(36,28,18,0.22);
   }
-  body{background:var(--parchment);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:0 0 80px;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 700px 420px at 50% 0%, rgba(227,173,46,0.14), transparent 65%);pointer-events:none;}
-  h1,h2{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
-  .wrap{max-width:560px;margin:0 auto;position:relative;padding:56px 20px 0;}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:0 0 60px;overflow-x:hidden;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;color:var(--ink);}
+  .wrap{max-width:600px;margin:0 auto;position:relative;padding:44px 20px 0;}
 
-  header{position:sticky;top:0;z-index:50;background:rgba(23,21,27,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-  .nav-wrap{max-width:560px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;}
-  .logo{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:var(--parchment);white-space:nowrap;flex-shrink:0;}
-  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--citrino);box-shadow:0 0 10px var(--citrino);flex-shrink:0;}
-  .nav-cta{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;background:var(--citrino);color:#241a06;padding:9px 14px;border-radius:4px;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;}
-  .nav-user{font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-mute);display:flex;align-items:center;gap:8px;min-width:0;}
-  .nav-user .nav-email{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:90px;}
-  .nav-saldo{color:var(--citrino);font-weight:700;white-space:nowrap;flex-shrink:0;}
-  .nav-user .nav-sair{background:transparent;border:1px solid var(--line-strong);color:var(--ink-mute);font-family:'Space Mono',monospace;font-size:11px;padding:7px 12px;border-radius:4px;cursor:pointer;flex-shrink:0;white-space:nowrap;}
-  .nav-hidden{display:none;}
+  header{position:sticky;top:0;z-index:50;background:rgba(247,242,231,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .nav-wrap{max-width:600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 20px;}
+  .logo{display:flex;align-items:center;gap:8px;font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink);white-space:nowrap;flex-shrink:0;}
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+  .nav-right{display:flex;align-items:center;gap:14px;}
+  .nav-link{font-size:13px;color:var(--ink-mute);text-decoration:none;white-space:nowrap;cursor:pointer;}
+  .nav-cta{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;background:#fff;color:var(--ink);padding:9px 14px;border-radius:6px;border:1px solid var(--line-strong);cursor:pointer;white-space:nowrap;flex-shrink:0;}
+  .nav-user{font-family:'Inter',sans-serif;font-size:12px;color:var(--ink-mute);display:flex;align-items:center;gap:8px;min-width:0;}
+  .nav-user .nav-email{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:90px;font-weight:600;color:var(--ink);}
+  .nav-saldo{color:var(--accent-dark);font-weight:700;white-space:nowrap;flex-shrink:0;font-size:11.5px;}
+  .nav-user .nav-sair{background:transparent;border:1px solid var(--line-strong);color:var(--ink-mute);font-family:'Inter',sans-serif;font-size:11px;padding:7px 10px;border-radius:5px;cursor:pointer;flex-shrink:0;white-space:nowrap;}
   @media (max-width:420px){
-    .nav-user .nav-email{max-width:70px;}
-    .logo{font-size:12px;}
+    .nav-user .nav-email{max-width:64px;}
+    .logo{font-size:14px;}
+    .nav-link{display:none;}
   }
 
   .head{text-align:center;}
-  .eyebrow{font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;gap:10px;}
-  .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--citrino);}
-  .head h1{margin-top:16px;font-size:clamp(26px,4vw,36px);color:var(--ink);}
-  .head p{margin-top:12px;color:var(--ink-mute2);font-size:15px;max-width:420px;margin-left:auto;margin-right:auto;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;justify-content:center;gap:10px;}
+  .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--accent);}
+  .head h1{margin-top:16px;font-size:clamp(30px,6vw,44px);}
+  .head p{margin-top:14px;color:var(--ink-mute);font-size:15.5px;max-width:440px;margin-left:auto;margin-right:auto;}
 
-  .card{margin-top:40px;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:26px;}
+  .card{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(36,28,18,0.03);}
+  .card h2{font-size:21px;text-align:center;}
 
-  .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:48px 20px;border:1.5px dashed var(--line-strong);border-radius:8px;cursor:pointer;transition:border-color .2s ease;}
-  .dropzone:hover{border-color:var(--citrino);}
-  .dropzone svg{width:34px;height:34px;stroke:var(--citrino);stroke-width:1.6;fill:none;}
-  .dropzone span{font-size:14px;color:var(--ink-mute);text-align:center;}
+  .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:44px 20px;border:1.5px dashed var(--line-strong);border-radius:10px;cursor:pointer;transition:border-color .2s ease, background .2s ease;background:var(--card-alt);}
+  .dropzone:hover{border-color:var(--accent);}
+  .dz-icon{width:64px;height:64px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;}
+  .dropzone svg{width:28px;height:28px;stroke:var(--accent);stroke-width:1.7;fill:none;}
+  .dropzone strong{font-family:'Fraunces',serif;font-size:17px;color:var(--ink);font-weight:600;}
+  .dropzone span{font-size:13.5px;color:var(--ink-mute);text-align:center;max-width:280px;}
   input[type=file]{display:none;}
 
-  .preview{width:100%;max-height:320px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+  .preview{width:100%;max-height:320px;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
   .preview img{width:100%;display:block;object-fit:cover;}
 
   .actions{display:flex;gap:12px;margin-top:18px;}
-  .btn{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;border-radius:4px;padding:13px 18px;cursor:pointer;border:none;}
+  .btn{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;border-radius:7px;padding:13px 18px;cursor:pointer;border:none;}
   .btn-secondary{flex:1;background:transparent;color:var(--ink-mute);border:1px solid var(--line-strong);}
-  .btn-primary{flex:2;background:var(--citrino);color:#241a06;}
-  .btn-primary:disabled{opacity:0.6;cursor:default;}
+  .btn-primary{flex:2;background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:var(--accent-dark);}
+  .btn-primary:disabled{opacity:0.55;cursor:default;}
   .btn-block{width:100%;}
 
   .erro{margin-top:16px;font-size:13.5px;color:var(--danger);text-align:center;}
   .aviso{margin-top:16px;font-size:13px;color:var(--ink-mute);text-align:center;}
 
-  .resultado{margin-top:22px;background:var(--bg-alt2);border:1px solid rgba(47,158,110,0.35);border-radius:10px;padding:26px;display:none;}
+  /* --- oferta / pacote de leituras --- */
+  .oferta{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;display:flex;flex-direction:column;}
+  .oferta-img{background:linear-gradient(135deg,var(--accent-light),#fff);padding:26px;display:flex;align-items:center;justify-content:center;}
+  .oferta-img svg{width:64px;height:64px;stroke:var(--accent);stroke-width:1.5;fill:none;}
+  .oferta-body{padding:26px;}
+  .oferta-body h2{font-size:23px;text-align:left;}
+  .oferta-body h2 em{font-style:normal;color:var(--accent);}
+  .oferta-lista{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+  .oferta-lista li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft);}
+  .oferta-lista .ico{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;}
+  .oferta-preco{margin-top:20px;display:flex;align-items:baseline;gap:8px;}
+  .oferta-preco .valor{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--ink);}
+  .oferta-preco .desc{font-size:12.5px;color:var(--ink-mute);}
+  .oferta-body .btn-primary{margin-top:16px;}
+
+  /* --- passos --- */
+  .passos{list-style:none;margin-top:20px;display:flex;flex-direction:column;}
+  .passo{display:flex;gap:16px;padding-bottom:22px;position:relative;}
+  .passo:not(:last-child)::before{content:'';position:absolute;left:14px;top:30px;bottom:0;width:1px;background:var(--line-strong);}
+  .passo-num{width:29px;height:29px;border-radius:50%;background:var(--accent);color:#fff;font-family:'Space Mono',monospace;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .passo-txt h3{font-size:15.5px;margin-bottom:4px;}
+  .passo-txt p{font-size:13.8px;color:var(--ink-mute);}
+
+  .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(47,143,94,0.3);border-radius:14px;padding:26px;display:none;}
   .resultado.active{display:block;}
   .resultado-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
   .resultado-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--emerald);}
-  .resultado h2{margin-top:6px;font-size:22px;color:var(--parchment);}
+  .resultado h2{margin-top:6px;font-size:22px;text-align:left;color:var(--ink);}
   .confianca{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;border-radius:20px;padding:4px 10px;white-space:nowrap;border:1px solid currentColor;}
   .alternativos{margin-top:10px;font-size:13.5px;color:var(--ink-mute);}
-  .caracteristicas{margin-top:16px;padding-left:18px;font-size:14px;color:var(--ink-mute);}
+  .caracteristicas{margin-top:16px;padding-left:18px;font-size:14px;color:var(--ink-soft);}
   .caracteristicas li{margin-bottom:6px;}
   .preco-box{padding-top:16px;}
   .preco-box + .preco-box{margin-top:14px;}
-  .preco-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--citrino);}
-  .preco-valor{margin-top:6px;font-size:15px;color:var(--parchment);}
+  .preco-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);}
+  .preco-valor{margin-top:6px;font-size:15px;color:var(--ink);}
   .observacao{margin-top:16px;font-size:12.5px;color:var(--ink-mute);}
 
-  /* --- bloco premium: preço + onde vender, borrado até pagar --- */
+  /* --- bloco premium: preço + onde vender, borrado até comprar --- */
   .premium-section{position:relative;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
   .premium-conteudo.bloqueado{filter:blur(7px);user-select:none;pointer-events:none;}
-  .desbloqueio-overlay{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:18px;border-radius:8px;background:linear-gradient(to bottom, rgba(33,28,40,0.35), rgba(33,28,40,0.94) 45%);}
+  .desbloqueio-overlay{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:18px;border-radius:10px;background:linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.96) 42%);}
   .desbloqueio-overlay.active{display:flex;}
-  .desbloqueio-overlay svg{width:22px;height:22px;stroke:var(--citrino);stroke-width:1.8;fill:none;margin-bottom:2px;}
+  .desbloqueio-overlay svg{width:22px;height:22px;stroke:var(--accent);stroke-width:1.8;fill:none;margin-bottom:2px;}
   .desbloqueio-overlay p{font-size:13px;color:var(--ink-mute);max-width:280px;}
-  .desbloqueio-overlay .preco-destaque{font-size:24px;margin:2px 0 4px;}
+  .desbloqueio-overlay .preco-destaque{font-size:26px;margin:2px 0 0;font-family:'Fraunces',serif;color:var(--ink);}
+  .desbloqueio-overlay .preco-sub{font-size:11.5px;color:var(--ink-mute2);margin-bottom:8px;}
   .desbloqueio-overlay .btn{padding:12px 22px;}
 
-  .carregando .btn-primary{background:rgba(227,173,46,0.5);}
+  .carregando .btn-primary{background:rgba(168,80,42,0.5);}
 
   /* --- login / paywall --- */
-  .painel-acesso{margin-top:22px;display:none;}
+  .painel-acesso{margin-top:26px;display:none;}
   .painel-acesso.active{display:block;}
-  .painel-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--citrino);margin-bottom:14px;}
+  .painel-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);margin-bottom:14px;}
   .campo{margin-bottom:12px;}
   .campo label{display:block;font-size:12.5px;color:var(--ink-mute);margin-bottom:6px;}
-  .campo input{width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:12px;color:var(--ink-light);font-size:14px;}
-  .campo input:focus{outline:none;border-color:var(--citrino);}
+  .campo input{width:100%;background:var(--card-alt);border:1px solid var(--line-strong);border-radius:7px;padding:12px;color:var(--ink);font-size:14px;}
+  .campo input:focus{outline:none;border-color:var(--accent);}
   .troca-modo{margin-top:10px;font-size:12.5px;color:var(--ink-mute);text-align:center;cursor:pointer;text-decoration:underline;}
-  .link-historico{background:transparent;border:1px solid var(--line-strong);color:var(--ink-mute);font-family:'Space Mono',monospace;font-size:10.5px;padding:6px 10px;border-radius:4px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+  .link-historico{background:transparent;border:1px solid var(--line-strong);color:var(--ink-mute);font-family:'Inter',sans-serif;font-size:10.5px;padding:6px 10px;border-radius:5px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
   .historico-lista{display:flex;flex-direction:column;gap:10px;}
-  .historico-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;cursor:pointer;transition:border-color .2s ease;}
-  .historico-item:hover{border-color:var(--citrino);}
-  .historico-nome{font-size:14px;color:var(--ink-light);font-weight:600;}
+  .historico-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:var(--card-alt);border:1px solid var(--line);border-radius:8px;cursor:pointer;transition:border-color .2s ease;}
+  .historico-item:hover{border-color:var(--accent);}
+  .historico-nome{font-size:14px;color:var(--ink);font-weight:600;}
   .historico-data{font-size:11.5px;color:var(--ink-mute2);margin-top:2px;}
   .historico-badge{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;text-transform:uppercase;padding:4px 8px;border-radius:20px;white-space:nowrap;border:1px solid currentColor;}
   .historico-badge.pago{color:var(--emerald);}
   .historico-badge.bloqueado{color:var(--ink-mute);}
-  .selo-logado{font-size:12.5px;color:var(--emerald);margin-bottom:14px;}
-  .preco-destaque{font-size:26px;color:var(--parchment);margin:8px 0 16px;}
+
+  /* --- seções de conteúdo --- */
+  .conteudo{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;}
+  .conteudo h2{font-size:21px;margin-bottom:14px;}
+  .conteudo p{font-size:14px;color:var(--ink-mute);margin-bottom:12px;}
+  .conteudo p:last-child{margin-bottom:0;}
+  .conteudo strong{color:var(--ink);}
+
+  .faq-item{background:var(--card-alt);border:1px solid var(--line);border-radius:9px;padding:16px 18px;}
+  .faq-item + .faq-item{margin-top:10px;}
+  .faq-item h3{font-size:14.5px;margin-bottom:6px;}
+  .faq-item p{font-size:13.5px;color:var(--ink-mute);margin:0;}
+
+  .cta-final{margin-top:32px;background:var(--card-alt);border:1px solid var(--line);border-radius:14px;padding:30px 24px;text-align:center;}
+  .cta-final h2{font-size:20px;}
+  .cta-final p{margin-top:8px;font-size:13.5px;color:var(--ink-mute);}
+  .cta-final .btn{margin-top:16px;}
+
+  footer{max-width:600px;margin:40px auto 0;padding:26px 20px 0;border-top:1px solid var(--line);}
+  footer .logo{margin-bottom:8px;}
+  footer p{font-size:13px;color:var(--ink-mute);max-width:360px;}
+  footer .foot-links{margin-top:18px;display:flex;gap:22px;flex-wrap:wrap;}
+  footer .foot-links a{font-size:12.5px;color:var(--ink-mute);text-decoration:none;}
+  footer .foot-links a:hover{color:var(--accent-dark);}
 </style>
 </head>
 <body>
 <header>
   <div class="nav-wrap">
     <div class="logo"><span class="dot"></span>Tesouro Esquecido</div>
-    <div id="header-auth-area">
-      <button class="nav-cta" id="btn-header-entrar">Entrar / Registrar</button>
+    <div class="nav-right">
+      <a class="nav-link" id="nav-link-precos">Preços</a>
+      <div id="header-auth-area">
+        <button class="nav-cta" id="btn-header-entrar">Entrar / Registrar</button>
+      </div>
     </div>
   </div>
 </header>
@@ -135,14 +191,15 @@
   <div class="head">
     <div class="eyebrow">Identificador com IA</div>
     <h1>Descubra o que é sua pedra</h1>
-    <p>Envie uma foto e nossa inteligência artificial analisa cor, brilho e textura para te dar uma primeira identificação.</p>
+    <p>Envie uma foto e nossa inteligência artificial identifica o tipo de pedra, o valor de mercado estimado e onde vender. Sem assinatura — você compra apenas o acesso que for usar.</p>
   </div>
 
   <!-- Upload livre, sem trava -->
   <div class="card" id="area-principal">
     <div class="dropzone" id="dropzone">
-      <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
-      <span>Toque para enviar a foto da sua pedra</span>
+      <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
+      <strong>Envie a foto da sua pedra</strong>
+      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão.</span>
       <input type="file" id="input-foto" accept="image/*">
     </div>
 
@@ -156,6 +213,26 @@
     </div>
 
     <p class="erro" id="erro" style="display:none;"></p>
+  </div>
+
+  <!-- Oferta: pacote de leituras -->
+  <div class="oferta" id="area-oferta">
+    <div class="oferta-img">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12l3 3 5-6"/></svg>
+    </div>
+    <div class="oferta-body">
+      <h2>Desbloqueie o valor <em>real</em> da sua pedra</h2>
+      <ul class="oferta-lista">
+        <li><span class="ico">✓</span>Faixa de preço estimada de mercado</li>
+        <li><span class="ico">✓</span>Sugestões de onde vender</li>
+        <li><span class="ico">✓</span>Histórico salvo na sua conta</li>
+      </ul>
+      <div class="oferta-preco">
+        <span class="valor">R$ 9,99</span>
+        <span class="desc">acesso a 10 leituras · sem mensalidade, sem prazo de expiração</span>
+      </div>
+      <button class="btn btn-primary btn-block" id="btn-comprar-early">Comprar acesso</button>
+    </div>
   </div>
 
   <!-- Painel de login/cadastro (aparece quando clica em "Ver resultado" sem estar logado) -->
@@ -211,23 +288,122 @@
       <div class="desbloqueio-overlay" id="desbloqueio-overlay">
         <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
         <p>Valor de mercado estimado e onde vender essa pedra</p>
-        <div class="preco-destaque">R$ 17,90</div>
-        <button class="btn btn-primary" id="btn-pagar">Desbloquear agora</button>
-        <button class="troca-modo" id="btn-ja-paguei" style="margin-top:2px;">Já paguei, atualizar resultado</button>
+        <div class="preco-destaque">R$ 9,99</div>
+        <div class="preco-sub">acesso a 10 leituras · sem assinatura</div>
+        <button class="btn btn-primary" id="btn-pagar">Comprar acesso</button>
+        <button class="troca-modo" id="btn-ja-paguei" style="margin-top:2px;">Já comprei, atualizar resultado</button>
       </div>
     </div>
 
     <p class="observacao" id="res-observacao"></p>
   </div>
 
+  <!-- Como usar -->
+  <div class="card">
+    <h2>Como Usar o Identificador de Pedras</h2>
+    <ul class="passos">
+      <li class="passo">
+        <span class="passo-num">1</span>
+        <div class="passo-txt">
+          <h3>Envie uma foto nítida</h3>
+          <p>Toque em "Envie a foto da sua pedra" e escolha uma imagem bem focada. Luz natural ajuda a mostrar as cores reais e a translucidez, especialmente em pedras semipreciosas.</p>
+        </div>
+      </li>
+      <li class="passo">
+        <span class="passo-num">2</span>
+        <div class="passo-txt">
+          <h3>Veja a identificação na hora</h3>
+          <p>Em segundos você recebe o nome provável da pedra, o nível de confiança da análise e as características observadas.</p>
+        </div>
+      </li>
+      <li class="passo">
+        <span class="passo-num">3</span>
+        <div class="passo-txt">
+          <h3>Compre acesso quando quiser mais</h3>
+          <p>Por R$ 9,99 você desbloqueia 10 leituras completas — com valor de mercado estimado e onde vender. Sem mensalidade, sem prazo de expiração.</p>
+        </div>
+      </li>
+      <li class="passo">
+        <span class="passo-num">4</span>
+        <div class="passo-txt">
+          <h3>Descubra o valor e onde vender</h3>
+          <p>Cada leitura desbloqueada mostra a faixa de preço estimada e sugestões de onde negociar sua pedra.</p>
+        </div>
+      </li>
+      <li class="passo" style="padding-bottom:0;">
+        <span class="passo-num">5</span>
+        <div class="passo-txt">
+          <h3>Guarde tudo na sua conta</h3>
+          <p>Crie uma conta gratuita para salvar seu histórico e revisitar identificações anteriores sem gastar uma nova leitura.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Conteúdo: explicação -->
+  <div class="conteudo">
+    <h2>Pedra ou Rocha? Existe Diferença?</h2>
+    <p>No dia a dia, usamos as duas palavras como sinônimos, mas há uma distinção que ajuda na identificação. <strong>Rocha</strong> é o termo geológico para o material sólido da crosta terrestre — pense em montanhas e afloramentos. <strong>Pedra</strong> costuma se referir a um fragmento menor, muitas vezes removido do seu local de origem e desgastado pela água, pelo tempo ou por mãos humanas.</p>
+    <p>Nosso identificador reconhece as duas coisas: seja um pedaço bruto de granito encontrado numa trilha ou uma gema já lapidada, a IA analisa cor, brilho, transparência e textura para sugerir a composição mineral mais provável.</p>
+  </div>
+
+  <div class="conteudo">
+    <h2>Como a IA Analisa a Sua Pedra</h2>
+    <p><strong>Cor e transparência:</strong> a pedra é opaca, translúcida ou transparente? Esse é o primeiro critério observado — mas isoladamente não basta, já que um mesmo mineral pode aparecer em várias cores.</p>
+    <p><strong>Brilho e efeitos ópticos:</strong> reflexos como o "olho de gato" ou o brilho azulado de certas pedras luares são pistas importantes que a IA foi treinada para reconhecer.</p>
+    <p><strong>Textura e inclusões:</strong> superfícies lisas, ásperas, vítreas ou foscas, além de padrões internos, ajudam a diferenciar pedras que à primeira vista parecem semelhantes.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="conteudo">
+    <h2>Perguntas Frequentes</h2>
+    <div class="faq-item">
+      <h3>O identificador de pedras é gratuito?</h3>
+      <p>Não. Você pode enviar sua foto e ver a identificação inicial sem custo, mas para saber o valor de mercado estimado e onde vender, é preciso comprar acesso. Não trabalhamos com assinatura: você paga R$ 9,99 por um pacote de 10 leituras, sem prazo de expiração.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Como funciona o pacote de 10 leituras?</h3>
+      <p>Ao comprar, você desbloqueia o valor estimado e onde vender em até 10 identificações. As leituras ficam disponíveis na sua conta até você usá-las, sem cobrança recorrente.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Preciso de conta para usar?</h3>
+      <p>Sim, é necessário criar uma conta gratuita com e-mail e senha para ver os resultados e comprar acesso. Isso também permite salvar seu histórico de identificações.</p>
+    </div>
+    <div class="faq-item">
+      <h3>A ferramenta funciona em celulares?</h3>
+      <p>Sim. É uma aplicação web otimizada para navegadores móveis — basta tirar a foto ou carregá-la direto do seu telefone.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Qual a diferença entre um cristal e uma pedra?</h3>
+      <p>Pedra é um termo geral para um fragmento de rocha. Cristal é um material sólido cujos átomos estão organizados numa estrutura ordenada. Muitas pedras, como o quartzo, são de fato cristais — e nossa ferramenta identifica ambos.</p>
+    </div>
+  </div>
+
+  <div class="cta-final">
+    <h2>Tudo pronto para identificar sua pedra?</h2>
+    <p>Envie uma foto nítida e receba a identificação em segundos.</p>
+    <button class="btn btn-primary" id="btn-cta-final">Identifique sua pedra</button>
+  </div>
+
 </div>
+
+<footer>
+  <div class="logo"><span class="dot"></span>Tesouro Esquecido</div>
+  <p>Identifique pedras, minerais e cristais com inteligência artificial. Sem assinatura — você compra só o acesso que for usar.</p>
+  <div class="foot-links">
+    <a href="#" id="foot-link-termos">Termos de uso</a>
+    <a href="#" id="foot-link-privacidade">Privacidade</a>
+    <a href="#" id="foot-link-contato">Contato</a>
+  </div>
+</footer>
 
 <script>
   // ==== CONFIGURAÇÃO — preencha com os dados do seu projeto Supabase ====
   var SUPABASE_URL = 'https://lflqjmbygghuikwuoimd.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmbHFqbWJ5Z2dodWlrd3VvaW1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNjU1NTMsImV4cCI6MjEwMTg0MTU1M30.tMrllUj-s0ZxahNbrazuGlWq6bT16o2E6hpbchhxqFU';
-  // Link de checkout do order bump na Cakto. Se a Cakto aceitar prefill de
-  // e-mail via querystring, o e-mail logado é anexado automaticamente.
+  // Link de checkout do pacote de 10 leituras (R$9,99) na Cakto. Se a Cakto
+  // aceitar prefill de e-mail via querystring, o e-mail logado é anexado
+  // automaticamente.
   var LINK_CHECKOUT_CAKTO = 'https://pay.cakto.com.br/jfotn5o_1030574';
   // ========================================================================
 
@@ -252,6 +428,7 @@
   var btnEntrar = document.getElementById('btn-entrar');
   var erroLoginEl = document.getElementById('erro-login');
   var btnPagar = document.getElementById('btn-pagar');
+  var btnComprarEarly = document.getElementById('btn-comprar-early');
   var btnJaPaguei = document.getElementById('btn-ja-paguei');
   var premiumConteudo = document.getElementById('premium-conteudo');
   var desbloqueioOverlay = document.getElementById('desbloqueio-overlay');
@@ -262,10 +439,13 @@
   var historicoVazio = document.getElementById('historico-vazio');
   var btnFecharHistorico = document.getElementById('btn-fechar-historico');
 
+  var btnCtaFinal = document.getElementById('btn-cta-final');
+  var navLinkPrecos = document.getElementById('nav-link-precos');
+
   var base64Atual = null;
   var mediaTypeAtual = null;
 
-  var confiancaCores = { alta: '#2f9e6e', media: '#e3ad2e', baixa: '#c24545' };
+  var confiancaCores = { alta: '#2f8f5e', media: '#a8502a', baixa: '#c0392b' };
 
   function esconderPaineis(){
     painelLogin.classList.remove('active');
@@ -274,6 +454,14 @@
 
   btnFecharHistorico.addEventListener('click', function(){
     painelHistorico.classList.remove('active');
+  });
+
+  btnCtaFinal.addEventListener('click', function(){
+    document.getElementById('area-principal').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  navLinkPrecos.addEventListener('click', function(){
+    document.getElementById('area-oferta').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
   // ---- Header: mostra "Entrar / Registrar" ou e-mail + saldo + "Sair" ----
@@ -400,7 +588,7 @@
   }
 
   // ---- Busca uma identificação já salva (com foto) e mostra na tela,
-  //      sem rodar a IA de novo e sem gastar nenhum crédito ----
+  //      sem rodar a IA de novo e sem gastar nenhuma leitura ----
   function buscarEExibirIdentificacao(id, accessToken){
     fetch('/api/obter', {
       method: 'POST',
@@ -439,7 +627,7 @@
   }
 
   // ---- Ao carregar a página, se a pessoa está logada, restaura
-  //      automaticamente a última avaliação (sem gastar tokens de novo) ----
+  //      automaticamente a última avaliação (sem gastar nenhuma leitura de novo) ----
   function restaurarUltimaIdentificacao(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
@@ -574,11 +762,17 @@
       });
   });
 
-  // ---- Botão pagar: abre o checkout em nova aba, mantendo esta página aberta ----
-  btnPagar.addEventListener('click', function(){
+  // ---- Abre o checkout do pacote de 10 leituras (R$9,99) em nova aba ----
+  function abrirCheckout(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
-      var email = sessao && sessao.user ? sessao.user.email : '';
+      if (!sessao) {
+        esconderPaineis();
+        painelLogin.classList.add('active');
+        painelLogin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      var email = sessao.user ? sessao.user.email : '';
       var separador = LINK_CHECKOUT_CAKTO.indexOf('?') > -1 ? '&' : '?';
       var url = LINK_CHECKOUT_CAKTO + separador + 'email=' + encodeURIComponent(email);
       if (identificacaoIdAtual) {
@@ -586,9 +780,12 @@
       }
       window.open(url, '_blank');
     });
-  });
+  }
 
-  // ---- Botão "já paguei": chama /api/desbloquear pra liberar preço/onde vender
+  btnPagar.addEventListener('click', abrirCheckout);
+  btnComprarEarly.addEventListener('click', abrirCheckout);
+
+  // ---- Botão "já comprei": chama /api/desbloquear pra liberar preço/onde vender
   //      sem rodar a IA de novo ----
   btnJaPaguei.addEventListener('click', function(){
     if (!identificacaoIdAtual) return;
@@ -599,7 +796,7 @@
 
       btnJaPaguei.disabled = true;
       var textoOriginal = btnJaPaguei.textContent;
-      btnJaPaguei.textContent = 'Checando pagamento...';
+      btnJaPaguei.textContent = 'Checando compra...';
       erroEl.style.display = 'none';
 
       fetch('/api/desbloquear', {
@@ -613,7 +810,7 @@
       .then(function(res){
         return res.json().then(function(data){
           if (!res.ok || data.error) {
-            throw new Error(data.error || 'Ainda não encontramos seu pagamento.');
+            throw new Error(data.error || 'Ainda não encontramos sua compra.');
           }
           return data;
         });
@@ -623,7 +820,7 @@
         atualizarHeader();
       })
       .catch(function(err){
-        erroEl.textContent = err.message || 'Ainda não encontramos seu pagamento. Aguarde alguns segundos e tente de novo.';
+        erroEl.textContent = err.message || 'Ainda não encontramos sua compra. Aguarde alguns segundos e tente de novo.';
         erroEl.style.display = 'block';
       })
       .finally(function(){
@@ -633,7 +830,9 @@
     });
   });
 
-  // ---- Chama a IA assim que a pessoa está logada (grátis; preço/onde vender vêm bloqueados) ----
+  // ---- Chama a IA assim que a pessoa está logada (a identificação básica
+  //      é liberada; preço/onde vender vêm bloqueados até haver leituras
+  //      disponíveis no pacote) ----
   function identificarPedra(accessToken){
     btnVerResultado.disabled = true;
     btnVerResultado.textContent = 'Analisando...';
@@ -674,7 +873,7 @@
     document.getElementById('res-nome').textContent = data.nome_provavel || '';
 
     var confEl = document.getElementById('res-confianca');
-    var cor = confiancaCores[data.confianca] || '#b4a99a';
+    var cor = confiancaCores[data.confianca] || '#8c7d66';
     confEl.textContent = 'confiança ' + (data.confianca || '');
     confEl.style.color = cor;
 
@@ -707,8 +906,8 @@
     if (typeof data.usos_restantes === 'number') {
       var obsEl = document.getElementById('res-observacao');
       var contadorTexto = data.usos_restantes > 0
-        ? 'Você ainda tem ' + data.usos_restantes + ' avaliação(ões) disponível(is).'
-        : 'Essa era sua última avaliação disponível.';
+        ? 'Você ainda tem ' + data.usos_restantes + ' leitura(s) disponível(is) no seu pacote.'
+        : 'Essa era sua última leitura disponível. Compre um novo pacote para continuar desbloqueando resultados.';
       obsEl.textContent += ' ' + contadorTexto;
     }
 
