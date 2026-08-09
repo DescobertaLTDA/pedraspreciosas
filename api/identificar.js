@@ -134,6 +134,8 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
         observacao: resultadoIA.observacao || null,
         faixa_preco_brasil: resultadoIA.faixa_preco_brasil || null,
         onde_vender: resultadoIA.onde_vender || null,
+        foto_base64: base64,
+        foto_media_type: mediaType,
         desbloqueada: false
       })
       .select('*')
