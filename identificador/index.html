@@ -137,7 +137,8 @@
   .passo-txt h3{font-size:15.5px;margin-bottom:4px;}
   .passo-txt p{font-size:13.8px;color:var(--ink-mute);}
 
-  .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(47,143,94,0.3);border-radius:14px;padding:26px;display:none;}
+  .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(47,143,94,0.3);border-radius:16px;padding:36px;display:none;}
+  @media (max-width:480px){ .resultado{padding:24px;} }
   .resultado.active{display:block;}
   .resultado-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
   .resultado-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--emerald);}
@@ -152,16 +153,25 @@
   .preco-valor{margin-top:6px;font-size:15px;color:var(--ink);}
   .observacao{margin-top:16px;font-size:12.5px;color:var(--ink-mute);}
 
-  /* --- bloco premium: preço + onde vender, borrado até comprar --- */
-  .premium-section{position:relative;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);min-height:230px;}
-  .premium-conteudo.bloqueado{filter:blur(7px);user-select:none;pointer-events:none;}
-  .desbloqueio-overlay{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:18px;border-radius:10px;background:linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.96) 42%);}
-  .desbloqueio-overlay.active{display:flex;}
-  .desbloqueio-overlay svg{width:22px;height:22px;stroke:var(--accent);stroke-width:1.8;fill:none;margin-bottom:2px;}
-  .desbloqueio-overlay p{font-size:13px;color:var(--ink-mute);max-width:280px;}
-  .desbloqueio-overlay .preco-destaque{font-size:26px;margin:2px 0 0;font-family:'Fraunces',serif;color:var(--ink);}
-  .desbloqueio-overlay .preco-sub{font-size:11.5px;color:var(--ink-mute2);margin-bottom:8px;}
-  .desbloqueio-overlay .btn{padding:12px 22px;}
+  /* --- bloco premium: preço + onde vender. Quando bloqueado, mostra uma
+         lista explícita do que está travado (em vez de borrar um conteúdo
+         vazio) --- */
+  .premium-section{position:relative;margin-top:22px;padding-top:22px;border-top:1px solid var(--line);}
+  .premium-conteudo{display:none;}
+  .premium-conteudo.desbloqueado{display:block;}
+
+  .premium-preview{display:none;background:var(--card-alt);border:1px solid var(--line);border-radius:12px;padding:24px;}
+  .premium-preview.active{display:block;}
+  .premium-preview-tag{font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);display:flex;align-items:center;gap:8px;}
+  .premium-preview-tag svg{width:15px;height:15px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
+  .premium-preview-lista{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:11px;}
+  .premium-preview-lista li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--ink-soft);line-height:1.45;}
+  .premium-preview-lista .cadeado{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .premium-preview-lista .cadeado svg{width:11px;height:11px;stroke:var(--accent-dark);stroke-width:2.2;fill:none;}
+  .premium-preview-lista em{font-style:normal;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--accent-dark);background:#fff;border:1px solid var(--line-strong);border-radius:20px;padding:2px 7px;margin-left:2px;white-space:nowrap;}
+  .premium-preview .preco-destaque{font-size:28px;margin:20px 0 0;font-family:'Fraunces',serif;color:var(--ink);}
+  .premium-preview .preco-sub{font-size:11.5px;color:var(--ink-mute2);margin-bottom:12px;}
+  .premium-preview .btn{padding:13px 22px;}
 
   .carregando .btn-primary{background:rgba(168,80,42,0.5);}
 
@@ -182,6 +192,23 @@
   .historico-badge{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;text-transform:uppercase;padding:4px 8px;border-radius:20px;white-space:nowrap;border:1px solid currentColor;}
   .historico-badge.pago{color:var(--emerald);}
   .historico-badge.bloqueado{color:var(--ink-mute);}
+
+  /* --- vitrine: pedras que outros clientes (pagantes) encontraram --- */
+  .vitrine-sub{margin-top:6px;font-size:13.5px;color:var(--ink-mute);text-align:center;}
+  .vitrine-grid{margin-top:22px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+  @media (max-width:680px){ .vitrine-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:420px){ .vitrine-grid{grid-template-columns:repeat(2,1fr);} }
+  .vitrine-card{background:var(--card-alt);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .vitrine-foto{width:100%;aspect-ratio:1/1;background:#eee;}
+  .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
+  .vitrine-info{padding:9px 10px 11px;}
+  .vitrine-nome{font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .vitrine-valor{margin-top:2px;font-size:11.5px;color:var(--ink-mute);line-height:1.3;}
+  .vitrine-valor strong{color:var(--emerald);}
+  .vitrine-paginacao{margin-top:22px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+  .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;width:32px;height:32px;border-radius:7px;border:1px solid var(--line-strong);background:#fff;color:var(--ink-mute);cursor:pointer;}
+  .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .vitrine-pag-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 
   /* --- seções de conteúdo --- */
   .conteudo{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;}
@@ -310,17 +337,35 @@
           <p class="preco-valor" id="res-onde"></p>
         </div>
       </div>
-      <div class="desbloqueio-overlay" id="desbloqueio-overlay">
-        <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
-        <p>Valor de mercado estimado e onde vender essa pedra</p>
+
+      <div class="premium-preview" id="premium-preview">
+        <div class="premium-preview-tag">
+          <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+          O que você ainda não viu sobre essa pedra
+        </div>
+        <ul class="premium-preview-lista">
+          <li><span class="cadeado"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span><span>Faixa de preço exata praticada no mercado brasileiro para essa pedra <em>PREMIUM</em></span></li>
+          <li><span class="cadeado"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span><span>Site especializado para vender pedras e minerais: <strong>mfrural.com.br</strong> <em>PREMIUM</em></span></li>
+          <li><span class="cadeado"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span><span>Lista completa de marketplaces, feiras de gemas e colecionadores compradores <em>PREMIUM</em></span></li>
+          <li><span class="cadeado"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span><span>Recomendação de como negociar o melhor preço nessa venda <em>PREMIUM</em></span></li>
+        </ul>
         <div class="preco-destaque">R$ 9,99</div>
         <div class="preco-sub">acesso a 10 leituras · sem assinatura</div>
-        <button class="btn btn-primary" id="btn-pagar">Comprar acesso</button>
+        <button class="btn btn-primary btn-block" id="btn-pagar">Comprar acesso</button>
         <button class="troca-modo" id="btn-ja-paguei" style="margin-top:2px;">Já comprei, atualizar resultado</button>
       </div>
     </div>
 
     <p class="observacao" id="res-observacao"></p>
+  </div>
+
+  <!-- Vitrine: pedras que outros clientes pagantes encontraram -->
+  <div class="card" id="area-vitrine">
+    <h2>Veja o que outras pessoas encontraram</h2>
+    <p class="vitrine-sub">Resultados reais de clientes que já desbloquearam o valor da sua pedra.</p>
+    <div class="vitrine-grid" id="vitrine-grid"></div>
+    <div class="vitrine-paginacao" id="vitrine-paginacao"></div>
+    <p class="aviso" id="vitrine-vazio" style="display:none;">Ainda não temos resultados para mostrar aqui.</p>
   </div>
 
   <!-- Oferta: pacote de leituras -->
@@ -476,7 +521,7 @@
   var btnComprarEarly = document.getElementById('btn-comprar-early');
   var btnJaPaguei = document.getElementById('btn-ja-paguei');
   var premiumConteudo = document.getElementById('premium-conteudo');
-  var desbloqueioOverlay = document.getElementById('desbloqueio-overlay');
+  var premiumPreview = document.getElementById('premium-preview');
   var identificacaoIdAtual = null;
 
   var sidebar = document.getElementById('sidebar');
@@ -705,6 +750,75 @@
 
   document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
   atualizarHeader();
+
+  // ---- Vitrine: mostra identificações de clientes que já pagaram
+  //      (desbloqueada = true), com foto, nome e valor encontrado ----
+  var vitrineGrid = document.getElementById('vitrine-grid');
+  var vitrinePaginacao = document.getElementById('vitrine-paginacao');
+  var vitrineVazio = document.getElementById('vitrine-vazio');
+
+  function carregarVitrine(pagina){
+    fetch('/api/vitrine?pagina=' + pagina)
+      .then(function(res){ return res.json(); })
+      .then(function(data){ renderizarVitrine(data); })
+      .catch(function(){ /* seção não é crítica pro resto da página funcionar */ });
+  }
+
+  function renderizarVitrine(data){
+    var itens = data.itens || [];
+    vitrineGrid.innerHTML = '';
+    vitrinePaginacao.innerHTML = '';
+
+    if (itens.length === 0) {
+      vitrineVazio.style.display = 'block';
+      return;
+    }
+    vitrineVazio.style.display = 'none';
+
+    itens.forEach(function(item){
+      var valorTexto = (typeof item.valor_exibicao === 'number')
+        ? formatarReais(item.valor_exibicao)
+        : 'valor sob consulta';
+
+      var card = document.createElement('div');
+      card.className = 'vitrine-card';
+
+      var foto = document.createElement('div');
+      foto.className = 'vitrine-foto';
+      var img = document.createElement('img');
+      img.src = item.foto;
+      img.alt = item.pedra || 'Pedra identificada';
+      foto.appendChild(img);
+
+      var info = document.createElement('div');
+      info.className = 'vitrine-info';
+      var nome = document.createElement('div');
+      nome.className = 'vitrine-nome';
+      nome.textContent = item.nome || 'Cliente';
+      var valor = document.createElement('div');
+      valor.className = 'vitrine-valor';
+      valor.innerHTML = 'achou uma pedra de <strong>' + valorTexto + '</strong>';
+      info.appendChild(nome);
+      info.appendChild(valor);
+
+      card.appendChild(foto);
+      card.appendChild(info);
+      vitrineGrid.appendChild(card);
+    });
+
+    var totalPaginas = data.total_paginas || 1;
+    for (var i = 1; i <= totalPaginas; i++) {
+      (function(pag){
+        var btn = document.createElement('button');
+        btn.className = 'vitrine-pag-btn' + (pag === data.pagina ? ' active' : '');
+        btn.textContent = pag;
+        btn.addEventListener('click', function(){ carregarVitrine(pag); });
+        vitrinePaginacao.appendChild(btn);
+      })(i);
+    }
+  }
+
+  carregarVitrine(1);
 
   // ---- Upload da foto (livre, sem checar nada) ----
   dropzone.addEventListener('click', function(){ inputFoto.click(); });
@@ -946,8 +1060,8 @@
     var desbloqueado = !!data.desbloqueado;
     document.getElementById('res-preco').textContent = desbloqueado ? (data.faixa_preco_brasil || '') : '';
     document.getElementById('res-onde').textContent = desbloqueado ? (data.onde_vender || '') : '';
-    premiumConteudo.classList.toggle('bloqueado', !desbloqueado);
-    desbloqueioOverlay.classList.toggle('active', !desbloqueado);
+    premiumConteudo.classList.toggle('desbloqueado', desbloqueado);
+    premiumPreview.classList.toggle('active', !desbloqueado);
 
     document.getElementById('res-observacao').textContent = data.observacao || '';
 
