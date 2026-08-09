@@ -38,7 +38,7 @@ module.exports = async function handler(req, res) {
 
   const { data: registro, error: erroBusca } = await supabase
     .from('creditos_avaliacao')
-    .select('status, usos, limite')
+    .select('status, usos, limite, valor_pago')
     .eq('email', email)
     .single();
 
@@ -46,10 +46,16 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ pago: false, email: email });
   }
 
+  var usosRestantes = registro.limite - registro.usos;
+  var saldo = registro.limite > 0
+    ? Math.round((registro.valor_pago * usosRestantes / registro.limite) * 100) / 100
+    : 0;
+
   return res.status(200).json({
     pago: true,
     email: email,
     usos: registro.usos,
-    limite: registro.limite
+    limite: registro.limite,
+    saldo: saldo
   });
 };

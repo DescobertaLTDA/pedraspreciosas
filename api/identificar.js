@@ -147,7 +147,11 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
       console.error('Erro Supabase (update):', erroUpdate);
     }
 
-    resultado.usos_restantes = registro.limite - (registro.usos + 1);
+    const usosRestantes = registro.limite - (registro.usos + 1);
+    resultado.usos_restantes = usosRestantes;
+    resultado.saldo_restante = registro.limite > 0
+      ? Math.round((registro.valor_pago * usosRestantes / registro.limite) * 100) / 100
+      : 0;
     return res.status(200).json(resultado);
 
   } catch (err) {

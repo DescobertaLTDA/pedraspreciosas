@@ -11,6 +11,7 @@ const supabase = createClient(
 );
 
 const LIMITE_PADRAO = 3;
+const VALOR_PADRAO = 17.90; // usado se o payload da Cakto não trouxer o valor pago
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -56,6 +57,10 @@ module.exports = async function handler(req, res) {
   }
 
   // ---- 5. Liberar o crédito para esse e-mail ----
+  // Se o payload da Cakto trouxer o valor pago (confira o campo exato no seu
+  // payload real — aqui assumo "amount" em centavos), usamos ele; senão, o padrão.
+  const valorPago = typeof data.amount === 'number' ? data.amount / 100 : VALOR_PADRAO;
+
   try {
     const { error } = await supabase
       .from('creditos_avaliacao')
@@ -64,7 +69,8 @@ module.exports = async function handler(req, res) {
           email,
           order_id: data.id,
           status: 'pago',
-          limite: LIMITE_PADRAO
+          limite: LIMITE_PADRAO,
+          valor_pago: valorPago
         },
         { onConflict: 'email' }
       );
