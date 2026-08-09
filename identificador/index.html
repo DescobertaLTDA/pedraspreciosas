@@ -900,7 +900,8 @@
       nome.textContent = item.nome || 'Cliente';
       var valor = document.createElement('div');
       valor.className = 'vitrine-valor';
-      valor.innerHTML = 'achou uma pedra de <strong>' + valorTexto + '</strong>';
+      var nomePedraTexto = item.pedra ? ('uma ' + item.pedra) : 'uma pedra';
+      valor.innerHTML = 'achou ' + nomePedraTexto + ' de <strong>' + valorTexto + '</strong> e já sabe onde vender!';
       info.appendChild(nome);
       info.appendChild(valor);
 
