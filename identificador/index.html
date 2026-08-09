@@ -196,6 +196,7 @@
         <p>Valor de mercado estimado e onde vender essa pedra</p>
         <div class="preco-destaque">R$ 17,90</div>
         <button class="btn btn-primary" id="btn-pagar">Desbloquear agora</button>
+        <button class="troca-modo" id="btn-ja-paguei" style="margin-top:2px;">Já paguei, atualizar resultado</button>
       </div>
     </div>
 
@@ -234,6 +235,7 @@
   var btnEntrar = document.getElementById('btn-entrar');
   var erroLoginEl = document.getElementById('erro-login');
   var btnPagar = document.getElementById('btn-pagar');
+  var btnJaPaguei = document.getElementById('btn-ja-paguei');
   var premiumConteudo = document.getElementById('premium-conteudo');
   var desbloqueioOverlay = document.getElementById('desbloqueio-overlay');
   var identificacaoIdAtual = null;
@@ -399,7 +401,7 @@
       });
   });
 
-  // ---- Botão pagar: manda pro checkout com e-mail e id da identificação já preenchidos ----
+  // ---- Botão pagar: abre o checkout em nova aba, mantendo esta página aberta ----
   btnPagar.addEventListener('click', function(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
@@ -409,7 +411,52 @@
       if (identificacaoIdAtual) {
         url += '&identificacao_id=' + encodeURIComponent(identificacaoIdAtual);
       }
-      window.location.href = url;
+      window.open(url, '_blank');
+    });
+  });
+
+  // ---- Botão "já paguei": chama /api/desbloquear pra liberar preço/onde vender
+  //      sem rodar a IA de novo ----
+  btnJaPaguei.addEventListener('click', function(){
+    if (!identificacaoIdAtual) return;
+
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      if (!sessao) return;
+
+      btnJaPaguei.disabled = true;
+      var textoOriginal = btnJaPaguei.textContent;
+      btnJaPaguei.textContent = 'Checando pagamento...';
+      erroEl.style.display = 'none';
+
+      fetch('/api/desbloquear', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + sessao.access_token
+        },
+        body: JSON.stringify({ identificacao_id: identificacaoIdAtual })
+      })
+      .then(function(res){
+        return res.json().then(function(data){
+          if (!res.ok || data.error) {
+            throw new Error(data.error || 'Ainda não encontramos seu pagamento.');
+          }
+          return data;
+        });
+      })
+      .then(function(data){
+        mostrarResultado(data);
+        atualizarHeader();
+      })
+      .catch(function(err){
+        erroEl.textContent = err.message || 'Ainda não encontramos seu pagamento. Aguarde alguns segundos e tente de novo.';
+        erroEl.style.display = 'block';
+      })
+      .finally(function(){
+        btnJaPaguei.disabled = false;
+        btnJaPaguei.textContent = textoOriginal;
+      });
     });
   });
 
