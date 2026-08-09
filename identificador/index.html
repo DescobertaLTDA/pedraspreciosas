@@ -108,6 +108,15 @@
   .campo input{width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:12px;color:var(--ink-light);font-size:14px;}
   .campo input:focus{outline:none;border-color:var(--citrino);}
   .troca-modo{margin-top:10px;font-size:12.5px;color:var(--ink-mute);text-align:center;cursor:pointer;text-decoration:underline;}
+  .link-historico{background:transparent;border:1px solid var(--line-strong);color:var(--ink-mute);font-family:'Space Mono',monospace;font-size:10.5px;padding:6px 10px;border-radius:4px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+  .historico-lista{display:flex;flex-direction:column;gap:10px;}
+  .historico-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;cursor:pointer;transition:border-color .2s ease;}
+  .historico-item:hover{border-color:var(--citrino);}
+  .historico-nome{font-size:14px;color:var(--ink-light);font-weight:600;}
+  .historico-data{font-size:11.5px;color:var(--ink-mute2);margin-top:2px;}
+  .historico-badge{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;text-transform:uppercase;padding:4px 8px;border-radius:20px;white-space:nowrap;border:1px solid currentColor;}
+  .historico-badge.pago{color:var(--emerald);}
+  .historico-badge.bloqueado{color:var(--ink-mute);}
   .selo-logado{font-size:12.5px;color:var(--emerald);margin-bottom:14px;}
   .preco-destaque{font-size:26px;color:var(--parchment);margin:8px 0 16px;}
 </style>
@@ -167,6 +176,14 @@
     </div>
     <button class="btn btn-primary btn-block" id="btn-entrar">Entrar / Criar conta</button>
     <p class="erro" id="erro-login" style="display:none;"></p>
+  </div>
+
+  <!-- Painel de histórico (lista as identificações já feitas nessa conta) -->
+  <div class="card painel-acesso" id="painel-historico">
+    <div class="painel-tag">Seu histórico</div>
+    <div class="historico-lista" id="historico-lista"></div>
+    <p class="aviso" id="historico-vazio" style="display:none;">Você ainda não fez nenhuma avaliação.</p>
+    <p class="troca-modo" id="btn-fechar-historico">Fechar</p>
   </div>
 
   <div class="resultado" id="resultado">
@@ -240,6 +257,11 @@
   var desbloqueioOverlay = document.getElementById('desbloqueio-overlay');
   var identificacaoIdAtual = null;
 
+  var painelHistorico = document.getElementById('painel-historico');
+  var historicoLista = document.getElementById('historico-lista');
+  var historicoVazio = document.getElementById('historico-vazio');
+  var btnFecharHistorico = document.getElementById('btn-fechar-historico');
+
   var base64Atual = null;
   var mediaTypeAtual = null;
 
@@ -247,7 +269,12 @@
 
   function esconderPaineis(){
     painelLogin.classList.remove('active');
+    painelHistorico.classList.remove('active');
   }
+
+  btnFecharHistorico.addEventListener('click', function(){
+    painelHistorico.classList.remove('active');
+  });
 
   // ---- Header: mostra "Entrar / Registrar" ou e-mail + saldo + "Sair" ----
   function formatarReais(valor){
@@ -261,8 +288,10 @@
         var nomeExibido = (sessao.user.user_metadata && sessao.user.user_metadata.nome) || sessao.user.email;
         headerAuthArea.innerHTML =
           '<div class="nav-user"><span class="nav-email">' + nomeExibido + '</span>' +
+          '<button class="link-historico" id="btn-header-historico">Histórico</button>' +
           '<span class="nav-saldo" id="nav-saldo">···</span>' +
           '<button class="nav-sair" id="btn-header-sair">Sair</button></div>';
+        document.getElementById('btn-header-historico').addEventListener('click', abrirHistorico);
         document.getElementById('btn-header-sair').addEventListener('click', function(){
           supa.auth.signOut().then(function(){
             esconderPaineis();
@@ -288,6 +317,149 @@
     });
   }
 
+  function abrirHistorico(){
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      if (!sessao) { abrirLoginDoHeader(); return; }
+
+      esconderPaineis();
+      painelHistorico.classList.add('active');
+      historicoLista.innerHTML = '';
+      historicoVazio.style.display = 'none';
+      historicoVazio.textContent = 'Carregando...';
+      historicoVazio.style.display = 'block';
+
+      fetch('/api/historico', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + sessao.access_token }
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        renderizarHistorico(data.itens || []);
+      })
+      .catch(function(){
+        historicoLista.innerHTML = '';
+        historicoVazio.textContent = 'Não foi possível carregar seu histórico agora.';
+        historicoVazio.style.display = 'block';
+      });
+
+      painelHistorico.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+
+  function formatarData(iso){
+    try {
+      var d = new Date(iso);
+      return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function renderizarHistorico(itens){
+    historicoLista.innerHTML = '';
+
+    if (itens.length === 0) {
+      historicoVazio.textContent = 'Você ainda não fez nenhuma avaliação.';
+      historicoVazio.style.display = 'block';
+      return;
+    }
+    historicoVazio.style.display = 'none';
+
+    itens.forEach(function(item){
+      var div = document.createElement('div');
+      div.className = 'historico-item';
+
+      var info = document.createElement('div');
+      var nome = document.createElement('div');
+      nome.className = 'historico-nome';
+      nome.textContent = item.nome_provavel || 'Pedra não identificada';
+      var data = document.createElement('div');
+      data.className = 'historico-data';
+      data.textContent = formatarData(item.criado_em);
+      info.appendChild(nome);
+      info.appendChild(data);
+
+      var badge = document.createElement('span');
+      badge.className = 'historico-badge ' + (item.desbloqueada ? 'pago' : 'bloqueado');
+      badge.textContent = item.desbloqueada ? 'desbloqueado' : 'bloqueado';
+
+      div.appendChild(info);
+      div.appendChild(badge);
+
+      div.addEventListener('click', function(){
+        supa.auth.getSession().then(function(sessaoResp){
+          var sessao = sessaoResp.data.session;
+          if (!sessao) return;
+          buscarEExibirIdentificacao(item.id, sessao.access_token);
+        });
+      });
+
+      historicoLista.appendChild(div);
+    });
+  }
+
+  // ---- Busca uma identificação já salva (com foto) e mostra na tela,
+  //      sem rodar a IA de novo e sem gastar nenhum crédito ----
+  function buscarEExibirIdentificacao(id, accessToken){
+    fetch('/api/obter', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      },
+      body: JSON.stringify({ identificacao_id: id })
+    })
+    .then(function(res){
+      return res.json().then(function(data){
+        if (!res.ok || data.error) {
+          throw new Error(data.error || 'Não foi possível abrir essa identificação.');
+        }
+        return data;
+      });
+    })
+    .then(function(data){
+      esconderPaineis();
+
+      if (data.foto_base64 && data.foto_media_type) {
+        previewImg.src = 'data:' + data.foto_media_type + ';base64,' + data.foto_base64;
+        base64Atual = data.foto_base64;
+        mediaTypeAtual = data.foto_media_type;
+        dropzone.style.display = 'none';
+        preview.style.display = 'block';
+        actions.style.display = 'flex';
+      }
+
+      mostrarResultado(data);
+    })
+    .catch(function(err){
+      erroEl.textContent = err.message || 'Não foi possível abrir essa identificação.';
+      erroEl.style.display = 'block';
+    });
+  }
+
+  // ---- Ao carregar a página, se a pessoa está logada, restaura
+  //      automaticamente a última avaliação (sem gastar tokens de novo) ----
+  function restaurarUltimaIdentificacao(){
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      if (!sessao) return;
+
+      fetch('/api/historico', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + sessao.access_token }
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        var itens = data.itens || [];
+        if (itens.length > 0) {
+          buscarEExibirIdentificacao(itens[0].id, sessao.access_token);
+        }
+      })
+      .catch(function(){});
+    });
+  }
+
   function abrirLoginDoHeader(){
     esconderPaineis();
     painelLogin.classList.add('active');
@@ -296,6 +468,7 @@
 
   document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
   atualizarHeader();
+  restaurarUltimaIdentificacao();
 
   // ---- Upload da foto (livre, sem checar nada) ----
   dropzone.addEventListener('click', function(){ inputFoto.click(); });
