@@ -54,6 +54,9 @@ module.exports = async function handler(req, res) {
   }
 
   const email = userData.user.email.toLowerCase();
+  const nomeExibicao = (userData.user.user_metadata && userData.user.user_metadata.nome)
+    ? userData.user.user_metadata.nome
+    : email.split('@')[0];
 
   try {
     // ---- 3. Chamar a Claude API ----
@@ -127,6 +130,7 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
       .from('identificacoes')
       .insert({
         email: email,
+        nome_exibicao: nomeExibicao,
         nome_provavel: resultadoIA.nome_provavel || null,
         confianca: resultadoIA.confianca || null,
         nomes_alternativos: resultadoIA.nomes_alternativos || [],
