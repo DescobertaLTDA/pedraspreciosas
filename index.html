@@ -499,6 +499,13 @@ src="https://www.facebook.com/tr?id=940556475332489&ev=PageView&noscript=1"
   .support-item a{color:var(--ink-light);border-bottom:1px dashed var(--line-strong);transition:color .15s ease,border-color .15s ease;}
   .support-item a:hover{color:var(--citrino);border-color:var(--citrino);}
   .support-item .support-label{display:block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:4px;}
+  .support-item-email{text-align:center;}
+  .support-item-email .support-label{font-size:12px;letter-spacing:0.1em;color:var(--citrino);margin-bottom:8px;}
+  .support-item-email a{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--citrino);border-bottom:2px solid var(--citrino);padding-bottom:2px;}
+  .support-item-email a:hover{color:var(--gold);border-color:var(--gold);}
+  @media (max-width:520px){
+    .support-item-email a{font-size:18px;}
+  }
   .support-hours{margin-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--ink-mute);letter-spacing:0.02em;}
 </style>
 </head>
@@ -1399,13 +1406,9 @@ src="https://www.facebook.com/tr?id=940556475332489&ev=PageView&noscript=1"
     <div class="support-box">
       <div class="support-title">Atendimento &amp; Suporte</div>
       <div class="support-rows">
-        <div class="support-item">
+        <div class="support-item support-item-email">
           <span class="support-label">E-mail</span>
           <a href="mailto:descobertamental@gmail.com">descobertamental@gmail.com</a>
-        </div>
-        <div class="support-item">
-          <span class="support-label">WhatsApp</span>
-          <a href="https://wa.me/5518991996324" target="_blank" rel="noopener">(18) 99199-6324</a>
         </div>
       </div>
       <p class="support-hours">Atendimento todos os dias, das 08h às 21h</p>
