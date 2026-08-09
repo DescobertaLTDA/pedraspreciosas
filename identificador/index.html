@@ -14,8 +14,10 @@
     --bg:#17151b;
     --bg-alt2:#211c28;
     --parchment:#f1e7d3;
+    --ink:#2a2118;
     --ink-light:#efe6d8;
     --ink-mute:#b4a99a;
+    --ink-mute2:#7a6c58;
     --ink-soft:#5a4c3a;
     --citrino:#e3ad2e;
     --emerald:#2f9e6e;
@@ -23,16 +25,25 @@
     --line:rgba(240,230,210,0.14);
     --line-strong:rgba(240,230,210,0.28);
   }
-  body{background:var(--bg);color:var(--ink-light);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:56px 20px 80px;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 700px 420px at 50% 0%, rgba(227,173,46,0.10), transparent 65%);pointer-events:none;}
+  body{background:var(--parchment);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:0 0 80px;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 700px 420px at 50% 0%, rgba(227,173,46,0.14), transparent 65%);pointer-events:none;}
   h1,h2{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
-  .wrap{max-width:560px;margin:0 auto;position:relative;}
+  .wrap{max-width:560px;margin:0 auto;position:relative;padding:56px 20px 0;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(23,21,27,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .nav-wrap{max-width:560px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;}
+  .logo{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;color:var(--parchment);}
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--citrino);box-shadow:0 0 10px var(--citrino);}
+  .nav-cta{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;background:var(--citrino);color:#241a06;padding:9px 16px;border-radius:4px;border:none;cursor:pointer;}
+  .nav-user{font-family:'Space Mono',monospace;font-size:11.5px;color:var(--ink-mute);display:flex;align-items:center;gap:10px;}
+  .nav-user .nav-sair{background:transparent;border:1px solid var(--line-strong);color:var(--ink-mute);font-family:'Space Mono',monospace;font-size:11px;padding:7px 12px;border-radius:4px;cursor:pointer;}
+  .nav-hidden{display:none;}
 
   .head{text-align:center;}
-  .eyebrow{font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--citrino);display:flex;align-items:center;justify-content:center;gap:10px;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;gap:10px;}
   .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--citrino);}
-  .head h1{margin-top:16px;font-size:clamp(26px,4vw,36px);color:var(--parchment);}
-  .head p{margin-top:12px;color:var(--ink-mute);font-size:15px;max-width:420px;margin-left:auto;margin-right:auto;}
+  .head h1{margin-top:16px;font-size:clamp(26px,4vw,36px);color:var(--ink);}
+  .head p{margin-top:12px;color:var(--ink-mute2);font-size:15px;max-width:420px;margin-left:auto;margin-right:auto;}
 
   .card{margin-top:40px;background:var(--bg-alt2);border:1px solid var(--line);border-radius:10px;padding:26px;}
 
@@ -85,6 +96,14 @@
 </style>
 </head>
 <body>
+<header>
+  <div class="nav-wrap">
+    <div class="logo"><span class="dot"></span>Tesouro Esquecido</div>
+    <div id="header-auth-area">
+      <button class="nav-cta" id="btn-header-entrar">Entrar / Registrar</button>
+    </div>
+  </div>
+</header>
 <div class="wrap">
 
   <div class="head">
@@ -178,6 +197,8 @@
   var erroEl = document.getElementById('erro');
   var resultadoEl = document.getElementById('resultado');
 
+  var headerAuthArea = document.getElementById('header-auth-area');
+
   var painelLogin = document.getElementById('painel-login');
   var painelPagar = document.getElementById('painel-pagar');
   var inputEmail = document.getElementById('input-email');
@@ -196,6 +217,36 @@
     painelLogin.classList.remove('active');
     painelPagar.classList.remove('active');
   }
+
+  // ---- Header: mostra "Entrar / Registrar" ou e-mail + "Sair" ----
+  function atualizarHeader(){
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      if (sessao && sessao.user) {
+        headerAuthArea.innerHTML =
+          '<div class="nav-user"><span>' + sessao.user.email + '</span>' +
+          '<button class="nav-sair" id="btn-header-sair">Sair</button></div>';
+        document.getElementById('btn-header-sair').addEventListener('click', function(){
+          supa.auth.signOut().then(function(){
+            esconderPaineis();
+            atualizarHeader();
+          });
+        });
+      } else {
+        headerAuthArea.innerHTML = '<button class="nav-cta" id="btn-header-entrar">Entrar / Registrar</button>';
+        document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
+      }
+    });
+  }
+
+  function abrirLoginDoHeader(){
+    esconderPaineis();
+    painelLogin.classList.add('active');
+    painelLogin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
+  atualizarHeader();
 
   // ---- Upload da foto (livre, sem checar nada) ----
   dropzone.addEventListener('click', function(){ inputFoto.click(); });
@@ -297,7 +348,10 @@
       .then(function(resp){
         if (resp.error) throw resp.error;
         painelLogin.classList.remove('active');
-        verificarAcessoEProsseguir();
+        atualizarHeader();
+        if (base64Atual) {
+          verificarAcessoEProsseguir();
+        }
       })
       .catch(function(err){
         erroLoginEl.textContent = err.message || 'Não foi possível entrar. Confira seus dados.';
