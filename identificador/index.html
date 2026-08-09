@@ -697,28 +697,6 @@
     });
   }
 
-  // ---- Ao carregar a página, se a pessoa está logada, restaura
-  //      automaticamente a última avaliação (sem gastar nenhuma leitura de novo) ----
-  function restaurarUltimaIdentificacao(){
-    supa.auth.getSession().then(function(sessaoResp){
-      var sessao = sessaoResp.data.session;
-      if (!sessao) return;
-
-      fetch('/api/historico', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + sessao.access_token }
-      })
-      .then(function(res){ return res.json(); })
-      .then(function(data){
-        var itens = data.itens || [];
-        if (itens.length > 0) {
-          buscarEExibirIdentificacao(itens[0].id, sessao.access_token);
-        }
-      })
-      .catch(function(){});
-    });
-  }
-
   function abrirLoginDoHeader(){
     esconderPaineis();
     painelLogin.classList.add('active');
@@ -727,7 +705,6 @@
 
   document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
   atualizarHeader();
-  restaurarUltimaIdentificacao();
 
   // ---- Upload da foto (livre, sem checar nada) ----
   dropzone.addEventListener('click', function(){ inputFoto.click(); });
