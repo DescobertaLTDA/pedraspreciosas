@@ -81,10 +81,21 @@
   .alternativos{margin-top:10px;font-size:13.5px;color:var(--ink-mute);}
   .caracteristicas{margin-top:16px;padding-left:18px;font-size:14px;}
   .caracteristicas li{margin-bottom:6px;}
-  .preco-box{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .preco-box{padding-top:16px;}
+  .preco-box + .preco-box{margin-top:14px;}
   .preco-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--citrino);}
   .preco-valor{margin-top:6px;font-size:15px;color:var(--parchment);}
   .observacao{margin-top:16px;font-size:12.5px;color:var(--ink-soft);}
+
+  /* --- bloco premium: preço + onde vender, borrado até pagar --- */
+  .premium-section{position:relative;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .premium-conteudo.bloqueado{filter:blur(7px);user-select:none;pointer-events:none;}
+  .desbloqueio-overlay{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:18px;border-radius:8px;background:linear-gradient(to bottom, rgba(33,28,40,0.35), rgba(33,28,40,0.94) 45%);}
+  .desbloqueio-overlay.active{display:flex;}
+  .desbloqueio-overlay svg{width:22px;height:22px;stroke:var(--citrino);stroke-width:1.8;fill:none;margin-bottom:2px;}
+  .desbloqueio-overlay p{font-size:13px;color:var(--ink-mute);max-width:280px;}
+  .desbloqueio-overlay .preco-destaque{font-size:24px;margin:2px 0 4px;}
+  .desbloqueio-overlay .btn{padding:12px 22px;}
 
   .carregando .btn-primary{background:rgba(227,173,46,0.5);}
 
@@ -158,15 +169,6 @@
     <p class="erro" id="erro-login" style="display:none;"></p>
   </div>
 
-  <!-- Painel de pagamento (aparece quando está logado mas ainda não pagou) -->
-  <div class="card painel-acesso" id="painel-pagar">
-    <div class="selo-logado" id="selo-email-logado"></div>
-    <div class="painel-tag">Desbloquear resultado</div>
-    <div class="preco-destaque">R$ 17,90</div>
-    <p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:16px;">Inclui 3 avaliações de pedras vinculadas à sua conta — pode usar de qualquer aparelho.</p>
-    <button class="btn btn-primary btn-block" id="btn-pagar">Pagar e desbloquear</button>
-  </div>
-
   <div class="resultado" id="resultado" style="display:none;">
     <div class="resultado-head">
       <div>
@@ -177,10 +179,26 @@
     </div>
     <p class="alternativos" id="res-alternativos" style="display:none;"></p>
     <ul class="caracteristicas" id="res-caracteristicas"></ul>
-    <div class="preco-box">
-      <div class="preco-label">Faixa de preço estimada</div>
-      <p class="preco-valor" id="res-preco"></p>
+
+    <div class="premium-section">
+      <div class="premium-conteudo" id="premium-conteudo">
+        <div class="preco-box">
+          <div class="preco-label">Faixa de preço estimada</div>
+          <p class="preco-valor" id="res-preco"></p>
+        </div>
+        <div class="preco-box">
+          <div class="preco-label">Onde vender</div>
+          <p class="preco-valor" id="res-onde"></p>
+        </div>
+      </div>
+      <div class="desbloqueio-overlay" id="desbloqueio-overlay">
+        <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+        <p>Valor de mercado estimado e onde vender essa pedra</p>
+        <div class="preco-destaque">R$ 17,90</div>
+        <button class="btn btn-primary" id="btn-pagar">Desbloquear agora</button>
+      </div>
     </div>
+
     <p class="observacao" id="res-observacao"></p>
   </div>
 
@@ -210,14 +228,15 @@
   var headerAuthArea = document.getElementById('header-auth-area');
 
   var painelLogin = document.getElementById('painel-login');
-  var painelPagar = document.getElementById('painel-pagar');
   var inputNome = document.getElementById('input-nome');
   var inputEmail = document.getElementById('input-email');
   var inputSenha = document.getElementById('input-senha');
   var btnEntrar = document.getElementById('btn-entrar');
   var erroLoginEl = document.getElementById('erro-login');
   var btnPagar = document.getElementById('btn-pagar');
-  var seloEmailLogado = document.getElementById('selo-email-logado');
+  var premiumConteudo = document.getElementById('premium-conteudo');
+  var desbloqueioOverlay = document.getElementById('desbloqueio-overlay');
+  var identificacaoIdAtual = null;
 
   var base64Atual = null;
   var mediaTypeAtual = null;
@@ -226,7 +245,6 @@
 
   function esconderPaineis(){
     painelLogin.classList.remove('active');
-    painelPagar.classList.remove('active');
   }
 
   // ---- Header: mostra "Entrar / Registrar" ou e-mail + saldo + "Sair" ----
@@ -328,26 +346,10 @@
         painelLogin.classList.add('active');
         return;
       }
-      // logado: checa se já pagou
-      fetch('/api/status', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + sessao.access_token }
-      })
-      .then(function(res){ return res.json(); })
-      .then(function(data){
-        if (data.pago) {
-          esconderPaineis();
-          identificarPedra(sessao.access_token);
-        } else {
-          esconderPaineis();
-          seloEmailLogado.textContent = 'Logado como ' + (data.email || sessao.user.email);
-          painelPagar.classList.add('active');
-        }
-      })
-      .catch(function(){
-        erroEl.textContent = 'Não foi possível checar seu acesso agora. Tente de novo.';
-        erroEl.style.display = 'block';
-      });
+      // logado: já pode identificar. Preço/onde vender vêm bloqueados
+      // ou liberados dentro da própria resposta de /api/identificar.
+      esconderPaineis();
+      identificarPedra(sessao.access_token);
     });
   }
 
@@ -397,17 +399,21 @@
       });
   });
 
-  // ---- Botão pagar: manda pro checkout com e-mail já preenchido ----
+  // ---- Botão pagar: manda pro checkout com e-mail e id da identificação já preenchidos ----
   btnPagar.addEventListener('click', function(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
       var email = sessao && sessao.user ? sessao.user.email : '';
       var separador = LINK_CHECKOUT_CAKTO.indexOf('?') > -1 ? '&' : '?';
-      window.location.href = LINK_CHECKOUT_CAKTO + separador + 'email=' + encodeURIComponent(email);
+      var url = LINK_CHECKOUT_CAKTO + separador + 'email=' + encodeURIComponent(email);
+      if (identificacaoIdAtual) {
+        url += '&identificacao_id=' + encodeURIComponent(identificacaoIdAtual);
+      }
+      window.location.href = url;
     });
   });
 
-  // ---- Chama a IA depois de confirmar login + pagamento ----
+  // ---- Chama a IA assim que a pessoa está logada (grátis; preço/onde vender vêm bloqueados) ----
   function identificarPedra(accessToken){
     btnVerResultado.disabled = true;
     btnVerResultado.textContent = 'Analisando...';
@@ -468,7 +474,14 @@
       listaEl.appendChild(li);
     });
 
-    document.getElementById('res-preco').textContent = data.faixa_preco_brasil || '';
+    identificacaoIdAtual = data.identificacao_id || null;
+
+    var desbloqueado = !!data.desbloqueado;
+    document.getElementById('res-preco').textContent = desbloqueado ? (data.faixa_preco_brasil || '') : '';
+    document.getElementById('res-onde').textContent = desbloqueado ? (data.onde_vender || '') : '';
+    premiumConteudo.classList.toggle('bloqueado', !desbloqueado);
+    desbloqueioOverlay.classList.toggle('active', !desbloqueado);
+
     document.getElementById('res-observacao').textContent = data.observacao || '';
 
     if (typeof data.usos_restantes === 'number') {
