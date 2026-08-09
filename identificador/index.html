@@ -752,6 +752,103 @@
   document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
   atualizarHeader();
 
+  // ---- Retorno automático do checkout (Cakto): se a URL trouxer
+  //      identificacao_id (redirecionamento pós-pagamento), reabre essa
+  //      identificação sozinho e já tenta desbloquear o preço/onde vender,
+  //      sem depender de a pessoa voltar pra aba original. ----
+  function restaurarConsultaDaURL(){
+    var params = new URLSearchParams(window.location.search);
+    var idDaUrl = params.get('identificacao_id');
+    if (!idDaUrl) return;
+
+    // tira os parâmetros da URL pra não reprocessar em caso de refresh
+    var urlLimpa = window.location.pathname;
+    window.history.replaceState({}, document.title, urlLimpa);
+
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+
+      if (!sessao) {
+        // ainda não está logado nessa aba/navegador: pede pra entrar
+        // primeiro e guarda o id pra retomar assim que o login terminar
+        idPendenteDaUrl = idDaUrl;
+        esconderPaineis();
+        painelLogin.classList.add('active');
+        painelLogin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      abrirEDesbloquearAutomaticamente(idDaUrl, sessao.access_token);
+    });
+  }
+
+  // ---- Reabre a identificação salva e, se ainda não estiver liberada,
+  //      tenta desbloquear na hora (o crédito já deve ter sido creditado
+  //      pelo webhook da Cakto no momento do pagamento). ----
+  function abrirEDesbloquearAutomaticamente(id, accessToken){
+    fetch('/api/obter', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      },
+      body: JSON.stringify({ identificacao_id: id })
+    })
+    .then(function(res){
+      return res.json().then(function(data){
+        if (!res.ok || data.error) {
+          throw new Error(data.error || 'Não foi possível abrir essa identificação.');
+        }
+        return data;
+      });
+    })
+    .then(function(data){
+      esconderPaineis();
+
+      if (data.foto_base64 && data.foto_media_type) {
+        previewImg.src = 'data:' + data.foto_media_type + ';base64,' + data.foto_base64;
+        base64Atual = data.foto_base64;
+        mediaTypeAtual = data.foto_media_type;
+        dropzone.style.display = 'none';
+        preview.style.display = 'block';
+        actions.style.display = 'flex';
+      }
+
+      mostrarResultado(data);
+      document.getElementById('area-principal').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      if (!data.desbloqueado) {
+        // pagamento pode ainda estar sendo processado pelo webhook:
+        // tenta desbloquear automaticamente
+        return fetch('/api/desbloquear', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+          },
+          body: JSON.stringify({ identificacao_id: id })
+        })
+        .then(function(res){ return res.json(); })
+        .then(function(desb){
+          if (!desb.error) {
+            mostrarResultado(desb);
+            atualizarHeader();
+          }
+        })
+        .catch(function(){ /* se falhar, a pessoa ainda pode clicar em "Já comprei" manualmente */ });
+      }
+
+      atualizarHeader();
+    })
+    .catch(function(err){
+      erroEl.textContent = err.message || 'Não foi possível abrir sua última consulta automaticamente.';
+      erroEl.style.display = 'block';
+    });
+  }
+
+  var idPendenteDaUrl = null;
+  restaurarConsultaDaURL();
+
   // ---- Vitrine: mostra identificações de clientes que já pagaram
   //      (desbloqueada = true), com foto, nome e valor encontrado ----
   var vitrineGrid = document.getElementById('vitrine-grid');
@@ -911,7 +1008,14 @@
         if (resp.error) throw resp.error;
         painelLogin.classList.remove('active');
         atualizarHeader();
-        if (base64Atual) {
+        if (idPendenteDaUrl) {
+          var idParaAbrir = idPendenteDaUrl;
+          idPendenteDaUrl = null;
+          supa.auth.getSession().then(function(sessaoResp){
+            var sessao = sessaoResp.data.session;
+            if (sessao) abrirEDesbloquearAutomaticamente(idParaAbrir, sessao.access_token);
+          });
+        } else if (base64Atual) {
           verificarAcessoEProsseguir();
         }
       })
