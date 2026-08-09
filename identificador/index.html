@@ -34,6 +34,10 @@
 
   header{position:sticky;top:0;z-index:50;background:rgba(247,242,231,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
   .nav-wrap{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 20px;}
+  .nav-left{display:flex;align-items:center;gap:12px;}
+  .btn-sidebar-toggle{background:transparent;border:1px solid var(--line-strong);border-radius:7px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .btn-sidebar-toggle:hover{background:var(--card-alt);}
+  .btn-sidebar-toggle svg{width:17px;height:17px;stroke:var(--ink-soft);stroke-width:1.8;fill:none;}
   .logo{display:flex;align-items:center;gap:8px;font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink);white-space:nowrap;flex-shrink:0;}
   .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
   .nav-right{display:flex;align-items:center;gap:16px;}
@@ -56,6 +60,22 @@
   .nav-dropdown button{width:100%;text-align:left;background:transparent;border:none;padding:9px 10px;font-size:13px;color:var(--ink);border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;}
   .nav-dropdown button:hover{background:var(--card-alt);}
   .nav-dropdown button.sair{color:var(--danger);}
+
+  /* --- sidebar de histórico (estilo Claude) --- */
+  .sidebar-backdrop{position:fixed;inset:0;background:rgba(36,28,18,0.32);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:90;}
+  .sidebar-backdrop.active{opacity:1;pointer-events:auto;}
+  .sidebar{position:fixed;top:0;left:0;bottom:0;width:290px;max-width:84vw;background:var(--card);border-right:1px solid var(--line);z-index:91;transform:translateX(-100%);transition:transform .2s ease;display:flex;flex-direction:column;}
+  .sidebar.active{transform:translateX(0);}
+  .sidebar-head{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 14px;border-bottom:1px solid var(--line);flex-shrink:0;}
+  .sidebar-head h2{font-size:16px;}
+  .btn-sidebar-close{background:transparent;border:none;width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .btn-sidebar-close:hover{background:var(--card-alt);}
+  .btn-sidebar-close svg{width:16px;height:16px;stroke:var(--ink-mute);stroke-width:1.9;fill:none;}
+  .sidebar-body{padding:14px 12px;overflow-y:auto;flex:1;}
+  .sidebar .historico-lista{display:flex;flex-direction:column;gap:6px;}
+  .sidebar .historico-item{padding:11px 12px;border-radius:8px;background:transparent;border:none;}
+  .sidebar .historico-item:hover{background:var(--card-alt);border-color:transparent;}
+  .sidebar .aviso{text-align:left;padding:4px 6px;}
 
   @media (max-width:420px){
     .nav-name{max-width:54px;}
@@ -191,7 +211,12 @@
 <body>
 <header>
   <div class="nav-wrap">
-    <div class="logo"><span class="dot"></span>Tesouro Esquecido</div>
+    <div class="nav-left">
+      <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" title="Histórico" aria-label="Abrir histórico">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+      </button>
+      <div class="logo"><span class="dot"></span>Tesouro Esquecido</div>
+    </div>
     <div class="nav-right">
       <a class="nav-link" id="nav-link-precos">Preços</a>
       <div id="header-auth-area">
@@ -200,6 +225,20 @@
     </div>
   </div>
 </header>
+
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <h2>Histórico</h2>
+    <button class="btn-sidebar-close" id="btn-sidebar-close" aria-label="Fechar histórico">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="sidebar-body">
+    <div class="historico-lista" id="historico-lista"></div>
+    <p class="aviso" id="historico-vazio" style="display:none;">Você ainda não fez nenhuma avaliação.</p>
+  </div>
+</aside>
 <div class="wrap">
 
   <div class="head">
@@ -267,14 +306,6 @@
     </div>
     <button class="btn btn-primary btn-block" id="btn-entrar">Entrar / Criar conta</button>
     <p class="erro" id="erro-login" style="display:none;"></p>
-  </div>
-
-  <!-- Painel de histórico (lista as identificações já feitas nessa conta) -->
-  <div class="card painel-acesso" id="painel-historico">
-    <div class="painel-tag">Seu histórico</div>
-    <div class="historico-lista" id="historico-lista"></div>
-    <p class="aviso" id="historico-vazio" style="display:none;">Você ainda não fez nenhuma avaliação.</p>
-    <p class="troca-modo" id="btn-fechar-historico">Fechar</p>
   </div>
 
   <div class="resultado" id="resultado">
@@ -448,10 +479,12 @@
   var desbloqueioOverlay = document.getElementById('desbloqueio-overlay');
   var identificacaoIdAtual = null;
 
-  var painelHistorico = document.getElementById('painel-historico');
+  var sidebar = document.getElementById('sidebar');
+  var sidebarBackdrop = document.getElementById('sidebar-backdrop');
+  var btnSidebarToggle = document.getElementById('btn-sidebar-toggle');
+  var btnSidebarClose = document.getElementById('btn-sidebar-close');
   var historicoLista = document.getElementById('historico-lista');
   var historicoVazio = document.getElementById('historico-vazio');
-  var btnFecharHistorico = document.getElementById('btn-fechar-historico');
 
   var btnCtaFinal = document.getElementById('btn-cta-final');
   var navLinkPrecos = document.getElementById('nav-link-precos');
@@ -461,14 +494,21 @@
 
   var confiancaCores = { alta: '#2f8f5e', media: '#a8502a', baixa: '#c0392b' };
 
-  function esconderPaineis(){
-    painelLogin.classList.remove('active');
-    painelHistorico.classList.remove('active');
+  function fecharSidebar(){
+    sidebar.classList.remove('active');
+    sidebarBackdrop.classList.remove('active');
   }
 
-  btnFecharHistorico.addEventListener('click', function(){
-    painelHistorico.classList.remove('active');
+  function esconderPaineis(){
+    painelLogin.classList.remove('active');
+    fecharSidebar();
+  }
+
+  btnSidebarToggle.addEventListener('click', function(){
+    abrirHistorico();
   });
+  btnSidebarClose.addEventListener('click', fecharSidebar);
+  sidebarBackdrop.addEventListener('click', fecharSidebar);
 
   btnCtaFinal.addEventListener('click', function(){
     document.getElementById('area-principal').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -499,7 +539,6 @@
             '</button>' +
             '<div class="nav-dropdown" id="nav-dropdown">' +
               '<div class="nav-dropdown-saldo" id="nav-dropdown-saldo">···</div>' +
-              '<button id="btn-header-historico">Histórico</button>' +
               '<button class="sair" id="btn-header-sair">Sair</button>' +
             '</div>' +
           '</div>';
@@ -511,10 +550,6 @@
         });
         document.addEventListener('click', function(){ navUser.classList.remove('active'); });
 
-        document.getElementById('btn-header-historico').addEventListener('click', function(){
-          navUser.classList.remove('active');
-          abrirHistorico();
-        });
         document.getElementById('btn-header-sair').addEventListener('click', function(){
           supa.auth.signOut().then(function(){
             esconderPaineis();
@@ -547,8 +582,9 @@
       var sessao = sessaoResp.data.session;
       if (!sessao) { abrirLoginDoHeader(); return; }
 
-      esconderPaineis();
-      painelHistorico.classList.add('active');
+      painelLogin.classList.remove('active');
+      sidebar.classList.add('active');
+      sidebarBackdrop.classList.add('active');
       historicoLista.innerHTML = '';
       historicoVazio.style.display = 'none';
       historicoVazio.textContent = 'Carregando...';
@@ -567,8 +603,6 @@
         historicoVazio.textContent = 'Não foi possível carregar seu histórico agora.';
         historicoVazio.style.display = 'block';
       });
-
-      painelHistorico.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   }
 
