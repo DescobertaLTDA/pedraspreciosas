@@ -196,16 +196,21 @@
 
   /* --- vitrine: pedras que outros clientes (pagantes) encontraram --- */
   .vitrine-sub{margin-top:6px;font-size:13.5px;color:var(--ink-mute);text-align:center;}
-  .vitrine-grid{margin-top:22px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
-  @media (max-width:680px){ .vitrine-grid{grid-template-columns:repeat(3,1fr);} }
-  @media (max-width:420px){ .vitrine-grid{grid-template-columns:repeat(2,1fr);} }
-  .vitrine-card{background:var(--card-alt);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
-  .vitrine-foto{width:100%;aspect-ratio:1/1;background:#eee;}
+  .vitrine-grid{margin-top:22px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  @media (max-width:560px){ .vitrine-grid{grid-template-columns:1fr;} }
+  .vitrine-card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:border-color .15s ease, box-shadow .15s ease;}
+  .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(36,28,18,0.06);}
+  .vitrine-index{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.04em;color:var(--ink-mute2);padding:14px 18px 0;}
+  .vitrine-foto{margin:10px 18px 0;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:#eee;border:1px solid var(--line);}
   .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
-  .vitrine-info{padding:9px 10px 11px;}
-  .vitrine-nome{font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .vitrine-valor{margin-top:2px;font-size:11.5px;color:var(--ink-mute);line-height:1.3;}
-  .vitrine-valor strong{color:var(--emerald);}
+  .vitrine-info{padding:16px 18px 20px;}
+  .vitrine-nome{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .vitrine-subtitulo{font-style:italic;font-size:13px;color:var(--ink-mute);margin-top:3px;}
+  .vitrine-divisor{border-top:1px dashed var(--line-strong);margin:14px 0;}
+  .vitrine-label{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mute2);margin-bottom:6px;}
+  .vitrine-valor{font-family:'Fraunces',serif;font-size:23px;font-weight:700;color:var(--emerald);}
+  .vitrine-status{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--accent-dark);}
+  .vitrine-status svg{width:15px;height:15px;stroke:var(--accent-dark);stroke-width:2.4;fill:none;flex-shrink:0;}
   .vitrine-paginacao{margin-top:22px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
   .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;width:32px;height:32px;border-radius:7px;border:1px solid var(--line-strong);background:#fff;color:var(--ink-mute);cursor:pointer;}
   .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
@@ -878,13 +883,20 @@
     }
     vitrineVazio.style.display = 'none';
 
-    itens.forEach(function(item){
+    itens.forEach(function(item, i){
       var valorTexto = (typeof item.valor_exibicao === 'number')
         ? formatarReais(item.valor_exibicao)
         : 'valor sob consulta';
 
+      var numeroGlobal = (data.pagina - 1) * itens.length + i + 1;
+      var numeroTexto = 'N° ' + String(numeroGlobal).padStart(3, '0');
+
       var card = document.createElement('div');
       card.className = 'vitrine-card';
+
+      var indice = document.createElement('div');
+      indice.className = 'vitrine-index';
+      indice.textContent = numeroTexto;
 
       var foto = document.createElement('div');
       foto.className = 'vitrine-foto';
@@ -895,16 +907,42 @@
 
       var info = document.createElement('div');
       info.className = 'vitrine-info';
+
       var nome = document.createElement('div');
       nome.className = 'vitrine-nome';
-      nome.textContent = item.nome || 'Cliente';
+      nome.textContent = item.pedra || 'Pedra não identificada';
+
+      var subtitulo = document.createElement('div');
+      subtitulo.className = 'vitrine-subtitulo';
+      subtitulo.textContent = 'encontrada por ' + (item.nome || 'cliente');
+
+      var divisor1 = document.createElement('div');
+      divisor1.className = 'vitrine-divisor';
+
+      var labelValor = document.createElement('div');
+      labelValor.className = 'vitrine-label';
+      labelValor.textContent = 'Valor encontrado';
+
       var valor = document.createElement('div');
       valor.className = 'vitrine-valor';
-      var nomePedraTexto = item.pedra ? ('uma ' + item.pedra) : 'uma pedra';
-      valor.innerHTML = 'achou ' + nomePedraTexto + ' de <strong>' + valorTexto + '</strong> e já sabe onde vender!';
-      info.appendChild(nome);
-      info.appendChild(valor);
+      valor.textContent = valorTexto;
 
+      var divisor2 = document.createElement('div');
+      divisor2.className = 'vitrine-divisor';
+
+      var status = document.createElement('div');
+      status.className = 'vitrine-status';
+      status.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Já sabe onde vender';
+
+      info.appendChild(nome);
+      info.appendChild(subtitulo);
+      info.appendChild(divisor1);
+      info.appendChild(labelValor);
+      info.appendChild(valor);
+      info.appendChild(divisor2);
+      info.appendChild(status);
+
+      card.appendChild(indice);
       card.appendChild(foto);
       card.appendChild(info);
       vitrineGrid.appendChild(card);
