@@ -7,6 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{
@@ -49,8 +50,10 @@
   .btn-secondary{flex:1;background:transparent;color:var(--ink-mute);border:1px solid var(--line-strong);}
   .btn-primary{flex:2;background:var(--citrino);color:#241a06;}
   .btn-primary:disabled{opacity:0.6;cursor:default;}
+  .btn-block{width:100%;}
 
   .erro{margin-top:16px;font-size:13.5px;color:var(--danger);text-align:center;}
+  .aviso{margin-top:16px;font-size:13px;color:var(--ink-mute);text-align:center;}
 
   .resultado{margin-top:22px;background:var(--bg-alt2);border:1px solid rgba(47,158,110,0.35);border-radius:10px;padding:26px;display:none;}
   .resultado.active{display:block;}
@@ -67,6 +70,18 @@
   .observacao{margin-top:16px;font-size:12.5px;color:var(--ink-soft);}
 
   .carregando .btn-primary{background:rgba(227,173,46,0.5);}
+
+  /* --- login / paywall --- */
+  .painel-acesso{margin-top:22px;display:none;}
+  .painel-acesso.active{display:block;}
+  .painel-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--citrino);margin-bottom:14px;}
+  .campo{margin-bottom:12px;}
+  .campo label{display:block;font-size:12.5px;color:var(--ink-mute);margin-bottom:6px;}
+  .campo input{width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:12px;color:var(--ink-light);font-size:14px;}
+  .campo input:focus{outline:none;border-color:var(--citrino);}
+  .troca-modo{margin-top:10px;font-size:12.5px;color:var(--ink-mute);text-align:center;cursor:pointer;text-decoration:underline;}
+  .selo-logado{font-size:12.5px;color:var(--emerald);margin-bottom:14px;}
+  .preco-destaque{font-size:26px;color:var(--parchment);margin:8px 0 16px;}
 </style>
 </head>
 <body>
@@ -78,10 +93,7 @@
     <p>Envie uma foto e nossa inteligência artificial analisa cor, brilho e textura para te dar uma primeira identificação.</p>
   </div>
 
-  <div class="card" id="acesso-negado" style="display:none;text-align:center;">
-    <p style="font-size:15px;color:var(--ink-mute);">Este link é exclusivo para quem adquiriu o identificador de pedras. Se você já comprou, use o link enviado no seu e-mail de confirmação.</p>
-  </div>
-
+  <!-- Upload livre, sem trava -->
   <div class="card" id="area-principal">
     <div class="dropzone" id="dropzone">
       <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
@@ -95,10 +107,35 @@
 
     <div class="actions" id="actions" style="display:none;">
       <button class="btn btn-secondary" id="btn-trocar">Trocar foto</button>
-      <button class="btn btn-primary" id="btn-identificar">Identificar pedra</button>
+      <button class="btn btn-primary" id="btn-ver-resultado">Ver resultado</button>
     </div>
 
     <p class="erro" id="erro" style="display:none;"></p>
+  </div>
+
+  <!-- Painel de login/cadastro (aparece quando clica em "Ver resultado" sem estar logado) -->
+  <div class="card painel-acesso" id="painel-login">
+    <div class="painel-tag">Entrar ou criar conta</div>
+    <p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:16px;">Use e-mail e senha. Não enviamos nada por e-mail — sua conta fica pronta na hora.</p>
+    <div class="campo">
+      <label for="input-email">E-mail</label>
+      <input type="email" id="input-email" placeholder="voce@email.com">
+    </div>
+    <div class="campo">
+      <label for="input-senha">Senha</label>
+      <input type="password" id="input-senha" placeholder="mínimo 6 caracteres">
+    </div>
+    <button class="btn btn-primary btn-block" id="btn-entrar">Entrar / Criar conta</button>
+    <p class="erro" id="erro-login" style="display:none;"></p>
+  </div>
+
+  <!-- Painel de pagamento (aparece quando está logado mas ainda não pagou) -->
+  <div class="card painel-acesso" id="painel-pagar">
+    <div class="selo-logado" id="selo-email-logado"></div>
+    <div class="painel-tag">Desbloquear resultado</div>
+    <div class="preco-destaque">R$ 17,90</div>
+    <p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:16px;">Inclui 3 avaliações de pedras vinculadas à sua conta — pode usar de qualquer aparelho.</p>
+    <button class="btn btn-primary btn-block" id="btn-pagar">Pagar e desbloquear</button>
   </div>
 
   <div class="resultado" id="resultado" style="display:none;">
@@ -121,31 +158,15 @@
 </div>
 
 <script>
-  // ---- Verificação de acesso: reivindica o crédito da compra mais recente via cookie de sessão ----
-  var areaPrincipal = document.getElementById('area-principal');
-  var acessoNegadoEl = document.getElementById('acesso-negado');
-  var usosRestantesGlobal = null;
-  var limiteGlobal = null;
+  // ==== CONFIGURAÇÃO — preencha com os dados do seu projeto Supabase ====
+  var SUPABASE_URL = 'COLE_AQUI_A_URL_DO_SEU_PROJETO_SUPABASE';
+  var SUPABASE_ANON_KEY = 'COLE_AQUI_A_ANON_KEY_PUBLICA_DO_SUPABASE';
+  // Link de checkout do order bump na Cakto. Se a Cakto aceitar prefill de
+  // e-mail via querystring, o e-mail logado é anexado automaticamente.
+  var LINK_CHECKOUT_CAKTO = 'COLE_AQUI_O_LINK_DE_CHECKOUT_DA_CAKTO';
+  // ========================================================================
 
-  areaPrincipal.style.display = 'none';
-  acessoNegadoEl.style.display = 'none';
-
-  fetch('/api/reivindicar', { method: 'POST' })
-    .then(function(res){
-      return res.json().then(function(data){
-        if (!res.ok || data.error) throw new Error(data.error || 'Acesso negado');
-        return data;
-      });
-    })
-    .then(function(data){
-      usosRestantesGlobal = data.limite - data.usos;
-      limiteGlobal = data.limite;
-      areaPrincipal.style.display = 'block';
-    })
-    .catch(function(err){
-      acessoNegadoEl.querySelector('p').textContent = err.message;
-      acessoNegadoEl.style.display = 'block';
-    });
+  var supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   var dropzone = document.getElementById('dropzone');
   var inputFoto = document.getElementById('input-foto');
@@ -153,15 +174,30 @@
   var previewImg = document.getElementById('preview-img');
   var actions = document.getElementById('actions');
   var btnTrocar = document.getElementById('btn-trocar');
-  var btnIdentificar = document.getElementById('btn-identificar');
+  var btnVerResultado = document.getElementById('btn-ver-resultado');
   var erroEl = document.getElementById('erro');
   var resultadoEl = document.getElementById('resultado');
+
+  var painelLogin = document.getElementById('painel-login');
+  var painelPagar = document.getElementById('painel-pagar');
+  var inputEmail = document.getElementById('input-email');
+  var inputSenha = document.getElementById('input-senha');
+  var btnEntrar = document.getElementById('btn-entrar');
+  var erroLoginEl = document.getElementById('erro-login');
+  var btnPagar = document.getElementById('btn-pagar');
+  var seloEmailLogado = document.getElementById('selo-email-logado');
 
   var base64Atual = null;
   var mediaTypeAtual = null;
 
   var confiancaCores = { alta: '#2f9e6e', media: '#e3ad2e', baixa: '#c24545' };
 
+  function esconderPaineis(){
+    painelLogin.classList.remove('active');
+    painelPagar.classList.remove('active');
+  }
+
+  // ---- Upload da foto (livre, sem checar nada) ----
   dropzone.addEventListener('click', function(){ inputFoto.click(); });
 
   inputFoto.addEventListener('change', function(e){
@@ -170,6 +206,7 @@
 
     resultadoEl.classList.remove('active');
     erroEl.style.display = 'none';
+    esconderPaineis();
     mediaTypeAtual = file.type;
 
     var reader = new FileReader();
@@ -194,19 +231,107 @@
     actions.style.display = 'none';
     resultadoEl.classList.remove('active');
     erroEl.style.display = 'none';
+    esconderPaineis();
   });
 
-  btnIdentificar.addEventListener('click', function(){
+  // ---- Clique em "Ver resultado": decide o que mostrar ----
+  btnVerResultado.addEventListener('click', function(){
     if (!base64Atual) return;
+    verificarAcessoEProsseguir();
+  });
 
-    btnIdentificar.disabled = true;
-    btnIdentificar.textContent = 'Analisando...';
+  function verificarAcessoEProsseguir(){
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      if (!sessao) {
+        esconderPaineis();
+        painelLogin.classList.add('active');
+        return;
+      }
+      // logado: checa se já pagou
+      fetch('/api/status', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + sessao.access_token }
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        if (data.pago) {
+          esconderPaineis();
+          identificarPedra(sessao.access_token);
+        } else {
+          esconderPaineis();
+          seloEmailLogado.textContent = 'Logado como ' + (data.email || sessao.user.email);
+          painelPagar.classList.add('active');
+        }
+      })
+      .catch(function(){
+        erroEl.textContent = 'Não foi possível checar seu acesso agora. Tente de novo.';
+        erroEl.style.display = 'block';
+      });
+    });
+  }
+
+  // ---- Login / cadastro (sem confirmação por e-mail) ----
+  btnEntrar.addEventListener('click', function(){
+    var email = inputEmail.value.trim();
+    var senha = inputSenha.value;
+    erroLoginEl.style.display = 'none';
+
+    if (!email || senha.length < 6) {
+      erroLoginEl.textContent = 'Preencha um e-mail válido e uma senha com pelo menos 6 caracteres.';
+      erroLoginEl.style.display = 'block';
+      return;
+    }
+
+    btnEntrar.disabled = true;
+    btnEntrar.textContent = 'Entrando...';
+
+    supa.auth.signInWithPassword({ email: email, password: senha })
+      .then(function(resp){
+        if (resp.error) {
+          // conta ainda não existe -> tenta criar
+          return supa.auth.signUp({ email: email, password: senha });
+        }
+        return resp;
+      })
+      .then(function(resp){
+        if (resp.error) throw resp.error;
+        painelLogin.classList.remove('active');
+        verificarAcessoEProsseguir();
+      })
+      .catch(function(err){
+        erroLoginEl.textContent = err.message || 'Não foi possível entrar. Confira seus dados.';
+        erroLoginEl.style.display = 'block';
+      })
+      .finally(function(){
+        btnEntrar.disabled = false;
+        btnEntrar.textContent = 'Entrar / Criar conta';
+      });
+  });
+
+  // ---- Botão pagar: manda pro checkout com e-mail já preenchido ----
+  btnPagar.addEventListener('click', function(){
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      var email = sessao && sessao.user ? sessao.user.email : '';
+      var separador = LINK_CHECKOUT_CAKTO.indexOf('?') > -1 ? '&' : '?';
+      window.location.href = LINK_CHECKOUT_CAKTO + separador + 'email=' + encodeURIComponent(email);
+    });
+  });
+
+  // ---- Chama a IA depois de confirmar login + pagamento ----
+  function identificarPedra(accessToken){
+    btnVerResultado.disabled = true;
+    btnVerResultado.textContent = 'Analisando...';
     erroEl.style.display = 'none';
     resultadoEl.classList.remove('active');
 
     fetch('/api/identificar', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      },
       body: JSON.stringify({ base64: base64Atual, mediaType: mediaTypeAtual })
     })
     .then(function(res){
@@ -221,14 +346,14 @@
       mostrarResultado(data);
     })
     .catch(function(err){
-      erroEl.textContent = err.message || 'Não foi possível identificar a pedra agora. Tente novamente com outra foto.';
+      erroEl.textContent = err.message || 'Não foi possível identificar a pedra agora. Tente novamente.';
       erroEl.style.display = 'block';
     })
     .finally(function(){
-      btnIdentificar.disabled = false;
-      btnIdentificar.textContent = 'Identificar pedra';
+      btnVerResultado.disabled = false;
+      btnVerResultado.textContent = 'Ver resultado';
     });
-  });
+  }
 
   function mostrarResultado(data){
     document.getElementById('res-nome').textContent = data.nome_provavel || '';
