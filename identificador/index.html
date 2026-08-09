@@ -153,7 +153,7 @@
   .observacao{margin-top:16px;font-size:12.5px;color:var(--ink-mute);}
 
   /* --- bloco premium: preço + onde vender, borrado até comprar --- */
-  .premium-section{position:relative;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .premium-section{position:relative;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);min-height:230px;}
   .premium-conteudo.bloqueado{filter:blur(7px);user-select:none;pointer-events:none;}
   .desbloqueio-overlay{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:18px;border-radius:10px;background:linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.96) 42%);}
   .desbloqueio-overlay.active{display:flex;}
@@ -268,26 +268,6 @@
     <p class="erro" id="erro" style="display:none;"></p>
   </div>
 
-  <!-- Oferta: pacote de leituras -->
-  <div class="oferta" id="area-oferta">
-    <div class="oferta-img">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12l3 3 5-6"/></svg>
-    </div>
-    <div class="oferta-body">
-      <h2>Desbloqueie o valor <em>real</em> da sua pedra</h2>
-      <ul class="oferta-lista">
-        <li><span class="ico">✓</span>Faixa de preço estimada de mercado</li>
-        <li><span class="ico">✓</span>Sugestões de onde vender</li>
-        <li><span class="ico">✓</span>Histórico salvo na sua conta</li>
-      </ul>
-      <div class="oferta-preco">
-        <span class="valor">R$ 9,99</span>
-        <span class="desc">acesso a 10 leituras · sem mensalidade, sem prazo de expiração</span>
-      </div>
-      <button class="btn btn-primary btn-block" id="btn-comprar-early">Comprar acesso</button>
-    </div>
-  </div>
-
   <!-- Painel de login/cadastro (aparece quando clica em "Ver resultado" sem estar logado) -->
   <div class="card painel-acesso" id="painel-login">
     <div class="painel-tag">Entrar ou criar conta</div>
@@ -341,6 +321,26 @@
     </div>
 
     <p class="observacao" id="res-observacao"></p>
+  </div>
+
+  <!-- Oferta: pacote de leituras -->
+  <div class="oferta" id="area-oferta">
+    <div class="oferta-img">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12l3 3 5-6"/></svg>
+    </div>
+    <div class="oferta-body">
+      <h2>Desbloqueie o valor <em>real</em> da sua pedra</h2>
+      <ul class="oferta-lista">
+        <li><span class="ico">✓</span>Faixa de preço estimada de mercado</li>
+        <li><span class="ico">✓</span>Sugestões de onde vender</li>
+        <li><span class="ico">✓</span>Histórico salvo na sua conta</li>
+      </ul>
+      <div class="oferta-preco">
+        <span class="valor">R$ 9,99</span>
+        <span class="desc">acesso a 10 leituras · sem mensalidade, sem prazo de expiração</span>
+      </div>
+      <button class="btn btn-primary btn-block" id="btn-comprar-early">Comprar acesso</button>
+    </div>
   </div>
 
   <!-- Como usar -->
