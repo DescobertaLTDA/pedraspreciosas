@@ -1,6 +1,7 @@
 // /api/webhook-cakto.js
 // Recebe a notificação da Cakto quando o order bump "Avaliação Individual da Sua Pedra"
-// é pago, e registra um crédito pendente que a página do identificador vai reivindicar.
+// é pago, e libera o crédito vinculado ao e-mail do comprador.
+// (Antes era vinculado a um cookie/sessão; agora é vinculado à conta/e-mail.)
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -34,29 +35,42 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, ignorado: true });
   }
 
-  // ---- 3. Filtrar só pela oferta do order bump (evita liberar crédito na venda do ebook principal) ----
+  // ---- 3. Filtrar só pela oferta do order bump ----
   const offerIdEsperado = process.env.CAKTO_OFFER_ID;
   if (offerIdEsperado && data.offer && data.offer.id !== offerIdEsperado) {
     return res.status(200).json({ ok: true, ignorado: true });
   }
 
+  // ---- 4. Extrair e-mail do comprador ----
+  // Confira no payload real da Cakto o caminho exato — normalmente vem em
+  // data.customer.email. Ajuste aqui se o campo tiver outro nome.
+  const emailBruto = data.customer && data.customer.email;
+  if (!emailBruto) {
+    console.error('Payload sem e-mail do comprador:', JSON.stringify(data));
+    return res.status(400).json({ error: 'Payload sem e-mail do comprador' });
+  }
+  const email = emailBruto.toLowerCase().trim();
+
   if (!data.id) {
     return res.status(400).json({ error: 'Payload sem ID do pedido' });
   }
 
-  // ---- 4. Registrar o crédito pendente ----
+  // ---- 5. Liberar o crédito para esse e-mail ----
   try {
     const { error } = await supabase
       .from('creditos_avaliacao')
-      .insert({
-        order_id: data.id,
-        status: 'pendente',
-        limite: LIMITE_PADRAO
-      });
+      .upsert(
+        {
+          email,
+          order_id: data.id,
+          status: 'pago',
+          limite: LIMITE_PADRAO
+        },
+        { onConflict: 'email' }
+      );
 
-    // código 23505 = order_id duplicado (a Cakto reenviou o mesmo webhook) — não é erro real
-    if (error && error.code !== '23505') {
-      console.error('Erro Supabase (webhook insert):', error);
+    if (error) {
+      console.error('Erro Supabase (webhook upsert):', error);
       return res.status(500).json({ error: 'Erro ao registrar crédito' });
     }
 
