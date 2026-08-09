@@ -56,6 +56,20 @@
 
   .foot-note{margin-top:18px;font-size:12.5px;color:var(--ink-soft);}
 
+  .support-note{margin-top:22px;padding-top:20px;border-top:1px dashed rgba(42,33,24,0.25);}
+  .support-note .support-title{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px;}
+  .support-note .support-rows{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;}
+  .support-note .support-item{font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);}
+  .support-note .support-item a{color:var(--ink);border-bottom:1px dashed rgba(42,33,24,0.35);text-decoration:none;}
+  .support-note .support-item a:hover{color:var(--ink-soft);}
+  .support-note .support-hours{margin-top:10px;font-family:'Space Mono',monospace;font-size:10px;color:var(--ink-soft);opacity:0.85;}
+
+  .blocked .support-note{margin-top:26px;padding-top:22px;border-top:1px dashed var(--line-strong);}
+  .blocked .support-note .support-title{color:var(--ink-mute);}
+  .blocked .support-note .support-item{color:var(--parchment);}
+  .blocked .support-note .support-item a{color:var(--parchment);border-bottom-color:var(--line-strong);}
+  .blocked .support-note .support-hours{color:var(--ink-mute);}
+
   /* ===== ESTADO BLOQUEADO (chave ausente/inválida) ===== */
   .blocked{width:100%;max-width:460px;background:var(--bg-alt2);border:1px solid var(--line);border-radius:8px;padding:44px 32px;text-align:center;}
   .blocked .lock{width:64px;height:64px;border-radius:50%;background:var(--bg-alt);border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
@@ -88,6 +102,15 @@
       <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </a>
     <p class="foot-note">Guarde esta página ou o e-mail de confirmação para acessar quando quiser.</p>
+
+    <div class="support-note">
+      <div class="support-title">Dúvidas ou problemas com o acesso?</div>
+      <div class="support-rows">
+        <div class="support-item"><a href="mailto:descobertamental@gmail.com">descobertamental@gmail.com</a></div>
+        <div class="support-item"><a href="https://wa.me/5518991996324" target="_blank" rel="noopener">WhatsApp (18) 99199-6324</a></div>
+      </div>
+      <p class="support-hours">Atendimento todos os dias, das 08h às 21h</p>
+    </div>
   </div>
 
   <!-- Estado: sem chave válida -->
@@ -95,7 +118,15 @@
     <div class="lock"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div>
     <h1>Não encontramos sua compra por aqui.</h1>
     <p>Este link de acesso é pessoal e chega por e-mail logo após a confirmação do pagamento. Confira sua caixa de entrada (e o spam) ou fale com o suporte.</p>
-    <a href="https://wa.me/SEUNUMEROAQUI" class="zap">Falar com o suporte</a>
+    <a href="https://wa.me/5518991996324" class="zap">Falar com o suporte</a>
+
+    <div class="support-note">
+      <div class="support-title">Outra forma de contato</div>
+      <div class="support-rows">
+        <div class="support-item"><a href="mailto:descobertamental@gmail.com">descobertamental@gmail.com</a></div>
+      </div>
+      <p class="support-hours">Atendimento todos os dias, das 08h às 21h</p>
+    </div>
   </div>
 
 <script>
