@@ -256,9 +256,26 @@
 
   .carregando .btn-primary{background:rgba(168,80,42,0.5);}
 
-  /* --- login / paywall --- */
-  .painel-acesso{margin-top:26px;display:none;}
-  .painel-acesso.active{display:block;}
+  /* --- login / paywall (popup) --- */
+  .painel-acesso{display:none;}
+  .painel-acesso.active,
+  .teaser-bloqueio.active{
+    display:block;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:90%;
+    max-width:440px;
+    max-height:88vh;
+    overflow-y:auto;
+    z-index:1000;
+    box-shadow:0 0 0 9999px rgba(20,15,8,0.6), 0 24px 60px rgba(0,0,0,0.35);
+    margin-top:0;
+  }
+  body.popup-aberto{overflow:hidden;}
+  .painel-fechar{position:sticky;top:0;float:right;margin:-6px -6px 0 0;width:30px;height:30px;border-radius:50%;border:none;background:var(--card-alt);color:var(--ink-mute);font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .painel-fechar:hover{background:var(--line);color:var(--ink);}
   .painel-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);margin-bottom:14px;}
   .campo{margin-bottom:12px;}
   .campo label{display:block;font-size:12.5px;color:var(--ink-mute);margin-bottom:6px;}
@@ -297,6 +314,8 @@
   .vitrine-valor{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--emerald);}
   .vitrine-status{display:flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--accent-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .vitrine-status svg{width:10px;height:10px;stroke:var(--accent-dark);stroke-width:2.6;fill:none;flex-shrink:0;}
+  .vitrine-whatsapp{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:9.5px;font-weight:600;color:#25A24A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .vitrine-whatsapp svg{width:10px;height:10px;stroke:#25A24A;stroke-width:2.2;fill:none;flex-shrink:0;}
   .vitrine-paginacao{margin-top:22px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
   .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;width:32px;height:32px;border-radius:7px;border:1px solid var(--line-strong);background:#fff;color:var(--ink-mute);cursor:pointer;}
   .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
@@ -408,11 +427,16 @@
 
   <!-- Painel de login/cadastro (aparece quando clica em "Ver resultado" sem estar logado) -->
   <div class="card painel-acesso" id="painel-login">
+    <button type="button" class="painel-fechar" id="btn-fechar-login" aria-label="Fechar">&times;</button>
     <div class="painel-tag">Entrar ou criar conta</div>
     <p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:16px;">Use e-mail e senha. Não enviamos nada por e-mail — sua conta fica pronta na hora.</p>
     <div class="campo">
       <label for="input-nome">Seu nome</label>
       <input type="text" id="input-nome" placeholder="Como podemos te chamar">
+    </div>
+    <div class="campo">
+      <label for="input-whatsapp">Seu WhatsApp</label>
+      <input type="tel" id="input-whatsapp" placeholder="(00) 00000-0000">
     </div>
     <div class="campo">
       <label for="input-email">E-mail</label>
@@ -429,6 +453,7 @@
   <!-- Teaser motivacional: aparece no lugar do resultado quando a pessoa
        ainda não tem leituras disponíveis, SEM chamar a IA (evita gastar tokens) -->
   <div class="teaser-bloqueio" id="teaser-bloqueio">
+    <button type="button" class="painel-fechar" id="btn-fechar-teaser" aria-label="Fechar">&times;</button>
     <div class="teaser-bloqueio-icon">
       <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
     </div>
@@ -658,10 +683,13 @@
 
   var painelLogin = document.getElementById('painel-login');
   var inputNome = document.getElementById('input-nome');
+  var inputWhatsapp = document.getElementById('input-whatsapp');
   var inputEmail = document.getElementById('input-email');
   var inputSenha = document.getElementById('input-senha');
   var btnEntrar = document.getElementById('btn-entrar');
   var erroLoginEl = document.getElementById('erro-login');
+  var btnFecharLogin = document.getElementById('btn-fechar-login');
+  var btnFecharTeaser = document.getElementById('btn-fechar-teaser');
   var btnPagar = document.getElementById('btn-pagar');
   var btnComprarEarly = document.getElementById('btn-comprar-early');
   var btnJaPaguei = document.getElementById('btn-ja-paguei');
@@ -693,8 +721,29 @@
   function esconderPaineis(){
     painelLogin.classList.remove('active');
     teaserBloqueioEl.classList.remove('active');
+    document.body.classList.remove('popup-aberto');
     fecharSidebar();
   }
+
+  // ---- Popups de login e "sem saldo": travam o scroll do fundo e
+  //      fecham ao clicar no X ou fora da caixa ----
+  function abrirPopup(painel){
+    esconderPaineis();
+    painel.classList.add('active');
+    document.body.classList.add('popup-aberto');
+  }
+
+  btnFecharLogin.addEventListener('click', esconderPaineis);
+  btnFecharTeaser.addEventListener('click', esconderPaineis);
+
+  document.addEventListener('click', function(ev){
+    if (painelLogin.classList.contains('active') && !painelLogin.contains(ev.target) && ev.target.id !== 'btn-header-entrar') {
+      esconderPaineis();
+    }
+    if (teaserBloqueioEl.classList.contains('active') && !teaserBloqueioEl.contains(ev.target)) {
+      esconderPaineis();
+    }
+  });
 
   btnSidebarToggle.addEventListener('click', function(){
     abrirHistorico();
@@ -894,9 +943,7 @@
   }
 
   function abrirLoginDoHeader(){
-    esconderPaineis();
-    painelLogin.classList.add('active');
-    painelLogin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    abrirPopup(painelLogin);
   }
 
   document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
@@ -922,9 +969,7 @@
         // ainda não está logado nessa aba/navegador: pede pra entrar
         // primeiro e guarda o id pra retomar assim que o login terminar
         idPendenteDaUrl = idDaUrl;
-        esconderPaineis();
-        painelLogin.classList.add('active');
-        painelLogin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        abrirPopup(painelLogin);
         return;
       }
 
@@ -1082,6 +1127,14 @@
       info.appendChild(divisor2);
       info.appendChild(status);
 
+      // WhatsApp de quem encontrou a pedra, exibido logo abaixo do card com a foto
+      if (item.whatsapp) {
+        var whats = document.createElement('div');
+        whats.className = 'vitrine-whatsapp';
+        whats.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 01-12.4 7.5L3 20l1.1-5.4A8.5 8.5 0 1121 11.5z"/></svg>' + item.whatsapp;
+        info.appendChild(whats);
+      }
+
       card.appendChild(indice);
       card.appendChild(foto);
       card.appendChild(info);
@@ -1152,8 +1205,7 @@
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
       if (!sessao) {
-        esconderPaineis();
-        painelLogin.classList.add('active');
+        abrirPopup(painelLogin);
         return;
       }
       // logado: só chama a IA (gasta tokens) se a pessoa já tiver
@@ -1191,8 +1243,7 @@
 
   function mostrarTeaserBloqueio(){
     resultadoEl.classList.remove('active');
-    teaserBloqueioEl.classList.add('active');
-    teaserBloqueioEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    abrirPopup(teaserBloqueioEl);
   }
 
   btnAssinarTeaser.addEventListener('click', abrirCheckout);
@@ -1200,6 +1251,7 @@
   // ---- Login / cadastro (sem confirmação por e-mail) ----
   btnEntrar.addEventListener('click', function(){
     var nome = inputNome.value.trim();
+    var whatsapp = inputWhatsapp.value.trim();
     var email = inputEmail.value.trim();
     var senha = inputSenha.value;
     erroLoginEl.style.display = 'none';
@@ -1210,17 +1262,22 @@
       return;
     }
 
+
+
     btnEntrar.disabled = true;
     btnEntrar.textContent = 'Entrando...';
 
     supa.auth.signInWithPassword({ email: email, password: senha })
       .then(function(resp){
         if (resp.error) {
-          // conta ainda não existe -> tenta criar, já salvando o nome
+          // conta ainda não existe -> tenta criar, exigindo o WhatsApp
+          if (!whatsapp) {
+            return Promise.reject(new Error('Informe seu WhatsApp para criar a conta.'));
+          }
           return supa.auth.signUp({
             email: email,
             password: senha,
-            options: { data: { nome: nome || email.split('@')[0] } }
+            options: { data: { nome: nome || email.split('@')[0], whatsapp: whatsapp } }
           });
         }
         return resp;
@@ -1255,9 +1312,7 @@
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
       if (!sessao) {
-        esconderPaineis();
-        painelLogin.classList.add('active');
-        painelLogin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        abrirPopup(painelLogin);
         return;
       }
       var email = sessao.user ? sessao.user.email : '';
