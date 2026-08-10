@@ -120,12 +120,12 @@
   .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--accent);}
   .head h1{margin-top:16px;font-size:clamp(30px,6vw,44px);}
 
-  .hero-callout{margin:26px auto 0;max-width:480px;background:var(--accent-light);border:1px solid var(--accent);border-radius:14px;padding:16px 22px;font-size:14.5px;color:var(--ink-soft);line-height:1.5;}
-  .hero-callout strong{color:var(--accent-dark);font-family:'Fraunces',serif;}
-  .hero-callout-hint{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Space Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--accent-dark);}
-  .hero-callout-hint svg{width:14px;height:14px;stroke:var(--accent-dark);stroke-width:2.4;fill:none;animation:heroArrowBounce 1.4s ease-in-out infinite;flex-shrink:0;}
+  .hero-sub{margin:18px auto 0;max-width:440px;font-size:16.5px;line-height:1.6;color:var(--ink-mute);}
+  .hero-sub strong{color:var(--ink);font-weight:600;}
+  .upload-hint{margin:36px auto 0;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent-dark);}
+  .upload-hint svg{width:14px;height:14px;stroke:var(--accent-dark);stroke-width:2.4;fill:none;animation:heroArrowBounce 1.4s ease-in-out infinite;flex-shrink:0;}
   @keyframes heroArrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
-  @media (max-width:480px){ .hero-callout{padding:14px 18px;font-size:14px;} .hero-callout-hint{font-size:10.5px;} }
+  @media (max-width:480px){ .hero-sub{font-size:15px;} .upload-hint{font-size:10.5px;margin-top:28px;} }
 
   .card{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(36,28,18,0.03);overflow-wrap:break-word;word-break:break-word;}
   .card h2{font-size:21px;text-align:center;}
@@ -406,17 +406,16 @@
   <div class="head">
     <div class="eyebrow">Identificador com IA</div>
     <h1>Descubra o que é sua pedra</h1>
-    <div class="hero-callout">
-      <strong>Avaliamos sua pedra em poucos segundos</strong> e te dizemos quanto ela vale e onde vender.
-      <div class="hero-callout-hint">
-        Carregue a foto logo abaixo e veja o resultado na hora
-        <svg viewBox="0 0 24 24"><path d="M12 5v14m0 0l-6-6m6 6l6-6"/></svg>
-      </div>
-    </div>
+    <p class="hero-sub"><strong>Avaliamos sua pedra em poucos segundos</strong> e te dizemos quanto ela vale e onde vender.</p>
+  </div>
+
+  <div class="upload-hint">
+    Carregue a foto abaixo e veja o resultado na hora
+    <svg viewBox="0 0 24 24"><path d="M12 5v14m0 0l-6-6m6 6l6-6"/></svg>
   </div>
 
   <!-- Upload livre, sem trava -->
-  <div class="card" id="area-principal">
+  <div class="card" id="area-principal" style="margin-top:14px;">
     <div class="dropzone" id="dropzone">
       <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
       <strong>Envie a foto da sua pedra</strong>
