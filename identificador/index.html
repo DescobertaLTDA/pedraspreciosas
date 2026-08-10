@@ -1524,6 +1524,8 @@
     });
 
     var totalPaginas = data.total_paginas || 1;
+    var LIMITE_MAX_PAGINACAO = 50; // segurança: nunca cria uma quantidade absurda de botões
+    if (totalPaginas > LIMITE_MAX_PAGINACAO) totalPaginas = LIMITE_MAX_PAGINACAO;
     for (var i = 1; i <= totalPaginas; i++) {
       (function(pag){
         var btn = document.createElement('button');
