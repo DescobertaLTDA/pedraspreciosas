@@ -1,10 +1,15 @@
 // /api/identificar.js
 // Endpoint serverless (Vercel) para identificação de pedras via IA (Claude API).
-// Agora a identificação em si é GRÁTIS para quem está logado (não exige pagamento).
+// A identificação em si é GRÁTIS para quem está logado (não exige pagamento).
 // Preço e onde vender só entram na resposta se a conta já tiver crédito pago
 // disponível — nesse caso, 1 crédito é consumido na hora. Se não tiver crédito,
 // o resultado completo fica salvo no banco (tabela identificacoes) e a pessoa
 // libera depois via /api/desbloquear, sem precisar rodar a IA de novo.
+//
+// Também registra (silenciosamente, sem afetar a resposta) o custo em USD de
+// cada chamada à Claude API na tabela `custos_ia`, usando o campo "usage"
+// que a própria resposta da API já traz — pra você acompanhar gasto x margem
+// direto pelo Supabase.
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -12,6 +17,44 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
+
+// ---- Preços da Claude API (claude-sonnet-4-6), por milhão de tokens ----
+// Ajuste aqui se o preço do modelo mudar. Fonte: platform.claude.com/docs
+const MODELO = 'claude-sonnet-4-6';
+const PRECO_INPUT_POR_MILHAO = 3;   // USD
+const PRECO_OUTPUT_POR_MILHAO = 15; // USD
+
+function calcularCustoUsd(inputTokens, outputTokens) {
+  const custoInput = (inputTokens / 1_000_000) * PRECO_INPUT_POR_MILHAO;
+  const custoOutput = (outputTokens / 1_000_000) * PRECO_OUTPUT_POR_MILHAO;
+  return Math.round((custoInput + custoOutput) * 1_000_000) / 1_000_000; // 6 casas
+}
+
+// Grava o custo da chamada. Roda "fire and forget": se der erro, só loga —
+// nunca deve derrubar ou atrasar a resposta pro usuário.
+async function registrarCustoIA({ identificacaoId, email, usage }) {
+  try {
+    if (!usage) return;
+    const inputTokens = usage.input_tokens || 0;
+    const outputTokens = usage.output_tokens || 0;
+    const custoUsd = calcularCustoUsd(inputTokens, outputTokens);
+
+    const { error } = await supabase.from('custos_ia').insert({
+      identificacao_id: identificacaoId || null,
+      email: email || null,
+      modelo: MODELO,
+      input_tokens: inputTokens,
+      output_tokens: outputTokens,
+      custo_usd: custoUsd
+    });
+
+    if (error) {
+      console.error('Erro Supabase (insert custos_ia):', error);
+    }
+  } catch (err) {
+    console.error('Erro inesperado ao registrar custo IA:', err);
+  }
+}
 
 function pegarToken(req) {
   const cabecalho = req.headers.authorization || '';
@@ -83,7 +126,7 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: MODELO,
         max_tokens: 1000,
         system: promptSistema,
         messages: [
@@ -122,6 +165,8 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
       resultadoIA = JSON.parse(limpo);
     } catch (e) {
       console.error('Falha ao parsear JSON da Claude:', textoResposta);
+      // Mesmo com falha de parse, a chamada foi cobrada — registra o custo.
+      registrarCustoIA({ identificacaoId: null, email, usage: dataClaude.usage });
       return res.status(502).json({ error: 'Não foi possível interpretar o resultado. Tente novamente.' });
     }
 
@@ -147,8 +192,13 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
 
     if (erroInsert || !linhaSalva) {
       console.error('Erro Supabase (insert identificacao):', erroInsert);
+      // A chamada à Claude já foi cobrada mesmo sem conseguir salvar — registra.
+      registrarCustoIA({ identificacaoId: null, email, usage: dataClaude.usage });
       return res.status(500).json({ error: 'Erro ao salvar o resultado. Tente novamente.' });
     }
+
+    // ---- 4.1 Registrar custo da chamada (não bloqueia a resposta) ----
+    registrarCustoIA({ identificacaoId: linhaSalva.id, email, usage: dataClaude.usage });
 
     // ---- 5. Ver se essa conta já tem crédito pago disponível ----
     const { data: credito } = await supabase
