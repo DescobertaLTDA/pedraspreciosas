@@ -141,9 +141,7 @@
   .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:44px 20px;border:1.5px dashed var(--line-strong);border-radius:10px;cursor:pointer;transition:border-color .2s ease, background .2s ease;background:var(--card-alt);}
   .dropzone:hover{border-color:var(--accent);}
   .dropzone:active{border-color:var(--accent);}
-  /* CORREÇÃO: Permite que o clique funcione em toda a área */
   .dropzone * { pointer-events: none; }
-  /* O input file precisa receber o clique */
   .dropzone input[type="file"] { pointer-events: auto; display: none; }
   @media (max-width:380px){ .dropzone{padding:32px 16px;} .card{padding:20px;} }
   .dz-icon{width:64px;height:64px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;}
@@ -953,6 +951,20 @@
 
   var confiancaCores = { alta: '#2f8f5e', media: '#a8502a', baixa: '#c0392b' };
 
+  // CONTROLE DE TIMEOUTS - PREVINE TRAVAMENTO
+  var timeoutIds = [];
+
+  function limparTimeouts() {
+    timeoutIds.forEach(function(id) { clearTimeout(id); });
+    timeoutIds = [];
+  }
+
+  function setTimeoutSeguro(fn, delay) {
+    var id = setTimeout(fn, delay);
+    timeoutIds.push(id);
+    return id;
+  }
+
   function fecharSidebar(){
     sidebar.classList.remove('active');
     sidebarBackdrop.classList.remove('active');
@@ -1324,12 +1336,23 @@
   var vitrineGrid = document.getElementById('vitrine-grid');
   var vitrinePaginacao = document.getElementById('vitrine-paginacao');
   var vitrineVazio = document.getElementById('vitrine-vazio');
+  var paginaVitrineAtual = 1;
+  var carregandoVitrine = false;
 
   function carregarVitrine(pagina){
-    fetch('/api/vitrine?pagina=' + pagina)
+    if (carregandoVitrine) return;
+    carregandoVitrine = true;
+    paginaVitrineAtual = pagina || 1;
+
+    fetch('/api/vitrine?pagina=' + paginaVitrineAtual)
       .then(function(res){ return res.json(); })
-      .then(function(data){ renderizarVitrine(data); })
-      .catch(function(){});
+      .then(function(data){ 
+        renderizarVitrine(data);
+        carregandoVitrine = false;
+      })
+      .catch(function(){
+        carregandoVitrine = false;
+      });
   }
 
   function renderizarVitrine(data){
@@ -1420,24 +1443,23 @@
     }
   }
 
-  carregarVitrine(1);
+  // Carrega a vitrine apenas uma vez
+  setTimeoutSeguro(function() {
+    carregarVitrine(1);
+  }, 500);
 
   // ---- Upload da foto ----
-  // Função para abrir o seletor de arquivos
   function abrirSeletorArquivo() {
     inputFoto.click();
   }
 
-  // Event listener para o dropzone - CORRIGIDO com pointer-events
   dropzone.addEventListener('click', function(e){
-    // Se for navegador interno, mostra o popup
     if (ehNavegadorInterno) {
       e.preventDefault();
       abrirPopup(painelNavegadorInterno);
       return;
     }
     
-    // Verifica se o usuário está logado
     supa.auth.getSession()
       .then(function(sessaoResp){
         var sessao = sessaoResp.data.session;
@@ -1446,11 +1468,9 @@
           abrirPainelLogin();
           return;
         }
-        // Se estiver logado, abre o seletor de arquivos
         abrirSeletorArquivo();
       })
       .catch(function(){
-        // Em caso de erro, tenta abrir o seletor mesmo assim
         abrirSeletorArquivo();
       });
   });
@@ -1488,7 +1508,6 @@
       actions.style.display = 'flex';
       consentimentoVitrine.style.display = 'flex';
       
-      // Inicia a identificação automaticamente
       iniciarIdentificacao();
     };
     reader.readAsDataURL(file);
@@ -1543,9 +1562,9 @@
     erroEl.style.display = 'none';
     esconderPaineis();
     pararAnalisePorCancelamento();
+    limparTimeouts();
   });
 
-  // ---- Clique em "Ver resultado" ----
   btnVerResultado.addEventListener('click', function(){
     if (!base64Atual || !fotoCarregada) return;
     if (analiseEmAndamento) return;
@@ -1768,7 +1787,7 @@
     btnProgressFill.style.transition = 'width .35s ease-out';
     btnProgressFill.style.width = sucesso ? '100%' : '0%';
     if (sucesso) {
-      setTimeout(function(){
+      setTimeoutSeguro(function(){
         btnProgressFill.style.transition = 'none';
         btnProgressFill.style.width = '0%';
       }, 500);
@@ -1816,8 +1835,10 @@
       pararProgresso(true);
       mostrarResultado(data);
       atualizarHeader();
-      // Recarrega a vitrine após identificar
-      carregarVitrine(1);
+      // Recarrega a vitrine APENAS se a imagem foi autorizada
+      if (checkPermiteVitrine.checked) {
+        carregarVitrine(1);
+      }
     })
     .catch(function(err){
       pararProgresso(false);
@@ -1901,7 +1922,7 @@
 
     resultadoEl.classList.add('active');
 
-    setTimeout(function(){
+    setTimeoutSeguro(function(){
       resultadoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 60);
   }
@@ -1915,6 +1936,11 @@
     if (sessaoResp.data.session) {
       atualizarHeader();
     }
+  });
+
+  // Limpa timeouts quando a página é descarregada
+  window.addEventListener('beforeunload', function() {
+    limparTimeouts();
   });
 </script>
 </body>
