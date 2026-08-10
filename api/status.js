@@ -13,7 +13,7 @@ const supabase = createClient(
 );
 
 // Mantido igual ao definido em /api/identificar.js
-const LIMITE_AVALIACOES_GRATIS = 3;
+const LIMITE_AVALIACOES_GRATIS = 1;
 
 function pegarToken(req) {
   const cabecalho = req.headers.authorization || '';

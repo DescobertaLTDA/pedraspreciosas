@@ -14,6 +14,16 @@
 // - Fotos que a IA identifica como "não é pedra/mineral" nunca contam como uma
 //   das avaliações grátis nem consomem crédito pago.
 //
+// Fotos (múltiplos ângulos):
+// - O front envia um array `fotos` com 1 a 5 imagens ({ base64, mediaType } cada).
+// - Todas as fotos entram na MESMA mensagem enviada à Claude (um bloco "image"
+//   por foto), pra IA cruzar informações entre ângulos (cor, textura, brilho,
+//   transparência) — isso continua sendo UMA análise, consumindo 1 avaliação
+//   grátis ou 1 uso de crédito pago, nunca 1 por foto.
+// - Só a 1ª foto do array é persistida no banco (colunas foto_base64/foto_media_type),
+//   como "capa" da identificação — as demais só passam pela chamada à IA e não
+//   são salvas, pra não inflar o armazenamento no Supabase.
+//
 // Também registra (silenciosamente, sem afetar a resposta) o custo em USD de
 // cada chamada à Claude API na tabela `custos_ia`, usando o campo "usage"
 // que a própria resposta da API já traz — pra você acompanhar gasto x margem
@@ -33,8 +43,17 @@ const PRECO_INPUT_POR_MILHAO = 3;   // USD
 const PRECO_OUTPUT_POR_MILHAO = 15; // USD
 
 // ---- Cota de avaliações gratuitas por conta ----
-const LIMITE_AVALIACOES_GRATIS = 3;
+const LIMITE_AVALIACOES_GRATIS = 1;
 const MENSAGEM_UPSELL = 'Gostou do resultado? Libere agora onde anunciar essa pedra e desbloqueie +10 avaliações completas por apenas R$13,99.';
+
+// ---- Limites de upload de fotos (1 análise = até 5 fotos = 1 crédito) ----
+// Payload total do request precisa ficar bem abaixo do limite de body do Vercel
+// (4.5MB no plano Hobby). O front já comprime cada imagem no client (~1280px,
+// JPEG q0.8) antes de enviar, então esses números são uma margem de segurança.
+const MIN_FOTOS = 1;
+const MAX_FOTOS = 5;
+const TAMANHO_MAX_BASE64_POR_FOTO = 2_000_000;  // ~1.5MB decodificado
+const TAMANHO_MAX_BASE64_TOTAL = 4_200_000;     // ~3.1MB decodificado, soma de todas as fotos
 
 function calcularCustoUsd(inputTokens, outputTokens) {
   const custoInput = (inputTokens / 1_000_000) * PRECO_INPUT_POR_MILHAO;
@@ -81,23 +100,39 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  const { base64, mediaType, permitirVitrine } = req.body || {};
+  const { fotos, permitirVitrine } = req.body || {};
   // Se o front não mandar o campo (versão antiga do app, por exemplo),
   // assume true — mas o app atual sempre envia esse valor explicitamente.
   const permiteVitrine = permitirVitrine !== false;
 
   // ---- 1. Validações básicas de entrada ----
-  if (!base64 || !mediaType) {
-    return res.status(400).json({ error: 'Foto não enviada corretamente' });
+  if (!Array.isArray(fotos) || fotos.length < MIN_FOTOS) {
+    return res.status(400).json({ error: 'Envie pelo menos 1 foto da pedra.' });
+  }
+
+  if (fotos.length > MAX_FOTOS) {
+    return res.status(400).json({ error: `Envie no máximo ${MAX_FOTOS} fotos por análise.` });
   }
 
   const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
-  if (!tiposPermitidos.includes(mediaType)) {
-    return res.status(400).json({ error: 'Formato de imagem não suportado' });
+  let tamanhoTotalBase64 = 0;
+
+  for (let i = 0; i < fotos.length; i++) {
+    const foto = fotos[i];
+    if (!foto || !foto.base64 || !foto.mediaType) {
+      return res.status(400).json({ error: `Foto ${i + 1} não enviada corretamente.` });
+    }
+    if (!tiposPermitidos.includes(foto.mediaType)) {
+      return res.status(400).json({ error: `Formato da foto ${i + 1} não suportado.` });
+    }
+    if (foto.base64.length > TAMANHO_MAX_BASE64_POR_FOTO) {
+      return res.status(400).json({ error: `Foto ${i + 1} está muito grande. Envie uma foto menor.` });
+    }
+    tamanhoTotalBase64 += foto.base64.length;
   }
 
-  if (base64.length > 11_000_000) {
-    return res.status(400).json({ error: 'Imagem muito grande. Envie uma foto menor.' });
+  if (tamanhoTotalBase64 > TAMANHO_MAX_BASE64_TOTAL) {
+    return res.status(400).json({ error: 'O conjunto de fotos ficou muito grande. Remova alguma foto ou envie versões menores.' });
   }
 
   // ---- 2. Validar login ----
@@ -177,6 +212,17 @@ Se "e_pedra_ou_mineral" for false, preencha os demais campos com string vazia ou
 
 Se for uma pedra mas não for possível identificar com segurança, defina "e_pedra_ou_mineral" como true, "confianca" como "baixa" e ainda assim dê o palpite mais provável.`;
 
+    const blocosDeImagem = fotos.map(function (foto) {
+      return {
+        type: 'image',
+        source: { type: 'base64', media_type: foto.mediaType, data: foto.base64 }
+      };
+    });
+
+    const textoInstrucao = fotos.length > 1
+      ? `Estas são ${fotos.length} fotos da MESMA pedra, em ângulos e/ou condições de luz diferentes. Compare cor, textura, brilho e transparência entre as fotos para aumentar a precisão da identificação. Identifique esta pedra e responda apenas com o JSON pedido.`
+      : 'Identifique esta pedra e responda apenas com o JSON pedido.';
+
     const respostaClaude = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -191,16 +237,12 @@ Se for uma pedra mas não for possível identificar com segurança, defina "e_pe
         messages: [
           {
             role: 'user',
-            content: [
-              {
-                type: 'image',
-                source: { type: 'base64', media_type: mediaType, data: base64 }
-              },
+            content: blocosDeImagem.concat([
               {
                 type: 'text',
-                text: 'Identifique esta pedra e responda apenas com o JSON pedido.'
+                text: textoInstrucao
               }
-            ]
+            ])
           }
         ]
       })
@@ -279,8 +321,8 @@ Se for uma pedra mas não for possível identificar com segurança, defina "e_pe
         observacao: resultadoIA.observacao || null,
         faixa_preco_brasil: resultadoIA.faixa_preco_brasil || null,
         onde_vender: resultadoIA.onde_vender || null,
-        foto_base64: base64,
-        foto_media_type: mediaType,
+        foto_base64: fotos[0].base64,
+        foto_media_type: fotos[0].mediaType,
         desbloqueada: desbloqueado,
         consumiu_credito_pago: desbloqueado,
         permite_vitrine: permiteVitrine
