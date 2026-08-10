@@ -561,7 +561,7 @@
   <div class="card" id="area-principal" style="margin-top:14px;">
     <div class="dropzone" id="dropzone">
       <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
-      <strong>Envie a foto da sua pedra</strong>
+      <strong id="dz-titulo">Envie a foto da sua pedra</strong>
       <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Você pode enviar até 5 fotos de ângulos diferentes.</span>
       <input type="file" id="input-foto" accept="image/*">
     </div>
@@ -1578,38 +1578,70 @@
     }
   });
 
-  function comprimirImagem(file, callback){
+  var MAX_TAMANHO_ARQUIVO_BYTES = 35 * 1024 * 1024; // 35MB, segurança contra arquivos gigantes
+
+  function redimensionarEExportar(fonte, larguraOrig, alturaOrig, callback, bitmapParaFechar){
+    try {
+      var largura = larguraOrig;
+      var altura = alturaOrig;
+      var maiorLado = Math.max(largura, altura);
+      if (maiorLado > MAX_LADO_PX) {
+        var escala = MAX_LADO_PX / maiorLado;
+        largura = Math.round(largura * escala);
+        altura = Math.round(altura * escala);
+      }
+      var canvas = document.createElement('canvas');
+      canvas.width = largura;
+      canvas.height = altura;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(fonte, 0, 0, largura, altura);
+      if (bitmapParaFechar && bitmapParaFechar.close) bitmapParaFechar.close();
+      var dataUrl;
+      try {
+        dataUrl = canvas.toDataURL('image/jpeg', QUALIDADE_JPEG);
+      } catch (e) {
+        callback(new Error('Não foi possível processar essa imagem.'));
+        return;
+      }
+      callback(null, dataUrl);
+    } catch (eProc) {
+      callback(new Error('Não foi possível processar essa imagem.'));
+    }
+  }
+
+  function comprimirImagemFallback(file, callback){
+    // Método antigo, usado só se o navegador não suportar createImageBitmap.
+    // Roda a decodificação via <img>, que pode travar a página em fotos muito grandes.
     var leitor = new FileReader();
     leitor.onload = function(){
       var img = new Image();
       img.onload = function(){
-        var largura = img.width;
-        var altura = img.height;
-        var maiorLado = Math.max(largura, altura);
-        if (maiorLado > MAX_LADO_PX) {
-          var escala = MAX_LADO_PX / maiorLado;
-          largura = Math.round(largura * escala);
-          altura = Math.round(altura * escala);
-        }
-        var canvas = document.createElement('canvas');
-        canvas.width = largura;
-        canvas.height = altura;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, largura, altura);
-        var dataUrl;
-        try {
-          dataUrl = canvas.toDataURL('image/jpeg', QUALIDADE_JPEG);
-        } catch (e) {
-          callback(new Error('Não foi possível processar essa imagem.'));
-          return;
-        }
-        callback(null, dataUrl);
+        redimensionarEExportar(img, img.width, img.height, callback);
       };
       img.onerror = function(){ callback(new Error('Não foi possível ler essa imagem.')); };
       img.src = leitor.result;
     };
     leitor.onerror = function(){ callback(new Error('Não foi possível ler esse arquivo.')); };
     leitor.readAsDataURL(file);
+  }
+
+  function comprimirImagem(file, callback){
+    if (file.size && file.size > MAX_TAMANHO_ARQUIVO_BYTES) {
+      callback(new Error('Essa foto é muito grande. Tente uma imagem menor que 35MB.'));
+      return;
+    }
+
+    // createImageBitmap decodifica a foto fora da thread principal, evitando que
+    // fotos grandes de celular (12–50MP) travem a página durante o processamento.
+    if (window.createImageBitmap) {
+      window.createImageBitmap(file).then(function(bitmap){
+        redimensionarEExportar(bitmap, bitmap.width, bitmap.height, callback, bitmap);
+      }).catch(function(){
+        comprimirImagemFallback(file, callback);
+      });
+    } else {
+      comprimirImagemFallback(file, callback);
+    }
   }
 
   function renderizarTiraFotos(){
@@ -1676,17 +1708,28 @@
     limparTimeouts();
   }
 
+  var dzTitulo = document.getElementById('dz-titulo');
+  var processandoFoto = false;
+
   inputFoto.addEventListener('change', function(e){
     var file = e.target.files[0];
     inputFoto.value = '';
     if (!file) return;
     if (fotosSelecionadas.length >= MAX_FOTOS) return;
+    if (processandoFoto) return; // evita processar duas fotos ao mesmo tempo
 
     resultadoEl.classList.remove('active');
     erroEl.style.display = 'none';
     esconderPaineis();
 
+    processandoFoto = true;
+    var tituloOriginal = dzTitulo.textContent;
+    dzTitulo.textContent = 'Processando foto...';
+
     comprimirImagem(file, function(err, dataUrl){
+      processandoFoto = false;
+      dzTitulo.textContent = tituloOriginal;
+
       if (err) {
         erroEl.textContent = err.message;
         erroEl.style.display = 'block';
