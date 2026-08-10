@@ -100,16 +100,39 @@
   .dropzone span{font-size:13.5px;color:var(--ink-mute);text-align:center;max-width:280px;}
   input[type=file]{display:none;}
 
-  .preview{width:100%;max-height:420px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--card-alt);display:flex;align-items:center;justify-content:center;}
+  .preview{width:100%;max-height:420px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--card-alt);display:flex;align-items:center;justify-content:center;position:relative;}
   .preview img{width:100%;max-height:420px;display:block;object-fit:contain;}
+
+  /* --- efeito de scanner sobre a foto durante a análise --- */
+  .scanner-overlay{position:absolute;inset:0;display:none;overflow:hidden;pointer-events:none;}
+  .scanner-overlay.active{display:block;}
+  .scanner-grid{position:absolute;inset:0;opacity:0;background-image:
+      linear-gradient(rgba(56,196,120,0.45) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,196,120,0.45) 1px, transparent 1px);
+    background-size:26px 26px;
+    animation:scannerGridFade .5s ease forwards;}
+  .scanner-overlay::after{content:'';position:absolute;inset:0;background:rgba(56,196,120,0.06);opacity:0;animation:scannerGridFade .5s ease forwards;}
+  .scanner-line{position:absolute;left:0;right:0;top:-4px;height:4px;
+    background:linear-gradient(90deg, transparent, #38c478 15%, #a7f3c5 50%, #38c478 85%, transparent);
+    box-shadow:0 0 14px 3px rgba(56,196,120,0.85), 0 0 34px 8px rgba(56,196,120,0.35);
+    animation:scannerMove 1.9s ease-in-out infinite;}
+  @keyframes scannerGridFade{to{opacity:1;}}
+  @keyframes scannerMove{
+    0%{top:-4px;}
+    50%{top:calc(100% - 4px);}
+    100%{top:-4px;}
+  }
 
   .actions{display:flex;gap:12px;margin-top:18px;}
   .btn{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;border-radius:7px;padding:13px 18px;cursor:pointer;border:none;}
   .btn-secondary{flex:1;background:transparent;color:var(--ink-mute);border:1px solid var(--line-strong);}
-  .btn-primary{flex:2;background:var(--accent);color:#fff;}
+  .btn-primary{flex:2;background:var(--accent);color:#fff;position:relative;overflow:hidden;isolation:isolate;}
   .btn-primary:hover{background:var(--accent-dark);}
   .btn-primary:disabled{opacity:0.55;cursor:default;}
   .btn-block{width:100%;}
+  .btn-progress-fill{position:absolute;top:0;left:0;bottom:0;width:0%;background:rgba(255,255,255,0.22);z-index:0;}
+  .btn-label{position:relative;z-index:1;}
+  #btn-ver-resultado:disabled{opacity:1;}
 
   .erro{margin-top:16px;font-size:13.5px;color:var(--danger);text-align:center;}
   .aviso{margin-top:16px;font-size:13px;color:var(--ink-mute);text-align:center;}
@@ -292,11 +315,18 @@
 
     <div class="preview" id="preview" style="display:none;">
       <img id="preview-img" alt="Foto da pedra enviada">
+      <div class="scanner-overlay" id="scanner-overlay">
+        <div class="scanner-grid"></div>
+        <div class="scanner-line"></div>
+      </div>
     </div>
 
     <div class="actions" id="actions" style="display:none;">
       <button class="btn btn-secondary" id="btn-trocar">Trocar foto</button>
-      <button class="btn btn-primary" id="btn-ver-resultado">Ver resultado</button>
+      <button class="btn btn-primary" id="btn-ver-resultado">
+        <span class="btn-progress-fill" id="btn-progress-fill"></span>
+        <span class="btn-label" id="btn-ver-resultado-label">Ver resultado</span>
+      </button>
     </div>
 
     <p class="erro" id="erro" style="display:none;"></p>
@@ -513,6 +543,9 @@
   var actions = document.getElementById('actions');
   var btnTrocar = document.getElementById('btn-trocar');
   var btnVerResultado = document.getElementById('btn-ver-resultado');
+  var btnVerResultadoLabel = document.getElementById('btn-ver-resultado-label');
+  var btnProgressFill = document.getElementById('btn-progress-fill');
+  var scannerOverlay = document.getElementById('scanner-overlay');
   var erroEl = document.getElementById('erro');
   var resultadoEl = document.getElementById('resultado');
 
@@ -1142,12 +1175,50 @@
     });
   });
 
+  // ---- Efeito de scanner na foto + barra de progresso no botão,
+  //      durante a análise da IA ----
+  var progressoInterval = null;
+
+  function iniciarScanner(){
+    scannerOverlay.classList.add('active');
+  }
+  function pararScanner(){
+    scannerOverlay.classList.remove('active');
+  }
+
+  function iniciarProgresso(){
+    var pct = 0;
+    btnProgressFill.style.transition = 'none';
+    btnProgressFill.style.width = '0%';
+    clearInterval(progressoInterval);
+    progressoInterval = setInterval(function(){
+      pct += (90 - pct) * 0.08 + 0.3;
+      if (pct > 90) pct = 90;
+      btnProgressFill.style.transition = 'width .25s linear';
+      btnProgressFill.style.width = pct + '%';
+    }, 130);
+  }
+
+  function pararProgresso(sucesso){
+    clearInterval(progressoInterval);
+    btnProgressFill.style.transition = 'width .35s ease-out';
+    btnProgressFill.style.width = sucesso ? '100%' : '0%';
+    if (sucesso) {
+      setTimeout(function(){
+        btnProgressFill.style.transition = 'none';
+        btnProgressFill.style.width = '0%';
+      }, 500);
+    }
+  }
+
   // ---- Chama a IA assim que a pessoa está logada (a identificação básica
   //      é liberada; preço/onde vender vêm bloqueados até haver leituras
   //      disponíveis no pacote) ----
   function identificarPedra(accessToken){
     btnVerResultado.disabled = true;
-    btnVerResultado.textContent = 'Analisando...';
+    btnVerResultadoLabel.textContent = 'Analisando...';
+    iniciarScanner();
+    iniciarProgresso();
     erroEl.style.display = 'none';
     resultadoEl.classList.remove('active');
 
@@ -1168,16 +1239,19 @@
       });
     })
     .then(function(data){
+      pararProgresso(true);
       mostrarResultado(data);
       atualizarHeader();
     })
     .catch(function(err){
+      pararProgresso(false);
       erroEl.textContent = err.message || 'Não foi possível identificar a pedra agora. Tente novamente.';
       erroEl.style.display = 'block';
     })
     .finally(function(){
       btnVerResultado.disabled = false;
-      btnVerResultado.textContent = 'Ver resultado';
+      btnVerResultadoLabel.textContent = 'Ver resultado';
+      pararScanner();
     });
   }
 
