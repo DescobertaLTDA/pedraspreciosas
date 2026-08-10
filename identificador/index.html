@@ -469,8 +469,8 @@
       <p class="teaser-cta-vitrine-texto"><strong>Avalie sua pedra e mostre na nossa vitrine</strong> para mais de 100.000 pessoas.</p>
       <p class="teaser-cta-vitrine-sub">Não deixe sua pedra escondida — aqui é a hora de divulgar ela. Caso alguém se interesse, ele vai entrar em contato com você pelo WhatsApp. Fique atento!</p>
     </div>
-    <button class="btn btn-primary btn-block" id="btn-assinar-teaser">Desbloquear identificação — R$ 9,99</button>
-    <p class="teaser-bloqueio-sub">acesso a 10 leituras · sem mensalidade, sem prazo de expiração</p>
+    <button class="btn btn-primary btn-block" id="btn-assinar-teaser">Desbloquear identificação — R$ 17,90</button>
+    <p class="teaser-bloqueio-sub">acesso a 18 leituras · sem mensalidade, sem prazo de expiração</p>
   </div>
 
   <div class="resultado" id="resultado">
@@ -522,8 +522,8 @@
           <li><span class="cadeado"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span><strong>Onde encontrar</strong> mais compradores para esse tipo de pedra <em>PREMIUM</em></li>
           <li><span class="cadeado"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span><strong>Como negociar</strong> o melhor valor nessa venda <em>PREMIUM</em></li>
         </ul>
-        <div class="preco-destaque">R$ 9,99</div>
-        <div class="preco-sub">acesso a 10 leituras · sem assinatura</div>
+        <div class="preco-destaque">R$ 17,90</div>
+        <div class="preco-sub">acesso a 18 leituras · sem assinatura</div>
         <button class="btn btn-primary btn-block" id="btn-pagar">Comprar acesso</button>
         <button class="troca-modo" id="btn-ja-paguei" style="margin-top:2px;">Já comprei, atualizar resultado</button>
       </div>
@@ -554,8 +554,8 @@
         <li><span class="ico">✓</span>Histórico salvo na sua conta</li>
       </ul>
       <div class="oferta-preco">
-        <span class="valor">R$ 9,99</span>
-        <span class="desc">acesso a 10 leituras · sem mensalidade, sem prazo de expiração</span>
+        <span class="valor">R$ 17,90</span>
+        <span class="desc">acesso a 18 leituras · sem mensalidade, sem prazo de expiração</span>
       </div>
       <button class="btn btn-primary btn-block" id="btn-comprar-early">Comprar acesso</button>
     </div>
@@ -583,7 +583,7 @@
         <span class="passo-num">3</span>
         <div class="passo-txt">
           <h3>Compre acesso quando quiser mais</h3>
-          <p>Por R$ 9,99 você desbloqueia 10 leituras completas — com valor de mercado estimado e onde vender. Sem mensalidade, sem prazo de expiração.</p>
+          <p>Por R$ 17,90 você desbloqueia 18 leituras completas — com valor de mercado estimado e onde vender. Sem mensalidade, sem prazo de expiração.</p>
         </div>
       </li>
       <li class="passo">
@@ -622,11 +622,11 @@
     <h2>Perguntas Frequentes</h2>
     <div class="faq-item">
       <h3>O identificador de pedras é gratuito?</h3>
-      <p>Não. Você pode enviar sua foto e ver a identificação inicial sem custo, mas para saber o valor de mercado estimado e onde vender, é preciso comprar acesso. Não trabalhamos com assinatura: você paga R$ 9,99 por um pacote de 10 leituras, sem prazo de expiração.</p>
+      <p>Não. Você pode enviar sua foto e ver a identificação inicial sem custo, mas para saber o valor de mercado estimado e onde vender, é preciso comprar acesso. Não trabalhamos com assinatura: você paga R$ 17,90 por um pacote de 18 leituras, sem prazo de expiração.</p>
     </div>
     <div class="faq-item">
-      <h3>Como funciona o pacote de 10 leituras?</h3>
-      <p>Ao comprar, você desbloqueia o valor estimado e onde vender em até 10 identificações. As leituras ficam disponíveis na sua conta até você usá-las, sem cobrança recorrente.</p>
+      <h3>Como funciona o pacote de 18 leituras?</h3>
+      <p>Ao comprar, você desbloqueia o valor estimado e onde vender em até 18 identificações. As leituras ficam disponíveis na sua conta até você usá-las, sem cobrança recorrente.</p>
     </div>
     <div class="faq-item">
       <h3>Preciso de conta para usar?</h3>
@@ -664,7 +664,7 @@
   // ==== CONFIGURAÇÃO — preencha com os dados do seu projeto Supabase ====
   var SUPABASE_URL = 'https://lflqjmbygghuikwuoimd.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmbHFqbWJ5Z2dodWlrd3VvaW1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNjU1NTMsImV4cCI6MjEwMTg0MTU1M30.tMrllUj-s0ZxahNbrazuGlWq6bT16o2E6hpbchhxqFU';
-  // Link de checkout do pacote de 10 leituras (R$9,99) na Cakto. Se a Cakto
+  // Link de checkout do pacote de 18 leituras (R$17,90) na Cakto. Se a Cakto
   // aceitar prefill de e-mail via querystring, o e-mail logado é anexado
   // automaticamente.
   var LINK_CHECKOUT_CAKTO = 'https://pay.cakto.com.br/jfotn5o_1030574';
@@ -1347,7 +1347,7 @@
       });
   });
 
-  // ---- Abre o checkout do pacote de 10 leituras (R$9,99) em nova aba ----
+  // ---- Abre o checkout do pacote de 18 leituras (R$17,90) em nova aba ----
   function abrirCheckout(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
