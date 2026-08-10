@@ -332,8 +332,6 @@
   .vitrine-valor{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--emerald);}
   .vitrine-status{display:flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--accent-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .vitrine-status svg{width:10px;height:10px;stroke:var(--accent-dark);stroke-width:2.6;fill:none;flex-shrink:0;}
-  .vitrine-whatsapp{display:inline-flex;align-items:center;justify-content:center;margin-top:7px;padding:5px 10px;border-radius:6px;background:var(--accent);font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:0.04em;color:#fff;white-space:nowrap;text-decoration:none;cursor:pointer;transition:background .15s ease;}
-  .vitrine-whatsapp:hover{background:var(--accent-dark);text-decoration:none;}
   .vitrine-paginacao{margin-top:22px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
   .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;width:32px;height:32px;border-radius:7px;border:1px solid var(--line-strong);background:#fff;color:var(--ink-mute);cursor:pointer;}
   .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
@@ -1266,21 +1264,6 @@
       info.appendChild(valor);
       info.appendChild(divisor2);
       info.appendChild(status);
-
-      // WhatsApp de quem encontrou a pedra, exibido logo abaixo do card com a foto.
-      // Clicar abre uma conversa no WhatsApp já com a mensagem pronta.
-      if (item.whatsapp) {
-        var numeroLimpo = formatarNumeroWhatsapp(item.whatsapp);
-        var mensagem = 'Oie, vi que você tem "' + (item.pedra || 'essa pedra') + '", podemos negociar?';
-        var whats = document.createElement('a');
-        whats.className = 'vitrine-whatsapp';
-        whats.href = 'https://wa.me/' + numeroLimpo + '?text=' + encodeURIComponent(mensagem);
-        whats.target = '_blank';
-        whats.rel = 'noopener';
-        whats.addEventListener('click', function(ev){ ev.stopPropagation(); });
-        whats.innerHTML = 'CONVERSAR';
-        info.appendChild(whats);
-      }
 
       card.appendChild(indice);
       card.appendChild(foto);
