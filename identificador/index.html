@@ -895,7 +895,41 @@
   var LINK_CHECKOUT_CAKTO = 'https://pay.cakto.com.br/jfotn5o_1030574';
   // ========================================================================
 
-  var supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // CRIAÇÃO SEGURA DO CLIENTE SUPABASE
+  // Se a lib do CDN não carregar a tempo (rede lenta, bloqueio, CDN fora do ar),
+  // isso NÃO pode derrubar o resto do script — senão nenhum botão da página funciona.
+  var supa;
+  function criarClienteSupabase(){
+    return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  try {
+    if (!window.supabase) throw new Error('Biblioteca Supabase não carregada');
+    supa = criarClienteSupabase();
+  } catch (erroInicSupabase) {
+    console.error('Falha ao iniciar Supabase, usando modo de segurança:', erroInicSupabase);
+    // Stub: qualquer chamada de auth rejeita, mas não quebra o restante do app.
+    supa = {
+      auth: {
+        getSession: function(){ return Promise.reject(erroInicSupabase); },
+        onAuthStateChange: function(){ return { data: { subscription: { unsubscribe: function(){} } } }; },
+        signInWithPassword: function(){ return Promise.reject(erroInicSupabase); },
+        signUp: function(){ return Promise.reject(erroInicSupabase); },
+        signOut: function(){ return Promise.reject(erroInicSupabase); }
+      }
+    };
+    // Tenta se recuperar sozinho, recarregando a lib uma vez.
+    var scriptRetrySupabase = document.createElement('script');
+    scriptRetrySupabase.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    scriptRetrySupabase.onload = function(){
+      try {
+        supa = criarClienteSupabase();
+        atualizarHeader();
+      } catch (erroRetry) {
+        console.error('Retentativa de carregar Supabase falhou:', erroRetry);
+      }
+    };
+    document.head.appendChild(scriptRetrySupabase);
+  }
 
   var ehNavegadorInterno = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly/i.test(navigator.userAgent || '');
 
@@ -1063,7 +1097,7 @@
   btnContinuarBoasVindas.addEventListener('click', fecharBoasVindasEContinuar);
 
   document.addEventListener('click', function(ev){
-    if (painelLogin.classList.contains('active') && !painelLogin.contains(ev.target) && ev.target.id !== 'btn-header-entrar') {
+    if (painelLogin.classList.contains('active') && !painelLogin.contains(ev.target) && !ev.target.closest('#btn-header-entrar')) {
       esconderPaineis();
       pararAnalisePorCancelamento();
     }
@@ -1099,6 +1133,11 @@
 
   function atualizarHeader(){
     supa.auth.getSession().then(function(sessaoResp){
+      return sessaoResp;
+    }, function(erroSessao){
+      // Sem sessão (ou falha de rede): trata como "não logado" em vez de travar.
+      return { data: { session: null } };
+    }).then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
       if (sessao && sessao.user) {
         var nomeExibido = (sessao.user.user_metadata && sessao.user.user_metadata.nome) || sessao.user.email;
@@ -1235,6 +1274,10 @@
           var sessao = sessaoResp.data.session;
           if (!sessao) return;
           buscarEExibirIdentificacao(item.id, sessao.access_token);
+        }).catch(function(erroItem){
+          console.error('Falha ao abrir item do histórico:', erroItem);
+          erroEl.textContent = 'Não foi possível abrir essa identificação agora.';
+          erroEl.style.display = 'block';
         });
       });
 
@@ -1300,6 +1343,8 @@
         return;
       }
       abrirEDesbloquearAutomaticamente(idDaUrl, sessao.access_token);
+    }).catch(function(erroRestaurar){
+      console.error('Falha ao restaurar consulta da URL:', erroRestaurar);
     });
   }
 
@@ -1842,6 +1887,10 @@
         url += '&identificacao_id=' + encodeURIComponent(identificacaoIdAtual);
       }
       window.open(url, '_blank');
+    }).catch(function(erroCheckout){
+      // Falha ao checar sessão: melhor abrir o login do que deixar o botão sem reação.
+      console.error('Falha ao abrir checkout:', erroCheckout);
+      abrirPainelLogin();
     });
   }
 
@@ -2074,6 +2123,8 @@
     if (sessaoResp.data.session) {
       atualizarHeader();
     }
+  }).catch(function(erroInit){
+    console.error('Falha ao checar sessão na inicialização:', erroInit);
   });
 
   // Limpa timeouts quando a página é descarregada
