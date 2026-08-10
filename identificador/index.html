@@ -1551,20 +1551,13 @@
       abrirPopup(painelNavegadorInterno);
       return;
     }
-    
-    supa.auth.getSession()
-      .then(function(sessaoResp){
-        var sessao = sessaoResp.data.session;
-        if (!sessao) {
-          e.preventDefault();
-          abrirPainelLogin();
-          return;
-        }
-        abrirSeletorArquivo();
-      })
-      .catch(function(){
-        abrirSeletorArquivo();
-      });
+
+    // O seletor de arquivo precisa abrir de forma SÍNCRONA, direto na resposta
+    // ao clique do usuário. Se passar por um .then() (ex.: checar a sessão de
+    // login antes), alguns navegadores perdem a "ativação" do gesto do usuário
+    // e a página trava/fica sem resposta depois que o arquivo é escolhido.
+    // A checagem de login agora acontece depois, ao processar o arquivo.
+    abrirSeletorArquivo();
   });
 
   // ---- Arrastar e soltar (drag-and-drop) ----
@@ -1607,18 +1600,7 @@
       return;
     }
 
-    supa.auth.getSession()
-      .then(function(sessaoResp){
-        var sessao = sessaoResp.data.session;
-        if (!sessao) {
-          abrirPainelLogin();
-          return;
-        }
-        processarArquivoDeFoto(arquivo);
-      })
-      .catch(function(){
-        processarArquivoDeFoto(arquivo);
-      });
+    processarArquivoDeFoto(arquivo);
   });
 
   // Rede de segurança: se o usuário soltar o arquivo um pouco fora da área
@@ -1808,6 +1790,22 @@
     if (fotosSelecionadas.length >= MAX_FOTOS) return;
     if (processandoFoto) return; // evita processar duas fotos ao mesmo tempo
 
+    // Checagem de login movida pra cá (depois que o arquivo já foi escolhido),
+    // pra não atrasar a abertura do seletor de arquivo com um .then() antes dele.
+    supa.auth.getSession()
+      .then(function(sessaoResp){
+        if (!sessaoResp.data.session) {
+          abrirPainelLogin();
+          return;
+        }
+        continuarProcessamentoDaFoto(file);
+      })
+      .catch(function(){
+        continuarProcessamentoDaFoto(file);
+      });
+  }
+
+  function continuarProcessamentoDaFoto(file){
     resultadoEl.classList.remove('active');
     erroEl.style.display = 'none';
     esconderPaineis();
