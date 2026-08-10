@@ -141,6 +141,10 @@
   .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:44px 20px;border:1.5px dashed var(--line-strong);border-radius:10px;cursor:pointer;transition:border-color .2s ease, background .2s ease;background:var(--card-alt);}
   .dropzone:hover{border-color:var(--accent);}
   .dropzone:active{border-color:var(--accent);}
+  /* CORREÇÃO: Permite que o clique funcione em toda a área */
+  .dropzone * { pointer-events: none; }
+  /* O input file precisa receber o clique */
+  .dropzone input[type="file"] { pointer-events: auto; display: none; }
   @media (max-width:380px){ .dropzone{padding:32px 16px;} .card{padding:20px;} }
   .dz-icon{width:64px;height:64px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;}
   .dropzone svg{width:28px;height:28px;stroke:var(--accent);stroke-width:1.7;fill:none;}
@@ -1226,6 +1230,7 @@
         dropzone.style.display = 'none';
         preview.style.display = 'block';
         actions.style.display = 'flex';
+        consentimentoVitrine.style.display = 'flex';
       }
       resultadoIAAtual = data;
       mostrarResultado(data);
@@ -1282,6 +1287,7 @@
         dropzone.style.display = 'none';
         preview.style.display = 'block';
         actions.style.display = 'flex';
+        consentimentoVitrine.style.display = 'flex';
       }
       resultadoIAAtual = data;
       mostrarResultado(data);
@@ -1422,13 +1428,11 @@
     inputFoto.click();
   }
 
-  // Event listener para o dropzone - VERSÃO SIMPLIFICADA E CORRIGIDA
+  // Event listener para o dropzone - CORRIGIDO com pointer-events
   dropzone.addEventListener('click', function(e){
-    // Previne qualquer comportamento padrão
-    e.preventDefault();
-    
     // Se for navegador interno, mostra o popup
     if (ehNavegadorInterno) {
+      e.preventDefault();
       abrirPopup(painelNavegadorInterno);
       return;
     }
@@ -1438,6 +1442,7 @@
       .then(function(sessaoResp){
         var sessao = sessaoResp.data.session;
         if (!sessao) {
+          e.preventDefault();
           abrirPainelLogin();
           return;
         }
@@ -1448,13 +1453,6 @@
         // Em caso de erro, tenta abrir o seletor mesmo assim
         abrirSeletorArquivo();
       });
-  });
-
-  // Também permite clicar nos elementos filhos
-  dropzone.querySelectorAll('*').forEach(function(el) {
-    el.addEventListener('click', function(e) {
-      e.stopPropagation();
-    });
   });
 
   btnFecharNavegadorInterno.addEventListener('click', esconderPaineis);
@@ -1818,6 +1816,8 @@
       pararProgresso(true);
       mostrarResultado(data);
       atualizarHeader();
+      // Recarrega a vitrine após identificar
+      carregarVitrine(1);
     })
     .catch(function(err){
       pararProgresso(false);
