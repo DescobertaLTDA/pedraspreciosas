@@ -162,6 +162,16 @@
   @keyframes scannerGridFade{to{opacity:1;}}
   @keyframes scannerMove{0%{top:-4px;}50%{top:calc(100% - 4px);}100%{top:-4px;}}
 
+  .foto-tira-wrap{margin-top:14px;}
+  .foto-tira{display:flex;gap:10px;flex-wrap:wrap;}
+  .foto-tira-item{position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--line-strong);flex-shrink:0;background:var(--card-alt);}
+  .foto-tira-item img{width:100%;height:100%;object-fit:cover;display:block;}
+  .foto-tira-remover{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(0,0,0,0.65);color:#fff;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+  .foto-tira-remover:hover{background:rgba(0,0,0,0.85);}
+  .foto-tira-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap;}
+  .foto-contador{font-size:12.5px;color:var(--ink-mute);font-weight:600;}
+  .btn-adicionar-angulo{font-size:13px;font-weight:600;color:var(--accent-dark);background:var(--accent-light);border:1px solid var(--line-strong);border-radius:20px;padding:7px 14px;cursor:pointer;}
+  .btn-adicionar-angulo:disabled{opacity:0.5;cursor:not-allowed;}
   .actions{display:flex;gap:12px;margin-top:18px;}
   .btn{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;border-radius:7px;padding:13px 18px;cursor:pointer;border:none;min-height:46px;transition:transform .08s ease;}
   .btn:active{transform:scale(0.97);}
@@ -510,7 +520,7 @@
       <a class="nav-link" id="nav-link-precos">Preços</a>
       <span class="gratis-counter-nav" id="gratis-counter-nav" style="display:none;">
         <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        <span id="gratis-counter-text">3 grátis</span>
+        <span id="gratis-counter-text">1 grátis</span>
       </span>
       <div id="header-auth-area">
         <button class="nav-cta" id="btn-header-entrar"><span class="full">Entrar / Registrar</span><span class="short">Entrar</span></button>
@@ -551,7 +561,7 @@
     <div class="dropzone" id="dropzone">
       <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
       <strong>Envie a foto da sua pedra</strong>
-      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão.</span>
+      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Você pode enviar até 5 fotos de ângulos diferentes.</span>
       <input type="file" id="input-foto" accept="image/*">
     </div>
 
@@ -560,6 +570,14 @@
       <div class="scanner-overlay" id="scanner-overlay">
         <div class="scanner-grid"></div>
         <div class="scanner-line"></div>
+      </div>
+    </div>
+
+    <div class="foto-tira-wrap" id="foto-tira-wrap" style="display:none;">
+      <div class="foto-tira" id="foto-tira"></div>
+      <div class="foto-tira-footer">
+        <span class="foto-contador" id="foto-contador">0/5 fotos</span>
+        <button type="button" class="btn-adicionar-angulo" id="btn-adicionar-angulo">+ Adicionar outro ângulo</button>
       </div>
     </div>
 
@@ -621,7 +639,7 @@
 
     <div class="boas-vindas-destaque">
       <p style="font-size:14px;color:var(--ink);margin-bottom:0;text-align:center;line-height:1.5;">
-        Você tem <strong style="color:var(--accent-dark);">3 avaliações gratuitas</strong> para testar.
+        Você tem <strong style="color:var(--accent-dark);">1 avaliação gratuita</strong> para testar.
         Depois, desbloqueie o valor real da sua pedra.
       </p>
     </div>
@@ -832,7 +850,7 @@
     <h2>Perguntas Frequentes</h2>
     <div class="faq-item">
       <h3>O identificador de pedras é gratuito?</h3>
-      <p>Sim, você tem <strong>3 avaliações gratuitas</strong> para testar. Nelas, você vê o nome, características, confiança e faixa de preço da pedra. Para ver <strong>onde vender</strong> e continuar avaliando, é preciso comprar o pacote de 10 leituras por R$ 13,99.</p>
+      <p>Sim, você tem <strong>1 avaliação gratuita</strong> para testar. Nela, você vê o nome, características, confiança e faixa de preço da pedra. Para ver <strong>onde vender</strong> e continuar avaliando, é preciso comprar o pacote de 10 leituras por R$ 13,99.</p>
     </div>
     <div class="faq-item">
       <h3>Como funciona o pacote de 10 leituras?</h3>
@@ -929,11 +947,18 @@
   var mensagemUpsellEl = document.getElementById('mensagem-upsell');
   var gratisCounterNav = document.getElementById('gratis-counter-nav');
   var gratisCounterText = document.getElementById('gratis-counter-text');
+  var fotoTiraWrap = document.getElementById('foto-tira-wrap');
+  var fotoTira = document.getElementById('foto-tira');
+  var fotoContador = document.getElementById('foto-contador');
+  var btnAdicionarAngulo = document.getElementById('btn-adicionar-angulo');
+
+  var MAX_FOTOS = 5;
+  var MAX_LADO_PX = 1280;
+  var QUALIDADE_JPEG = 0.8;
 
   var identificacaoIdAtual = null;
   var aposBoasVindas = null;
-  var base64Atual = null;
-  var mediaTypeAtual = null;
+  var fotosSelecionadas = []; // até 5 itens: { base64, mediaType, previewUrl }
   var avaliacoesGratisRestantes = 0;
   var resultadoIAAtual = null;
   var analiseEmAndamento = false;
@@ -1015,9 +1040,10 @@
   function pararAnalisePorCancelamento(){
     pararScanner();
     pararProgresso(false);
-    btnVerResultado.disabled = false;
     btnVerResultadoLabel.textContent = 'Ver resultado';
     analiseEmAndamento = false;
+    btnAdicionarAngulo.disabled = fotosSelecionadas.length >= MAX_FOTOS;
+    btnVerResultado.disabled = fotosSelecionadas.length === 0;
   }
 
   btnFecharLogin.addEventListener('click', function(){
@@ -1237,13 +1263,17 @@
       esconderPaineis();
       if (data.foto_base64 && data.foto_media_type) {
         previewImg.src = 'data:' + data.foto_media_type + ';base64,' + data.foto_base64;
-        base64Atual = data.foto_base64;
-        mediaTypeAtual = data.foto_media_type;
+        fotosSelecionadas = [{
+          base64: data.foto_base64,
+          mediaType: data.foto_media_type,
+          previewUrl: previewImg.src
+        }];
         fotoCarregada = true;
         dropzone.style.display = 'none';
         preview.style.display = 'block';
         actions.style.display = 'flex';
         consentimentoVitrine.style.display = 'flex';
+        fotoTiraWrap.style.display = 'none';
       }
       resultadoIAAtual = data;
       mostrarResultado(data);
@@ -1294,13 +1324,17 @@
       esconderPaineis();
       if (data.foto_base64 && data.foto_media_type) {
         previewImg.src = 'data:' + data.foto_media_type + ';base64,' + data.foto_base64;
-        base64Atual = data.foto_base64;
-        mediaTypeAtual = data.foto_media_type;
+        fotosSelecionadas = [{
+          base64: data.foto_base64,
+          mediaType: data.foto_media_type,
+          previewUrl: previewImg.src
+        }];
         fotoCarregada = true;
         dropzone.style.display = 'none';
         preview.style.display = 'block';
         actions.style.display = 'flex';
         consentimentoVitrine.style.display = 'flex';
+        fotoTiraWrap.style.display = 'none';
       }
       resultadoIAAtual = data;
       mostrarResultado(data);
@@ -1488,34 +1522,147 @@
     }
   });
 
+  function comprimirImagem(file, callback){
+    var leitor = new FileReader();
+    leitor.onload = function(){
+      var img = new Image();
+      img.onload = function(){
+        var largura = img.width;
+        var altura = img.height;
+        var maiorLado = Math.max(largura, altura);
+        if (maiorLado > MAX_LADO_PX) {
+          var escala = MAX_LADO_PX / maiorLado;
+          largura = Math.round(largura * escala);
+          altura = Math.round(altura * escala);
+        }
+        var canvas = document.createElement('canvas');
+        canvas.width = largura;
+        canvas.height = altura;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, largura, altura);
+        var dataUrl;
+        try {
+          dataUrl = canvas.toDataURL('image/jpeg', QUALIDADE_JPEG);
+        } catch (e) {
+          callback(new Error('Não foi possível processar essa imagem.'));
+          return;
+        }
+        callback(null, dataUrl);
+      };
+      img.onerror = function(){ callback(new Error('Não foi possível ler essa imagem.')); };
+      img.src = leitor.result;
+    };
+    leitor.onerror = function(){ callback(new Error('Não foi possível ler esse arquivo.')); };
+    leitor.readAsDataURL(file);
+  }
+
+  function renderizarTiraFotos(){
+    fotoTira.innerHTML = '';
+    fotosSelecionadas.forEach(function(foto, indice){
+      var item = document.createElement('div');
+      item.className = 'foto-tira-item';
+
+      var img = document.createElement('img');
+      img.src = foto.previewUrl;
+      img.alt = 'Ângulo ' + (indice + 1);
+
+      var btnRemover = document.createElement('button');
+      btnRemover.type = 'button';
+      btnRemover.className = 'foto-tira-remover';
+      btnRemover.setAttribute('aria-label', 'Remover foto');
+      btnRemover.textContent = '×';
+      btnRemover.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        removerFoto(indice);
+      });
+
+      item.appendChild(img);
+      item.appendChild(btnRemover);
+      fotoTira.appendChild(item);
+    });
+
+    fotoContador.textContent = fotosSelecionadas.length + '/' + MAX_FOTOS + ' fotos';
+    fotoTiraWrap.style.display = fotosSelecionadas.length > 0 ? 'block' : 'none';
+    btnAdicionarAngulo.disabled = fotosSelecionadas.length >= MAX_FOTOS;
+    btnVerResultado.disabled = fotosSelecionadas.length === 0 || analiseEmAndamento;
+  }
+
+  function removerFoto(indice){
+    fotosSelecionadas.splice(indice, 1);
+    resultadoIAAtual = null;
+    identificacaoIdAtual = null;
+
+    if (fotosSelecionadas.length === 0) {
+      resetarUploadCompleto();
+      return;
+    }
+
+    previewImg.src = fotosSelecionadas[0].previewUrl;
+    renderizarTiraFotos();
+  }
+
+  function resetarUploadCompleto(){
+    fotosSelecionadas = [];
+    resultadoIAAtual = null;
+    fotoCarregada = false;
+    inputFoto.value = '';
+    dropzone.style.display = 'flex';
+    preview.style.display = 'none';
+    actions.style.display = 'none';
+    consentimentoVitrine.style.display = 'none';
+    checkPermiteVitrine.checked = true;
+    fotoTira.innerHTML = '';
+    fotoTiraWrap.style.display = 'none';
+    resultadoEl.classList.remove('active');
+    erroEl.style.display = 'none';
+    esconderPaineis();
+    pararAnalisePorCancelamento();
+    limparTimeouts();
+  }
+
   inputFoto.addEventListener('change', function(e){
     var file = e.target.files[0];
+    inputFoto.value = '';
     if (!file) return;
+    if (fotosSelecionadas.length >= MAX_FOTOS) return;
 
     resultadoEl.classList.remove('active');
     erroEl.style.display = 'none';
     esconderPaineis();
-    mediaTypeAtual = file.type;
-    fotoCarregada = true;
 
-    var reader = new FileReader();
-    reader.onload = function(){
-      var dataUrl = reader.result;
-      previewImg.src = dataUrl;
-      base64Atual = dataUrl.split(',')[1];
+    comprimirImagem(file, function(err, dataUrl){
+      if (err) {
+        erroEl.textContent = err.message;
+        erroEl.style.display = 'block';
+        return;
+      }
 
+      fotosSelecionadas.push({
+        base64: dataUrl.split(',')[1],
+        mediaType: 'image/jpeg',
+        previewUrl: dataUrl
+      });
+      fotoCarregada = true;
+      resultadoIAAtual = null;
+      identificacaoIdAtual = null;
+
+      previewImg.src = fotosSelecionadas[0].previewUrl;
       dropzone.style.display = 'none';
       preview.style.display = 'block';
       actions.style.display = 'flex';
       consentimentoVitrine.style.display = 'flex';
-      
-      iniciarIdentificacao();
-    };
-    reader.readAsDataURL(file);
+
+      renderizarTiraFotos();
+    });
+  });
+
+  btnAdicionarAngulo.addEventListener('click', function(){
+    if (fotosSelecionadas.length >= MAX_FOTOS) return;
+    inputFoto.click();
   });
 
   function iniciarIdentificacao(){
-    if (!base64Atual || !fotoCarregada) return;
+    if (!fotosSelecionadas.length || !fotoCarregada) return;
     
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
@@ -1526,6 +1673,7 @@
       
       analiseEmAndamento = true;
       btnVerResultado.disabled = true;
+      btnAdicionarAngulo.disabled = true;
       btnVerResultadoLabel.textContent = 'Analisando...';
       iniciarScanner();
       iniciarProgresso();
@@ -1548,26 +1696,10 @@
     });
   }
 
-  btnTrocar.addEventListener('click', function(){
-    base64Atual = null;
-    mediaTypeAtual = null;
-    resultadoIAAtual = null;
-    fotoCarregada = false;
-    inputFoto.value = '';
-    dropzone.style.display = 'flex';
-    preview.style.display = 'none';
-    actions.style.display = 'none';
-    consentimentoVitrine.style.display = 'none';
-    checkPermiteVitrine.checked = true;
-    resultadoEl.classList.remove('active');
-    erroEl.style.display = 'none';
-    esconderPaineis();
-    pararAnalisePorCancelamento();
-    limparTimeouts();
-  });
+  btnTrocar.addEventListener('click', resetarUploadCompleto);
 
   btnVerResultado.addEventListener('click', function(){
-    if (!base64Atual || !fotoCarregada) return;
+    if (!fotosSelecionadas.length || !fotoCarregada) return;
     if (analiseEmAndamento) return;
 
     if (resultadoIAAtual) {
@@ -1636,7 +1768,7 @@
             return;
           }
 
-          if (base64Atual && fotoCarregada) {
+          if (fotosSelecionadas.length && fotoCarregada) {
             supa.auth.getSession().then(function(sessaoResp){
               var sessao = sessaoResp.data.session;
               if (sessao) {
@@ -1652,6 +1784,7 @@
                   }
                   analiseEmAndamento = true;
                   btnVerResultado.disabled = true;
+                  btnAdicionarAngulo.disabled = true;
                   btnVerResultadoLabel.textContent = 'Analisando...';
                   iniciarScanner();
                   iniciarProgresso();
@@ -1660,6 +1793,7 @@
                 .catch(function(){
                   analiseEmAndamento = true;
                   btnVerResultado.disabled = true;
+                  btnAdicionarAngulo.disabled = true;
                   btnVerResultadoLabel.textContent = 'Analisando...';
                   iniciarScanner();
                   iniciarProgresso();
@@ -1805,6 +1939,7 @@
     }
 
     btnVerResultado.disabled = true;
+    btnAdicionarAngulo.disabled = true;
     btnVerResultadoLabel.textContent = 'Analisando...';
     iniciarScanner();
     iniciarProgresso();
@@ -1818,8 +1953,9 @@
         'Authorization': 'Bearer ' + accessToken
       },
       body: JSON.stringify({
-        base64: base64Atual,
-        mediaType: mediaTypeAtual,
+        fotos: fotosSelecionadas.map(function(foto){
+          return { base64: foto.base64, mediaType: foto.mediaType };
+        }),
         permitirVitrine: checkPermiteVitrine.checked
       })
     })
@@ -1848,6 +1984,7 @@
     })
     .finally(function(){
       btnVerResultado.disabled = false;
+      btnAdicionarAngulo.disabled = fotosSelecionadas.length >= MAX_FOTOS;
       btnVerResultadoLabel.textContent = 'Ver resultado';
       pararScanner();
       analiseEmAndamento = false;
