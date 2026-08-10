@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
   try {
     const { data: linhas, error, count } = await supabase
       .from('identificacoes')
-      .select('id, nome_exibicao, nome_provavel, faixa_preco_brasil, foto_base64, foto_media_type, criado_em', { count: 'exact' })
+      .select('id, nome_exibicao, whatsapp, nome_provavel, faixa_preco_brasil, foto_base64, foto_media_type, criado_em', { count: 'exact' })
       .eq('desbloqueada', true)
       .eq('permite_vitrine', true)
       .not('foto_base64', 'is', null)
@@ -51,6 +51,7 @@ module.exports = async function handler(req, res) {
       return {
         id: item.id,
         nome: mascararNome(item.nome_exibicao),
+        whatsapp: item.whatsapp || null,
         pedra: item.nome_provavel,
         valor_exibicao: extrairValorExibicao(item.faixa_preco_brasil),
         foto: 'data:' + (item.foto_media_type || 'image/jpeg') + ';base64,' + item.foto_base64

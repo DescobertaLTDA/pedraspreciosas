@@ -103,6 +103,9 @@ module.exports = async function handler(req, res) {
   const nomeExibicao = (userData.user.user_metadata && userData.user.user_metadata.nome)
     ? userData.user.user_metadata.nome
     : email.split('@')[0];
+  const whatsappExibicao = (userData.user.user_metadata && userData.user.user_metadata.whatsapp)
+    ? userData.user.user_metadata.whatsapp
+    : null;
 
   try {
     // ---- 3. Chamar a Claude API ----
@@ -179,6 +182,7 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
       .insert({
         email: email,
         nome_exibicao: nomeExibicao,
+        whatsapp: whatsappExibicao,
         nome_provavel: resultadoIA.nome_provavel || null,
         confianca: resultadoIA.confianca || null,
         nomes_alternativos: resultadoIA.nomes_alternativos || [],
