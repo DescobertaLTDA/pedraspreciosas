@@ -305,10 +305,13 @@
   .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(36,28,18,0.06);}
   .vitrine-card:active{transform:scale(0.97);}
   .vitrine-index{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:0.03em;color:var(--ink-mute2);padding:8px 8px 0;}
-  .consentimento-vitrine{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:13px;color:var(--ink-mute,#6b5c47);cursor:pointer;line-height:1.4;}
-  .consentimento-vitrine input{margin-top:2px;flex-shrink:0;}
-  .vitrine-foto{margin:5px 7px 0;border-radius:6px;overflow:hidden;aspect-ratio:1/1;background:#eee;border:1px solid var(--line);}
+  .vitrine-foto{position:relative;margin:5px 7px 0;border-radius:6px;overflow:hidden;aspect-ratio:1/1;background:#eee;border:1px solid var(--line);}
   .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
+  .vitrine-del-btn{position:absolute;top:5px;right:5px;width:24px;height:24px;border-radius:6px;border:none;background:rgba(20,16,10,0.55);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s ease, transform .08s ease;z-index:2;}
+  .vitrine-del-btn svg{width:13px;height:13px;stroke:#fff;stroke-width:2.2;fill:none;}
+  .vitrine-del-btn:hover{background:#c0392b;}
+  .vitrine-del-btn:active{transform:scale(0.92);}
+  .vitrine-card.vitrine-removendo{opacity:0.4;pointer-events:none;}
   .vitrine-info{padding:8px 8px 10px;}
   .vitrine-nome{font-family:'Fraunces',serif;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .vitrine-subtitulo{font-style:italic;font-size:9.5px;color:var(--ink-mute);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -569,11 +572,6 @@
         <div class="scanner-line"></div>
       </div>
     </div>
-
-    <label class="consentimento-vitrine" id="consentimento-vitrine" style="display:none;">
-      <input type="checkbox" id="check-permite-vitrine" checked>
-      <span>📸 Autorizo exibir minha pedra na vitrine do catálogo (seu nome aparece apenas como "Cliente", sem expor seus dados pessoais).</span>
-    </label>
 
     <div class="actions" id="actions" style="display:none;">
       <button class="btn btn-secondary" id="btn-trocar">Trocar foto</button>
@@ -907,8 +905,6 @@
 
   var dropzone = document.getElementById('dropzone');
   var inputFoto = document.getElementById('input-foto');
-  var consentimentoVitrine = document.getElementById('consentimento-vitrine');
-  var checkPermiteVitrine = document.getElementById('check-permite-vitrine');
   var preview = document.getElementById('preview');
   var previewImg = document.getElementById('preview-img');
   var actions = document.getElementById('actions');
@@ -1275,7 +1271,6 @@
         dropzone.style.display = 'none';
         preview.style.display = 'block';
         actions.style.display = 'flex';
-        consentimentoVitrine.style.display = 'flex';
       }
       resultadoIAAtual = data;
       mostrarResultado(data);
@@ -1332,7 +1327,6 @@
         dropzone.style.display = 'none';
         preview.style.display = 'block';
         actions.style.display = 'flex';
-        consentimentoVitrine.style.display = 'flex';
       }
       resultadoIAAtual = data;
       mostrarResultado(data);
@@ -1377,18 +1371,49 @@
     carregandoVitrine = true;
     paginaVitrineAtual = pagina || 1;
 
-    fetch('/api/vitrine?pagina=' + paginaVitrineAtual)
-      .then(function(res){ return res.json(); })
-      .then(function(data){ 
-        renderizarVitrine(data);
-        carregandoVitrine = false;
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      var headers = {};
+      if (sessao) headers['Authorization'] = 'Bearer ' + sessao.access_token;
+
+      fetch('/api/vitrine?pagina=' + paginaVitrineAtual, { headers: headers })
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          renderizarVitrine(data, sessao);
+          carregandoVitrine = false;
+        })
+        .catch(function(){
+          carregandoVitrine = false;
+        });
+    });
+  }
+
+  function deletarFotoVitrine(item, sessao, card){
+    if (!sessao) return;
+    if (!confirm('Remover essa foto da vitrine? Essa ação não pode ser desfeita.')) return;
+
+    card.classList.add('vitrine-removendo');
+
+    fetch('/api/vitrine?id=' + encodeURIComponent(item.id), {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + sessao.access_token }
+    })
+      .then(function(res){
+        return res.json().catch(function(){ return {}; }).then(function(data){
+          if (!res.ok) throw new Error(data.error || 'Falha ao remover');
+          card.remove();
+          if (!vitrineGrid.children.length) {
+            vitrineVazio.style.display = 'block';
+          }
+        });
       })
-      .catch(function(){
-        carregandoVitrine = false;
+      .catch(function(err){
+        card.classList.remove('vitrine-removendo');
+        alert(err.message || 'Não foi possível remover a foto agora. Tente novamente.');
       });
   }
 
-  function renderizarVitrine(data){
+  function renderizarVitrine(data, sessao){
     var itens = data.itens || [];
     vitrineGrid.innerHTML = '';
     vitrinePaginacao.innerHTML = '';
@@ -1420,6 +1445,20 @@
       img.src = item.foto;
       img.alt = item.pedra || 'Pedra identificada';
       foto.appendChild(img);
+
+      var ehMinhaFoto = !!item.pode_deletar;
+      if (ehMinhaFoto) {
+        var btnDel = document.createElement('button');
+        btnDel.type = 'button';
+        btnDel.className = 'vitrine-del-btn';
+        btnDel.title = 'Remover minha foto da vitrine';
+        btnDel.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m-8 0l1 13a2 2 0 002 2h4a2 2 0 002-2l1-13"/></svg>';
+        btnDel.addEventListener('click', function(ev){
+          ev.stopPropagation();
+          deletarFotoVitrine(item, sessao, card);
+        });
+        foto.appendChild(btnDel);
+      }
 
       var info = document.createElement('div');
       info.className = 'vitrine-info';
@@ -1535,7 +1574,6 @@
       dropzone.style.display = 'none';
       preview.style.display = 'block';
       actions.style.display = 'flex';
-      consentimentoVitrine.style.display = 'flex';
       
       iniciarIdentificacao();
     };
@@ -1585,8 +1623,6 @@
     dropzone.style.display = 'flex';
     preview.style.display = 'none';
     actions.style.display = 'none';
-    consentimentoVitrine.style.display = 'none';
-    checkPermiteVitrine.checked = true;
     resultadoEl.classList.remove('active');
     erroEl.style.display = 'none';
     esconderPaineis();
@@ -1848,7 +1884,7 @@
       body: JSON.stringify({
         base64: base64Atual,
         mediaType: mediaTypeAtual,
-        permitirVitrine: checkPermiteVitrine.checked
+        permitirVitrine: true
       })
     })
     .then(function(res){
@@ -1864,10 +1900,7 @@
       pararProgresso(true);
       mostrarResultado(data);
       atualizarHeader();
-      // Recarrega a vitrine APENAS se a imagem foi autorizada
-      if (checkPermiteVitrine.checked) {
-        carregarVitrine(1);
-      }
+      carregarVitrine(1);
     })
     .catch(function(err){
       pararProgresso(false);
