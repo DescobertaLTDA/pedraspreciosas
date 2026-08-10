@@ -81,8 +81,11 @@
   .painel-navegador-interno .painel-icon{width:44px;height:44px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
   .painel-navegador-interno .painel-icon svg{width:22px;height:22px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
   .painel-navegador-interno p{font-size:14px;color:var(--ink-soft);line-height:1.5;margin-bottom:14px;text-align:left;}
-  .painel-navegador-interno .navegador-passo{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--ink-soft);background:var(--card-alt);border-radius:8px;padding:12px;margin-bottom:16px;line-height:1.45;text-align:left;}
-  .painel-navegador-interno .navegador-passo strong{color:var(--ink);flex-shrink:0;}
+  .painel-navegador-interno .navegador-passo{display:block;font-size:13.5px;color:var(--ink-soft);background:var(--card-alt);border-radius:8px;padding:12px;margin-bottom:16px;line-height:1.45;text-align:left;overflow-wrap:break-word;word-break:break-word;}
+  .painel-navegador-interno .navegador-passo strong{color:var(--ink);}
+  .painel-navegador-interno p,
+  .painel-navegador-interno .navegador-passo{max-width:100%;overflow-wrap:break-word;word-break:break-word;}
+  .painel-navegador-interno .grifo{background:var(--accent-light);color:var(--accent-dark);font-weight:700;padding:1px 5px;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
   .sidebar-backdrop{position:fixed;inset:0;background:rgba(36,28,18,0.32);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:90;}
   .sidebar-backdrop.active{opacity:1;pointer-events:auto;}
   .sidebar{position:fixed;top:0;left:0;bottom:0;width:290px;max-width:84vw;background:var(--card);border-right:1px solid var(--line);z-index:91;transform:translateX(-100%);transition:transform .2s ease;display:flex;flex-direction:column;}
@@ -124,7 +127,7 @@
   @keyframes heroArrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
   @media (max-width:480px){ .hero-callout{padding:14px 18px;font-size:14px;} .hero-callout-hint{font-size:10.5px;} }
 
-  .card{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(36,28,18,0.03);}
+  .card{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(36,28,18,0.03);overflow-wrap:break-word;word-break:break-word;}
   .card h2{font-size:21px;text-align:center;}
 
   .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:44px 20px;border:1.5px dashed var(--line-strong);border-radius:10px;cursor:pointer;transition:border-color .2s ease, background .2s ease;background:var(--card-alt);}
@@ -496,8 +499,8 @@
     <button type="button" class="painel-fechar" id="btn-fechar-navegador-interno" aria-label="Fechar">&times;</button>
     <div class="painel-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
     <div class="painel-tag">Abra no navegador</div>
-    <p>Você entrou por dentro do app e, por segurança, ele bloqueia o envio de fotos. Pra continuar, abra esta página no navegador do celular (Chrome, Safari etc).</p>
-    <div class="navegador-passo">Toque em <strong>⋮</strong> ou <strong>⋯</strong> no canto da tela e escolha <strong>"Abrir no navegador"</strong>.</div>
+    <p>Você provavelmente abriu o site pelo <span class="grifo">TikTok</span>, <span class="grifo">Facebook</span> ou <span class="grifo">Instagram</span>, e eles <span class="grifo">não permitem o envio de fotos</span>.</p>
+    <div class="navegador-passo">Para carregar a foto da sua pedra, clique nos <strong class="grifo">"..."</strong> no topo da página e depois em <strong class="grifo">"Abrir no Navegador"</strong>.</div>
     <button class="btn btn-primary btn-block" id="btn-tentar-abrir-navegador">Tentar abrir automaticamente</button>
     <button class="btn btn-secondary btn-block" id="btn-ok-abrir-navegador" style="margin-top:8px;">Ok, vou abrir</button>
   </div>
