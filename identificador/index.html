@@ -337,7 +337,7 @@
   footer{padding-bottom:env(safe-area-inset-bottom);}
   footer .foot-links a:hover{color:var(--accent-dark);}
 
-  /* --- BOAS-VINDAS MELHORADO --- */
+  /* BOAS-VINDAS */
   #painel-boas-vindas {
     padding: 0;
     overflow: hidden;
@@ -491,7 +491,6 @@
     }
   }
 
-  /* --- TEASER BLOQUEIO (NUNCA MAIS USADO, mas mantido por compatibilidade) --- */
   .teaser-bloqueio{display:none !important;}
 </style>
 </head>
@@ -563,7 +562,7 @@
 
     <label class="consentimento-vitrine" id="consentimento-vitrine" style="display:none;">
       <input type="checkbox" id="check-permite-vitrine" checked>
-      <span>Aceito publicar essa foto na vitrine do catálogo — seu nome aparece só como "Nome I.", sem expor seus dados.</span>
+      <span>📸 Autorizo exibir minha pedra na vitrine do catálogo (seu nome aparece apenas como "Cliente", sem expor seus dados pessoais).</span>
     </label>
 
     <div class="actions" id="actions" style="display:none;">
@@ -605,7 +604,7 @@
     <p class="erro" id="erro-login" style="display:none;"></p>
   </div>
 
-  <!-- POPUP DE BOAS-VINDAS (MELHORADO) -->
+  <!-- POPUP DE BOAS-VINDAS -->
   <div class="card painel-acesso" id="painel-boas-vindas">
     <button type="button" class="painel-fechar" id="btn-fechar-boas-vindas" aria-label="Fechar">&times;</button>
     
@@ -671,7 +670,7 @@
     <button class="btn btn-secondary btn-block" id="btn-ok-abrir-navegador" style="margin-top:8px;">Ok, vou abrir</button>
   </div>
 
-  <!-- TEASER BLOQUEIO (DESATIVADO - NUNCA MAIS APARECE) -->
+  <!-- TEASER BLOQUEIO (DESATIVADO) -->
   <div class="teaser-bloqueio" id="teaser-bloqueio" style="display:none !important;"></div>
 
   <!-- RESULTADO -->
@@ -998,7 +997,18 @@
     definirModoLogin(!modoLoginAtivo);
   });
 
-  btnFecharLogin.addEventListener('click', esconderPaineis);
+  function pararAnalisePorCancelamento(){
+    pararScanner();
+    pararProgresso(false);
+    btnVerResultado.disabled = false;
+    btnVerResultadoLabel.textContent = 'Ver resultado';
+    analiseEmAndamento = false;
+  }
+
+  btnFecharLogin.addEventListener('click', function(){
+    esconderPaineis();
+    pararAnalisePorCancelamento();
+  });
 
   function fecharBoasVindasEContinuar(){
     painelBoasVindas.classList.remove('active');
@@ -1014,6 +1024,7 @@
   document.addEventListener('click', function(ev){
     if (painelLogin.classList.contains('active') && !painelLogin.contains(ev.target) && ev.target.id !== 'btn-header-entrar') {
       esconderPaineis();
+      pararAnalisePorCancelamento();
     }
     if (painelBoasVindas.classList.contains('active') && !painelBoasVindas.contains(ev.target)) {
       fecharBoasVindasEContinuar();
@@ -1462,6 +1473,7 @@
     resultadoEl.classList.remove('active');
     erroEl.style.display = 'none';
     esconderPaineis();
+    pararAnalisePorCancelamento();
   });
 
   // ---- Clique em "Ver resultado" ----
@@ -1481,6 +1493,8 @@
   function verificarAcessoEProsseguir(){
     if (analiseEmAndamento) return;
 
+    // INICIA O SCANNER IMEDIATAMENTE
+    analiseEmAndamento = true;
     btnVerResultado.disabled = true;
     btnVerResultadoLabel.textContent = 'Analisando...';
     iniciarScanner();
@@ -1490,10 +1504,7 @@
       var sessao = sessaoResp.data.session;
 
       if (!sessao) {
-        pararScanner();
-        pararProgresso(false);
-        btnVerResultado.disabled = false;
-        btnVerResultadoLabel.textContent = 'Ver resultado';
+        // Mantém o scanner rodando enquanto o popup de login aparece
         abrirPainelLogin();
         return;
       }
@@ -1504,7 +1515,6 @@
       })
       .then(function(res){ return res.json(); })
       .then(function(data){
-        var temLeituras = !!(data.pago && data.saldo > 0);
         if (typeof data.avaliacoes_gratis_restantes === 'number') {
           avaliacoesGratisRestantes = data.avaliacoes_gratis_restantes;
           atualizarContadorGratis();
@@ -1558,6 +1568,7 @@
         atualizarHeader();
 
         var continuarFluxo = function(){
+          // Se tem ID pendente da URL
           if (idPendenteDaUrl) {
             var idParaAbrir = idPendenteDaUrl;
             idPendenteDaUrl = null;
@@ -1568,7 +1579,16 @@
             return;
           }
 
-          if (base64Atual && !resultadoIAAtual) {
+          // Se já tem resultado salvo, mostra ele (NÃO chama IA de novo)
+          if (resultadoIAAtual) {
+            pararScanner();
+            pararProgresso(true);
+            mostrarResultado(resultadoIAAtual);
+            return;
+          }
+
+          // Se tem foto, chama a IA (o scanner já está rodando)
+          if (base64Atual) {
             supa.auth.getSession().then(function(sessaoResp){
               var sessao = sessaoResp.data.session;
               if (sessao) {
@@ -1592,10 +1612,8 @@
             return;
           }
 
-          if (resultadoIAAtual) {
-            mostrarResultado(resultadoIAAtual);
-            return;
-          }
+          // Fallback: para o scanner se nada mais acontecer
+          pararAnalisePorCancelamento();
         };
 
         if (contaCriadaAgora) {
@@ -1610,6 +1628,7 @@
           ? 'Não foi possível entrar. Confira seu e-mail e senha.'
           : 'Não foi possível criar a conta. Tente novamente.');
         erroLoginEl.style.display = 'block';
+        pararAnalisePorCancelamento();
       })
       .finally(function(){
         btnEntrar.disabled = false;
@@ -1721,8 +1740,13 @@
 
   // ---- Identificar Pedra ----
   function identificarPedra(accessToken){
-    if (analiseEmAndamento) return;
-    analiseEmAndamento = true;
+    if (analiseEmAndamento && resultadoIAAtual) {
+      // Já tem resultado, mostra ele
+      pararScanner();
+      pararProgresso(true);
+      mostrarResultado(resultadoIAAtual);
+      return;
+    }
 
     btnVerResultado.disabled = true;
     btnVerResultadoLabel.textContent = 'Analisando...';
@@ -1851,7 +1875,6 @@
   atualizarHeader();
   atualizarContadorGratis();
 
-  // Atualiza status assim que a página carrega
   supa.auth.getSession().then(function(sessaoResp){
     if (sessaoResp.data.session) {
       atualizarHeader();
