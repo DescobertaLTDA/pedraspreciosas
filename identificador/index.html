@@ -142,6 +142,7 @@
   .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:44px 20px;border:1.5px dashed var(--line-strong);border-radius:10px;cursor:pointer;transition:border-color .2s ease, background .2s ease;background:var(--card-alt);}
   .dropzone:hover{border-color:var(--accent);}
   .dropzone:active{border-color:var(--accent);}
+  .dropzone.dropzone-arrastando{border-color:var(--accent);background:var(--accent-light);border-style:solid;}
   .dropzone * { pointer-events: none; }
   .dropzone input[type="file"] { pointer-events: auto; display: none; }
   @media (max-width:380px){ .dropzone{padding:32px 16px;} .card{padding:20px;} }
@@ -1566,6 +1567,69 @@
       });
   });
 
+  // ---- Arrastar e soltar (drag-and-drop) ----
+  // Sem isto, o navegador assume o comportamento padrão dele ao soltar um
+  // arquivo: navega a aba inteira para o arquivo de imagem, o que trava a
+  // página em fotos grandes. e.preventDefault() em cada evento evita isso.
+  var dropzoneArrastes = 0; // contador p/ lidar com dragenter/dragleave em elementos filhos
+
+  dropzone.addEventListener('dragenter', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    dropzoneArrastes++;
+    dropzone.classList.add('dropzone-arrastando');
+  });
+
+  dropzone.addEventListener('dragover', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+  });
+
+  dropzone.addEventListener('dragleave', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    dropzoneArrastes = Math.max(0, dropzoneArrastes - 1);
+    if (dropzoneArrastes === 0) dropzone.classList.remove('dropzone-arrastando');
+  });
+
+  dropzone.addEventListener('drop', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    dropzoneArrastes = 0;
+    dropzone.classList.remove('dropzone-arrastando');
+
+    var arquivo = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!arquivo) return;
+
+    if (ehNavegadorInterno) {
+      abrirPopup(painelNavegadorInterno);
+      return;
+    }
+
+    supa.auth.getSession()
+      .then(function(sessaoResp){
+        var sessao = sessaoResp.data.session;
+        if (!sessao) {
+          abrirPainelLogin();
+          return;
+        }
+        processarArquivoDeFoto(arquivo);
+      })
+      .catch(function(){
+        processarArquivoDeFoto(arquivo);
+      });
+  });
+
+  // Rede de segurança: se o usuário soltar o arquivo um pouco fora da área
+  // demarcada, ainda assim impede o navegador de abrir o arquivo cru.
+  ['dragover', 'drop'].forEach(function(evento){
+    window.addEventListener(evento, function(e){
+      if (e.target && dropzone.contains(e.target)) return; // já tratado acima
+      e.preventDefault();
+    });
+  });
+
   btnFecharNavegadorInterno.addEventListener('click', esconderPaineis);
   btnOkAbrirNavegador.addEventListener('click', esconderPaineis);
 
@@ -1711,10 +1775,13 @@
   var dzTitulo = document.getElementById('dz-titulo');
   var processandoFoto = false;
 
-  inputFoto.addEventListener('change', function(e){
-    var file = e.target.files[0];
-    inputFoto.value = '';
+  function processarArquivoDeFoto(file){
     if (!file) return;
+    if (!/^image\//.test(file.type)) {
+      erroEl.textContent = 'Envie um arquivo de imagem (JPG, PNG, etc).';
+      erroEl.style.display = 'block';
+      return;
+    }
     if (fotosSelecionadas.length >= MAX_FOTOS) return;
     if (processandoFoto) return; // evita processar duas fotos ao mesmo tempo
 
@@ -1753,6 +1820,12 @@
 
       renderizarTiraFotos();
     });
+  }
+
+  inputFoto.addEventListener('change', function(e){
+    var file = e.target.files[0];
+    inputFoto.value = '';
+    processarArquivoDeFoto(file);
   });
 
   btnAdicionarAngulo.addEventListener('click', function(){
