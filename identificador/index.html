@@ -1417,23 +1417,35 @@
   carregarVitrine(1);
 
   // ---- Upload da foto ----
-  dropzone.addEventListener('click', function(){
+  dropzone.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    
     if (ehNavegadorInterno) {
-      abrirPopup(painelNavegadorInterno);
-      return;
+        abrirPopup(painelNavegadorInterno);
+        return;
     }
     
-    // Verifica se o usuário está logado
+    function abrirSeletorArquivo() {
+        inputFoto.click();
+    }
+    
     supa.auth.getSession().then(function(sessaoResp){
-      var sessao = sessaoResp.data.session;
-      if (!sessao) {
-        // Não está logado - abre o popup de login primeiro
-        abrirPainelLogin();
-        return;
-      }
-      // Já está logado - abre o seletor de arquivo
-      inputFoto.click();
+        var sessao = sessaoResp.data.session;
+        if (!sessao) {
+            abrirPainelLogin();
+            return;
+        }
+        abrirSeletorArquivo();
+    }).catch(function(){
+        abrirSeletorArquivo();
     });
+  });
+
+  // Também permite clicar na área do dropzone para abrir o seletor
+  dropzone.addEventListener('click', function(e){
+    // Este segundo listener é redundante, mas garante que funciona
+    // O primeiro listener já faz tudo
   });
 
   btnFecharNavegadorInterno.addEventListener('click', esconderPaineis);
@@ -1478,7 +1490,6 @@
   function iniciarIdentificacao(){
     if (!base64Atual || !fotoCarregada) return;
     
-    // Verifica se está logado
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
       if (!sessao) {
@@ -1486,7 +1497,6 @@
         return;
       }
       
-      // Logado - inicia o scanner e a identificação
       analiseEmAndamento = true;
       btnVerResultado.disabled = true;
       btnVerResultadoLabel.textContent = 'Analisando...';
@@ -1533,7 +1543,6 @@
     if (!base64Atual || !fotoCarregada) return;
     if (analiseEmAndamento) return;
 
-    // Se já tem um resultado salvo, mostra ele
     if (resultadoIAAtual) {
       mostrarResultado(resultadoIAAtual);
       return;
@@ -1583,7 +1592,6 @@
         atualizarHeader();
 
         var continuarFluxo = function(){
-          // Se tem ID pendente da URL
           if (idPendenteDaUrl) {
             var idParaAbrir = idPendenteDaUrl;
             idPendenteDaUrl = null;
@@ -1594,7 +1602,6 @@
             return;
           }
 
-          // Se já tem resultado salvo, mostra ele
           if (resultadoIAAtual) {
             pararScanner();
             pararProgresso(true);
@@ -1602,12 +1609,10 @@
             return;
           }
 
-          // Se tem foto carregada, inicia a identificação
           if (base64Atual && fotoCarregada) {
             supa.auth.getSession().then(function(sessaoResp){
               var sessao = sessaoResp.data.session;
               if (sessao) {
-                // Já tem foto, inicia a identificação (o scanner já está rodando)
                 fetch('/api/status', {
                   method: 'POST',
                   headers: { 'Authorization': 'Bearer ' + sessao.access_token }
@@ -1618,7 +1623,6 @@
                     avaliacoesGratisRestantes = data.avaliacoes_gratis_restantes;
                     atualizarContadorGratis();
                   }
-                  // Inicia a identificação
                   analiseEmAndamento = true;
                   btnVerResultado.disabled = true;
                   btnVerResultadoLabel.textContent = 'Analisando...';
@@ -1639,7 +1643,6 @@
             return;
           }
 
-          // Fallback: para o scanner se nada mais acontecer
           pararAnalisePorCancelamento();
         };
 
@@ -1768,7 +1771,6 @@
   // ---- Identificar Pedra ----
   function identificarPedra(accessToken){
     if (analiseEmAndamento && resultadoIAAtual) {
-      // Já tem resultado, mostra ele
       pararScanner();
       pararProgresso(true);
       mostrarResultado(resultadoIAAtual);
@@ -1855,10 +1857,8 @@
 
     identificacaoIdAtual = data.identificacao_id || null;
 
-    // PREÇO: SEMPRE VISÍVEL
     document.getElementById('res-preco').textContent = data.faixa_preco_brasil || 'Não disponível';
 
-    // ONDE VENDER: bloqueado até pagar
     var desbloqueado = !!data.desbloqueado;
     var ondeVenderEl = document.getElementById('res-onde');
 
