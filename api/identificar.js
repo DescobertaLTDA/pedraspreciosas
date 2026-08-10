@@ -69,7 +69,10 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  const { base64, mediaType } = req.body || {};
+  const { base64, mediaType, permitirVitrine } = req.body || {};
+  // Se o front não mandar o campo (versão antiga do app, por exemplo),
+  // assume true — mas o app atual sempre envia esse valor explicitamente.
+  const permiteVitrine = permitirVitrine !== false;
 
   // ---- 1. Validações básicas de entrada ----
   if (!base64 || !mediaType) {
@@ -185,7 +188,8 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
         onde_vender: resultadoIA.onde_vender || null,
         foto_base64: base64,
         foto_media_type: mediaType,
-        desbloqueada: false
+        desbloqueada: false,
+        permite_vitrine: permiteVitrine
       })
       .select('*')
       .single();
