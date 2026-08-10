@@ -10,6 +10,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Tesouro Esquecido">
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="shortcut icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -53,6 +56,8 @@
   .btn-sidebar-toggle svg{width:17px;height:17px;stroke:var(--ink-soft);stroke-width:1.8;fill:none;}
   .logo{display:flex;align-items:center;gap:8px;font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink);white-space:nowrap;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;}
   .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+  .logo img{height:28px;width:auto;flex-shrink:0;object-fit:contain;}
+  footer .logo img{height:24px;}
   .nav-right{display:flex;align-items:center;gap:16px;}
   .nav-link{font-size:13px;color:var(--ink-mute);text-decoration:none;white-space:nowrap;cursor:pointer;}
   .nav-cta{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;background:#fff;color:var(--ink);padding:9px 14px;border-radius:6px;border:1px solid var(--line-strong);cursor:pointer;white-space:nowrap;flex-shrink:0;}
@@ -376,7 +381,7 @@
       <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" title="Histórico" aria-label="Abrir histórico">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
       </button>
-      <div class="logo"><span class="dot"></span>Tesouro Esquecido</div>
+      <div class="logo"><img src="/logo.png" alt="Tesouro Esquecido">Tesouro Esquecido</div>
     </div>
     <div class="nav-right">
       <a class="nav-link" id="nav-link-precos">Preços</a>
@@ -704,7 +709,7 @@
 </div>
 
 <footer>
-  <div class="logo"><span class="dot"></span>Tesouro Esquecido</div>
+  <div class="logo"><img src="/logo.png" alt="Tesouro Esquecido">Tesouro Esquecido</div>
   <p>Identifique pedras, minerais e cristais com inteligência artificial. Sem assinatura — você compra só o acesso que for usar.</p>
   <div class="foot-links">
     <a href="#" id="foot-link-termos">Termos de uso</a>
