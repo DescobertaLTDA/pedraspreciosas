@@ -76,10 +76,11 @@
   .nav-dropdown button.sair{color:var(--danger);}
 
   /* --- sidebar de histórico (estilo Claude) --- */
-  .banner-navegador-interno{display:none;align-items:flex-start;gap:10px;background:var(--accent-light);border-bottom:1px solid var(--accent);padding:12px 20px;font-size:13px;line-height:1.45;color:var(--accent-dark);}
-  .banner-navegador-interno.active{display:flex;}
-  .banner-navegador-interno svg{width:18px;height:18px;stroke:var(--accent-dark);stroke-width:2;fill:none;flex-shrink:0;margin-top:1px;}
-  @media (max-width:480px){ .banner-navegador-interno{padding:10px 16px;font-size:12.5px;} }
+  .painel-navegador-interno .painel-icon{width:44px;height:44px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .painel-navegador-interno .painel-icon svg{width:22px;height:22px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
+  .painel-navegador-interno p{font-size:14px;color:var(--ink-soft);line-height:1.5;margin-bottom:14px;}
+  .painel-navegador-interno .navegador-passo{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--ink-soft);background:var(--card-alt);border-radius:8px;padding:12px;margin-bottom:16px;line-height:1.45;}
+  .painel-navegador-interno .navegador-passo strong{color:var(--ink);}
   .sidebar-backdrop{position:fixed;inset:0;background:rgba(36,28,18,0.32);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:90;}
   .sidebar-backdrop.active{opacity:1;pointer-events:auto;}
   .sidebar{position:fixed;top:0;left:0;bottom:0;width:290px;max-width:84vw;background:var(--card);border-right:1px solid var(--line);z-index:91;transform:translateX(-100%);transition:transform .2s ease;display:flex;flex-direction:column;}
@@ -384,13 +385,6 @@
 
 <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
-<!-- Aviso pra quem abriu o link de dentro do app do Instagram/Facebook/TikTok:
-     esses navegadores internos bloqueiam upload de foto por segurança, então
-     avisamos e pedimos pra abrir no navegador padrão. Detecção via JS abaixo. -->
-<div class="banner-navegador-interno" id="banner-navegador-interno">
-  <svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-  <span>Você abriu por dentro do app e o upload de foto pode não funcionar. Toque em <strong>⋮</strong> ou <strong>⋯</strong> no canto e escolha <strong>"Abrir no navegador"</strong>.</span>
-</div>
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-head">
     <h2>Histórico</h2>
@@ -494,6 +488,19 @@
       <li><span class="ico">✓</span>Assim te ajudamos a <strong>vender sua pedra pelo valor justo</strong>.</li>
     </ul>
     <button class="btn btn-primary btn-block" id="btn-continuar-boas-vindas">Entendi, continuar</button>
+  </div>
+
+  <!-- Popup de navegador interno: aparece quando a pessoa toca em "Envie a
+       foto da sua pedra" mas está dentro do app do Instagram/Facebook/TikTok
+       (detectado via user agent). Esses WebViews bloqueiam o upload de foto. -->
+  <div class="card painel-acesso painel-navegador-interno" id="painel-navegador-interno">
+    <button type="button" class="painel-fechar" id="btn-fechar-navegador-interno" aria-label="Fechar">&times;</button>
+    <div class="painel-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
+    <div class="painel-tag">Abra no navegador</div>
+    <p>Você entrou por dentro do app e, por segurança, ele bloqueia o envio de fotos. Pra continuar, abra esta página no navegador do celular (Chrome, Safari etc).</p>
+    <div class="navegador-passo">Toque em <strong>⋮</strong> ou <strong>⋯</strong> no canto da tela e escolha <strong>"Abrir no navegador"</strong>.</div>
+    <button class="btn btn-primary btn-block" id="btn-tentar-abrir-navegador">Tentar abrir automaticamente</button>
+    <button class="btn btn-secondary btn-block" id="btn-ok-abrir-navegador" style="margin-top:8px;">Ok, vou abrir</button>
   </div>
 
 
@@ -715,15 +722,11 @@
 
   var supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ---- Detecta navegador in-app (Instagram, Facebook, TikTok) e mostra o
-  //      banner de aviso, já que esses WebViews bloqueiam upload de arquivo. ----
-  (function detectarNavegadorInterno(){
-    var ua = navigator.userAgent || '';
-    var ehInApp = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly/i.test(ua);
-    if (ehInApp) {
-      document.getElementById('banner-navegador-interno').classList.add('active');
-    }
-  })();
+  // ---- Detecta navegador in-app (Instagram, Facebook, TikTok): esses
+  //      WebViews bloqueiam upload de arquivo. Não mostra nada de cara —
+  //      só guarda o estado; o popup de aviso aparece ao tocar em
+  //      "Envie a foto da sua pedra" (ver interceptação do clique no dropzone). ----
+  var ehNavegadorInterno = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly/i.test(navigator.userAgent || '');
 
   var dropzone = document.getElementById('dropzone');
   var inputFoto = document.getElementById('input-foto');
@@ -761,6 +764,10 @@
   var painelBoasVindas = document.getElementById('painel-boas-vindas');
   var btnFecharBoasVindas = document.getElementById('btn-fechar-boas-vindas');
   var btnContinuarBoasVindas = document.getElementById('btn-continuar-boas-vindas');
+  var painelNavegadorInterno = document.getElementById('painel-navegador-interno');
+  var btnFecharNavegadorInterno = document.getElementById('btn-fechar-navegador-interno');
+  var btnTentarAbrirNavegador = document.getElementById('btn-tentar-abrir-navegador');
+  var btnOkAbrirNavegador = document.getElementById('btn-ok-abrir-navegador');
   var btnPagar = document.getElementById('btn-pagar');
   var btnComprarEarly = document.getElementById('btn-comprar-early');
   var btnJaPaguei = document.getElementById('btn-ja-paguei');
@@ -794,6 +801,7 @@
     painelLogin.classList.remove('active');
     teaserBloqueioEl.classList.remove('active');
     painelBoasVindas.classList.remove('active');
+    painelNavegadorInterno.classList.remove('active');
     document.body.classList.remove('popup-aberto');
     fecharSidebar();
   }
@@ -1294,8 +1302,38 @@
 
   carregarVitrine(1);
 
-  // ---- Upload da foto (livre, sem checar nada) ----
-  dropzone.addEventListener('click', function(){ inputFoto.click(); });
+  // ---- Upload da foto ----
+  // Se estiver num navegador in-app (Instagram/Facebook/TikTok), esses
+  // WebViews bloqueiam o input de arquivo — em vez de abrir o seletor de
+  // foto direto, mostra o popup explicando como abrir no navegador padrão.
+  dropzone.addEventListener('click', function(){
+    if (ehNavegadorInterno) {
+      abrirPopup(painelNavegadorInterno);
+      return;
+    }
+    inputFoto.click();
+  });
+
+  btnFecharNavegadorInterno.addEventListener('click', esconderPaineis);
+  btnOkAbrirNavegador.addEventListener('click', esconderPaineis);
+
+  // Tenta abrir a página atual no navegador padrão do celular. Isso NÃO é
+  // garantido: no Android, o esquema "intent://" às vezes funciona (o
+  // sistema oferece abrir no Chrome), mas o app pode bloquear. No iOS não
+  // existe forma confiável de forçar a troca pro Safari — a Apple não
+  // permite isso por segurança. Por isso o botão é só uma tentativa;
+  // o popup continua aberto com a instrução manual como caminho garantido.
+  btnTentarAbrirNavegador.addEventListener('click', function(){
+    var url = window.location.href;
+    var ehAndroid = /Android/i.test(navigator.userAgent || '');
+    if (ehAndroid) {
+      var semEsquema = url.replace(/^https?:\/\//, '');
+      window.location.href = 'intent://' + semEsquema + '#Intent;scheme=https;package=com.android.chrome;end';
+    } else {
+      // iOS e outros: não há API confiável pra forçar a troca de navegador.
+      // Mantém o popup aberto mostrando a instrução manual.
+    }
+  });
 
   inputFoto.addEventListener('change', function(e){
     var file = e.target.files[0];
