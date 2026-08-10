@@ -1417,10 +1417,17 @@
   carregarVitrine(1);
 
   // ---- Upload da foto ----
+  // Função para abrir o seletor de arquivos
+  function abrirSeletorArquivo() {
+    inputFoto.click();
+  }
+
+  // Event listener para o dropzone - VERSÃO SIMPLIFICADA E CORRIGIDA
   dropzone.addEventListener('click', function(e){
+    // Previne qualquer comportamento padrão
     e.preventDefault();
-    e.stopPropagation();
     
+    // Se for navegador interno, mostra o popup
     if (ehNavegadorInterno) {
       abrirPopup(painelNavegadorInterno);
       return;
@@ -1435,12 +1442,19 @@
           return;
         }
         // Se estiver logado, abre o seletor de arquivos
-        inputFoto.click();
+        abrirSeletorArquivo();
       })
       .catch(function(){
         // Em caso de erro, tenta abrir o seletor mesmo assim
-        inputFoto.click();
+        abrirSeletorArquivo();
       });
+  });
+
+  // Também permite clicar nos elementos filhos
+  dropzone.querySelectorAll('*').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
   });
 
   btnFecharNavegadorInterno.addEventListener('click', esconderPaineis);
