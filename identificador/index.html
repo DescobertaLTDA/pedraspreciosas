@@ -563,7 +563,7 @@
     <div class="dropzone" id="dropzone">
       <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
       <strong id="dz-titulo">Envie a foto da sua pedra</strong>
-      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Você pode enviar até 5 fotos de ângulos diferentes.</span>
+      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Envie 1 foto por pedra.</span>
       <input type="file" id="input-foto" accept="image/*">
     </div>
 
@@ -578,7 +578,7 @@
     <div class="foto-tira-wrap" id="foto-tira-wrap" style="display:none;">
       <div class="foto-tira" id="foto-tira"></div>
       <div class="foto-tira-footer">
-        <span class="foto-contador" id="foto-contador">0/5 fotos</span>
+        <span class="foto-contador" id="foto-contador">0/1 fotos</span>
         <button type="button" class="btn-adicionar-angulo" id="btn-adicionar-angulo">+ Adicionar outro ângulo</button>
       </div>
     </div>
@@ -988,7 +988,7 @@
   var fotoContador = document.getElementById('foto-contador');
   var btnAdicionarAngulo = document.getElementById('btn-adicionar-angulo');
 
-  var MAX_FOTOS = 5;
+  var MAX_FOTOS = 1;
   var MAX_LADO_PX = 1280;
   var QUALIDADE_JPEG = 0.8;
 
@@ -1660,6 +1660,29 @@
       var ctx = canvas.getContext('2d');
       ctx.drawImage(fonte, 0, 0, largura, altura);
       if (bitmapParaFechar && bitmapParaFechar.close) bitmapParaFechar.close();
+
+      // toBlob é assíncrono e não bloqueia a thread principal como o toDataURL
+      // fazia — em fotos reais de alta resolução/muito detalhe, a codificação
+      // JPEG síncrona era o que travava a página (RESULT_CODE_HUNG).
+      if (canvas.toBlob) {
+        canvas.toBlob(function(blob){
+          if (!blob) {
+            callback(new Error('Não foi possível processar essa imagem.'));
+            return;
+          }
+          var leitorBlob = new FileReader();
+          leitorBlob.onload = function(){
+            callback(null, leitorBlob.result);
+          };
+          leitorBlob.onerror = function(){
+            callback(new Error('Não foi possível processar essa imagem.'));
+          };
+          leitorBlob.readAsDataURL(blob);
+        }, 'image/jpeg', QUALIDADE_JPEG);
+        return;
+      }
+
+      // Fallback para navegadores sem suporte a toBlob.
       var dataUrl;
       try {
         dataUrl = canvas.toDataURL('image/jpeg', QUALIDADE_JPEG);
@@ -1734,7 +1757,7 @@
     });
 
     fotoContador.textContent = fotosSelecionadas.length + '/' + MAX_FOTOS + ' fotos';
-    fotoTiraWrap.style.display = fotosSelecionadas.length > 0 ? 'block' : 'none';
+    fotoTiraWrap.style.display = (fotosSelecionadas.length > 0 && MAX_FOTOS > 1) ? 'block' : 'none';
     btnAdicionarAngulo.disabled = fotosSelecionadas.length >= MAX_FOTOS;
     btnVerResultado.disabled = fotosSelecionadas.length === 0 || analiseEmAndamento;
   }
