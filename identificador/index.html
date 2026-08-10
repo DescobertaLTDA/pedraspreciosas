@@ -174,6 +174,19 @@
   .preco-box + .preco-box{margin-top:14px;}
   .preco-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);}
   .preco-valor{margin-top:6px;font-size:15px;color:var(--ink);}
+
+  /* --- canais de venda recomendados (MF Rural em destaque) --- */
+  .canais-venda{margin-top:16px;}
+  .canal-destaque{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--accent-light);border:1.5px solid var(--accent);border-radius:11px;padding:14px 16px;text-decoration:none;transition:background .15s ease;}
+  .canal-destaque:hover{background:#f0d4b8;}
+  .canal-destaque-info{display:flex;flex-direction:column;gap:2px;}
+  .canal-destaque-info .canal-tag{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent-dark);}
+  .canal-destaque-info strong{font-family:'Fraunces',serif;font-size:16.5px;color:var(--ink);}
+  .canal-destaque-info span:not(.canal-tag){font-size:12.5px;color:var(--ink-soft);}
+  .canal-seta{font-size:20px;color:var(--accent-dark);flex-shrink:0;}
+  .canal-secundarios{display:flex;gap:10px;margin-top:10px;}
+  .canal-link{flex:1;text-align:center;padding:11px;border:1px solid var(--line-strong);border-radius:8px;font-size:13px;font-weight:700;color:var(--ink-soft);text-decoration:none;transition:border-color .15s ease, color .15s ease;}
+  .canal-link:hover{border-color:var(--accent);color:var(--accent-dark);}
   .observacao{margin-top:16px;font-size:12.5px;color:var(--ink-mute);}
 
   /* --- bloco premium: preço + onde vender. Quando bloqueado, mostra uma
@@ -372,6 +385,21 @@
         <div class="preco-box">
           <div class="preco-label">Onde vender</div>
           <p class="preco-valor" id="res-onde"></p>
+        </div>
+
+        <div class="canais-venda">
+          <a class="canal-destaque" id="canal-mfrural" href="https://www.mfrural.com.br/busca/pedras" target="_blank" rel="noopener noreferrer">
+            <div class="canal-destaque-info">
+              <span class="canal-tag">⭐ Mais recomendado</span>
+              <strong>MF Rural</strong>
+              <span>O maior marketplace de pedras e minerais do Brasil</span>
+            </div>
+            <span class="canal-seta">→</span>
+          </a>
+          <div class="canal-secundarios">
+            <a class="canal-link" id="canal-ml" href="https://lista.mercadolivre.com.br/pedras" target="_blank" rel="noopener noreferrer">Mercado Livre</a>
+            <a class="canal-link" id="canal-olx" href="https://www.olx.com.br/brasil?q=pedras" target="_blank" rel="noopener noreferrer">OLX</a>
+          </div>
         </div>
       </div>
 
@@ -1257,6 +1285,13 @@
 
   function mostrarResultado(data){
     document.getElementById('res-nome').textContent = data.nome_provavel || '';
+
+    var termoBusca = (data.nome_provavel || 'pedras').trim();
+    var termoBuscaEnc = encodeURIComponent(termoBusca);
+    var termoBuscaTraco = termoBuscaEnc.replace(/%20/g, '-');
+    document.getElementById('canal-mfrural').href = 'https://www.mfrural.com.br/busca/' + termoBuscaEnc;
+    document.getElementById('canal-ml').href = 'https://lista.mercadolivre.com.br/' + termoBuscaTraco;
+    document.getElementById('canal-olx').href = 'https://www.olx.com.br/brasil?q=' + termoBuscaEnc;
 
     var confEl = document.getElementById('res-confianca');
     var cor = confiancaCores[data.confianca] || '#8c7d66';
