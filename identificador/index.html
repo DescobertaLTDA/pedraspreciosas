@@ -1062,9 +1062,14 @@
     }
   }
 
+  var loginAbertoNesteClique = false;
+
   function abrirPainelLogin(){
     definirModoLogin(false);
     abrirPopup(painelLogin);
+    // Marca que o painel acabou de ser aberto por este clique, para o
+    // listener global de "clique fora" (abaixo) não fechá-lo na mesma hora.
+    loginAbertoNesteClique = true;
   }
 
   btnTrocarModoLogin.addEventListener('click', function(){
@@ -1097,7 +1102,12 @@
   btnContinuarBoasVindas.addEventListener('click', fecharBoasVindasEContinuar);
 
   document.addEventListener('click', function(ev){
-    if (painelLogin.classList.contains('active') && !painelLogin.contains(ev.target) && !ev.target.closest('#btn-header-entrar')) {
+    if (loginAbertoNesteClique) {
+      // Este clique foi o que abriu o painel agora mesmo — não fechar.
+      loginAbertoNesteClique = false;
+      return;
+    }
+    if (painelLogin.classList.contains('active') && !painelLogin.contains(ev.target)) {
       esconderPaineis();
       pararAnalisePorCancelamento();
     }
