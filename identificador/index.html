@@ -162,6 +162,17 @@
 
   .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(47,143,94,0.3);border-radius:16px;padding:36px;display:none;}
   @media (max-width:480px){ .resultado{padding:24px;} }
+
+  /* --- teaser motivacional para quem ainda não tem leituras --- */
+  .teaser-bloqueio{margin-top:26px;background:var(--card);border:1.5px solid var(--accent);border-radius:16px;padding:36px;text-align:center;display:none;}
+  .teaser-bloqueio.active{display:block;}
+  @media (max-width:480px){ .teaser-bloqueio{padding:26px 22px;} }
+  .teaser-bloqueio-icon{width:56px;height:56px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto;}
+  .teaser-bloqueio-icon svg{width:26px;height:26px;stroke:var(--accent-dark);stroke-width:1.7;fill:none;}
+  .teaser-bloqueio h2{margin-top:18px;font-size:22px;}
+  .teaser-bloqueio p{margin-top:12px;font-size:14.5px;color:var(--ink-mute);max-width:460px;margin-left:auto;margin-right:auto;}
+  .teaser-bloqueio .btn-primary{margin-top:22px;}
+  .teaser-bloqueio-sub{margin-top:10px !important;font-size:12px;color:var(--ink-mute2);}
   .resultado.active{display:block;}
   .resultado-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
   .resultado-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--emerald);}
@@ -363,6 +374,18 @@
     </div>
     <button class="btn btn-primary btn-block" id="btn-entrar">Entrar / Criar conta</button>
     <p class="erro" id="erro-login" style="display:none;"></p>
+  </div>
+
+  <!-- Teaser motivacional: aparece no lugar do resultado quando a pessoa
+       ainda não tem leituras disponíveis, SEM chamar a IA (evita gastar tokens) -->
+  <div class="teaser-bloqueio" id="teaser-bloqueio">
+    <div class="teaser-bloqueio-icon">
+      <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+    </div>
+    <h2>Essa pedra pode valer mais do que você imagina</h2>
+    <p>Todos os dias gente comum descobre tesouros escondidos no quintal, na coleção da avó ou numa caminhada. Desbloqueie seu acesso agora e descubra o nome exato da sua pedra, a faixa de preço de mercado e onde vender com segurança — pode ser a sua vez.</p>
+    <button class="btn btn-primary btn-block" id="btn-assinar-teaser">Desbloquear identificação — R$ 9,99</button>
+    <p class="teaser-bloqueio-sub">acesso a 10 leituras · sem mensalidade, sem prazo de expiração</p>
   </div>
 
   <div class="resultado" id="resultado">
@@ -576,6 +599,8 @@
   var scannerOverlay = document.getElementById('scanner-overlay');
   var erroEl = document.getElementById('erro');
   var resultadoEl = document.getElementById('resultado');
+  var teaserBloqueioEl = document.getElementById('teaser-bloqueio');
+  var btnAssinarTeaser = document.getElementById('btn-assinar-teaser');
 
   var headerAuthArea = document.getElementById('header-auth-area');
 
@@ -615,6 +640,7 @@
 
   function esconderPaineis(){
     painelLogin.classList.remove('active');
+    teaserBloqueioEl.classList.remove('active');
     fecharSidebar();
   }
 
@@ -1075,12 +1101,46 @@
         painelLogin.classList.add('active');
         return;
       }
-      // logado: já pode identificar. Preço/onde vender vêm bloqueados
-      // ou liberados dentro da própria resposta de /api/identificar.
-      esconderPaineis();
-      identificarPedra(sessao.access_token);
+      // logado: só chama a IA (gasta tokens) se a pessoa já tiver
+      // leituras disponíveis no pacote. Sem saldo, mostra o teaser
+      // motivacional e não roda a identificação.
+      btnVerResultado.disabled = true;
+      btnVerResultadoLabel.textContent = 'Verificando acesso...';
+
+      fetch('/api/status', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + sessao.access_token }
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        btnVerResultado.disabled = false;
+        btnVerResultadoLabel.textContent = 'Ver resultado';
+        esconderPaineis();
+
+        var temLeituras = !!(data.pago && data.saldo > 0);
+        if (temLeituras) {
+          identificarPedra(sessao.access_token);
+        } else {
+          mostrarTeaserBloqueio();
+        }
+      })
+      .catch(function(){
+        // se não der pra confirmar o saldo, por segurança não gasta tokens
+        btnVerResultado.disabled = false;
+        btnVerResultadoLabel.textContent = 'Ver resultado';
+        esconderPaineis();
+        mostrarTeaserBloqueio();
+      });
     });
   }
+
+  function mostrarTeaserBloqueio(){
+    resultadoEl.classList.remove('active');
+    teaserBloqueioEl.classList.add('active');
+    teaserBloqueioEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  btnAssinarTeaser.addEventListener('click', abrirCheckout);
 
   // ---- Login / cadastro (sem confirmação por e-mail) ----
   btnEntrar.addEventListener('click', function(){
