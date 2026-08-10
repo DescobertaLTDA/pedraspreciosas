@@ -171,9 +171,10 @@
   .oferta-lista{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:10px;}
   .oferta-lista li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft);}
   .oferta-lista .ico{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;}
-  .oferta-preco{margin-top:20px;display:flex;align-items:baseline;gap:8px;}
-  .oferta-preco .valor{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--ink);}
+  .oferta-preco{margin-top:20px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .oferta-preco .valor{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--ink);white-space:nowrap;}
   .oferta-preco .desc{font-size:12.5px;color:var(--ink-mute);}
+  @media (max-width:480px){ .oferta-preco{flex-direction:column;align-items:flex-start;gap:4px;} }
   .oferta-body .btn-primary{margin-top:16px;}
 
   /* --- passos --- */
@@ -184,7 +185,7 @@
   .passo-txt h3{font-size:15.5px;margin-bottom:4px;}
   .passo-txt p{font-size:13.8px;color:var(--ink-mute);}
 
-  .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(47,143,94,0.3);border-radius:16px;padding:36px;display:none;}
+  .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(47,143,94,0.3);border-radius:16px;padding:36px;display:none;scroll-margin-top:88px;}
   @media (max-width:480px){ .resultado{padding:24px;} }
 
   /* --- teaser motivacional para quem ainda não tem leituras --- */
@@ -1421,6 +1422,12 @@
     }
 
     resultadoEl.classList.add('active');
+
+    // rola a tela automaticamente até o resultado assim que a análise termina,
+    // pra pessoa não precisar descer manualmente pra ver o texto
+    setTimeout(function(){
+      resultadoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
   }
 </script>
 </body>
