@@ -32,7 +32,7 @@
     --line:rgba(36,28,18,0.12);
     --line-strong:rgba(36,28,18,0.22);
   }
-  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:none;}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:none;overflow-x:hidden;max-width:100%;}
   body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:0 0 60px;overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-x:none;}
   h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;color:var(--ink);}
   a,button,input,.dropzone,.historico-item,.vitrine-card,.vitrine-pag-btn{touch-action:manipulation;}
@@ -42,21 +42,21 @@
     .wrap{padding-left:max(18px, env(safe-area-inset-left)); padding-right:max(18px, env(safe-area-inset-right));}
     body{padding-bottom:max(60px, env(safe-area-inset-bottom));}
     .head h1{font-size:clamp(26px,7.5vw,34px);}
-    .head p{font-size:14.5px;}
   }
 
   header{position:sticky;top:0;z-index:50;background:rgba(247,242,231,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-  .nav-wrap{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 24px;padding-left:max(24px, env(safe-area-inset-left));padding-right:max(24px, env(safe-area-inset-right));}
+  .nav-wrap{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 24px;padding-left:max(24px, env(safe-area-inset-left));padding-right:max(24px, env(safe-area-inset-right));min-width:0;}
   @media (max-width:600px){ .nav-wrap{padding:12px 16px;padding-left:max(16px, env(safe-area-inset-left));padding-right:max(16px, env(safe-area-inset-right));} }
-  .nav-left{display:flex;align-items:center;gap:12px;}
+  .nav-left{display:flex;align-items:center;gap:12px;min-width:0;}
   .btn-sidebar-toggle{background:transparent;border:1px solid var(--line-strong);border-radius:7px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
   .btn-sidebar-toggle:hover{background:var(--card-alt);}
   .btn-sidebar-toggle svg{width:17px;height:17px;stroke:var(--ink-soft);stroke-width:1.8;fill:none;}
-  .logo{display:flex;align-items:center;gap:8px;font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink);white-space:nowrap;flex-shrink:0;}
+  .logo{display:flex;align-items:center;gap:8px;font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink);white-space:nowrap;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;}
   .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
   .nav-right{display:flex;align-items:center;gap:16px;}
   .nav-link{font-size:13px;color:var(--ink-mute);text-decoration:none;white-space:nowrap;cursor:pointer;}
   .nav-cta{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;background:#fff;color:var(--ink);padding:9px 14px;border-radius:6px;border:1px solid var(--line-strong);cursor:pointer;white-space:nowrap;flex-shrink:0;}
+  .nav-cta .short{display:none;}
 
   /* --- menu do usuário logado (avatar + nome + saldo -> dropdown) --- */
   .nav-user{position:relative;}
@@ -95,6 +95,8 @@
     .nav-name{max-width:54px;}
     .logo{font-size:14px;}
     .nav-link{display:none;}
+    .nav-cta .full{display:none;}
+    .nav-cta .short{display:inline;}
   }
   @media (max-width:600px){
     .btn-sidebar-toggle{width:40px;height:40px;}
@@ -103,27 +105,12 @@
     .nav-cta{padding:11px 14px;min-height:40px;}
   }
 
-  .head{text-align:center;position:relative;z-index:0;}
-
-  /* --- pedrinhas roxas/rosas flutuando no hero (decorativo) --- */
-  .floating-stones{position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:visible;}
-  .floating-stones .stone{position:absolute;filter:drop-shadow(0 8px 16px rgba(107,60,158,0.18));animation:stoneFloat ease-in-out infinite;}
-  .floating-stones .stone svg{display:block;width:100%;height:auto;}
-  .stone-1{top:-6px;left:2%;width:50px;animation-duration:6.5s;}
-  .stone-2{top:18px;right:4%;width:38px;animation-duration:5.5s;animation-delay:.8s;}
-  .stone-3{top:190px;left:6%;width:30px;animation-duration:5s;animation-delay:1.6s;opacity:.9;}
-  @keyframes stoneFloat{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(4deg);}}
-  @media (max-width:600px){
-    .stone-1{width:36px;top:-4px;}
-    .stone-2{width:28px;top:10px;}
-    .stone-3{display:none;}
-  }
+  .head{text-align:center;}
   .eyebrow{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;justify-content:center;gap:10px;}
   .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--accent);}
   .head h1{margin-top:16px;font-size:clamp(30px,6vw,44px);}
-  .head p{margin-top:14px;color:var(--ink-mute);font-size:15.5px;max-width:560px;margin-left:auto;margin-right:auto;}
 
-  .hero-callout{margin:22px auto 0;max-width:480px;background:var(--accent-light);border:1px solid var(--accent);border-radius:14px;padding:16px 22px;font-size:14.5px;color:var(--ink-soft);line-height:1.5;}
+  .hero-callout{margin:26px auto 0;max-width:480px;background:var(--accent-light);border:1px solid var(--accent);border-radius:14px;padding:16px 22px;font-size:14.5px;color:var(--ink-soft);line-height:1.5;}
   .hero-callout strong{color:var(--accent-dark);font-family:'Fraunces',serif;}
   .hero-callout-hint{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Space Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--accent-dark);}
   .hero-callout-hint svg{width:14px;height:14px;stroke:var(--accent-dark);stroke-width:2.4;fill:none;animation:heroArrowBounce 1.4s ease-in-out infinite;flex-shrink:0;}
@@ -351,7 +338,7 @@
     <div class="nav-right">
       <a class="nav-link" id="nav-link-precos">Preços</a>
       <div id="header-auth-area">
-        <button class="nav-cta" id="btn-header-entrar">Entrar / Registrar</button>
+        <button class="nav-cta" id="btn-header-entrar"><span class="full">Entrar / Registrar</span><span class="short">Entrar</span></button>
       </div>
     </div>
   </div>
@@ -373,54 +360,8 @@
 <div class="wrap">
 
   <div class="head">
-    <div class="floating-stones" aria-hidden="true">
-      <div class="stone stone-1">
-        <svg viewBox="0 0 60 72" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="gradRoxo1" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#cdaef7"/>
-              <stop offset="100%" stop-color="#8b5cf6"/>
-            </linearGradient>
-          </defs>
-          <polygon points="30,2 52,20 44,70 16,70 8,20" fill="url(#gradRoxo1)"/>
-          <polygon points="30,2 52,20 30,30" fill="#ffffff" opacity="0.28"/>
-          <polygon points="30,2 8,20 30,30" fill="#000000" opacity="0.08"/>
-          <line x1="30" y1="30" x2="16" y2="70" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1"/>
-          <line x1="30" y1="30" x2="44" y2="70" stroke="#000000" stroke-opacity="0.1" stroke-width="1"/>
-        </svg>
-      </div>
-      <div class="stone stone-2">
-        <svg viewBox="0 0 60 72" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="gradRosa1" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fbd0e4"/>
-              <stop offset="100%" stop-color="#ec6ea8"/>
-            </linearGradient>
-          </defs>
-          <polygon points="30,2 52,20 44,70 16,70 8,20" fill="url(#gradRosa1)"/>
-          <polygon points="30,2 52,20 30,30" fill="#ffffff" opacity="0.3"/>
-          <polygon points="30,2 8,20 30,30" fill="#000000" opacity="0.08"/>
-          <line x1="30" y1="30" x2="16" y2="70" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1"/>
-          <line x1="30" y1="30" x2="44" y2="70" stroke="#000000" stroke-opacity="0.1" stroke-width="1"/>
-        </svg>
-      </div>
-      <div class="stone stone-3">
-        <svg viewBox="0 0 60 72" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="gradRoxo2" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#cdaef7"/>
-              <stop offset="100%" stop-color="#8b5cf6"/>
-            </linearGradient>
-          </defs>
-          <polygon points="30,2 52,20 44,70 16,70 8,20" fill="url(#gradRoxo2)"/>
-          <polygon points="30,2 52,20 30,30" fill="#ffffff" opacity="0.28"/>
-          <polygon points="30,2 8,20 30,30" fill="#000000" opacity="0.08"/>
-        </svg>
-      </div>
-    </div>
     <div class="eyebrow">Identificador com IA</div>
     <h1>Descubra o que é sua pedra</h1>
-    <p>Envie uma foto e nossa inteligência artificial identifica o tipo de pedra, o valor de mercado estimado e onde vender. Sem assinatura — você compra apenas o acesso que for usar.</p>
     <div class="hero-callout">
       <strong>Avaliamos sua pedra em poucos segundos</strong> e te dizemos quanto ela vale e onde vender.
       <div class="hero-callout-hint">
@@ -816,7 +757,7 @@
         })
         .catch(function(){});
       } else {
-        headerAuthArea.innerHTML = '<button class="nav-cta" id="btn-header-entrar">Entrar / Registrar</button>';
+        headerAuthArea.innerHTML = '<button class="nav-cta" id="btn-header-entrar"><span class="full">Entrar / Registrar</span><span class="short">Entrar</span></button>';
         document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
         if (areaOferta) areaOferta.style.display = '';
       }
