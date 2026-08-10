@@ -1422,30 +1422,25 @@
     e.stopPropagation();
     
     if (ehNavegadorInterno) {
-        abrirPopup(painelNavegadorInterno);
-        return;
+      abrirPopup(painelNavegadorInterno);
+      return;
     }
     
-    function abrirSeletorArquivo() {
-        inputFoto.click();
-    }
-    
-    supa.auth.getSession().then(function(sessaoResp){
+    // Verifica se o usuário está logado
+    supa.auth.getSession()
+      .then(function(sessaoResp){
         var sessao = sessaoResp.data.session;
         if (!sessao) {
-            abrirPainelLogin();
-            return;
+          abrirPainelLogin();
+          return;
         }
-        abrirSeletorArquivo();
-    }).catch(function(){
-        abrirSeletorArquivo();
-    });
-  });
-
-  // Também permite clicar na área do dropzone para abrir o seletor
-  dropzone.addEventListener('click', function(e){
-    // Este segundo listener é redundante, mas garante que funciona
-    // O primeiro listener já faz tudo
+        // Se estiver logado, abre o seletor de arquivos
+        inputFoto.click();
+      })
+      .catch(function(){
+        // Em caso de erro, tenta abrir o seletor mesmo assim
+        inputFoto.click();
+      });
   });
 
   btnFecharNavegadorInterno.addEventListener('click', esconderPaineis);
