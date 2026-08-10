@@ -271,6 +271,8 @@
   .painel-fechar{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:var(--card-alt);color:var(--ink-mute);font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;flex-shrink:0;}
   .painel-fechar:hover{background:var(--line);color:var(--ink);}
   .painel-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);margin-bottom:14px;padding-right:36px;}
+  .painel-login-motivo{display:flex;align-items:flex-start;gap:8px;background:var(--accent-light);color:var(--accent-dark);font-size:12.5px;font-weight:600;line-height:1.4;padding:10px 12px;border-radius:8px;margin-bottom:16px;}
+  .painel-login-motivo svg{width:15px;height:15px;stroke:var(--accent-dark);stroke-width:2;fill:none;flex-shrink:0;margin-top:1px;}
   .boas-vindas-lista li{align-items:flex-start;line-height:1.4;}
   .boas-vindas-lista .ico{margin-top:1px;}
   @media (max-width:380px){
@@ -588,6 +590,10 @@
   <div class="card painel-acesso" id="painel-login">
     <button type="button" class="painel-fechar" id="btn-fechar-login" aria-label="Fechar">&times;</button>
     <div class="painel-tag" id="painel-login-tag">Criar conta</div>
+    <div class="painel-login-motivo" id="painel-login-motivo" style="display:none;">
+      <svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 11-13h-7l1-7z"/></svg>
+      <span id="painel-login-motivo-texto"></span>
+    </div>
     <p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:16px;" id="painel-login-sub">Use e-mail e senha. Não enviamos nada por e-mail — sua conta fica pronta na hora.</p>
     <div id="campos-cadastro">
       <div class="campo">
@@ -1021,8 +1027,16 @@
     }
   }
 
-  function abrirPainelLogin(){
+  function abrirPainelLogin(motivo){
     definirModoLogin(false);
+    var elMotivo = document.getElementById('painel-login-motivo');
+    var elMotivoTexto = document.getElementById('painel-login-motivo-texto');
+    if (motivo) {
+      elMotivoTexto.textContent = motivo;
+      elMotivo.style.display = 'flex';
+    } else {
+      elMotivo.style.display = 'none';
+    }
     abrirPopup(painelLogin);
   }
 
@@ -1534,7 +1548,7 @@
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
       if (!sessao) {
-        abrirPainelLogin();
+        abrirPainelLogin('Crie uma conta ou faça login para que o resultado seja mais preciso e fique salvo no seu histórico.');
         return;
       }
       
