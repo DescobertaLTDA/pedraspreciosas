@@ -1202,42 +1202,54 @@
   });
 
   function verificarAcessoEProsseguir(){
-    supa.auth.getSession().then(function(sessaoResp){
-      var sessao = sessaoResp.data.session;
-      if (!sessao) {
-        abrirPopup(painelLogin);
-        return;
-      }
-      // logado: só chama a IA (gasta tokens) se a pessoa já tiver
-      // leituras disponíveis no pacote. Sem saldo, mostra o teaser
-      // motivacional e não roda a identificação.
-      btnVerResultado.disabled = true;
-      btnVerResultadoLabel.textContent = 'Verificando acesso...';
+    // Simula a leitura da pedra por 5s (efeito scanner) antes de decidir
+    // se mostra o resultado de verdade ou o popup de acesso.
+    btnVerResultado.disabled = true;
+    btnVerResultadoLabel.textContent = 'Analisando...';
+    iniciarScanner();
+    iniciarProgresso();
 
-      fetch('/api/status', {
+    var esperaMinima = new Promise(function(resolve){ setTimeout(resolve, 5000); });
+
+    var checagemAcesso = supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      if (!sessao) return { logado: false };
+
+      return fetch('/api/status', {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + sessao.access_token }
       })
-      .then(function(res){ return res.json(); })
-      .then(function(data){
-        btnVerResultado.disabled = false;
-        btnVerResultadoLabel.textContent = 'Ver resultado';
-        esconderPaineis();
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          return { logado: true, sessao: sessao, temLeituras: !!(data.pago && data.saldo > 0) };
+        })
+        .catch(function(){
+          // se não der pra confirmar o saldo, por segurança não gasta tokens
+          return { logado: true, sessao: sessao, temLeituras: false };
+        });
+    });
 
-        var temLeituras = !!(data.pago && data.saldo > 0);
-        if (temLeituras) {
-          identificarPedra(sessao.access_token);
-        } else {
-          mostrarTeaserBloqueio();
-        }
-      })
-      .catch(function(){
-        // se não der pra confirmar o saldo, por segurança não gasta tokens
-        btnVerResultado.disabled = false;
-        btnVerResultadoLabel.textContent = 'Ver resultado';
+    Promise.all([esperaMinima, checagemAcesso]).then(function(resultados){
+      var acesso = resultados[1];
+
+      if (acesso.logado && acesso.temLeituras) {
+        // tem acesso: segue direto pra identificação de verdade,
+        // que mantém o scanner rodando sem interrupção
         esconderPaineis();
+        identificarPedra(acesso.sessao.access_token);
+        return;
+      }
+
+      pararScanner();
+      pararProgresso(false);
+      btnVerResultado.disabled = false;
+      btnVerResultadoLabel.textContent = 'Ver resultado';
+
+      if (!acesso.logado) {
+        abrirPopup(painelLogin);
+      } else {
         mostrarTeaserBloqueio();
-      });
+      }
     });
   }
 
