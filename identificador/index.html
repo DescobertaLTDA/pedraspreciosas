@@ -455,6 +455,22 @@
     <p class="erro" id="erro-login" style="display:none;"></p>
   </div>
 
+  <!-- Popup de boas-vindas: aparece só uma vez, logo depois que a conta é
+       criada (não aparece em login de conta já existente), explicando como
+       o identificador funciona antes da pessoa seguir pro resultado. -->
+  <div class="card painel-acesso" id="painel-boas-vindas">
+    <button type="button" class="painel-fechar" id="btn-fechar-boas-vindas" aria-label="Fechar">&times;</button>
+    <div class="painel-tag">Seja bem-vindo(a)!</div>
+    <p style="font-size:14.5px;color:var(--ink);margin-bottom:14px;">Antes de continuar, quero te explicar por que cobramos pelo resultado completo:</p>
+    <ul class="oferta-lista" style="margin-bottom:18px;">
+      <li><span class="ico">✓</span>Usamos <strong>inteligência artificial da Anthropic (Claude)</strong> pra analisar sua pedra com o máximo de precisão possível.</li>
+      <li><span class="ico">✓</span>Cobramos pela faixa de preço e onde vender porque isso tem custo real de análise — e é o que garante que você recebe a <strong>melhor identificação possível</strong>, não um chute genérico.</li>
+      <li><span class="ico">✓</span>O objetivo é te ajudar de verdade a <strong>identificar e vender sua pedra</strong> pelo valor justo, com segurança.</li>
+    </ul>
+    <button class="btn btn-primary btn-block" id="btn-continuar-boas-vindas">Entendi, continuar</button>
+  </div>
+
+
   <!-- Teaser motivacional: aparece no lugar do resultado quando a pessoa
        ainda não tem leituras disponíveis, SEM chamar a IA (evita gastar tokens) -->
   <div class="teaser-bloqueio" id="teaser-bloqueio">
@@ -700,6 +716,9 @@
   var erroLoginEl = document.getElementById('erro-login');
   var btnFecharLogin = document.getElementById('btn-fechar-login');
   var btnFecharTeaser = document.getElementById('btn-fechar-teaser');
+  var painelBoasVindas = document.getElementById('painel-boas-vindas');
+  var btnFecharBoasVindas = document.getElementById('btn-fechar-boas-vindas');
+  var btnContinuarBoasVindas = document.getElementById('btn-continuar-boas-vindas');
   var btnPagar = document.getElementById('btn-pagar');
   var btnComprarEarly = document.getElementById('btn-comprar-early');
   var btnJaPaguei = document.getElementById('btn-ja-paguei');
@@ -707,6 +726,7 @@
   var premiumPreview = document.getElementById('premium-preview');
   var areaOferta = document.getElementById('area-oferta');
   var identificacaoIdAtual = null;
+  var aposBoasVindas = null; // função a rodar depois que a pessoa fechar o popup de boas-vindas
 
   var sidebar = document.getElementById('sidebar');
   var sidebarBackdrop = document.getElementById('sidebar-backdrop');
@@ -731,6 +751,7 @@
   function esconderPaineis(){
     painelLogin.classList.remove('active');
     teaserBloqueioEl.classList.remove('active');
+    painelBoasVindas.classList.remove('active');
     document.body.classList.remove('popup-aberto');
     fecharSidebar();
   }
@@ -746,12 +767,29 @@
   btnFecharLogin.addEventListener('click', esconderPaineis);
   btnFecharTeaser.addEventListener('click', esconderPaineis);
 
+  // Fechar o popup de boas-vindas (pelo X ou pelo botão "Entendi") segue o
+  // mesmo caminho que estava pendente antes de mostrar o popup (abrir uma
+  // identificação vinda de link, ou seguir com a foto que a pessoa já tinha
+  // selecionado antes de criar a conta).
+  function fecharBoasVindasEContinuar(){
+    painelBoasVindas.classList.remove('active');
+    document.body.classList.remove('popup-aberto');
+    var continuar = aposBoasVindas;
+    aposBoasVindas = null;
+    if (typeof continuar === 'function') continuar();
+  }
+  btnFecharBoasVindas.addEventListener('click', fecharBoasVindasEContinuar);
+  btnContinuarBoasVindas.addEventListener('click', fecharBoasVindasEContinuar);
+
   document.addEventListener('click', function(ev){
     if (painelLogin.classList.contains('active') && !painelLogin.contains(ev.target) && ev.target.id !== 'btn-header-entrar') {
       esconderPaineis();
     }
     if (teaserBloqueioEl.classList.contains('active') && !teaserBloqueioEl.contains(ev.target)) {
       esconderPaineis();
+    }
+    if (painelBoasVindas.classList.contains('active') && !painelBoasVindas.contains(ev.target)) {
+      fecharBoasVindasEContinuar();
     }
   });
 
@@ -1307,6 +1345,8 @@
     btnEntrar.disabled = true;
     btnEntrar.textContent = 'Entrando...';
 
+    var contaCriadaAgora = false;
+
     supa.auth.signInWithPassword({ email: email, password: senha })
       .then(function(resp){
         if (resp.error) {
@@ -1314,6 +1354,7 @@
           if (!whatsapp) {
             return Promise.reject(new Error('Informe seu WhatsApp para criar a conta.'));
           }
+          contaCriadaAgora = true;
           return supa.auth.signUp({
             email: email,
             password: senha,
@@ -1326,15 +1367,28 @@
         if (resp.error) throw resp.error;
         painelLogin.classList.remove('active');
         atualizarHeader();
-        if (idPendenteDaUrl) {
-          var idParaAbrir = idPendenteDaUrl;
-          idPendenteDaUrl = null;
-          supa.auth.getSession().then(function(sessaoResp){
-            var sessao = sessaoResp.data.session;
-            if (sessao) abrirEDesbloquearAutomaticamente(idParaAbrir, sessao.access_token);
-          });
-        } else if (base64Atual) {
-          verificarAcessoEProsseguir();
+
+        var seguirFluxo = function(){
+          if (idPendenteDaUrl) {
+            var idParaAbrir = idPendenteDaUrl;
+            idPendenteDaUrl = null;
+            supa.auth.getSession().then(function(sessaoResp){
+              var sessao = sessaoResp.data.session;
+              if (sessao) abrirEDesbloquearAutomaticamente(idParaAbrir, sessao.access_token);
+            });
+          } else if (base64Atual) {
+            verificarAcessoEProsseguir();
+          }
+        };
+
+        if (contaCriadaAgora) {
+          // Conta nova: mostra o popup explicando como o sistema funciona
+          // e só segue o fluxo (abrir identificação pendente / prosseguir
+          // com a foto) depois que a pessoa fechar esse popup.
+          aposBoasVindas = seguirFluxo;
+          abrirPopup(painelBoasVindas);
+        } else {
+          seguirFluxo();
         }
       })
       .catch(function(err){
