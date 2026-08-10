@@ -10,7 +10,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const LIMITE_PADRAO = 3;
+const LIMITE_PADRAO = 18;
 const VALOR_PADRAO = 17.90; // usado se o payload da Cakto não trouxer o valor pago
 
 module.exports = async function handler(req, res) {
