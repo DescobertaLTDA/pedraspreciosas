@@ -84,6 +84,11 @@
   .gratis-counter-nav{display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);color:var(--accent-dark);font-size:10.5px;font-weight:700;padding:3px 10px 3px 8px;border-radius:20px;border:1px solid var(--line-strong);}
   .gratis-counter-nav svg{width:12px;height:12px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
 
+  .usuarios-cadastrados{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--ink-mute);white-space:nowrap;flex-shrink:0;}
+  .usuarios-cadastrados .dot-online{width:7px;height:7px;border-radius:50%;background:var(--emerald);flex-shrink:0;box-shadow:0 0 0 2px rgba(47,143,94,0.18);animation:pulse-online 2s infinite;}
+  @keyframes pulse-online{0%,100%{opacity:1;}50%{opacity:0.45;}}
+  @media (max-width:600px){ .usuarios-cadastrados{display:none;} }
+
   .painel-navegador-interno{text-align:center;}
   .painel-navegador-interno .painel-tag{padding-right:0;}
   .painel-navegador-interno .painel-icon{width:44px;height:44px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
@@ -504,6 +509,7 @@
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
       </button>
       <div class="logo"><img src="/logo.png" alt="Tesouro Esquecido">Tesouro Esquecido</div>
+      <span class="usuarios-cadastrados" id="usuarios-cadastrados-nav"><span class="dot-online"></span><span id="usuarios-cadastrados-texto">carregando...</span></span>
     </div>
     <div class="nav-right">
       <a class="nav-link" id="nav-link-precos">Preços</a>
@@ -877,6 +883,19 @@
   // ========================================================================
 
   var supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ---- Contador de usuários cadastrados (live, via RPC) ----
+  function atualizarContadorUsuarios(){
+    var elTexto = document.getElementById('usuarios-cadastrados-texto');
+    if (!elTexto) return;
+    supa.rpc('contar_usuarios_cadastrados').then(function(resp){
+      if (resp.error || resp.data == null) return;
+      var n = resp.data;
+      elTexto.textContent = n + (n === 1 ? ' usuário cadastrado' : ' usuários cadastrados');
+    }).catch(function(){});
+  }
+  atualizarContadorUsuarios();
+  setInterval(atualizarContadorUsuarios, 60000);
 
   var ehNavegadorInterno = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|WhatsApp|Line\/|Twitter|Pinterest/i.test(navigator.userAgent || '');
 
