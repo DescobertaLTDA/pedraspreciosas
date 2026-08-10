@@ -878,7 +878,7 @@
 
   var supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  var ehNavegadorInterno = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly/i.test(navigator.userAgent || '');
+  var ehNavegadorInterno = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|WhatsApp|Line\/|Twitter|Pinterest/i.test(navigator.userAgent || '');
 
   var dropzone = document.getElementById('dropzone');
   var inputFoto = document.getElementById('input-foto');
@@ -1459,20 +1459,9 @@
       abrirPopup(painelNavegadorInterno);
       return;
     }
-    
-    supa.auth.getSession()
-      .then(function(sessaoResp){
-        var sessao = sessaoResp.data.session;
-        if (!sessao) {
-          e.preventDefault();
-          abrirPainelLogin();
-          return;
-        }
-        abrirSeletorArquivo();
-      })
-      .catch(function(){
-        abrirSeletorArquivo();
-      });
+    // Abre o seletor de arquivo IMEDIATAMENTE (dentro do gesto de clique).
+    // A checagem de login já acontece depois, em iniciarIdentificacao().
+    abrirSeletorArquivo();
   });
 
   btnFecharNavegadorInterno.addEventListener('click', esconderPaineis);
@@ -1484,6 +1473,13 @@
     if (ehAndroid) {
       var semEsquema = url.replace(/^https?:\/\//, '');
       window.location.href = 'intent://' + semEsquema + '#Intent;scheme=https;package=com.android.chrome;end';
+    } else {
+      // iOS não permite abrir Safari programaticamente a partir de um webview.
+      // Copiamos o link e orientamos o usuário a colar no Safari.
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).catch(function(){});
+      }
+      alert('Copiamos o link. Cole no Safari (toque e segure a barra de endereço e escolha "Colar e Acessar") para continuar.');
     }
   });
 
