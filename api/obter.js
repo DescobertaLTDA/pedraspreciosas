@@ -1,9 +1,9 @@
 // /api/obter.js
-// Reabre uma identificação já feita antes — nome, características, foto e,
-// se já estiver desbloqueada, preço/onde vender também. Não roda a IA de
-// novo e não consome crédito nenhum: é só uma leitura do que já foi salvo.
-// Usado tanto pela tela de histórico quanto para restaurar automaticamente
-// a última avaliação quando a pessoa recarrega a página.
+// Reabre uma identificação já feita antes — nome, características, faixa de
+// preço e foto sempre vêm; "onde vender" só vem se já estiver desbloqueada.
+// Não roda a IA de novo e não consome crédito nenhum: é só uma leitura do que
+// já foi salvo. Usado tanto pela tela de histórico quanto para restaurar
+// automaticamente a última avaliação quando a pessoa recarrega a página.
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -65,7 +65,7 @@ module.exports = async function handler(req, res) {
     caracteristicas: identificacao.caracteristicas,
     observacao: identificacao.observacao,
     desbloqueado: desbloqueada,
-    faixa_preco_brasil: desbloqueada ? identificacao.faixa_preco_brasil : '',
+    faixa_preco_brasil: identificacao.faixa_preco_brasil,
     onde_vender: desbloqueada ? identificacao.onde_vender : '',
     foto_base64: identificacao.foto_base64,
     foto_media_type: identificacao.foto_media_type,

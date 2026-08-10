@@ -1,9 +1,9 @@
 // /api/desbloquear.js
-// Chamado depois que a pessoa já viu o resultado grátis (nome, características)
-// e quer liberar preço + onde vender de UMA identificação específica que já
-// rodou antes (salva na tabela identificacoes por /api/identificar).
+// Chamado depois que a pessoa já viu o resultado grátis (nome, características,
+// faixa de preço) e quer liberar o "onde vender" de UMA identificação específica
+// que já rodou antes (salva na tabela identificacoes por /api/identificar).
 // Não roda a IA de novo — só confere se há crédito pago disponível, consome 1
-// e devolve os campos que estavam bloqueados.
+// e devolve o campo que estava bloqueado.
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -30,7 +30,7 @@ function montarResposta(identificacao) {
     caracteristicas: identificacao.caracteristicas,
     observacao: identificacao.observacao,
     desbloqueado: desbloqueada,
-    faixa_preco_brasil: desbloqueada ? identificacao.faixa_preco_brasil : '',
+    faixa_preco_brasil: identificacao.faixa_preco_brasil,
     onde_vender: desbloqueada ? identificacao.onde_vender : ''
   };
 }
@@ -102,7 +102,7 @@ module.exports = async function handler(req, res) {
 
     const { data: identAtualizada, error: erroUpdateIdent } = await supabase
       .from('identificacoes')
-      .update({ desbloqueada: true })
+      .update({ desbloqueada: true, consumiu_credito_pago: true })
       .eq('id', identificacao_id)
       .select('*')
       .single();

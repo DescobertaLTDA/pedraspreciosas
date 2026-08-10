@@ -1,10 +1,18 @@
 // /api/identificar.js
 // Endpoint serverless (Vercel) para identificação de pedras via IA (Claude API).
-// A identificação em si é GRÁTIS para quem está logado (não exige pagamento).
-// Preço e onde vender só entram na resposta se a conta já tiver crédito pago
-// disponível — nesse caso, 1 crédito é consumido na hora. Se não tiver crédito,
-// o resultado completo fica salvo no banco (tabela identificacoes) e a pessoa
-// libera depois via /api/desbloquear, sem precisar rodar a IA de novo.
+//
+// Regras de acesso:
+// - Cada conta (por e-mail) tem direito a LIMITE_AVALIACOES_GRATIS identificações
+//   gratuitas. Nelas, a resposta traz nome, características, confiança e faixa
+//   de preço — mas o campo "onde vender" fica bloqueado, com uma chamada para
+//   liberar o acesso premium.
+// - Se a conta já tiver crédito pago disponível, a identificação sai completa
+//   (com "onde vender") e consome 1 uso do crédito — independente de ainda
+//   restarem avaliações grátis.
+// - Se a conta já esgotou as avaliações grátis e não tem crédito pago, o
+//   pedido é bloqueado ANTES de chamar a Claude API (evita gasto desnecessário).
+// - Fotos que a IA identifica como "não é pedra/mineral" nunca contam como uma
+//   das avaliações grátis nem consomem crédito pago.
 //
 // Também registra (silenciosamente, sem afetar a resposta) o custo em USD de
 // cada chamada à Claude API na tabela `custos_ia`, usando o campo "usage"
@@ -23,6 +31,10 @@ const supabase = createClient(
 const MODELO = 'claude-sonnet-4-6';
 const PRECO_INPUT_POR_MILHAO = 3;   // USD
 const PRECO_OUTPUT_POR_MILHAO = 15; // USD
+
+// ---- Cota de avaliações gratuitas por conta ----
+const LIMITE_AVALIACOES_GRATIS = 3;
+const MENSAGEM_UPSELL = 'Gostou do resultado? Libere agora onde anunciar essa pedra e desbloqueie +10 avaliações completas por apenas R$13,99.';
 
 function calcularCustoUsd(inputTokens, outputTokens) {
   const custoInput = (inputTokens / 1_000_000) * PRECO_INPUT_POR_MILHAO;
@@ -88,7 +100,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Imagem muito grande. Envie uma foto menor.' });
   }
 
-  // ---- 2. Validar login (pagamento NÃO é mais exigido aqui) ----
+  // ---- 2. Validar login ----
   const token = pegarToken(req);
   if (!token) {
     return res.status(401).json({ error: 'Você precisa entrar na sua conta primeiro.' });
@@ -108,7 +120,43 @@ module.exports = async function handler(req, res) {
     : null;
 
   try {
-    // ---- 3. Chamar a Claude API ----
+    // ---- 3. Ver se essa conta já tem crédito pago disponível ----
+    const { data: credito } = await supabase
+      .from('creditos_avaliacao')
+      .select('*')
+      .eq('email', email)
+      .eq('status', 'pago')
+      .single();
+
+    const temCreditoDisponivel = !!credito && credito.usos < credito.limite;
+
+    // ---- 4. Se não tem crédito pago, checar cota de avaliações grátis ----
+    // Bloqueia ANTES de chamar a IA, pra não gastar com uma chamada que não vai poder ser liberada.
+    let avaliacoesGratisUsadas = 0;
+    if (!temCreditoDisponivel) {
+      const { count, error: erroContagem } = await supabase
+        .from('identificacoes')
+        .select('id', { count: 'exact', head: true })
+        .eq('email', email)
+        .eq('consumiu_credito_pago', false);
+
+      if (erroContagem) {
+        console.error('Erro Supabase (contagem avaliações grátis):', erroContagem);
+        return res.status(500).json({ error: 'Erro ao verificar sua cota de avaliações. Tente novamente.' });
+      }
+
+      avaliacoesGratisUsadas = count || 0;
+
+      if (avaliacoesGratisUsadas >= LIMITE_AVALIACOES_GRATIS) {
+        return res.status(402).json({
+          error: 'Você já usou suas avaliações gratuitas.',
+          avaliacoes_gratis_esgotadas: true,
+          mensagem_upsell: MENSAGEM_UPSELL
+        });
+      }
+    }
+
+    // ---- 5. Chamar a Claude API ----
     const promptSistema = `Você é um especialista em gemologia e identificação de pedras e minerais.
 Primeiro, avalie se a imagem enviada realmente mostra uma pedra, gema, cristal ou mineral físico (bruto ou lapidado). Fotos de pessoas, animais, objetos do dia a dia, paisagens, telas de celular, texto, ou qualquer coisa que não seja uma pedra/mineral devem ser marcadas como NÃO sendo pedra.
 
@@ -181,9 +229,10 @@ Se for uma pedra mas não for possível identificar com segurança, defina "e_pe
       return res.status(502).json({ error: 'Não foi possível interpretar o resultado. Tente novamente.' });
     }
 
-    // ---- 3.1 Se a IA identificou que a imagem NÃO é uma pedra/mineral,
-    //          corta aqui: não salva em identificacoes, não consome crédito,
-    //          só registra o custo (a chamada à IA já foi feita e cobrada). ----
+    // ---- 5.1 Se a IA identificou que a imagem NÃO é uma pedra/mineral,
+    //          corta aqui: não salva em identificacoes, não consome crédito
+    //          nem avaliação grátis, só registra o custo (a chamada à IA já
+    //          foi feita e cobrada). ----
     if (resultadoIA.e_pedra_ou_mineral === false) {
       registrarCustoIA({ identificacaoId: null, email, usage: dataClaude.usage });
       return res.status(200).json({
@@ -192,7 +241,31 @@ Se for uma pedra mas não for possível identificar com segurança, defina "e_pe
       });
     }
 
-    // ---- 4. Salvar o resultado COMPLETO no banco (preço/onde vender inclusive) ----
+    // ---- 6. Consumir crédito pago (se houver) ANTES de salvar, pra já
+    //          gravar consumiu_credito_pago corretamente na mesma inserção ----
+    let desbloqueado = false;
+    let usosRestantes;
+    let saldoRestante;
+
+    if (temCreditoDisponivel) {
+      const { error: erroUpdateCredito } = await supabase
+        .from('creditos_avaliacao')
+        .update({ usos: credito.usos + 1 })
+        .eq('email', email);
+
+      if (!erroUpdateCredito) {
+        desbloqueado = true;
+        usosRestantes = credito.limite - (credito.usos + 1);
+        saldoRestante = credito.limite > 0
+          ? Math.round((credito.valor_pago * usosRestantes / credito.limite) * 100) / 100
+          : 0;
+      } else {
+        console.error('Erro Supabase (update crédito):', erroUpdateCredito);
+      }
+    }
+
+    // ---- 7. Salvar o resultado COMPLETO no banco (preço/onde vender inclusive,
+    //          mesmo quando gratuito — o "onde vender" só fica de fora da RESPOSTA) ----
     const { data: linhaSalva, error: erroInsert } = await supabase
       .from('identificacoes')
       .insert({
@@ -208,7 +281,8 @@ Se for uma pedra mas não for possível identificar com segurança, defina "e_pe
         onde_vender: resultadoIA.onde_vender || null,
         foto_base64: base64,
         foto_media_type: mediaType,
-        desbloqueada: false,
+        desbloqueada: desbloqueado,
+        consumiu_credito_pago: desbloqueado,
         permite_vitrine: permiteVitrine
       })
       .select('*')
@@ -221,49 +295,13 @@ Se for uma pedra mas não for possível identificar com segurança, defina "e_pe
       return res.status(500).json({ error: 'Erro ao salvar o resultado. Tente novamente.' });
     }
 
-    // ---- 4.1 Registrar custo da chamada (não bloqueia a resposta) ----
+    // ---- 7.1 Registrar custo da chamada (não bloqueia a resposta) ----
     registrarCustoIA({ identificacaoId: linhaSalva.id, email, usage: dataClaude.usage });
 
-    // ---- 5. Ver se essa conta já tem crédito pago disponível ----
-    const { data: credito } = await supabase
-      .from('creditos_avaliacao')
-      .select('*')
-      .eq('email', email)
-      .eq('status', 'pago')
-      .single();
-
-    const temCreditoDisponivel = !!credito && credito.usos < credito.limite;
-
-    let desbloqueado = false;
-    let usosRestantes;
-    let saldoRestante;
-
-    if (temCreditoDisponivel) {
-      // Já tinha pago antes (ou já desbloqueou outras): consome 1 crédito
-      // e libera essa identificação na hora, sem passo extra.
-      const { error: erroUpdateCredito } = await supabase
-        .from('creditos_avaliacao')
-        .update({ usos: credito.usos + 1 })
-        .eq('email', email);
-
-      if (!erroUpdateCredito) {
-        await supabase
-          .from('identificacoes')
-          .update({ desbloqueada: true })
-          .eq('id', linhaSalva.id);
-
-        desbloqueado = true;
-        usosRestantes = credito.limite - (credito.usos + 1);
-        saldoRestante = credito.limite > 0
-          ? Math.round((credito.valor_pago * usosRestantes / credito.limite) * 100) / 100
-          : 0;
-      } else {
-        console.error('Erro Supabase (update crédito):', erroUpdateCredito);
-      }
-    }
-
-    // ---- 6. Montar resposta: nome/confiança/alternativos/características SEMPRE
-    //          vão; preço/onde vender só se "desbloqueado" for true. ----
+    // ---- 8. Montar resposta:
+    //          - nome/confiança/alternativos/características/faixa de preço SEMPRE vão
+    //          - "onde vender" só se desbloqueado (crédito pago)
+    //          - quando gratuito, inclui quantas avaliações grátis ainda restam e o texto de upsell
     const resposta = {
       identificacao_id: linhaSalva.id,
       e_pedra_ou_mineral: true,
@@ -272,14 +310,17 @@ Se for uma pedra mas não for possível identificar com segurança, defina "e_pe
       nomes_alternativos: resultadoIA.nomes_alternativos,
       caracteristicas: resultadoIA.caracteristicas,
       observacao: resultadoIA.observacao,
+      faixa_preco_brasil: resultadoIA.faixa_preco_brasil,
       desbloqueado: desbloqueado,
-      faixa_preco_brasil: desbloqueado ? resultadoIA.faixa_preco_brasil : '',
       onde_vender: desbloqueado ? resultadoIA.onde_vender : ''
     };
 
     if (desbloqueado) {
       resposta.usos_restantes = usosRestantes;
       resposta.saldo_restante = saldoRestante;
+    } else {
+      resposta.avaliacoes_gratis_restantes = Math.max(0, LIMITE_AVALIACOES_GRATIS - (avaliacoesGratisUsadas + 1));
+      resposta.mensagem_upsell = MENSAGEM_UPSELL;
     }
 
     return res.status(200).json(resposta);
