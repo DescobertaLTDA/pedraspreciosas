@@ -2099,12 +2099,14 @@
     var pct = 0;
     btnProgressFill.style.transition = 'none';
     btnProgressFill.style.width = '0%';
+    btnVerResultadoLabel.textContent = 'Analisando... 0%';
     clearInterval(progressoInterval);
     progressoInterval = setInterval(function(){
       pct += (90 - pct) * 0.08 + 0.3;
       if (pct > 90) pct = 90;
       btnProgressFill.style.transition = 'width .25s linear';
       btnProgressFill.style.width = pct + '%';
+      btnVerResultadoLabel.textContent = 'Analisando... ' + Math.round(pct) + '%';
     }, 130);
   }
 
@@ -2113,6 +2115,7 @@
     btnProgressFill.style.transition = 'width .35s ease-out';
     btnProgressFill.style.width = sucesso ? '100%' : '0%';
     if (sucesso) {
+      btnVerResultadoLabel.textContent = 'Analisando... 100%';
       setTimeoutSeguro(function(){
         btnProgressFill.style.transition = 'none';
         btnProgressFill.style.width = '0%';
