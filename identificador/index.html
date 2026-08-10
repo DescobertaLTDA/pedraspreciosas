@@ -670,9 +670,6 @@
     <button class="btn btn-secondary btn-block" id="btn-ok-abrir-navegador" style="margin-top:8px;">Ok, vou abrir</button>
   </div>
 
-  <!-- TEASER BLOQUEIO (DESATIVADO) -->
-  <div class="teaser-bloqueio" id="teaser-bloqueio" style="display:none !important;"></div>
-
   <!-- RESULTADO -->
   <div class="resultado" id="resultado">
     <div class="resultado-head">
@@ -938,6 +935,7 @@
   var resultadoIAAtual = null;
   var analiseEmAndamento = false;
   var idPendenteDaUrl = null;
+  var fotoCarregada = false;
 
   var sidebar = document.getElementById('sidebar');
   var sidebarBackdrop = document.getElementById('sidebar-backdrop');
@@ -1224,6 +1222,7 @@
         previewImg.src = 'data:' + data.foto_media_type + ';base64,' + data.foto_base64;
         base64Atual = data.foto_base64;
         mediaTypeAtual = data.foto_media_type;
+        fotoCarregada = true;
         dropzone.style.display = 'none';
         preview.style.display = 'block';
         actions.style.display = 'flex';
@@ -1279,6 +1278,7 @@
         previewImg.src = 'data:' + data.foto_media_type + ';base64,' + data.foto_base64;
         base64Atual = data.foto_base64;
         mediaTypeAtual = data.foto_media_type;
+        fotoCarregada = true;
         dropzone.style.display = 'none';
         preview.style.display = 'block';
         actions.style.display = 'flex';
@@ -1422,7 +1422,18 @@
       abrirPopup(painelNavegadorInterno);
       return;
     }
-    inputFoto.click();
+    
+    // Verifica se o usuário está logado
+    supa.auth.getSession().then(function(sessaoResp){
+      var sessao = sessaoResp.data.session;
+      if (!sessao) {
+        // Não está logado - abre o popup de login primeiro
+        abrirPainelLogin();
+        return;
+      }
+      // Já está logado - abre o seletor de arquivo
+      inputFoto.click();
+    });
   });
 
   btnFecharNavegadorInterno.addEventListener('click', esconderPaineis);
@@ -1445,6 +1456,7 @@
     erroEl.style.display = 'none';
     esconderPaineis();
     mediaTypeAtual = file.type;
+    fotoCarregada = true;
 
     var reader = new FileReader();
     reader.onload = function(){
@@ -1456,59 +1468,31 @@
       preview.style.display = 'block';
       actions.style.display = 'flex';
       consentimentoVitrine.style.display = 'flex';
+      
+      // Inicia a identificação automaticamente
+      iniciarIdentificacao();
     };
     reader.readAsDataURL(file);
   });
 
-  btnTrocar.addEventListener('click', function(){
-    base64Atual = null;
-    mediaTypeAtual = null;
-    resultadoIAAtual = null;
-    inputFoto.value = '';
-    dropzone.style.display = 'flex';
-    preview.style.display = 'none';
-    actions.style.display = 'none';
-    consentimentoVitrine.style.display = 'none';
-    checkPermiteVitrine.checked = true;
-    resultadoEl.classList.remove('active');
-    erroEl.style.display = 'none';
-    esconderPaineis();
-    pararAnalisePorCancelamento();
-  });
-
-  // ---- Clique em "Ver resultado" ----
-  btnVerResultado.addEventListener('click', function(){
-    if (!base64Atual) return;
-    if (analiseEmAndamento) return;
-
-    // Se já tem um resultado salvo, mostra ele
-    if (resultadoIAAtual) {
-      mostrarResultado(resultadoIAAtual);
-      return;
-    }
-
-    verificarAcessoEProsseguir();
-  });
-
-  function verificarAcessoEProsseguir(){
-    if (analiseEmAndamento) return;
-
-    // INICIA O SCANNER IMEDIATAMENTE
-    analiseEmAndamento = true;
-    btnVerResultado.disabled = true;
-    btnVerResultadoLabel.textContent = 'Analisando...';
-    iniciarScanner();
-    iniciarProgresso();
-
+  function iniciarIdentificacao(){
+    if (!base64Atual || !fotoCarregada) return;
+    
+    // Verifica se está logado
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
-
       if (!sessao) {
-        // Mantém o scanner rodando enquanto o popup de login aparece
         abrirPainelLogin();
         return;
       }
-
+      
+      // Logado - inicia o scanner e a identificação
+      analiseEmAndamento = true;
+      btnVerResultado.disabled = true;
+      btnVerResultadoLabel.textContent = 'Analisando...';
+      iniciarScanner();
+      iniciarProgresso();
+      
       fetch('/api/status', {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + sessao.access_token }
@@ -1526,6 +1510,37 @@
       });
     });
   }
+
+  btnTrocar.addEventListener('click', function(){
+    base64Atual = null;
+    mediaTypeAtual = null;
+    resultadoIAAtual = null;
+    fotoCarregada = false;
+    inputFoto.value = '';
+    dropzone.style.display = 'flex';
+    preview.style.display = 'none';
+    actions.style.display = 'none';
+    consentimentoVitrine.style.display = 'none';
+    checkPermiteVitrine.checked = true;
+    resultadoEl.classList.remove('active');
+    erroEl.style.display = 'none';
+    esconderPaineis();
+    pararAnalisePorCancelamento();
+  });
+
+  // ---- Clique em "Ver resultado" ----
+  btnVerResultado.addEventListener('click', function(){
+    if (!base64Atual || !fotoCarregada) return;
+    if (analiseEmAndamento) return;
+
+    // Se já tem um resultado salvo, mostra ele
+    if (resultadoIAAtual) {
+      mostrarResultado(resultadoIAAtual);
+      return;
+    }
+
+    iniciarIdentificacao();
+  });
 
   // ---- Login/cadastro ----
   btnEntrar.addEventListener('click', function(){
@@ -1579,7 +1594,7 @@
             return;
           }
 
-          // Se já tem resultado salvo, mostra ele (NÃO chama IA de novo)
+          // Se já tem resultado salvo, mostra ele
           if (resultadoIAAtual) {
             pararScanner();
             pararProgresso(true);
@@ -1587,11 +1602,12 @@
             return;
           }
 
-          // Se tem foto, chama a IA (o scanner já está rodando)
-          if (base64Atual) {
+          // Se tem foto carregada, inicia a identificação
+          if (base64Atual && fotoCarregada) {
             supa.auth.getSession().then(function(sessaoResp){
               var sessao = sessaoResp.data.session;
               if (sessao) {
+                // Já tem foto, inicia a identificação (o scanner já está rodando)
                 fetch('/api/status', {
                   method: 'POST',
                   headers: { 'Authorization': 'Bearer ' + sessao.access_token }
@@ -1602,9 +1618,20 @@
                     avaliacoesGratisRestantes = data.avaliacoes_gratis_restantes;
                     atualizarContadorGratis();
                   }
+                  // Inicia a identificação
+                  analiseEmAndamento = true;
+                  btnVerResultado.disabled = true;
+                  btnVerResultadoLabel.textContent = 'Analisando...';
+                  iniciarScanner();
+                  iniciarProgresso();
                   identificarPedra(sessao.access_token);
                 })
                 .catch(function(){
+                  analiseEmAndamento = true;
+                  btnVerResultado.disabled = true;
+                  btnVerResultadoLabel.textContent = 'Analisando...';
+                  iniciarScanner();
+                  iniciarProgresso();
                   identificarPedra(sessao.access_token);
                 });
               }
