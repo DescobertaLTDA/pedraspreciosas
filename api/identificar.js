@@ -110,9 +110,12 @@ module.exports = async function handler(req, res) {
   try {
     // ---- 3. Chamar a Claude API ----
     const promptSistema = `Você é um especialista em gemologia e identificação de pedras e minerais.
-Analise a imagem da pedra enviada e responda APENAS com um JSON válido, sem markdown, sem crases, sem texto antes ou depois, no seguinte formato exato:
+Primeiro, avalie se a imagem enviada realmente mostra uma pedra, gema, cristal ou mineral físico (bruto ou lapidado). Fotos de pessoas, animais, objetos do dia a dia, paisagens, telas de celular, texto, ou qualquer coisa que não seja uma pedra/mineral devem ser marcadas como NÃO sendo pedra.
+
+Responda APENAS com um JSON válido, sem markdown, sem crases, sem texto antes ou depois, no seguinte formato exato:
 
 {
+  "e_pedra_ou_mineral": true | false,
   "nome_provavel": "nome da pedra em português",
   "confianca": "alta" | "media" | "baixa",
   "nomes_alternativos": ["nome1", "nome2"],
@@ -122,7 +125,9 @@ Analise a imagem da pedra enviada e responda APENAS com um JSON válido, sem mar
   "observacao": "uma frase curta com recomendação, ex: para confirmar o valor exato, procure um gemólogo"
 }
 
-Se não for possível identificar com segurança, defina confianca como "baixa" e ainda assim dê o palpite mais provável.`;
+Se "e_pedra_ou_mineral" for false, preencha os demais campos com string vazia ou lista vazia — não invente uma identificação.
+
+Se for uma pedra mas não for possível identificar com segurança, defina "e_pedra_ou_mineral" como true, "confianca" como "baixa" e ainda assim dê o palpite mais provável.`;
 
     const respostaClaude = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -174,6 +179,17 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
       // Mesmo com falha de parse, a chamada foi cobrada — registra o custo.
       registrarCustoIA({ identificacaoId: null, email, usage: dataClaude.usage });
       return res.status(502).json({ error: 'Não foi possível interpretar o resultado. Tente novamente.' });
+    }
+
+    // ---- 3.1 Se a IA identificou que a imagem NÃO é uma pedra/mineral,
+    //          corta aqui: não salva em identificacoes, não consome crédito,
+    //          só registra o custo (a chamada à IA já foi feita e cobrada). ----
+    if (resultadoIA.e_pedra_ou_mineral === false) {
+      registrarCustoIA({ identificacaoId: null, email, usage: dataClaude.usage });
+      return res.status(200).json({
+        e_pedra_ou_mineral: false,
+        error: 'Não conseguimos identificar uma pedra ou mineral nessa foto. Tente enviar uma imagem mais nítida, focada na pedra.'
+      });
     }
 
     // ---- 4. Salvar o resultado COMPLETO no banco (preço/onde vender inclusive) ----
@@ -250,6 +266,7 @@ Se não for possível identificar com segurança, defina confianca como "baixa" 
     //          vão; preço/onde vender só se "desbloqueado" for true. ----
     const resposta = {
       identificacao_id: linhaSalva.id,
+      e_pedra_ou_mineral: true,
       nome_provavel: resultadoIA.nome_provavel,
       confianca: resultadoIA.confianca,
       nomes_alternativos: resultadoIA.nomes_alternativos,
