@@ -63,7 +63,6 @@
   .nav-cta{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;background:#fff;color:var(--ink);padding:9px 14px;border-radius:6px;border:1px solid var(--line-strong);cursor:pointer;white-space:nowrap;flex-shrink:0;}
   .nav-cta .short{display:none;}
 
-  /* --- menu do usuário logado (avatar + nome + saldo -> dropdown) --- */
   .nav-user{position:relative;}
   .nav-user-btn{font-family:'Inter',sans-serif;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line-strong);border-radius:22px;padding:5px 12px 5px 5px;cursor:pointer;min-width:0;}
   .nav-user-btn:hover{border-color:var(--line-strong);background:var(--card-alt);}
@@ -82,8 +81,9 @@
 
   .gratis-counter{display:inline-flex;align-items:center;gap:4px;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-left:6px;white-space:nowrap;}
   .gratis-counter svg{width:12px;height:12px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
+  .gratis-counter-nav{display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);color:var(--accent-dark);font-size:10.5px;font-weight:700;padding:3px 10px 3px 8px;border-radius:20px;border:1px solid var(--line-strong);}
+  .gratis-counter-nav svg{width:12px;height:12px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
 
-  /* --- sidebar de histórico (estilo Claude) --- */
   .painel-navegador-interno{text-align:center;}
   .painel-navegador-interno .painel-tag{padding-right:0;}
   .painel-navegador-interno .painel-icon{width:44px;height:44px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
@@ -151,25 +151,13 @@
   .preview{width:100%;max-height:420px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--card-alt);display:flex;align-items:center;justify-content:center;position:relative;}
   .preview img{width:100%;max-height:420px;display:block;object-fit:contain;}
 
-  /* --- efeito de scanner sobre a foto durante a análise --- */
   .scanner-overlay{position:absolute;inset:0;display:none;overflow:hidden;pointer-events:none;}
   .scanner-overlay.active{display:block;}
-  .scanner-grid{position:absolute;inset:0;opacity:0;background-image:
-      linear-gradient(rgba(56,196,120,0.45) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(56,196,120,0.45) 1px, transparent 1px);
-    background-size:26px 26px;
-    animation:scannerGridFade .5s ease forwards;}
+  .scanner-grid{position:absolute;inset:0;opacity:0;background-image:linear-gradient(rgba(56,196,120,0.45) 1px, transparent 1px),linear-gradient(90deg, rgba(56,196,120,0.45) 1px, transparent 1px);background-size:26px 26px;animation:scannerGridFade .5s ease forwards;}
   .scanner-overlay::after{content:'';position:absolute;inset:0;background:rgba(56,196,120,0.06);opacity:0;animation:scannerGridFade .5s ease forwards;}
-  .scanner-line{position:absolute;left:0;right:0;top:-4px;height:4px;
-    background:linear-gradient(90deg, transparent, #38c478 15%, #a7f3c5 50%, #38c478 85%, transparent);
-    box-shadow:0 0 14px 3px rgba(56,196,120,0.85), 0 0 34px 8px rgba(56,196,120,0.35);
-    animation:scannerMove 1.9s ease-in-out infinite;}
+  .scanner-line{position:absolute;left:0;right:0;top:-4px;height:4px;background:linear-gradient(90deg, transparent, #38c478 15%, #a7f3c5 50%, #38c478 85%, transparent);box-shadow:0 0 14px 3px rgba(56,196,120,0.85), 0 0 34px 8px rgba(56,196,120,0.35);animation:scannerMove 1.9s ease-in-out infinite;}
   @keyframes scannerGridFade{to{opacity:1;}}
-  @keyframes scannerMove{
-    0%{top:-4px;}
-    50%{top:calc(100% - 4px);}
-    100%{top:-4px;}
-  }
+  @keyframes scannerMove{0%{top:-4px;}50%{top:calc(100% - 4px);}100%{top:-4px;}}
 
   .actions{display:flex;gap:12px;margin-top:18px;}
   .btn{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;border-radius:7px;padding:13px 18px;cursor:pointer;border:none;min-height:46px;transition:transform .08s ease;}
@@ -187,7 +175,6 @@
   .erro{margin-top:16px;font-size:13.5px;color:var(--danger);text-align:center;}
   .aviso{margin-top:16px;font-size:13px;color:var(--ink-mute);text-align:center;}
 
-  /* --- oferta / pacote de leituras --- */
   .oferta{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;display:flex;flex-direction:column;}
   .oferta-img{background:linear-gradient(135deg,var(--accent-light),#fff);padding:26px;display:flex;align-items:center;justify-content:center;}
   .oferta-img svg{width:64px;height:64px;stroke:var(--accent);stroke-width:1.5;fill:none;}
@@ -203,7 +190,6 @@
   @media (max-width:480px){ .oferta-preco{flex-direction:column;align-items:flex-start;gap:4px;} }
   .oferta-body .btn-primary{margin-top:16px;}
 
-  /* --- passos --- */
   .passos{list-style:none;margin-top:20px;display:flex;flex-direction:column;}
   .passo{display:flex;gap:16px;padding-bottom:22px;position:relative;}
   .passo:not(:last-child)::before{content:'';position:absolute;left:14px;top:30px;bottom:0;width:1px;background:var(--line-strong);}
@@ -213,22 +199,6 @@
 
   .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(47,143,94,0.3);border-radius:16px;padding:36px;display:none;scroll-margin-top:88px;}
   @media (max-width:480px){ .resultado{padding:24px;} }
-
-  /* --- teaser motivacional para quem ainda não tem leituras --- */
-  .teaser-bloqueio{margin-top:26px;background:var(--card);border:1.5px solid var(--accent);border-radius:16px;padding:26px 30px;text-align:center;display:none;}
-  .teaser-bloqueio.active{display:block;}
-  @media (max-width:480px){ .teaser-bloqueio{padding:20px 18px;} }
-  .teaser-bloqueio-icon{width:44px;height:44px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto;}
-  .teaser-bloqueio-icon svg{width:22px;height:22px;stroke:var(--accent-dark);stroke-width:1.7;fill:none;}
-  .teaser-bloqueio h2{margin-top:14px;font-size:19px;}
-  .teaser-bloqueio p{margin-top:8px;font-size:14px;color:var(--ink-mute);max-width:460px;margin-left:auto;margin-right:auto;}
-  .teaser-bloqueio .btn-primary{margin-top:16px;}
-  .teaser-oferta-destaque{margin-top:14px;background:var(--ink);color:#fff;border-radius:10px;padding:12px 16px;font-size:14.5px;line-height:1.4;}
-  .teaser-oferta-destaque strong{color:var(--accent-light);}
-  .teaser-cta-vitrine{margin-top:14px;background:var(--accent-light);border:1px dashed var(--accent);border-radius:12px;padding:12px 16px;text-align:left;}
-  .teaser-cta-vitrine-numero{font-family:'Fraunces',serif;font-size:19px;font-weight:700;color:var(--accent-dark);}
-  .teaser-cta-vitrine-texto{margin-top:3px;font-size:13.5px;color:var(--ink);line-height:1.35;}
-  .teaser-cta-vitrine-sub{margin-top:8px;font-size:12.5px;color:var(--ink-mute);line-height:1.45;}
   .resultado.active{display:block;}
   .resultado-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
   .resultado-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--emerald);}
@@ -242,7 +212,6 @@
   .preco-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);}
   .preco-valor{margin-top:6px;font-size:15px;color:var(--ink);}
 
-  /* --- canais de venda recomendados (MF Rural em destaque) --- */
   .canais-venda{margin-top:16px;}
   .canal-destaque{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--accent-light);border:1.5px solid var(--accent);border-radius:11px;padding:14px 16px;text-decoration:none;transition:background .15s ease;}
   .canal-destaque:hover{background:#f0d4b8;}
@@ -256,10 +225,8 @@
   .canal-link:hover{border-color:var(--accent);color:var(--accent-dark);}
   .observacao{margin-top:16px;font-size:12.5px;color:var(--ink-mute);}
 
-  /* --- bloco premium: preço SEMPRE visível, onde vender bloqueado --- */
   .premium-section{position:relative;margin-top:22px;padding-top:22px;border-top:1px solid var(--line);}
   .premium-conteudo{display:block;}
-
   .premium-preview{display:none;background:var(--card-alt);border:1px solid var(--line);border-radius:12px;padding:24px;margin-top:16px;}
   .premium-preview.active{display:block;}
   .premium-preview-tag{font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);display:flex;align-items:center;gap:8px;}
@@ -275,13 +242,10 @@
   .premium-preview .btn{padding:13px 22px;}
 
   .bloqueado-badge{display:inline-block;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-left:8px;}
-
   .carregando .btn-primary{background:rgba(168,80,42,0.5);}
 
-  /* --- login / paywall (popup) --- */
   .painel-acesso{display:none;}
-  .painel-acesso.active,
-  .teaser-bloqueio.active{
+  .painel-acesso.active{
     display:block;
     position:fixed;
     top:50%;
@@ -324,7 +288,6 @@
   .historico-badge.pago{color:var(--emerald);}
   .historico-badge.bloqueado{color:var(--ink-mute);}
 
-  /* --- vitrine: pedras que outros clientes (pagantes) encontraram --- */
   .vitrine-sub{margin-top:6px;font-size:13.5px;color:var(--ink-mute);text-align:center;}
   .vitrine-grid{margin-top:22px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
   @media (max-width:680px){ .vitrine-grid{grid-template-columns:repeat(3,1fr);} }
@@ -350,7 +313,6 @@
   .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
   .vitrine-pag-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 
-  /* --- seções de conteúdo --- */
   .conteudo{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;}
   .conteudo h2{font-size:21px;margin-bottom:14px;}
   .conteudo p{font-size:14px;color:var(--ink-mute);margin-bottom:12px;}
@@ -375,8 +337,162 @@
   footer{padding-bottom:env(safe-area-inset-bottom);}
   footer .foot-links a:hover{color:var(--accent-dark);}
 
-  .gratis-counter-nav{display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);color:var(--accent-dark);font-size:10.5px;font-weight:700;padding:3px 10px 3px 8px;border-radius:20px;border:1px solid var(--line-strong);}
-  .gratis-counter-nav svg{width:12px;height:12px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
+  /* --- BOAS-VINDAS MELHORADO --- */
+  #painel-boas-vindas {
+    padding: 0;
+    overflow: hidden;
+    max-width: 440px;
+    width: 92%;
+    border-radius: 20px;
+  }
+  #painel-boas-vindas .painel-fechar {
+    top: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.05);
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+  .boas-vindas-header {
+    padding: 28px 24px 16px;
+    background: linear-gradient(135deg, var(--accent-light) 0%, #fff 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .boas-vindas-icon {
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .boas-vindas-destaque {
+    padding: 0 24px;
+    margin-top: 16px;
+  }
+  .boas-vindas-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--card-alt);
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    transition: border-color .2s ease;
+  }
+  .boas-vindas-card:hover {
+    border-color: var(--accent);
+  }
+  .boas-vindas-card-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+    width: 34px;
+    text-align: center;
+  }
+  .boas-vindas-card-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .boas-vindas-card-desc {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    line-height: 1.4;
+  }
+  .boas-vindas-cta {
+    padding: 18px 24px 24px;
+    border-top: 1px solid var(--line);
+    margin-top: 4px;
+  }
+  @media (max-width: 480px) {
+    #painel-boas-vindas {
+      width: 94%;
+      max-height: 94vh;
+      border-radius: 16px;
+    }
+    .boas-vindas-header {
+      padding: 20px 16px 12px;
+    }
+    .boas-vindas-icon {
+      font-size: 26px;
+    }
+    #painel-boas-vindas .painel-tag {
+      font-size: 9px;
+    }
+    .boas-vindas-destaque {
+      padding: 0 16px;
+      margin-top: 12px;
+    }
+    .boas-vindas-destaque p {
+      font-size: 13px;
+    }
+    .boas-vindas-card {
+      padding: 12px 14px;
+      gap: 12px;
+      border-radius: 10px;
+    }
+    .boas-vindas-card-icon {
+      font-size: 18px;
+      width: 28px;
+    }
+    .boas-vindas-card-title {
+      font-size: 13px;
+    }
+    .boas-vindas-card-desc {
+      font-size: 12px;
+    }
+    .boas-vindas-cta {
+      padding: 14px 16px 18px;
+    }
+    .boas-vindas-cta .btn {
+      font-size: 14px !important;
+      padding: 12px !important;
+    }
+    .boas-vindas-cta p {
+      font-size: 10.5px !important;
+    }
+  }
+  @media (max-width: 380px) {
+    #painel-boas-vindas {
+      width: 96%;
+    }
+    .boas-vindas-header {
+      padding: 16px 12px 10px;
+    }
+    .boas-vindas-card {
+      padding: 10px 12px;
+      gap: 10px;
+    }
+    .boas-vindas-card-icon {
+      font-size: 16px;
+      width: 24px;
+    }
+    .boas-vindas-card-title {
+      font-size: 12px;
+    }
+    .boas-vindas-card-desc {
+      font-size: 11px;
+    }
+    .boas-vindas-cta {
+      padding: 12px 12px 14px;
+    }
+  }
+  @media (min-width: 768px) {
+    #painel-boas-vindas {
+      max-width: 460px;
+      border-radius: 24px;
+    }
+    .boas-vindas-card {
+      padding: 16px 20px;
+    }
+    .boas-vindas-card:hover {
+      transform: translateX(4px);
+      transition: transform .15s ease, border-color .2s ease;
+    }
+  }
+
+  /* --- TEASER BLOQUEIO (NUNCA MAIS USADO, mas mantido por compatibilidade) --- */
+  .teaser-bloqueio{display:none !important;}
 </style>
 </head>
 <body>
@@ -415,6 +531,7 @@
     <p class="aviso" id="historico-vazio" style="display:none;">Você ainda não fez nenhuma avaliação.</p>
   </div>
 </aside>
+
 <div class="wrap">
 
   <div class="head">
@@ -428,7 +545,6 @@
     <svg viewBox="0 0 24 24"><path d="M12 5v14m0 0l-6-6m6 6l6-6"/></svg>
   </div>
 
-  <!-- Upload livre, sem trava -->
   <div class="card" id="area-principal" style="margin-top:14px;">
     <div class="dropzone" id="dropzone">
       <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
@@ -461,10 +577,7 @@
     <p class="erro" id="erro" style="display:none;"></p>
   </div>
 
-  <!-- Painel de login/cadastro (aparece quando clica em "Ver resultado" sem estar logado).
-       Duas "telas" controladas por JS via classe .modo-login no painel:
-       por padrão mostra CADASTRO (tela principal); ao clicar em "Já tenho conta"
-       alterna pra tela de LOGIN, com campos reduzidos (só e-mail e senha). -->
+  <!-- PAINEL DE LOGIN/CADASTRO -->
   <div class="card painel-acesso" id="painel-login">
     <button type="button" class="painel-fechar" id="btn-fechar-login" aria-label="Fechar">&times;</button>
     <div class="painel-tag" id="painel-login-tag">Criar conta</div>
@@ -492,24 +605,62 @@
     <p class="erro" id="erro-login" style="display:none;"></p>
   </div>
 
-  <!-- Popup de boas-vindas: aparece só uma vez, logo depois que a conta é
-       criada (não aparece em login de conta já existente), explicando como
-       o identificador funciona antes da pessoa seguir pro resultado. -->
+  <!-- POPUP DE BOAS-VINDAS (MELHORADO) -->
   <div class="card painel-acesso" id="painel-boas-vindas">
     <button type="button" class="painel-fechar" id="btn-fechar-boas-vindas" aria-label="Fechar">&times;</button>
-    <div class="painel-tag">Seja bem-vindo(a)!</div>
-    <p style="font-size:14px;color:var(--ink);margin-bottom:12px;">Por que cobramos pelo resultado completo:</p>
-    <ul class="oferta-lista boas-vindas-lista" style="margin-bottom:16px;">
-      <li><span class="ico">✓</span>Usamos <strong>IA da Anthropic (Claude)</strong> pra máxima precisão na análise.</li>
-      <li><span class="ico">✓</span>É o que garante a <strong>melhor identificação possível</strong>, não um chute.</li>
-      <li><span class="ico">✓</span>Assim te ajudamos a <strong>vender sua pedra pelo valor justo</strong>.</li>
-    </ul>
-    <button class="btn btn-primary btn-block" id="btn-continuar-boas-vindas">Entendi, continuar</button>
+    
+    <div class="boas-vindas-header">
+      <div class="boas-vindas-icon">✨</div>
+      <div class="painel-tag" style="text-align:center;padding-right:0;">Seja bem-vindo(a)!</div>
+      <h2 style="font-size:20px;text-align:center;margin-top:4px;color:var(--ink);">
+        Identifique suas pedras com IA
+      </h2>
+    </div>
+
+    <div class="boas-vindas-destaque">
+      <p style="font-size:14px;color:var(--ink);margin-bottom:0;text-align:center;line-height:1.5;">
+        Você tem <strong style="color:var(--accent-dark);">3 avaliações gratuitas</strong> para testar.
+        Depois, desbloqueie o valor real da sua pedra.
+      </p>
+    </div>
+
+    <div style="margin-top:20px;display:flex;flex-direction:column;gap:14px;padding:0 24px;">
+      <div class="boas-vindas-card">
+        <div class="boas-vindas-card-icon">🤖</div>
+        <div>
+          <div class="boas-vindas-card-title">IA da Anthropic (Claude)</div>
+          <div class="boas-vindas-card-desc">A IA mais precisa do mercado para identificar pedras e minerais.</div>
+        </div>
+      </div>
+
+      <div class="boas-vindas-card">
+        <div class="boas-vindas-card-icon">🎯</div>
+        <div>
+          <div class="boas-vindas-card-title">Identificação confiável</div>
+          <div class="boas-vindas-card-desc">Não é um chute — é uma análise com alto índice de precisão.</div>
+        </div>
+      </div>
+
+      <div class="boas-vindas-card">
+        <div class="boas-vindas-card-icon">💰</div>
+        <div>
+          <div class="boas-vindas-card-title">Venda pelo valor justo</div>
+          <div class="boas-vindas-card-desc">Descubra o preço de mercado e onde vender sua pedra.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="boas-vindas-cta">
+      <button class="btn btn-primary btn-block" id="btn-continuar-boas-vindas" style="font-size:15px;padding:14px;">
+        Começar agora →
+      </button>
+      <p style="font-size:11.5px;color:var(--ink-mute2);text-align:center;margin-top:8px;">
+        Gratuito • Sem compromisso • Cadastro em 1 minuto
+      </p>
+    </div>
   </div>
 
-  <!-- Popup de navegador interno: aparece quando a pessoa toca em "Envie a
-       foto da sua pedra" mas está dentro do app do Instagram/Facebook/TikTok
-       (detectado via user agent). Esses WebViews bloqueiam o upload de foto. -->
+  <!-- POPUP NAVEGADOR INTERNO -->
   <div class="card painel-acesso painel-navegador-interno" id="painel-navegador-interno">
     <button type="button" class="painel-fechar" id="btn-fechar-navegador-interno" aria-label="Fechar">&times;</button>
     <div class="painel-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
@@ -520,26 +671,10 @@
     <button class="btn btn-secondary btn-block" id="btn-ok-abrir-navegador" style="margin-top:8px;">Ok, vou abrir</button>
   </div>
 
+  <!-- TEASER BLOQUEIO (DESATIVADO - NUNCA MAIS APARECE) -->
+  <div class="teaser-bloqueio" id="teaser-bloqueio" style="display:none !important;"></div>
 
-  <!-- Teaser motivacional: aparece no lugar do resultado quando a pessoa
-       ainda não tem leituras disponíveis, SEM chamar a IA (evita gastar tokens) -->
-  <div class="teaser-bloqueio" id="teaser-bloqueio">
-    <button type="button" class="painel-fechar" id="btn-fechar-teaser" aria-label="Fechar">&times;</button>
-    <div class="teaser-bloqueio-icon">
-      <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
-    </div>
-    <h2>Essa pedra pode valer mais do que você imagina</h2>
-    <p>Desbloqueie o nome exato, a faixa de preço e onde vender com segurança.</p>
-    <div class="teaser-oferta-destaque">
-      Por <strong>R$ 13,99</strong> avaliamos até <strong>10 pedras suas</strong>, com alta precisão.
-    </div>
-    <div class="teaser-cta-vitrine">
-      <div class="teaser-cta-vitrine-numero">+100.000</div>
-      <p class="teaser-cta-vitrine-texto"><strong>Avalie sua pedra e mostre na nossa vitrine</strong> para mais de 100.000 pessoas.</p>
-    </div>
-    <button class="btn btn-primary btn-block" id="btn-assinar-teaser">Desbloquear identificação — R$ 13,99</button>
-  </div>
-
+  <!-- RESULTADO -->
   <div class="resultado" id="resultado">
     <div class="resultado-head">
       <div>
@@ -551,7 +686,6 @@
     <p class="alternativos" id="res-alternativos" style="display:none;"></p>
     <ul class="caracteristicas" id="res-caracteristicas"></ul>
 
-    <!-- PREÇO SEMPRE VISÍVEL (não condicional) -->
     <div class="premium-section">
       <div class="premium-conteudo">
         <div class="preco-box">
@@ -559,13 +693,10 @@
           <p class="preco-valor" id="res-preco"></p>
         </div>
 
-        <!-- ONDE VENDER: bloqueado até pagar -->
         <div class="preco-box" id="onde-vender-box">
           <div class="preco-label">Onde vender</div>
           <p class="preco-valor" id="res-onde">
-            <span style="color:var(--ink-mute2);">
-              🔒 Desbloqueie para ver onde vender essa pedra
-            </span>
+            <span style="color:var(--ink-mute2);">🔒 Desbloqueie para ver onde vender essa pedra</span>
           </p>
           <div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
             <span class="bloqueado-badge">🔒 bloqueado</span>
@@ -592,7 +723,6 @@
         </div>
       </div>
 
-      <!-- Preview do que está bloqueado (mostra quando onde_vender está travado) -->
       <div class="premium-preview" id="premium-preview">
         <div class="premium-preview-tag">
           <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
@@ -613,7 +743,7 @@
     <p class="observacao" id="res-observacao"></p>
   </div>
 
-  <!-- Vitrine: pedras que outros clientes pagantes encontraram -->
+  <!-- VITRINE -->
   <div class="card" id="area-vitrine">
     <h2>Veja o que outras pessoas encontraram</h2>
     <p class="vitrine-sub">Resultados reais de clientes que já desbloquearam o valor da sua pedra.</p>
@@ -622,7 +752,7 @@
     <p class="aviso" id="vitrine-vazio" style="display:none;">Ainda não temos resultados para mostrar aqui.</p>
   </div>
 
-  <!-- Oferta: pacote de leituras -->
+  <!-- OFERTA -->
   <div class="oferta" id="area-oferta">
     <div class="oferta-img">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12l3 3 5-6"/></svg>
@@ -642,7 +772,7 @@
     </div>
   </div>
 
-  <!-- Como usar -->
+  <!-- COMO USAR -->
   <div class="card">
     <h2>Como Usar o Identificador de Pedras</h2>
     <ul class="passos">
@@ -684,7 +814,7 @@
     </ul>
   </div>
 
-  <!-- Conteúdo: explicação -->
+  <!-- CONTEÚDO -->
   <div class="conteudo">
     <h2>Pedra ou Rocha? Existe Diferença?</h2>
     <p>No dia a dia, usamos as duas palavras como sinônimos, mas há uma distinção que ajuda na identificação. <strong>Rocha</strong> é o termo geológico para o material sólido da crosta terrestre — pense em montanhas e afloramentos. <strong>Pedra</strong> costuma se referir a um fragmento menor, muitas vezes removido do seu local de origem e desgastado pela água, pelo tempo ou por mãos humanas.</p>
@@ -742,19 +872,14 @@
 </footer>
 
 <script>
-  // ==== CONFIGURAÇÃO — preencha com os dados do seu projeto Supabase ====
+  // ==== CONFIGURAÇÃO ====
   var SUPABASE_URL = 'https://lflqjmbygghuikwuoimd.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmbHFqbWJ5Z2dodWlrd3VvaW1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNjU1NTMsImV4cCI6MjEwMTg0MTU1M30.tMrllUj-s0ZxahNbrazuGlWq6bT16o2E6hpbchhxqFU';
-  // Link de checkout do pacote de 10 leituras (R$13,99) na Cakto.
   var LINK_CHECKOUT_CAKTO = 'https://pay.cakto.com.br/jfotn5o_1030574';
   // ========================================================================
 
   var supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ---- Detecta navegador in-app (Instagram, Facebook, TikTok): esses
-  //      WebViews bloqueiam upload de arquivo. Não mostra nada de cara —
-  //      só guarda o estado; o popup de aviso aparece ao tocar em
-  //      "Envie a foto da sua pedra" (ver interceptação do clique no dropzone). ----
   var ehNavegadorInterno = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly/i.test(navigator.userAgent || '');
 
   var dropzone = document.getElementById('dropzone');
@@ -771,8 +896,6 @@
   var scannerOverlay = document.getElementById('scanner-overlay');
   var erroEl = document.getElementById('erro');
   var resultadoEl = document.getElementById('resultado');
-  var teaserBloqueioEl = document.getElementById('teaser-bloqueio');
-  var btnAssinarTeaser = document.getElementById('btn-assinar-teaser');
   var btnDesbloquearOnde = document.getElementById('btn-desbloquear-onde');
 
   var headerAuthArea = document.getElementById('header-auth-area');
@@ -782,7 +905,7 @@
   var painelLoginSub = document.getElementById('painel-login-sub');
   var camposCadastro = document.getElementById('campos-cadastro');
   var btnTrocarModoLogin = document.getElementById('btn-trocar-modo-login');
-  var modoLoginAtivo = false; // false = tela de cadastro (principal); true = tela de login
+  var modoLoginAtivo = false;
   var inputNome = document.getElementById('input-nome');
   var inputWhatsapp = document.getElementById('input-whatsapp');
   var inputEmail = document.getElementById('input-email');
@@ -790,7 +913,6 @@
   var btnEntrar = document.getElementById('btn-entrar');
   var erroLoginEl = document.getElementById('erro-login');
   var btnFecharLogin = document.getElementById('btn-fechar-login');
-  var btnFecharTeaser = document.getElementById('btn-fechar-teaser');
   var painelBoasVindas = document.getElementById('painel-boas-vindas');
   var btnFecharBoasVindas = document.getElementById('btn-fechar-boas-vindas');
   var btnContinuarBoasVindas = document.getElementById('btn-continuar-boas-vindas');
@@ -801,7 +923,6 @@
   var btnPagar = document.getElementById('btn-pagar');
   var btnComprarEarly = document.getElementById('btn-comprar-early');
   var btnJaPaguei = document.getElementById('btn-ja-paguei');
-  var premiumConteudo = document.getElementById('premium-conteudo');
   var premiumPreview = document.getElementById('premium-preview');
   var areaOferta = document.getElementById('area-oferta');
   var ondeVenderBox = document.getElementById('onde-vender-box');
@@ -811,7 +932,13 @@
   var gratisCounterText = document.getElementById('gratis-counter-text');
 
   var identificacaoIdAtual = null;
-  var aposBoasVindas = null; // função a rodar depois que a pessoa fechar o popup de boas-vindas
+  var aposBoasVindas = null;
+  var base64Atual = null;
+  var mediaTypeAtual = null;
+  var avaliacoesGratisRestantes = 0;
+  var resultadoIAAtual = null;
+  var analiseEmAndamento = false;
+  var idPendenteDaUrl = null;
 
   var sidebar = document.getElementById('sidebar');
   var sidebarBackdrop = document.getElementById('sidebar-backdrop');
@@ -823,11 +950,6 @@
   var btnCtaFinal = document.getElementById('btn-cta-final');
   var navLinkPrecos = document.getElementById('nav-link-precos');
 
-  var base64Atual = null;
-  var mediaTypeAtual = null;
-  var avaliacoesGratisRestantes = 0;
-  var dadosUsuario = null;
-
   var confiancaCores = { alta: '#2f8f5e', media: '#a8502a', baixa: '#c0392b' };
 
   function fecharSidebar(){
@@ -837,23 +959,18 @@
 
   function esconderPaineis(){
     painelLogin.classList.remove('active');
-    teaserBloqueioEl.classList.remove('active');
     painelBoasVindas.classList.remove('active');
     painelNavegadorInterno.classList.remove('active');
     document.body.classList.remove('popup-aberto');
     fecharSidebar();
   }
 
-  // ---- Popups de login e "sem saldo": travam o scroll do fundo e
-  //      fecham ao clicar no X ou fora da caixa ----
   function abrirPopup(painel){
     esconderPaineis();
     painel.classList.add('active');
     document.body.classList.add('popup-aberto');
   }
 
-  // ---- Alterna entre a tela de cadastro (principal) e a de login (secundária)
-  //      dentro do mesmo painel, sem fechar o popup. ----
   function definirModoLogin(login){
     modoLoginAtivo = login;
     erroLoginEl.style.display = 'none';
@@ -872,8 +989,6 @@
     }
   }
 
-  // Sempre que o painel de login/cadastro for aberto (de qualquer lugar do
-  // site), reinicia na tela de CADASTRO — é a tela principal.
   function abrirPainelLogin(){
     definirModoLogin(false);
     abrirPopup(painelLogin);
@@ -884,12 +999,7 @@
   });
 
   btnFecharLogin.addEventListener('click', esconderPaineis);
-  btnFecharTeaser.addEventListener('click', esconderPaineis);
 
-  // Fechar o popup de boas-vindas (pelo X ou pelo botão "Entendi") segue o
-  // mesmo caminho que estava pendente antes de mostrar o popup (abrir uma
-  // identificação vinda de link, ou seguir com a foto que a pessoa já tinha
-  // selecionado antes de criar a conta).
   function fecharBoasVindasEContinuar(){
     painelBoasVindas.classList.remove('active');
     document.body.classList.remove('popup-aberto');
@@ -897,6 +1007,7 @@
     aposBoasVindas = null;
     if (typeof continuar === 'function') continuar();
   }
+
   btnFecharBoasVindas.addEventListener('click', fecharBoasVindasEContinuar);
   btnContinuarBoasVindas.addEventListener('click', fecharBoasVindasEContinuar);
 
@@ -904,17 +1015,12 @@
     if (painelLogin.classList.contains('active') && !painelLogin.contains(ev.target) && ev.target.id !== 'btn-header-entrar') {
       esconderPaineis();
     }
-    if (teaserBloqueioEl.classList.contains('active') && !teaserBloqueioEl.contains(ev.target)) {
-      esconderPaineis();
-    }
     if (painelBoasVindas.classList.contains('active') && !painelBoasVindas.contains(ev.target)) {
       fecharBoasVindasEContinuar();
     }
   });
 
-  btnSidebarToggle.addEventListener('click', function(){
-    abrirHistorico();
-  });
+  btnSidebarToggle.addEventListener('click', abrirHistorico);
   btnSidebarClose.addEventListener('click', fecharSidebar);
   sidebarBackdrop.addEventListener('click', fecharSidebar);
 
@@ -926,9 +1032,17 @@
     document.getElementById('area-oferta').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
-  // ---- Header: mostra "Entrar / Registrar" ou e-mail + saldo + "Sair" ----
   function formatarReais(valor){
     return 'R$ ' + Number(valor).toFixed(2).replace('.', ',');
+  }
+
+  function atualizarContadorGratis(){
+    if (avaliacoesGratisRestantes > 0) {
+      gratisCounterNav.style.display = 'inline-flex';
+      gratisCounterText.textContent = avaliacoesGratisRestantes + ' grátis';
+    } else {
+      gratisCounterNav.style.display = 'none';
+    }
   }
 
   function atualizarHeader(){
@@ -961,6 +1075,7 @@
         document.getElementById('btn-header-sair').addEventListener('click', function(){
           supa.auth.signOut().then(function(){
             esconderPaineis();
+            resultadoIAAtual = null;
             atualizarHeader();
             atualizarContadorGratis();
           });
@@ -978,19 +1093,17 @@
           var saldoDropdownEl = document.getElementById('nav-dropdown-saldo');
           if (saldoDropdownEl) saldoDropdownEl.innerHTML = '<strong>' + valorSaldo + '</strong> de saldo';
 
-          // Atualiza contador de grátis
           if (typeof data.avaliacoes_gratis_restantes === 'number') {
             avaliacoesGratisRestantes = data.avaliacoes_gratis_restantes;
             atualizarContadorGratis();
           }
 
-          // Já tem pacote com leituras disponíveis: some com o card de compra
           if (areaOferta) areaOferta.style.display = (data.pago && data.saldo > 0) ? 'none' : '';
         })
         .catch(function(){});
       } else {
         headerAuthArea.innerHTML = '<button class="nav-cta" id="btn-header-entrar"><span class="full">Entrar / Registrar</span><span class="short">Entrar</span></button>';
-        document.getElementById('btn-header-entrar').addEventListener('click', abrirLoginDoHeader);
+        document.getElementById('btn-header-entrar').addEventListener('click', abrirPainelLogin);
         if (areaOferta) areaOferta.style.display = '';
         avaliacoesGratisRestantes = 0;
         atualizarContadorGratis();
@@ -998,21 +1111,11 @@
     });
   }
 
-  function atualizarContadorGratis(){
-    if (avaliacoesGratisRestantes > 0) {
-      gratisCounterNav.style.display = 'inline-flex';
-      gratisCounterText.textContent = avaliacoesGratisRestantes + ' grátis';
-    } else {
-      gratisCounterNav.style.display = 'none';
-    }
-  }
-
   function abrirHistorico(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
-      if (!sessao) { abrirLoginDoHeader(); return; }
+      if (!sessao) { abrirPainelLogin(); return; }
 
-      painelLogin.classList.remove('active');
       sidebar.classList.add('active');
       sidebarBackdrop.classList.add('active');
       historicoLista.innerHTML = '';
@@ -1047,7 +1150,6 @@
 
   function renderizarHistorico(itens){
     historicoLista.innerHTML = '';
-
     if (itens.length === 0) {
       historicoVazio.textContent = 'Você ainda não fez nenhuma avaliação.';
       historicoVazio.style.display = 'block';
@@ -1088,8 +1190,6 @@
     });
   }
 
-  // ---- Busca uma identificação já salva (com foto) e mostra na tela,
-  //      sem rodar a IA de novo e sem gastar nenhuma leitura ----
   function buscarEExibirIdentificacao(id, accessToken){
     fetch('/api/obter', {
       method: 'POST',
@@ -1109,7 +1209,6 @@
     })
     .then(function(data){
       esconderPaineis();
-
       if (data.foto_base64 && data.foto_media_type) {
         previewImg.src = 'data:' + data.foto_media_type + ';base64,' + data.foto_base64;
         base64Atual = data.foto_base64;
@@ -1118,7 +1217,7 @@
         preview.style.display = 'block';
         actions.style.display = 'flex';
       }
-
+      resultadoIAAtual = data;
       mostrarResultado(data);
     })
     .catch(function(err){
@@ -1127,14 +1226,6 @@
     });
   }
 
-  function abrirLoginDoHeader(){
-    abrirPainelLogin();
-  }
-
-  // ---- Retorno automático do checkout (Cakto): se a URL trouxer
-  //      identificacao_id (redirecionamento pós-pagamento), reabre essa
-  //      identificação sozinho e já tenta desbloquear o preço/onde vender,
-  //      sem depender de a pessoa voltar pra aba original. ----
   function restaurarConsultaDaURL(){
     var params = new URLSearchParams(window.location.search);
     var idDaUrl = params.get('identificacao_id');
@@ -1145,13 +1236,11 @@
 
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
-
       if (!sessao) {
         idPendenteDaUrl = idDaUrl;
         abrirPainelLogin();
         return;
       }
-
       abrirEDesbloquearAutomaticamente(idDaUrl, sessao.access_token);
     });
   }
@@ -1175,7 +1264,6 @@
     })
     .then(function(data){
       esconderPaineis();
-
       if (data.foto_base64 && data.foto_media_type) {
         previewImg.src = 'data:' + data.foto_media_type + ';base64,' + data.foto_base64;
         base64Atual = data.foto_base64;
@@ -1184,7 +1272,7 @@
         preview.style.display = 'block';
         actions.style.display = 'flex';
       }
-
+      resultadoIAAtual = data;
       mostrarResultado(data);
       document.getElementById('area-principal').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
@@ -1200,13 +1288,13 @@
         .then(function(res){ return res.json(); })
         .then(function(desb){
           if (!desb.error) {
+            resultadoIAAtual = desb;
             mostrarResultado(desb);
             atualizarHeader();
           }
         })
         .catch(function(){});
       }
-
       atualizarHeader();
     })
     .catch(function(err){
@@ -1214,9 +1302,6 @@
       erroEl.style.display = 'block';
     });
   }
-
-  var idPendenteDaUrl = null;
-  restaurarConsultaDaURL();
 
   // ---- Vitrine ----
   var vitrineGrid = document.getElementById('vitrine-grid');
@@ -1367,6 +1452,7 @@
   btnTrocar.addEventListener('click', function(){
     base64Atual = null;
     mediaTypeAtual = null;
+    resultadoIAAtual = null;
     inputFoto.value = '';
     dropzone.style.display = 'flex';
     preview.style.display = 'none';
@@ -1381,65 +1467,57 @@
   // ---- Clique em "Ver resultado" ----
   btnVerResultado.addEventListener('click', function(){
     if (!base64Atual) return;
+    if (analiseEmAndamento) return;
+
+    // Se já tem um resultado salvo, mostra ele
+    if (resultadoIAAtual) {
+      mostrarResultado(resultadoIAAtual);
+      return;
+    }
+
     verificarAcessoEProsseguir();
   });
 
   function verificarAcessoEProsseguir(){
+    if (analiseEmAndamento) return;
+
     btnVerResultado.disabled = true;
     btnVerResultadoLabel.textContent = 'Analisando...';
     iniciarScanner();
     iniciarProgresso();
 
-    var esperaMinima = new Promise(function(resolve){ setTimeout(resolve, 5000); });
-
-    var checagemAcesso = supa.auth.getSession().then(function(sessaoResp){
+    supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
-      if (!sessao) return { logado: false };
 
-      return fetch('/api/status', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + sessao.access_token }
-      })
-        .then(function(res){ return res.json(); })
-        .then(function(data){
-          return { logado: true, sessao: sessao, temLeituras: !!(data.pago && data.saldo > 0) };
-        })
-        .catch(function(){
-          return { logado: true, sessao: sessao, temLeituras: false };
-        });
-    });
-
-    Promise.all([esperaMinima, checagemAcesso]).then(function(resultados){
-      var acesso = resultados[1];
-
-      if (acesso.logado && acesso.temLeituras) {
-        esconderPaineis();
-        identificarPedra(acesso.sessao.access_token);
+      if (!sessao) {
+        pararScanner();
+        pararProgresso(false);
+        btnVerResultado.disabled = false;
+        btnVerResultadoLabel.textContent = 'Ver resultado';
+        abrirPainelLogin();
         return;
       }
 
-      pararScanner();
-      pararProgresso(false);
-      btnVerResultado.disabled = false;
-      btnVerResultadoLabel.textContent = 'Ver resultado';
-
-      if (!acesso.logado) {
-        abrirPainelLogin();
-      } else {
-        mostrarTeaserBloqueio();
-      }
+      fetch('/api/status', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + sessao.access_token }
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        var temLeituras = !!(data.pago && data.saldo > 0);
+        if (typeof data.avaliacoes_gratis_restantes === 'number') {
+          avaliacoesGratisRestantes = data.avaliacoes_gratis_restantes;
+          atualizarContadorGratis();
+        }
+        identificarPedra(sessao.access_token);
+      })
+      .catch(function(){
+        identificarPedra(sessao.access_token);
+      });
     });
   }
 
-  function mostrarTeaserBloqueio(){
-    resultadoEl.classList.remove('active');
-    abrirPopup(teaserBloqueioEl);
-  }
-
-  btnAssinarTeaser.addEventListener('click', abrirCheckout);
-  btnDesbloquearOnde.addEventListener('click', abrirCheckout);
-
-  // ---- Login / cadastro ----
+  // ---- Login/cadastro ----
   btnEntrar.addEventListener('click', function(){
     var nome = inputNome.value.trim();
     var whatsapp = inputWhatsapp.value.trim();
@@ -1476,9 +1554,10 @@
       .then(function(resp){
         if (resp.error) throw resp.error;
         painelLogin.classList.remove('active');
+        document.body.classList.remove('popup-aberto');
         atualizarHeader();
 
-        var seguirFluxo = function(){
+        var continuarFluxo = function(){
           if (idPendenteDaUrl) {
             var idParaAbrir = idPendenteDaUrl;
             idPendenteDaUrl = null;
@@ -1486,16 +1565,44 @@
               var sessao = sessaoResp.data.session;
               if (sessao) abrirEDesbloquearAutomaticamente(idParaAbrir, sessao.access_token);
             });
-          } else if (base64Atual) {
-            verificarAcessoEProsseguir();
+            return;
+          }
+
+          if (base64Atual && !resultadoIAAtual) {
+            supa.auth.getSession().then(function(sessaoResp){
+              var sessao = sessaoResp.data.session;
+              if (sessao) {
+                fetch('/api/status', {
+                  method: 'POST',
+                  headers: { 'Authorization': 'Bearer ' + sessao.access_token }
+                })
+                .then(function(res){ return res.json(); })
+                .then(function(data){
+                  if (typeof data.avaliacoes_gratis_restantes === 'number') {
+                    avaliacoesGratisRestantes = data.avaliacoes_gratis_restantes;
+                    atualizarContadorGratis();
+                  }
+                  identificarPedra(sessao.access_token);
+                })
+                .catch(function(){
+                  identificarPedra(sessao.access_token);
+                });
+              }
+            });
+            return;
+          }
+
+          if (resultadoIAAtual) {
+            mostrarResultado(resultadoIAAtual);
+            return;
           }
         };
 
         if (contaCriadaAgora) {
-          aposBoasVindas = seguirFluxo;
+          aposBoasVindas = continuarFluxo;
           abrirPopup(painelBoasVindas);
         } else {
-          seguirFluxo();
+          continuarFluxo();
         }
       })
       .catch(function(err){
@@ -1510,7 +1617,7 @@
       });
   });
 
-  // ---- Abre o checkout do pacote de 10 leituras (R$13,99) em nova aba ----
+  // ---- Checkout ----
   function abrirCheckout(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
@@ -1530,8 +1637,9 @@
 
   btnPagar.addEventListener('click', abrirCheckout);
   btnComprarEarly.addEventListener('click', abrirCheckout);
+  btnDesbloquearOnde.addEventListener('click', abrirCheckout);
 
-  // ---- Botão "já comprei": chama /api/desbloquear ----
+  // ---- "Já comprei" ----
   btnJaPaguei.addEventListener('click', function(){
     if (!identificacaoIdAtual) return;
 
@@ -1561,6 +1669,7 @@
         });
       })
       .then(function(data){
+        resultadoIAAtual = data;
         mostrarResultado(data);
         atualizarHeader();
       })
@@ -1575,7 +1684,7 @@
     });
   });
 
-  // ---- Efeito de scanner na foto + barra de progresso no botão ----
+  // ---- Scanner e Progresso ----
   var progressoInterval = null;
 
   function iniciarScanner(){
@@ -1610,8 +1719,11 @@
     }
   }
 
-  // ---- Chama a IA ----
+  // ---- Identificar Pedra ----
   function identificarPedra(accessToken){
+    if (analiseEmAndamento) return;
+    analiseEmAndamento = true;
+
     btnVerResultado.disabled = true;
     btnVerResultadoLabel.textContent = 'Analisando...';
     iniciarScanner();
@@ -1640,6 +1752,7 @@
       });
     })
     .then(function(data){
+      resultadoIAAtual = data;
       pararProgresso(true);
       mostrarResultado(data);
       atualizarHeader();
@@ -1653,14 +1766,14 @@
       btnVerResultado.disabled = false;
       btnVerResultadoLabel.textContent = 'Ver resultado';
       pararScanner();
+      analiseEmAndamento = false;
     });
   }
 
+  // ---- Mostrar Resultado ----
   function mostrarResultado(data){
-    // Nome
     document.getElementById('res-nome').textContent = data.nome_provavel || '';
 
-    // Links de busca
     var termoBusca = (data.nome_provavel || 'pedras').trim();
     var termoBuscaEnc = encodeURIComponent(termoBusca);
     var termoBuscaTraco = termoBuscaEnc.replace(/%20/g, '-');
@@ -1668,13 +1781,11 @@
     document.getElementById('canal-ml').href = 'https://lista.mercadolivre.com.br/' + termoBuscaTraco;
     document.getElementById('canal-olx').href = 'https://www.olx.com.br/brasil?q=' + termoBuscaEnc;
 
-    // Confiança
     var confEl = document.getElementById('res-confianca');
     var cor = confiancaCores[data.confianca] || '#8c7d66';
     confEl.textContent = 'confiança ' + (data.confianca || '');
     confEl.style.color = cor;
 
-    // Alternativos
     var altEl = document.getElementById('res-alternativos');
     if (data.nomes_alternativos && data.nomes_alternativos.length > 0) {
       altEl.textContent = 'Também pode ser: ' + data.nomes_alternativos.join(', ');
@@ -1683,7 +1794,6 @@
       altEl.style.display = 'none';
     }
 
-    // Características
     var listaEl = document.getElementById('res-caracteristicas');
     listaEl.innerHTML = '';
     (data.caracteristicas || []).forEach(function(c){
@@ -1713,20 +1823,17 @@
       btnDesbloquearOnde.style.display = 'block';
       premiumPreview.classList.add('active');
 
-      // Mensagem de upsell vinda da API (identificar.js)
       if (data.mensagem_upsell) {
         mensagemUpsellEl.textContent = data.mensagem_upsell;
-      } else if (data.avaliacoes_gratis_restantes !== undefined) {
+      } else if (typeof data.avaliacoes_gratis_restantes === 'number' && data.avaliacoes_gratis_restantes > 0) {
         mensagemUpsellEl.textContent = 'Você ainda tem ' + data.avaliacoes_gratis_restantes + ' avaliações grátis.';
       } else {
         mensagemUpsellEl.textContent = 'Compre o pacote de 10 leituras por R$ 13,99.';
       }
     }
 
-    // Observação
     document.getElementById('res-observacao').textContent = data.observacao || '';
 
-    // Mostra quantas grátis restam (se veio da API)
     if (typeof data.avaliacoes_gratis_restantes === 'number') {
       avaliacoesGratisRestantes = data.avaliacoes_gratis_restantes;
       atualizarContadorGratis();
@@ -1739,10 +1846,12 @@
     }, 60);
   }
 
-  // Inicializa contador
+  // ---- Inicialização ----
+  restaurarConsultaDaURL();
+  atualizarHeader();
   atualizarContadorGratis();
 
-  // Atualiza status do usuário assim que a página carrega
+  // Atualiza status assim que a página carrega
   supa.auth.getSession().then(function(sessaoResp){
     if (sessaoResp.data.session) {
       atualizarHeader();
