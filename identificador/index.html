@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>Identificador de Pedras com IA — Tesouro Esquecido</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#075e54">
+<meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -19,22 +19,22 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{
-    --bg:#075e54;
-    --card:#0c6e61;
-    --card-alt:#0a5c51;
-    --ink:#ffffff;
-    --ink-light:#ffffff;
-    --ink-mute:#c9e6df;
-    --ink-mute2:#a9d6cb;
-    --ink-soft:#e3f5ef;
-    --accent:#25d366;
-    --accent-dark:#128c7e;
-    --accent-light:rgba(37,211,102,0.2);
-    --on-accent:#062f22;
-    --emerald:#06cf9c;
-    --danger:#f15c6d;
-    --line:rgba(255,255,255,0.16);
-    --line-strong:rgba(255,255,255,0.3);
+    --bg:#ffffff;
+    --card:#f7f6f4;
+    --card-alt:#efeeeb;
+    --ink:#141414;
+    --ink-light:#141414;
+    --ink-mute:#666666;
+    --ink-mute2:#8a8a8a;
+    --ink-soft:#333333;
+    --accent:#141414;
+    --accent-dark:#000000;
+    --accent-light:rgba(20,20,20,0.06);
+    --on-accent:#ffffff;
+    --emerald:#1a7a3c;
+    --danger:#d3302f;
+    --line:rgba(0,0,0,0.12);
+    --line-strong:rgba(0,0,0,0.24);
   }
   html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:none;overflow-x:hidden;max-width:100%;}
   body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:0 0 60px;overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-x:none;}
@@ -48,7 +48,7 @@
     .head h1{font-size:clamp(26px,7.5vw,34px);}
   }
 
-  header{position:sticky;top:0;z-index:50;background:rgba(7,94,84,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
   .nav-wrap{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 24px;padding-left:max(24px, env(safe-area-inset-left));padding-right:max(24px, env(safe-area-inset-right));min-width:0;}
   @media (max-width:600px){ .nav-wrap{padding:12px 16px;padding-left:max(16px, env(safe-area-inset-left));padding-right:max(16px, env(safe-area-inset-right));} }
   .nav-left{display:flex;align-items:center;gap:12px;min-width:0;}
@@ -136,7 +136,7 @@
   @keyframes heroArrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
   @media (max-width:480px){ .hero-sub{font-size:15px;} .upload-hint{font-size:10.5px;margin-top:28px;max-width:230px;} }
 
-  .card{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(0,0,0,0.25);overflow-wrap:break-word;word-break:break-word;}
+  .card{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(0,0,0,0.06);overflow-wrap:break-word;word-break:break-word;}
   .card h2{font-size:21px;text-align:center;}
 
   .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:44px 20px;border:1.5px dashed var(--line-strong);border-radius:10px;cursor:pointer;transition:border-color .2s ease, background .2s ease;background:var(--card-alt);}
@@ -157,9 +157,9 @@
 
   .scanner-overlay{position:absolute;inset:0;display:none;overflow:hidden;pointer-events:none;}
   .scanner-overlay.active{display:block;}
-  .scanner-grid{position:absolute;inset:0;opacity:0;background-image:linear-gradient(rgba(56,196,120,0.45) 1px, transparent 1px),linear-gradient(90deg, rgba(56,196,120,0.45) 1px, transparent 1px);background-size:26px 26px;animation:scannerGridFade .5s ease forwards;}
-  .scanner-overlay::after{content:'';position:absolute;inset:0;background:rgba(56,196,120,0.06);opacity:0;animation:scannerGridFade .5s ease forwards;}
-  .scanner-line{position:absolute;left:0;right:0;top:-4px;height:4px;background:linear-gradient(90deg, transparent, #128c7e 15%, #25d366 50%, #128c7e 85%, transparent);box-shadow:0 0 14px 3px rgba(37,211,102,0.85), 0 0 34px 8px rgba(37,211,102,0.35);animation:scannerMove 1.9s ease-in-out infinite;}
+  .scanner-grid{position:absolute;inset:0;opacity:0;background-image:linear-gradient(rgba(255,255,255,0.45) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.45) 1px, transparent 1px);background-size:26px 26px;animation:scannerGridFade .5s ease forwards;}
+  .scanner-overlay::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.06);opacity:0;animation:scannerGridFade .5s ease forwards;}
+  .scanner-line{position:absolute;left:0;right:0;top:-4px;height:4px;background:linear-gradient(90deg, transparent, #8a8a8a 15%, #ffffff 50%, #8a8a8a 85%, transparent);box-shadow:0 0 14px 3px rgba(255,255,255,0.85), 0 0 34px 8px rgba(255,255,255,0.35);animation:scannerMove 1.9s ease-in-out infinite;}
   @keyframes scannerGridFade{to{opacity:1;}}
   @keyframes scannerMove{0%{top:-4px;}50%{top:calc(100% - 4px);}100%{top:-4px;}}
 
@@ -211,7 +211,7 @@
   .passo-txt h3{font-size:15.5px;margin-bottom:4px;}
   .passo-txt p{font-size:13.8px;color:var(--ink-mute);}
 
-  .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(79,154,114,0.35);border-radius:16px;padding:36px;display:none;scroll-margin-top:88px;}
+  .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(0,0,0,0.12);border-radius:16px;padding:36px;display:none;scroll-margin-top:88px;}
   @media (max-width:480px){ .resultado{padding:24px;} }
   .resultado.active{display:block;}
   .resultado-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
@@ -228,7 +228,7 @@
 
   .canais-venda{margin-top:16px;}
   .canal-destaque{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--accent-light);border:1.5px solid var(--accent);border-radius:11px;padding:14px 16px;text-decoration:none;transition:background .15s ease;}
-  .canal-destaque:hover{background:rgba(37,211,102,0.22);}
+  .canal-destaque:hover{background:rgba(20,20,20,0.08);}
   .canal-destaque-info{display:flex;flex-direction:column;gap:2px;}
   .canal-destaque-info .canal-tag{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent-dark);}
   .canal-destaque-info strong{font-family:'Fraunces',serif;font-size:16.5px;color:var(--ink);}
@@ -256,7 +256,7 @@
   .premium-preview .btn{padding:13px 22px;}
 
   .bloqueado-badge{display:inline-block;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-left:8px;}
-  .carregando .btn-primary{background:rgba(37,211,102,0.5);}
+  .carregando .btn-primary{background:rgba(20,20,20,0.45);}
 
   .painel-acesso{display:none;}
   .painel-acesso.active{
@@ -272,7 +272,7 @@
     overflow-y:auto;
     overscroll-behavior:contain;
     z-index:1000;
-    box-shadow:0 0 0 9999px rgba(20,15,8,0.6), 0 24px 60px rgba(0,0,0,0.35);
+    box-shadow:0 0 0 9999px rgba(0,0,0,0.72), 0 24px 60px rgba(0,0,0,0.5);
   }
   body.popup-aberto{overflow:hidden;}
   .painel-fechar{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:var(--card-alt);color:var(--ink-mute);font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;flex-shrink:0;}
@@ -307,10 +307,10 @@
   @media (max-width:680px){ .vitrine-grid{grid-template-columns:repeat(3,1fr);} }
   @media (max-width:420px){ .vitrine-grid{grid-template-columns:repeat(2,1fr);gap:8px;} }
   .vitrine-card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
-  .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.3);}
+  .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
   .vitrine-card:active{transform:scale(0.97);}
   .vitrine-index{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:0.03em;color:var(--ink-mute2);padding:8px 8px 0;}
-  .consentimento-vitrine{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:13px;color:var(--ink-mute,#c9e6df);cursor:pointer;line-height:1.4;}
+  .consentimento-vitrine{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:13px;color:var(--ink-mute,#a6a6a6);cursor:pointer;line-height:1.4;}
   .consentimento-vitrine input{margin-top:2px;flex-shrink:0;}
   .vitrine-foto{margin:5px 7px 0;border-radius:6px;overflow:hidden;aspect-ratio:1/1;background:var(--card-alt);border:1px solid var(--line);}
   .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -363,7 +363,7 @@
   #painel-boas-vindas .painel-fechar {
     top: 12px;
     right: 12px;
-    background: rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.06);
     width: 32px;
     height: 32px;
     font-size: 18px;
@@ -563,7 +563,7 @@
     <div class="dropzone" id="dropzone">
       <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
       <strong id="dz-titulo">Envie a foto da sua pedra</strong>
-      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Envie 1 foto por pedra.</span>
+      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Você pode enviar até 3 fotos da mesma pedra em ângulos diferentes para um resultado mais preciso.</span>
       <input type="file" id="input-foto" accept="image/*">
     </div>
 
@@ -578,9 +578,10 @@
     <div class="foto-tira-wrap" id="foto-tira-wrap" style="display:none;">
       <div class="foto-tira" id="foto-tira"></div>
       <div class="foto-tira-footer">
-        <span class="foto-contador" id="foto-contador">0/1 fotos</span>
+        <span class="foto-contador" id="foto-contador">0/3 fotos</span>
         <button type="button" class="btn-adicionar-angulo" id="btn-adicionar-angulo">+ Adicionar outro ângulo</button>
       </div>
+      <p class="foto-tira-dica" id="foto-tira-dica" style="font-size:12px;color:var(--muted,#8a8a8a);margin:4px 2px 0;">Dica: 2 ou 3 ângulos diferentes da mesma pedra deixam a análise mais precisa.</p>
     </div>
 
     <input type="checkbox" id="check-permite-vitrine" checked style="display:none;">
@@ -984,7 +985,7 @@
   var fotoContador = document.getElementById('foto-contador');
   var btnAdicionarAngulo = document.getElementById('btn-adicionar-angulo');
 
-  var MAX_FOTOS = 1;
+  var MAX_FOTOS = 3; // até 5 no backend (identificar.js) — 3 é o equilíbrio custo x precisão escolhido aqui
   var MAX_LADO_PX = 1280;
   var QUALIDADE_JPEG = 0.8;
 
@@ -1007,7 +1008,7 @@
   var btnCtaFinal = document.getElementById('btn-cta-final');
   var navLinkPrecos = document.getElementById('nav-link-precos');
 
-  var confiancaCores = { alta: '#25d366', media: '#128c7e', baixa: '#f15c6d' };
+  var confiancaCores = { alta: '#1a7a3c', media: '#8a8a8a', baixa: '#d3302f' };
 
   // CONTROLE DE TIMEOUTS - PREVINE TRAVAMENTO
   var timeoutIds = [];
@@ -2197,7 +2198,7 @@
     document.getElementById('canal-olx').href = 'https://www.olx.com.br/brasil?q=' + termoBuscaEnc;
 
     var confEl = document.getElementById('res-confianca');
-    var cor = confiancaCores[data.confianca] || '#c9e6df';
+    var cor = confiancaCores[data.confianca] || '#a6a6a6';
     confEl.textContent = 'confiança ' + (data.confianca || '');
     confEl.style.color = cor;
 
