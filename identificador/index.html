@@ -1992,6 +1992,7 @@
     // ========================================================================
     function loginComGoogle() {
       erroLoginEl.style.display = 'none';
+      if (fotosSelecionadas.length) { salvarFotosPendentes(); }
       supa.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -2333,10 +2334,47 @@
         return;
       }
       if (fotosSelecionadas.length >= MAX_FOTOS) return;
+      continuarProcessamentoDaFoto(file);
+    }
+
+    // ========================================================================
+    // PERSISTÊNCIA DA FOTO ENTRE O CLIQUE EM "ANALISAR" E O LOGIN COM GOOGLE
+    // (o login redireciona a página inteira, então guardamos a foto em
+    // sessionStorage para restaurar e continuar a análise automaticamente)
+    // ========================================================================
+    var CHAVE_FOTOS_PENDENTES = 'stone_fotos_pendentes_analise';
+
+    function salvarFotosPendentes() {
+      try {
+        sessionStorage.setItem(CHAVE_FOTOS_PENDENTES, JSON.stringify(fotosSelecionadas));
+      } catch (e) { console.error('Não foi possível salvar fotos pendentes:', e); }
+    }
+
+    function limparFotosPendentes() {
+      try { sessionStorage.removeItem(CHAVE_FOTOS_PENDENTES); } catch (e) {}
+    }
+
+    function restaurarFotosPendentesSeExistir() {
+      var salvo;
+      try { salvo = sessionStorage.getItem(CHAVE_FOTOS_PENDENTES); } catch (e) { return; }
+      if (!salvo) return;
+      limparFotosPendentes();
+      var fotosRestauradas;
+      try { fotosRestauradas = JSON.parse(salvo); } catch (e) { return; }
+      if (!fotosRestauradas || !fotosRestauradas.length) return;
       supa.auth.getSession().then(function(sessaoResp) {
-        if (!sessaoResp.data.session) { abrirPainelLogin(); return; }
-        continuarProcessamentoDaFoto(file);
-      }).catch(function() { continuarProcessamentoDaFoto(file); });
+        if (!sessaoResp.data.session) return;
+        fotosSelecionadas = fotosRestauradas;
+        fotoCarregada = true;
+        resultadoIAAtual = null;
+        identificacaoIdAtual = null;
+        previewImg.src = fotosSelecionadas[0].previewUrl;
+        dropzone.style.display = 'none';
+        preview.style.display = 'block';
+        actions.style.display = 'flex';
+        renderizarTiraFotos();
+        iniciarIdentificacao();
+      }).catch(function() {});
     }
 
     function continuarProcessamentoDaFoto(file) {
@@ -2417,7 +2455,7 @@
       if (!fotosSelecionadas.length || !fotoCarregada) return;
       supa.auth.getSession().then(function(sessaoResp) {
         var sessao = sessaoResp.data.session;
-        if (!sessao) { abrirPainelLogin(); return; }
+        if (!sessao) { salvarFotosPendentes(); abrirPainelLogin(); return; }
         analiseEmAndamento = true;
         btnVerResultado.disabled = true;
         btnAdicionarAngulo.disabled = true;
@@ -3142,6 +3180,7 @@
 
     supa.auth.getSession().then(function(sessaoResp) {
       if (sessaoResp.data.session) { atualizarHeader(); }
+      restaurarFotosPendentesSeExistir();
     }).catch(function(erroInit) { console.error('Falha ao checar sessão na inicialização:', erroInit); });
 
     window.addEventListener('beforeunload', function() { limparTimeouts(); });
