@@ -31,21 +31,22 @@ module.exports = async function handler(req, res) {
 
   try {
     // ==========================================
-    // 1. TOTAL DE MEMBROS (TODOS OS USUÁRIOS CADASTRADOS)
+    // 1. TOTAL DE MEMBROS (USANDO A VIEW)
     // ==========================================
     let totalMembros = 0;
     
     try {
-      // Tenta buscar da tabela auth.users
-      const { count: totalUsuarios, error: errUsuarios } = await supabase
-        .from('auth.users')
-        .select('id', { count: 'exact', head: true });
+      // Busca da view que criamos no SQL
+      const { data: viewData, error: errView } = await supabase
+        .from('view_total_usuarios')
+        .select('total')
+        .single();
       
-      if (!errUsuarios && totalUsuarios > 0) {
-        totalMembros = totalUsuarios;
-        console.log('✅ Total de membros (auth.users):', totalMembros);
+      if (!errView && viewData && viewData.total > 0) {
+        totalMembros = viewData.total;
+        console.log('✅ Total de membros (view):', totalMembros);
       } else {
-        throw new Error('Não foi possível acessar auth.users');
+        throw new Error('Não foi possível acessar a view');
       }
     } catch (err) {
       // Fallback: Busca emails únicos da tabela identificacoes
@@ -137,7 +138,13 @@ module.exports = async function handler(req, res) {
       hoje: '+' + (avaliacoesHoje || 0),
       hoje_raw: avaliacoesHoje || 0,
       membros_hoje: membrosHoje || 0,
-      total_avaliacoes: totalAvaliacoes || 0
+      total_avaliacoes: totalAvaliacoes || 0,
+      // Dados de debug
+      _debug: {
+        total_membros_raw: totalMembros,
+        total_pedras_raw: totalPedras,
+        avaliacoes_hoje_raw: avaliacoesHoje
+      }
     });
 
   } catch (error) {
