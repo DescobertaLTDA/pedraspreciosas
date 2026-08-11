@@ -1430,6 +1430,131 @@
       flex-shrink: 0;
     }
 
+    /* PAYWALL — popup exibido quando as avaliações grátis acabam,
+       responsivo (mobile e desktop) */
+    .modal-paywall-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(8px);
+    }
+    .modal-paywall-overlay.active {
+      display: flex;
+    }
+    .modal-paywall {
+      background: var(--card);
+      border-radius: 20px;
+      max-width: 380px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+      padding: 32px 24px 24px;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .modal-paywall {
+        padding: 28px 20px 20px;
+        border-radius: 16px;
+      }
+    }
+    .modal-paywall-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card-alt);
+      color: var(--ink-mute);
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-paywall-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .modal-paywall-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--accent-dark);
+      stroke-width: 2;
+      fill: none;
+    }
+    .modal-paywall-titulo {
+      font-size: 20px;
+      color: var(--ink);
+      text-align: center;
+    }
+    .modal-paywall-texto {
+      margin-top: 8px;
+      font-size: 13.5px;
+      color: var(--ink-mute);
+      line-height: 1.5;
+    }
+    .modal-paywall-oferta {
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--card-alt);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .modal-paywall-oferta-qtd {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .modal-paywall-oferta-preco {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-top: 2px;
+    }
+    .modal-paywall-oferta-desc {
+      font-size: 11.5px;
+      color: var(--ink-mute2);
+      margin-top: 2px;
+    }
+    .modal-paywall .btn-primary.btn-block {
+      margin-top: 18px;
+      font-size: 15px;
+      padding: 14px;
+    }
+    .modal-paywall-depois {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px;
+      font-size: 12.5px;
+      color: var(--ink-mute);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      font-family: 'Inter', sans-serif;
+    }
+
     /* BOAS VINDAS */
     .painel-acesso {
       display: none;
@@ -1743,6 +1868,24 @@
           </div>
           <div class="dossie-observacao" id="modal-dossie-observacao" style="margin-top:16px;font-size:12.5px;color:var(--ink-mute);padding-top:12px;border-top:1px solid var(--line);"></div>
         </div>
+      </div>
+    </div>
+
+    <div class="modal-paywall-overlay" id="modal-paywall">
+      <div class="modal-paywall">
+        <button class="modal-paywall-close" id="modal-paywall-close">✕</button>
+        <div class="modal-paywall-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h2 class="modal-paywall-titulo">Suas avaliações grátis acabaram</h2>
+        <p class="modal-paywall-texto" id="modal-paywall-texto">Você já usou suas avaliações gratuitas. Para continuar identificando pedras, desbloqueie um pacote de leituras.</p>
+        <div class="modal-paywall-oferta">
+          <span class="modal-paywall-oferta-qtd">10 identificações de pedras</span>
+          <span class="modal-paywall-oferta-preco">R$ 13,99</span>
+          <span class="modal-paywall-oferta-desc">sem mensalidade, sem prazo de expiração</span>
+        </div>
+        <button class="btn btn-primary btn-block" id="btn-paywall-adquirir">Adquirir agora</button>
+        <button class="modal-paywall-depois" id="btn-paywall-depois">Agora não</button>
       </div>
     </div>
 
@@ -2708,8 +2851,13 @@
         })
         .catch(function(err) {
           pararProgresso(false);
-          erroEl.textContent = err.message || 'Não foi possível identificar a pedra agora. Tente novamente.';
-          erroEl.style.display = 'block';
+          var msg = err.message || 'Não foi possível identificar a pedra agora. Tente novamente.';
+          if (/avalia[cç][aã]o(?:es)? gr[aá]tis|avalia[cç][aã]o(?:es)? gratuita/i.test(msg)) {
+            abrirPaywall(msg);
+          } else {
+            erroEl.textContent = msg;
+            erroEl.style.display = 'block';
+          }
         })
         .finally(function() {
           btnVerResultado.disabled = false;
@@ -2827,7 +2975,30 @@
     }
     document.getElementById('modal-dossie-close').addEventListener('click', fecharDossie);
     document.getElementById('modal-dossie').addEventListener('click', function(e) { if (e.target === this) fecharDossie(); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecharDossie(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { fecharDossie(); fecharPaywall(); } });
+
+    // ========================================================================
+    // PAYWALL — popup de "avaliações grátis esgotadas"
+    // ========================================================================
+    var modalPaywall = document.getElementById('modal-paywall');
+    var modalPaywallTexto = document.getElementById('modal-paywall-texto');
+
+    function abrirPaywall(mensagem) {
+      modalPaywallTexto.textContent = mensagem || 'Você já usou suas avaliações gratuitas. Para continuar identificando pedras, desbloqueie um pacote de leituras.';
+      document.body.classList.add('popup-aberto');
+      modalPaywall.classList.add('active');
+    }
+    function fecharPaywall() {
+      modalPaywall.classList.remove('active');
+      document.body.classList.remove('popup-aberto');
+    }
+    document.getElementById('modal-paywall-close').addEventListener('click', fecharPaywall);
+    document.getElementById('btn-paywall-depois').addEventListener('click', fecharPaywall);
+    modalPaywall.addEventListener('click', function(e) { if (e.target === this) fecharPaywall(); });
+    document.getElementById('btn-paywall-adquirir').addEventListener('click', function() {
+      fecharPaywall();
+      abrirCheckout();
+    });
 
     // ========================================================================
     // CHECKOUT
