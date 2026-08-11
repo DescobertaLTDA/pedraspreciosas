@@ -628,11 +628,11 @@
 
   .vitrine-scroll{position:relative;margin-top:16px;}
   .vitrine-grid{display:grid;grid-template-columns:repeat(4, 1fr);grid-auto-rows:auto;gap:14px;max-width:1180px;margin:0 auto;}
-  .vitrine-card{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
+  .vitrine-card{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;cursor:pointer;}
   .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
   .vitrine-card:active{transform:scale(0.97);}
   @media (max-width:900px){ .vitrine-grid{grid-template-columns:repeat(3, 1fr);} }
-  @media (max-width:480px){ .vitrine-grid{grid-template-columns:repeat(2, 1fr);} }
+  @media (max-width:480px){ .vitrine-grid{grid-template-columns:repeat(2, 1fr) !important;gap:10px;} }
   
   .vitrine-grid:has(.vitrine-card:only-child) {
     grid-template-columns: 1fr !important;
@@ -648,12 +648,8 @@
     grid-template-columns: repeat(3, 1fr) !important;
     max-width: 900px !important;
   }
-  .vitrine-grid:has(.vitrine-card:nth-last-child(4):first-child),
-  .vitrine-grid:has(.vitrine-card:nth-last-child(4):first-child ~ .vitrine-card) {
-    grid-template-columns: repeat(4, 1fr) !important;
-  }
 
-  .vitrine-fav{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.94);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.18);z-index:2;}
+  .vitrine-fav{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.94);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.18);z-index:2;pointer-events:none;}
   .vitrine-fav svg{width:12px;height:12px;stroke:var(--ink-soft);stroke-width:1.9;fill:none;}
   .vitrine-foto{aspect-ratio:1/1;background:var(--card-alt);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
   .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -667,6 +663,217 @@
   .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;width:30px;height:30px;border-radius:6px;border:1px solid var(--line-strong);background:var(--card);color:var(--ink-mute);cursor:pointer;}
   .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
   .vitrine-pag-btn.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);}
+
+  /* ==========================================
+     MODAL DO DOSSIÊ DA PEDRA
+     ========================================== */
+  .modal-dossie-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: modalFadeIn 0.25s ease;
+    backdrop-filter: blur(8px);
+  }
+  .modal-dossie-overlay.active {
+    display: flex;
+  }
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .modal-dossie {
+    background: var(--card);
+    border-radius: 20px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    animation: modalSlideIn 0.3s ease;
+  }
+  @keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-dossie-close {
+    position: sticky;
+    top: 12px;
+    right: 12px;
+    float: right;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-dossie-close:hover {
+    background: rgba(0,0,0,0.9);
+  }
+
+  .modal-dossie-foto {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: var(--card-alt);
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-dossie-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .modal-dossie-body {
+    padding: 24px 28px 32px;
+  }
+  .modal-dossie-body .dossie-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--emerald);
+  }
+  .modal-dossie-body h2 {
+    font-size: 24px;
+    margin-top: 4px;
+    text-align: left;
+  }
+  .modal-dossie-body .dossie-confianca {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid currentColor;
+    margin-top: 6px;
+  }
+  .modal-dossie-body .dossie-alternativos {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--ink-mute);
+  }
+  .modal-dossie-body .dossie-caracteristicas {
+    margin-top: 14px;
+    padding-left: 20px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .modal-dossie-body .dossie-caracteristicas li {
+    margin-bottom: 4px;
+  }
+  .modal-dossie-body .dossie-preco {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .modal-dossie-body .dossie-preco-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-dark);
+  }
+  .modal-dossie-body .dossie-preco-valor {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 2px;
+  }
+  .modal-dossie-body .dossie-onde {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .modal-dossie-body .dossie-onde-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-dark);
+  }
+  .modal-dossie-body .dossie-onde-texto {
+    font-size: 14px;
+    color: var(--ink);
+    margin-top: 2px;
+  }
+  .modal-dossie-body .dossie-observacao {
+    margin-top: 16px;
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Desktop - Modal lateral */
+  @media (min-width: 769px) {
+    .modal-dossie-overlay {
+      padding: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: flex-end;
+    }
+    .modal-dossie {
+      max-width: 480px;
+      max-height: 100vh;
+      border-radius: 0;
+      height: 100vh;
+      animation: modalSlideRight 0.3s ease;
+    }
+    @keyframes modalSlideRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .modal-dossie-foto {
+      border-radius: 0;
+      aspect-ratio: 4/3;
+    }
+    .modal-dossie-close {
+      top: 16px;
+      right: 16px;
+    }
+  }
+
+  /* Mobile - tela cheia */
+  @media (max-width: 768px) {
+    .modal-dossie-overlay {
+      padding: 0;
+    }
+    .modal-dossie {
+      max-width: 100%;
+      max-height: 100vh;
+      border-radius: 0;
+      height: 100vh;
+    }
+    .modal-dossie-foto {
+      border-radius: 0;
+      aspect-ratio: 4/3;
+    }
+    .modal-dossie-body {
+      padding: 18px 20px 28px;
+    }
+  }
 
   .oferta{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;display:flex;flex-direction:column;}
   .oferta-img{background:linear-gradient(135deg,var(--accent-light),var(--card-alt));padding:26px;display:flex;align-items:center;justify-content:center;}
@@ -1040,6 +1247,32 @@
     <div class="navegador-passo">Para carregar a foto da sua pedra, clique nos <strong class="grifo">"..."</strong> no topo da página e depois em <strong class="grifo">"Abrir no Navegador"</strong>.</div>
     <button class="btn btn-primary btn-block" id="btn-tentar-abrir-navegador">Tentar abrir automaticamente</button>
     <button class="btn btn-secondary btn-block" id="btn-ok-abrir-navegador" style="margin-top:8px;">Ok, vou abrir</button>
+  </div>
+
+  <!-- MODAL DO DOSSIÊ DA PEDRA -->
+  <div class="modal-dossie-overlay" id="modal-dossie">
+    <div class="modal-dossie">
+      <button class="modal-dossie-close" id="modal-dossie-close">✕</button>
+      <div class="modal-dossie-foto">
+        <img id="modal-dossie-img" src="/stone-placeholder.png" alt="Pedra">
+      </div>
+      <div class="modal-dossie-body">
+        <div class="dossie-tag">Dossiê da pedra</div>
+        <h2 id="modal-dossie-nome">Nome da Pedra</h2>
+        <span class="dossie-confianca" id="modal-dossie-confianca">confiança alta</span>
+        <p class="dossie-alternativos" id="modal-dossie-alternativos" style="display:none;"></p>
+        <ul class="dossie-caracteristicas" id="modal-dossie-caracteristicas"></ul>
+        <div class="dossie-preco">
+          <div class="dossie-preco-label">Faixa de preço estimada</div>
+          <div class="dossie-preco-valor" id="modal-dossie-preco">R$ 100 - R$ 200</div>
+        </div>
+        <div class="dossie-onde">
+          <div class="dossie-onde-label">Onde vender</div>
+          <div class="dossie-onde-texto" id="modal-dossie-onde">🔒 Desbloqueie para ver</div>
+        </div>
+        <div class="dossie-observacao" id="modal-dossie-observacao"></div>
+      </div>
+    </div>
   </div>
 
   <!-- RESULTADO -->
@@ -1593,7 +1826,7 @@
   var rankingAtual = 'recentes';
 
   // ========================================================================
-  // VITRINE - CONFIGURAÇÃO PARA 8 ITENS
+  // VITRINE - CONFIGURAÇÃO
   // ========================================================================
   var QTD_VITRINE = 8;
   var vitrineGrid = document.getElementById('vitrine-grid');
@@ -1637,21 +1870,19 @@
     }
     vitrineVazio.style.display = 'none';
 
-    var cols = 4;
+    var isMobile = window.innerWidth <= 480;
+    var cols = isMobile ? 2 : 4;
     if (itens.length <= 2) cols = 2;
     else if (itens.length <= 4) cols = 3;
+    
     vitrineGrid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
-    if (itens.length <= 4) {
-      vitrineGrid.style.maxWidth = (cols * 220 + (cols - 1) * 14) + 'px';
-    } else {
-      vitrineGrid.style.maxWidth = '1180px';
-    }
 
-    itens.forEach(function(item, i){
+    itens.forEach(function(item){
       var valorTexto = item.valor || 'valor sob consulta';
 
       var card = document.createElement('div');
       card.className = 'vitrine-card';
+      card.style.cursor = 'pointer';
 
       var fav = document.createElement('div');
       fav.className = 'vitrine-fav';
@@ -1694,6 +1925,28 @@
       card.appendChild(fav);
       card.appendChild(foto);
       card.appendChild(info);
+
+      // CLIQUE ABRE O DOSSIÊ
+      card.addEventListener('click', function() {
+        fetch('/api/obter-publico?id=' + item.id)
+          .then(function(r) { return r.json(); })
+          .then(function(dados) {
+            abrirDossie(dados, item.foto);
+          })
+          .catch(function() {
+            var dadosFallback = {
+              nome: item.nome,
+              confianca: 'alta',
+              nomes_alternativos: [],
+              caracteristicas: ['Cor predominante observada', 'Textura característica'],
+              faixa_preco_brasil: item.valor || 'Não disponível',
+              onde_vender: '🔒 Desbloqueie para ver',
+              observacao: 'Clique em "Ver resultado" para uma análise completa.'
+            };
+            abrirDossie(dadosFallback, item.foto);
+          });
+      });
+
       vitrineGrid.appendChild(card);
     });
 
@@ -1705,13 +1958,86 @@
           btn.type = 'button';
           btn.className = 'vitrine-pag-btn' + (numeroPagina === data.pagina ? ' active' : '');
           btn.textContent = numeroPagina;
-          btn.setAttribute('aria-label', 'Ver página ' + numeroPagina + ' das descobertas');
           btn.addEventListener('click', function(){ carregarVitrine(numeroPagina); });
           vitrinePaginacao.appendChild(btn);
         })(p);
       }
     }
   }
+
+  // ========================================================================
+  // MODAL DO DOSSIÊ DA PEDRA
+  // ========================================================================
+
+  function abrirDossie(data, fotoUrl) {
+    var modal = document.getElementById('modal-dossie');
+    var img = document.getElementById('modal-dossie-img');
+    var nome = document.getElementById('modal-dossie-nome');
+    var confianca = document.getElementById('modal-dossie-confianca');
+    var alternativos = document.getElementById('modal-dossie-alternativos');
+    var caracteristicas = document.getElementById('modal-dossie-caracteristicas');
+    var preco = document.getElementById('modal-dossie-preco');
+    var onde = document.getElementById('modal-dossie-onde');
+    var observacao = document.getElementById('modal-dossie-observacao');
+
+    img.src = fotoUrl || '/stone-placeholder.png';
+    img.alt = data.nome || 'Pedra';
+
+    nome.textContent = data.nome || 'Pedra não identificada';
+
+    var cor = confiancaCores[data.confianca] || '#a6a6a6';
+    confianca.textContent = 'confiança ' + (data.confianca || '');
+    confianca.style.color = cor;
+    confianca.style.borderColor = cor;
+
+    if (data.nomes_alternativos && data.nomes_alternativos.length > 0) {
+      alternativos.textContent = 'Também pode ser: ' + data.nomes_alternativos.join(', ');
+      alternativos.style.display = 'block';
+    } else {
+      alternativos.style.display = 'none';
+    }
+
+    caracteristicas.innerHTML = '';
+    if (data.caracteristicas && data.caracteristicas.length > 0) {
+      data.caracteristicas.forEach(function(c) {
+        var li = document.createElement('li');
+        li.textContent = c;
+        caracteristicas.appendChild(li);
+      });
+    } else {
+      var li = document.createElement('li');
+      li.textContent = 'Nenhuma característica específica observada.';
+      caracteristicas.appendChild(li);
+    }
+
+    preco.textContent = data.faixa_preco_brasil || 'Não disponível';
+
+    var desbloqueado = !!data.desbloqueado;
+    if (desbloqueado && data.onde_vender) {
+      onde.textContent = data.onde_vender;
+    } else {
+      onde.textContent = '🔒 Desbloqueie para ver onde vender essa pedra';
+    }
+
+    observacao.textContent = data.observacao || '';
+
+    document.body.classList.add('popup-aberto');
+    modal.classList.add('active');
+  }
+
+  function fecharDossie() {
+    var modal = document.getElementById('modal-dossie');
+    modal.classList.remove('active');
+    document.body.classList.remove('popup-aberto');
+  }
+
+  document.getElementById('modal-dossie-close').addEventListener('click', fecharDossie);
+  document.getElementById('modal-dossie').addEventListener('click', function(e) {
+    if (e.target === this) fecharDossie();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') fecharDossie();
+  });
 
   // ========================================================================
   // UTILITÁRIOS
@@ -3068,13 +3394,9 @@
       atualizarContadorGratis();
     }
 
-    resultadoEl.classList.add('active');
-
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        resultadoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
+    // ABRE O DOSSIÊ EM VEZ DE ROLAR
+    var fotoUrl = previewImg.src || '/stone-placeholder.png';
+    abrirDossie(data, fotoUrl);
   }
 
   // ========================================================================
@@ -3090,7 +3412,6 @@
     
     if (!statMembros) return;
     
-    // Mostra loading
     statMembros.textContent = '...';
     statPedras.textContent = '...';
     statHoje.textContent = '...';
@@ -3102,7 +3423,6 @@
         return res.json();
       })
       .then(function(data) {
-        // Atualiza com dados reais
         statMembros.textContent = data.membros || '0';
         statPedras.textContent = data.pedras || '0';
         statHoje.textContent = data.hoje || '+0';
@@ -3115,7 +3435,6 @@
           statAtualizado.style.color = 'var(--accent-dark)';
         }
         
-        // Adiciona tooltip com números exatos
         if (data.membros_raw) {
           statMembros.title = data.membros_raw + ' membros ativos';
         }
@@ -3130,8 +3449,6 @@
       })
       .catch(function(err) {
         console.error('Erro ao carregar estatísticas:', err);
-        
-        // Fallback final: dados estáticos
         statMembros.textContent = '1.2k';
         statPedras.textContent = '4.7k';
         statHoje.textContent = '+38';
@@ -3158,20 +3475,15 @@
     carregarFeedReal();
   });
 
-  // Carrega estatísticas na inicialização
   carregarEstatisticas();
-
-  // Atualiza a cada 60 segundos (mantém dados frescos)
   statsTimeout = setInterval(carregarEstatisticas, 60000);
 
-  // Atualiza quando a página ganha foco (usuário voltou)
   document.addEventListener('visibilitychange', function() {
     if (!document.hidden) {
       carregarEstatisticas();
     }
   });
 
-  // Atualiza quando o usuário clica no card de estatísticas
   var cardStats = document.querySelector('.card:has(#stat-membros)');
   if (cardStats) {
     cardStats.addEventListener('click', function() {
