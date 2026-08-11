@@ -422,6 +422,27 @@
       color: var(--danger);
     }
 
+    .nav-dropdown-gratis {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-dark);
+      background: var(--accent-light);
+      padding: 7px 10px;
+      border-radius: 6px;
+      margin: 2px 0 4px;
+    }
+    .nav-dropdown-gratis svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--accent-dark);
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+    }
+
     .gratis-counter {
       display: inline-flex;
       align-items: center;
@@ -436,25 +457,6 @@
       white-space: nowrap;
     }
     .gratis-counter svg {
-      width: 12px;
-      height: 12px;
-      stroke: var(--accent-dark);
-      stroke-width: 2;
-      fill: none;
-    }
-    .gratis-counter-nav {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--accent-light);
-      color: var(--accent-dark);
-      font-size: 10.5px;
-      font-weight: 700;
-      padding: 3px 10px 3px 8px;
-      border-radius: 20px;
-      border: 1px solid var(--line-strong);
-    }
-    .gratis-counter-nav svg {
       width: 12px;
       height: 12px;
       stroke: var(--accent-dark);
@@ -1552,10 +1554,6 @@
           <svg viewBox="0 0 24 24"><path d="M12 2v20M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg>
           Rankings
         </a>
-        <span class="gratis-counter-nav" id="gratis-counter-nav" style="display:none;">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          <span id="gratis-counter-text">1 grátis</span>
-        </span>
         <div id="header-auth-area">
           <button class="nav-cta" id="btn-header-entrar"><span class="full">Entrar / Registrar</span><span class="short">Entrar</span></button>
         </div>
@@ -2060,8 +2058,6 @@
     var btnContinuarBoasVindas = document.getElementById('btn-continuar-boas-vindas');
     var btnGoogleLogin = document.getElementById('btn-google-login');
     var erroLoginEl = document.getElementById('erro-login');
-    var gratisCounterNav = document.getElementById('gratis-counter-nav');
-    var gratisCounterText = document.getElementById('gratis-counter-text');
     var fotoTiraWrap = document.getElementById('foto-tira-wrap');
     var fotoTira = document.getElementById('foto-tira');
     var fotoContador = document.getElementById('foto-contador');
@@ -2148,12 +2144,19 @@
     navLinkRankings.addEventListener('click', function(e) { e.preventDefault();
       document.getElementById('secao-rankings').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 
+    // Mostra quantas avaliações grátis restam dentro do dropdown do perfil
+    // (clicando no nome/pill do usuário) em vez de um badge solto na nav,
+    // que quebrava o layout no mobile.
     function atualizarContadorGratis() {
+      var gratisDropdown = document.getElementById('nav-dropdown-gratis');
+      if (!gratisDropdown) return;
       if (avaliacoesGratisRestantes > 0) {
-        gratisCounterNav.style.display = 'inline-flex';
-        gratisCounterText.textContent = avaliacoesGratisRestantes + ' grátis';
+        gratisDropdown.style.display = 'flex';
+        gratisDropdown.innerHTML =
+          '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>' +
+          avaliacoesGratisRestantes + (avaliacoesGratisRestantes === 1 ? ' avaliação grátis' : ' avaliações grátis');
       } else {
-        gratisCounterNav.style.display = 'none';
+        gratisDropdown.style.display = 'none';
       }
     }
 
@@ -2203,10 +2206,12 @@
             '</button>' +
             '<div class="nav-dropdown" id="nav-dropdown">' +
             '<div class="nav-dropdown-saldo" id="nav-dropdown-saldo">···</div>' +
+            '<div class="nav-dropdown-gratis" id="nav-dropdown-gratis" style="display:none;"></div>' +
             '<button class="sair" id="btn-header-sair">Sair</button>' +
             '</div>' +
             '</div>';
           var navUser = document.getElementById('nav-user');
+          atualizarContadorGratis();
           document.getElementById('btn-nav-user-toggle').addEventListener('click', function(e) {
             e.stopPropagation();
             navUser.classList.toggle('active');
