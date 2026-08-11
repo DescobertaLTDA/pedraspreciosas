@@ -766,43 +766,51 @@
     }
     /* Feedback de "carregando/recebendo a foto" — toca em loop assim que a
        imagem é selecionada, até o usuário clicar em "ver resultado" (quando
-       o scanner de análise de verdade assume). Um brilho passando + um leve
-       pulso no contorno, repetindo. */
+       o scanner de análise de verdade assume). Quadriculado + sensor verde
+       passando pela imagem, parecido com o scanner real mas mais sutil. */
     .preview.foto-recebida {
-      animation: previewPulseGlow 1.6s ease-in-out infinite;
+      animation: previewPulseGlow 1.8s ease-in-out infinite;
     }
     @keyframes previewPulseGlow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(26, 77, 58, 0); }
-      50% { box-shadow: 0 0 0 7px rgba(26, 77, 58, 0.14); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(26, 122, 60, 0); }
+      50% { box-shadow: 0 0 0 7px rgba(26, 122, 60, 0.14); }
     }
-    .preview-shimmer {
+    .preview-grid {
       position: absolute;
       inset: 0;
       pointer-events: none;
       opacity: 0;
-      background: linear-gradient(115deg,
-        transparent 25%,
-        rgba(255, 255, 255, 0.55) 45%,
-        rgba(255, 255, 255, 0.9) 50%,
-        rgba(255, 255, 255, 0.55) 55%,
-        transparent 75%);
-      background-size: 250% 100%;
-      background-position: -120% 0;
-      mix-blend-mode: overlay;
+      background-image:
+        linear-gradient(var(--emerald) 1px, transparent 1px),
+        linear-gradient(90deg, var(--emerald) 1px, transparent 1px);
+      background-size: 8.33% 8.33%;
+      transition: opacity .3s ease;
     }
-    .preview-shimmer.active {
-      animation: previewShimmerSweep 1.6s ease-in-out infinite;
+    .preview.foto-recebida .preview-grid {
+      opacity: 0.16;
     }
-    @keyframes previewShimmerSweep {
-      0% { background-position: -120% 0; opacity: 0; }
-      12% { opacity: 1; }
-      50% { opacity: 1; }
-      88% { opacity: 1; }
-      100% { background-position: 120% 0; opacity: 0; }
+    .preview-sensor-line {
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      top: 4%;
+      height: 2px;
+      pointer-events: none;
+      opacity: 0;
+      background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+      box-shadow: 0 0 10px 2px var(--emerald);
+    }
+    .preview.foto-recebida .preview-sensor-line {
+      animation: previewSensorMove 1.8s ease-in-out infinite;
+    }
+    @keyframes previewSensorMove {
+      0% { top: 4%; opacity: 0.25; }
+      50% { top: 96%; opacity: 1; }
+      100% { top: 4%; opacity: 0.25; }
     }
     @media (prefers-reduced-motion: reduce) {
       .preview.foto-recebida { animation: none; }
-      .preview-shimmer.active { animation: none; opacity: 0; }
+      .preview.foto-recebida .preview-sensor-line { animation: none; top: 50%; opacity: 0.6; }
     }
     .scanner-overlay {
       position: absolute;
@@ -1602,7 +1610,8 @@
 
       <div class="preview" id="preview" style="display:none;">
         <img id="preview-img" alt="Foto da pedra enviada">
-        <div class="preview-shimmer" id="preview-shimmer"></div>
+        <div class="preview-grid" id="preview-grid"></div>
+        <div class="preview-sensor-line" id="preview-sensor-line"></div>
         <div class="scanner-overlay" id="scanner-overlay">
           <div class="scanner-grid"></div>
           <div class="scanner-line"></div>
@@ -2040,7 +2049,6 @@
     var btnVerResultadoLabel = document.getElementById('btn-ver-resultado-label');
     var btnProgressFill = document.getElementById('btn-progress-fill');
     var scannerOverlay = document.getElementById('scanner-overlay');
-    var previewShimmer = document.getElementById('preview-shimmer');
     var erroEl = document.getElementById('erro');
     var resultadoEl = document.getElementById('resultado');
     var btnDesbloquearOnde = document.getElementById('btn-desbloquear-onde');
@@ -2585,11 +2593,9 @@
     // pararFotoRecebida() dentro de iniciarScanner()).
     function animarFotoRecebida() {
       preview.classList.add('foto-recebida');
-      previewShimmer.classList.add('active');
     }
     function pararFotoRecebida() {
       preview.classList.remove('foto-recebida');
-      previewShimmer.classList.remove('active');
     }
 
     function iniciarScanner() {
