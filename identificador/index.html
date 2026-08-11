@@ -473,6 +473,29 @@
     border-color:var(--accent);
     color:#fff;
   }
+  .catalogo-header .catalogo-tipo{
+    flex-shrink:0;
+  }
+  .catalogo-header .catalogo-tipo select{
+    background:var(--card-alt);
+    border:1px solid var(--line-strong);
+    border-radius:8px;
+    padding:9px 30px 9px 12px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    outline:none;
+    cursor:pointer;
+    max-width:170px;
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8a8a' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 10px center;
+    background-size:14px;
+  }
+  .catalogo-header .catalogo-tipo select:hover{border-color:var(--accent);}
 
   .catalogo-grid{
     display:grid;
@@ -851,34 +874,18 @@
     </div>
   </div>
 
-  <!-- ---- CATÁLOGO GERAL ---- -->
-  <div class="card" style="margin-top:20px;" id="secao-catalogo">
+  <!-- VITRINE -->
+  <div class="card" id="area-vitrine">
     <h2>
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
-      Catálogo Geral
+      Descobertas da comunidade
     </h2>
-    <p style="font-size:13px;color:var(--ink-mute);text-align:center;margin-top:4px;">Todas as pedras avaliadas pela comunidade</p>
-    
-    <div class="catalogo-header">
-      <div class="catalogo-busca">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="text" id="catalogo-busca-input" placeholder="Buscar pedra...">
-      </div>
-      <div class="catalogo-filtro" id="catalogo-filtros">
-        <button class="active" data-filtro="todos">Todos</button>
-        <button data-filtro="recentes">Recentes</button>
-        <button data-filtro="baratos">Baratos</button>
-        <button data-filtro="caros">Caros</button>
-      </div>
+    <p class="vitrine-sub">Resultados reais de quem já descobriu o valor da própria pedra.</p>
+    <div class="vitrine-scroll">
+      <div class="vitrine-grid" id="vitrine-grid"></div>
     </div>
-
-    <div class="catalogo-grid" id="catalogo-grid">
-      <!-- Preenchido via JS -->
-    </div>
-
-    <div class="catalogo-paginacao" id="catalogo-paginacao">
-      <!-- Preenchido via JS -->
-    </div>
+    <div class="vitrine-paginacao" id="vitrine-paginacao"></div>
+    <p class="aviso" id="vitrine-vazio" style="display:none;">Ainda não temos resultados para mostrar aqui.</p>
   </div>
 
   <!-- ---- RANKINGS ---- -->
@@ -1085,18 +1092,39 @@
     <p class="observacao" id="res-observacao"></p>
   </div>
 
-  <!-- VITRINE -->
-  <div class="card" id="area-vitrine">
+  <!-- ---- CATÁLOGO GERAL ---- -->
+  <div class="card" style="margin-top:20px;" id="secao-catalogo">
     <h2>
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
-      Descobertas da comunidade
+      Catálogo Geral
     </h2>
-    <p class="vitrine-sub">Resultados reais de quem já descobriu o valor da própria pedra.</p>
-    <div class="vitrine-scroll">
-      <div class="vitrine-grid" id="vitrine-grid"></div>
+    <p style="font-size:13px;color:var(--ink-mute);text-align:center;margin-top:4px;">Todas as pedras avaliadas pela comunidade</p>
+    
+    <div class="catalogo-header">
+      <div class="catalogo-busca">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="catalogo-busca-input" placeholder="Buscar pedra...">
+      </div>
+      <div class="catalogo-filtro" id="catalogo-filtros">
+        <button class="active" data-filtro="todos">Todos</button>
+        <button data-filtro="recentes">Recentes</button>
+        <button data-filtro="baratos">Baratos</button>
+        <button data-filtro="caros">Caros</button>
+      </div>
+      <div class="catalogo-tipo">
+        <select id="catalogo-filtro-tipo">
+          <option value="">Todos os tipos de pedra</option>
+        </select>
+      </div>
     </div>
-    <div class="vitrine-paginacao" id="vitrine-paginacao"></div>
-    <p class="aviso" id="vitrine-vazio" style="display:none;">Ainda não temos resultados para mostrar aqui.</p>
+
+    <div class="catalogo-grid" id="catalogo-grid">
+      <!-- Preenchido via JS -->
+    </div>
+
+    <div class="catalogo-paginacao" id="catalogo-paginacao">
+      <!-- Preenchido via JS -->
+    </div>
   </div>
 
   <!-- OFERTA -->
@@ -1433,6 +1461,7 @@
   var catalogoPorPagina = 6;
   var catalogoFiltro = 'todos';
   var catalogoBusca = '';
+  var catalogoFiltroTipo = '';
 
   // ========================================================================
   // UTILITÁRIOS
@@ -1580,18 +1609,47 @@
   // ========================================================================
   // CATÁLOGO GERAL - RENDERIZAÇÃO
   // ========================================================================
+  // Preenche o filtro "tipo de pedra" com os tipos que já existem no catálogo
+  // (nomes distintos de catalogoDados), mantendo a seleção atual se ainda for válida.
+  function popularFiltroTipoCatalogo(){
+    var select = document.getElementById('catalogo-filtro-tipo');
+    if (!select) return;
+
+    var tipos = [];
+    catalogoDados.forEach(function(item){
+      if (item.nome && tipos.indexOf(item.nome) === -1) tipos.push(item.nome);
+    });
+    tipos.sort(function(a, b){ return a.localeCompare(b, 'pt-BR'); });
+
+    var valorAtual = select.value;
+    select.innerHTML = '<option value="">Todos os tipos de pedra</option>';
+    tipos.forEach(function(nome){
+      var opt = document.createElement('option');
+      opt.value = nome;
+      opt.textContent = nome;
+      select.appendChild(opt);
+    });
+
+    // Mantém a seleção anterior se o tipo ainda existir na lista
+    if (valorAtual && tipos.indexOf(valorAtual) !== -1) {
+      select.value = valorAtual;
+    } else {
+      catalogoFiltroTipo = '';
+    }
+  }
+
   function renderizarCatalogo(){
     var grid = document.getElementById('catalogo-grid');
     var paginacao = document.getElementById('catalogo-paginacao');
-    
-    // Não repetir no catálogo os itens que já estão em destaque na vitrine
-    var idsNaVitrine = obterIdsVitrine();
 
-    // Filtrar
+    popularFiltroTipoCatalogo();
+
+    // Filtrar (mostra todas as pedras da comunidade, inclusive as que também
+    // aparecem em destaque na vitrine "Descobertas da comunidade")
     var dados = catalogoDados.filter(function(item){
-      if (idsNaVitrine.indexOf(item.id) !== -1) return false;
       var matchBusca = item.nome.toLowerCase().includes(catalogoBusca.toLowerCase());
       if (!matchBusca) return false;
+      if (catalogoFiltroTipo && item.nome !== catalogoFiltroTipo) return false;
       if (catalogoFiltro === 'recentes') return true;
       if (!item.valor) return catalogoFiltro === 'todos';
       if (catalogoFiltro === 'baratos') {
@@ -1669,6 +1727,13 @@
   // Busca no catálogo
   document.getElementById('catalogo-busca-input').addEventListener('input', function(){
     catalogoBusca = this.value;
+    catalogoPagina = 1;
+    renderizarCatalogo();
+  });
+
+  // Filtro por tipo de pedra (só os tipos que já existem no catálogo)
+  document.getElementById('catalogo-filtro-tipo').addEventListener('change', function(){
+    catalogoFiltroTipo = this.value;
     catalogoPagina = 1;
     renderizarCatalogo();
   });
