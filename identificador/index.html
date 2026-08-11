@@ -480,6 +480,15 @@
     gap:14px;
     margin-top:16px;
   }
+  @media (max-width:640px){
+    .catalogo-grid{
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .catalogo-item .cat-info{padding:8px 8px 10px;}
+    .catalogo-item .cat-info .cat-nome{font-size:12px;}
+    .catalogo-item .cat-info .cat-preco{font-size:13px;}
+  }
   .catalogo-item{
     background:var(--card-alt);
     border-radius:10px;
@@ -597,7 +606,7 @@
   #area-vitrine{margin-top:24px;background:none;border:none;box-shadow:none;padding:0;}
   #area-vitrine > h2, #area-vitrine > .vitrine-sub, #area-vitrine > .aviso{padding-left:2px;padding-right:2px;}
   .vitrine-scroll{position:relative;margin-top:16px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:2px max(20px, env(safe-area-inset-left)) 12px;}
-  .vitrine-grid{display:grid;grid-template-columns:repeat(6, 1fr);grid-auto-rows:auto;gap:14px;max-width:1180px;margin:0 auto;}
+  .vitrine-grid{display:grid;grid-template-columns:repeat(4, 1fr);grid-auto-rows:auto;gap:14px;max-width:1180px;margin:0 auto;}
   .vitrine-card{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
   .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
   .vitrine-card:active{transform:scale(0.97);}
