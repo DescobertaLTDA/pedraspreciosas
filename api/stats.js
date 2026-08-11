@@ -1,5 +1,8 @@
 // /api/stats.js
 // Retorna estatísticas reais da comunidade
+// - Total de membros (TODOS os usuários cadastrados no Supabase Auth)
+// - Total de pedras avaliadas (identificações públicas)
+// - Avaliações feitas hoje
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -30,26 +33,51 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // 1. TOTAL DE MEMBROS - BUSCA EMAILS ÚNICOS COM AVALIAÇÕES PÚBLICAS
-    const { data: membrosData, error: errMembrosData } = await supabase
-      .from('identificacoes')
-      .select('email')
-      .eq('publica', true);
-
+    // ==========================================
+    // 1. TOTAL DE MEMBROS (TODOS OS USUÁRIOS CADASTRADOS)
+    // ==========================================
+    // Usando a tabela auth.users do Supabase
+    // NOTA: Isso requer permissão para acessar auth.users
+    // Se não tiver, use a segunda opção abaixo
     let totalMembros = 0;
-    if (!errMembrosData && membrosData) {
-      const emailsUnicos = new Set();
-      membrosData.forEach(row => {
-        if (row.email) emailsUnicos.add(row.email.toLowerCase());
-      });
-      totalMembros = emailsUnicos.size;
+    
+    try {
+      // Tenta buscar da tabela auth.users (requer permissão)
+      const { count: totalUsuarios, error: errUsuarios } = await supabase
+        .from('auth.users')
+        .select('id', { count: 'exact', head: true });
+      
+      if (!errUsuarios && totalUsuarios > 0) {
+        totalMembros = totalUsuarios;
+        console.log('✅ Total de membros (auth.users):', totalMembros);
+      } else {
+        throw new Error('Não foi possível acessar auth.users');
+      }
+    } catch (err) {
+      // Fallback: Busca emails únicos da tabela identificacoes
+      console.log('⚠️ Usando fallback: contando emails únicos da tabela identificacoes');
+      
+      const { data: membrosData, error: errMembrosData } = await supabase
+        .from('identificacoes')
+        .select('email')
+        .eq('publica', true);
+
+      if (!errMembrosData && membrosData) {
+        const emailsUnicos = new Set();
+        membrosData.forEach(row => {
+          if (row.email) emailsUnicos.add(row.email.toLowerCase());
+        });
+        totalMembros = emailsUnicos.size;
+      }
+
+      if (errMembrosData) {
+        console.error('Erro ao buscar membros (fallback):', errMembrosData);
+      }
     }
 
-    if (errMembrosData) {
-      console.error('Erro ao buscar membros:', errMembrosData);
-    }
-
+    // ==========================================
     // 2. Total de pedras avaliadas (identificações públicas)
+    // ==========================================
     const { count: totalPedras, error: errPedras } = await supabase
       .from('identificacoes')
       .select('id', { count: 'exact', head: true })
@@ -59,7 +87,9 @@ module.exports = async function handler(req, res) {
       console.error('Erro ao buscar pedras:', errPedras);
     }
 
+    // ==========================================
     // 3. Avaliações de hoje (apenas públicas)
+    // ==========================================
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
     const hojeISO = hoje.toISOString();
@@ -74,7 +104,9 @@ module.exports = async function handler(req, res) {
       console.error('Erro ao buscar avaliações de hoje:', errHoje);
     }
 
+    // ==========================================
     // 4. Membros que avaliaram hoje
+    // ==========================================
     const { data: membrosHojeData, error: errMembrosHoje } = await supabase
       .from('identificacoes')
       .select('email')
@@ -90,7 +122,20 @@ module.exports = async function handler(req, res) {
       membrosHoje = emailsUnicosHoje.size;
     }
 
+    // ==========================================
+    // 5. Total de avaliações (todas, para referência)
+    // ==========================================
+    const { count: totalAvaliacoes, error: errTotal } = await supabase
+      .from('identificacoes')
+      .select('id', { count: 'exact', head: true });
+
+    if (errTotal) {
+      console.error('Erro ao buscar total de avaliações:', errTotal);
+    }
+
+    // ==========================================
     // Retorna os dados formatados
+    // ==========================================
     return res.status(200).json({
       membros: formatarNumero(totalMembros || 0),
       membros_raw: totalMembros || 0,
@@ -98,7 +143,8 @@ module.exports = async function handler(req, res) {
       pedras_raw: totalPedras || 0,
       hoje: '+' + (avaliacoesHoje || 0),
       hoje_raw: avaliacoesHoje || 0,
-      membros_hoje: membrosHoje || 0
+      membros_hoje: membrosHoje || 0,
+      total_avaliacoes: totalAvaliacoes || 0
     });
 
   } catch (error) {
