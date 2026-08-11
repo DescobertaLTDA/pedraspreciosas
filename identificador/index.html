@@ -645,13 +645,18 @@
       inset: 0;
       border-radius: 14px;
       overflow: hidden;
+      background: var(--card);
     }
     .dz-scan-photo {
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
       display: none;
       z-index: 1;
     }
@@ -660,7 +665,12 @@
     }
     .dz-scan-grid {
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
       z-index: 2;
       opacity: 0;
       pointer-events: none;
@@ -668,6 +678,7 @@
         linear-gradient(var(--accent) 1px, transparent 1px),
         linear-gradient(90deg, var(--accent) 1px, transparent 1px);
       background-size: 12.5% 12.5%;
+      background-position: 0 0, 0 0;
       transition: opacity 0.3s ease;
     }
     .dz-scan-photo.loaded ~ .dz-scan-grid {
@@ -1414,7 +1425,7 @@
         <div class="dz-icon" id="dz-icon-desktop"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
         <div class="dz-scan-demo" id="dz-scan-demo" aria-hidden="true">
           <div class="dz-scan-frame">
-            <img class="dz-scan-photo" id="dz-scan-photo" alt="" src="">
+            <img class="dz-scan-photo" id="dz-scan-photo" alt="Jaspe Bumble Bee (Jaspe Abelha)" src="">
             <div class="dz-scan-grid"></div>
           </div>
           <span class="dz-scan-corner tl"></span>
@@ -3101,23 +3112,13 @@
       });
     }
 
-    function carregarFotoDemoScan(tentativas) {
-      tentativas = tentativas || 0;
+    // Foto fixa de demonstração do scanner — Jaspe Bumble Bee (Jaspe Abelha), id 1d4ae7d6-50ac-457b-88e8-3108185ee77e
+    var FOTO_DEMO_SCAN_FIXA = 'https://raw.githubusercontent.com/DescobertaLTDA/pedraspreciosas/main/91o-8RxjcNL._AC_SL1500_.jpg';
+    function carregarFotoDemoScan() {
       var demoImg = document.getElementById('dz-scan-photo');
       if (!demoImg) return;
-      var comFoto = (catalogoDados || []).filter(function(item) { return !!item.foto; });
-      if (comFoto.length === 0) {
-        if (tentativas < 5) {
-          setTimeout(function() { carregarFotoDemoScan(tentativas + 1); }, 1200);
-        }
-        return;
-      }
-      var escolhida = comFoto[Math.floor(Math.random() * comFoto.length)];
       demoImg.onload = function() { demoImg.classList.add('loaded'); };
-      demoImg.onerror = function() {
-        if (tentativas < 5) { carregarFotoDemoScan(tentativas + 1); }
-      };
-      demoImg.src = escolhida.foto;
+      demoImg.src = FOTO_DEMO_SCAN_FIXA;
       if (demoImg.complete && demoImg.naturalWidth > 0) { demoImg.classList.add('loaded'); }
     }
 
@@ -3129,11 +3130,11 @@
     renderizarRankings('recentes');
     document.getElementById('catalogo-grid').innerHTML =
       '<p style="text-align:center;color:var(--ink-mute2);padding:20px 0;grid-column:1/-1;">Carregando pedras da comunidade...</p>';
+    carregarFotoDemoScan();
     carregarDadosPublicos().then(function() {
       renderizarCatalogo();
       carregarVitrine(1);
       renderizarRankings(rankingAtual);
-      carregarFotoDemoScan();
     });
     carregarEstatisticas();
     setInterval(carregarEstatisticas, 60000);
