@@ -635,10 +635,16 @@
         border-radius: 14px;
         background: linear-gradient(150deg, var(--accent-light), var(--card));
         border: 1px solid var(--line);
-        overflow: hidden;
+        overflow: visible;
         align-items: center;
         justify-content: center;
       }
+    }
+    .dz-scan-frame {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      overflow: hidden;
     }
     .dz-scan-photo {
       position: absolute;
@@ -651,6 +657,21 @@
     }
     .dz-scan-photo.loaded {
       display: block;
+    }
+    .dz-scan-grid {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--accent) 1px, transparent 1px),
+        linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+      background-size: 12.5% 12.5%;
+      transition: opacity 0.3s ease;
+    }
+    .dz-scan-photo.loaded ~ .dz-scan-grid {
+      opacity: 0.18;
     }
     .dz-scan-corner {
       position: absolute;
@@ -1392,7 +1413,10 @@
       <div class="dropzone" id="dropzone">
         <div class="dz-icon" id="dz-icon-desktop"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
         <div class="dz-scan-demo" id="dz-scan-demo" aria-hidden="true">
-          <img class="dz-scan-photo" id="dz-scan-photo" alt="" src="">
+          <div class="dz-scan-frame">
+            <img class="dz-scan-photo" id="dz-scan-photo" alt="" src="">
+            <div class="dz-scan-grid"></div>
+          </div>
           <span class="dz-scan-corner tl"></span>
           <span class="dz-scan-corner tr"></span>
           <span class="dz-scan-corner bl"></span>
@@ -2008,10 +2032,7 @@
           document.addEventListener('click', function() { navUser.classList.remove('active'); });
           document.getElementById('btn-header-sair').addEventListener('click', function() {
             supa.auth.signOut().then(function() {
-              esconderPaineis();
-              resultadoIAAtual = null;
-              atualizarHeader();
-              atualizarContadorGratis();
+              window.location.reload();
             });
           });
           fetch('/api/status', {
