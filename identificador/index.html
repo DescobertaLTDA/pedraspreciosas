@@ -641,10 +641,13 @@
       }
     }
     .dz-scan-photo {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: none;
+      z-index: 1;
     }
     .dz-scan-photo.loaded {
       display: block;
@@ -2438,7 +2441,6 @@
               renderizarCatalogo();
               carregarVitrine(1);
               renderizarRankings(rankingAtual);
-              carregarFeedReal();
             });
           }
         })
@@ -3078,14 +3080,24 @@
       });
     }
 
-    function carregarFotoDemoScan() {
+    function carregarFotoDemoScan(tentativas) {
+      tentativas = tentativas || 0;
       var demoImg = document.getElementById('dz-scan-photo');
       if (!demoImg) return;
       var comFoto = (catalogoDados || []).filter(function(item) { return !!item.foto; });
-      if (comFoto.length === 0) return;
+      if (comFoto.length === 0) {
+        if (tentativas < 5) {
+          setTimeout(function() { carregarFotoDemoScan(tentativas + 1); }, 1200);
+        }
+        return;
+      }
       var escolhida = comFoto[Math.floor(Math.random() * comFoto.length)];
-      demoImg.src = escolhida.foto;
       demoImg.onload = function() { demoImg.classList.add('loaded'); };
+      demoImg.onerror = function() {
+        if (tentativas < 5) { carregarFotoDemoScan(tentativas + 1); }
+      };
+      demoImg.src = escolhida.foto;
+      if (demoImg.complete && demoImg.naturalWidth > 0) { demoImg.classList.add('loaded'); }
     }
 
     // ========================================================================
@@ -3100,7 +3112,6 @@
       renderizarCatalogo();
       carregarVitrine(1);
       renderizarRankings(rankingAtual);
-      carregarFeedReal();
       carregarFotoDemoScan();
     });
     carregarEstatisticas();
