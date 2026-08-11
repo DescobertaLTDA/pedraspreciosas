@@ -1462,6 +1462,29 @@
   var catalogoFiltroTipo = '';
 
   // ========================================================================
+  // RANKINGS - DATA FALLBACK (usado apenas enquanto os dados reais não carregam)
+  // ========================================================================
+  var rankingsData = {
+    recentes: [
+      { nome: 'Quartzo Rosa Druza', meta: 'por LUCAS · há 2h', badge: 'novo' },
+      { nome: 'Turmalina Negra', meta: 'por LUCAS · há 3h', badge: 'novo' },
+      { nome: 'Água-marinha', meta: 'por LUCAS · há 4h', badge: 'novo' }
+    ],
+    baratas: [
+      { nome: 'Calcário', meta: 'R$ 20,00 · por Marcos', badge: 'barata' },
+      { nome: 'Calcita', meta: 'R$ 22,00 · por Luisa', badge: 'barata' },
+      { nome: 'Mica', meta: 'R$ 28,00 · por Pedro', badge: 'barata' }
+    ],
+    caras: [
+      { nome: 'Rubi', meta: 'R$ 1.200,00 · por Sofia', badge: 'premium' },
+      { nome: 'Esmeralda', meta: 'R$ 950,00 · por Thiago', badge: 'premium' },
+      { nome: 'Turmalina Negra', meta: 'R$ 400,00 · por LUCAS', badge: 'premium' }
+    ]
+  };
+
+  var rankingAtual = 'recentes';
+
+  // ========================================================================
   // UTILITÁRIOS
   // ========================================================================
   function limparTimeouts() {
@@ -1605,10 +1628,102 @@
   }
 
   // ========================================================================
+  // RANKINGS - AGORA COM FOTOS REAIS
+  // ========================================================================
+  function carregarRankingsComFotos(tipo){
+    var grid = document.getElementById('rankings-grid');
+    
+    if (!catalogoDadosCarregados || catalogoDados.length === 0) {
+      // Fallback: dados estáticos com placeholder de imagem
+      var dadosFallback = rankingsData[tipo] || rankingsData.recentes;
+      grid.innerHTML = '';
+      dadosFallback.forEach(function(item, index){
+        var div = document.createElement('div');
+        div.className = 'rank-item';
+        var badgeIcon = '';
+        if (item.badge === 'novo') badgeIcon = '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>';
+        else if (item.badge === 'barata') badgeIcon = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M8 16l8-8"/></svg>';
+        else if (item.badge === 'premium') badgeIcon = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>';
+        div.innerHTML = 
+          '<div style="aspect-ratio:1/1;background:var(--card-alt);border-radius:6px;overflow:hidden;margin-bottom:8px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink-mute2);font-size:11px;">📷</div>' +
+          '<div class="rank-pos">#' + (index + 1) + '</div>' +
+          '<div class="rank-name">' + item.nome + '</div>' +
+          '<div class="rank-meta">' + item.meta + '</div>' +
+          '<span class="rank-badge">' + badgeIcon + item.badge + '</span>';
+        grid.appendChild(div);
+      });
+      return;
+    }
+    
+    // Pega os dados do catálogo e ordena conforme o tipo selecionado
+    var dados = catalogoDados.slice();
+    
+    if (tipo === 'recentes') {
+      dados.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
+    } else if (tipo === 'baratas') {
+      dados.sort(function(a,b){
+        var valA = parseFloat((a.valor || 'R$ 0').replace('R$ ', '').replace('.', '').replace(',', '.'));
+        var valB = parseFloat((b.valor || 'R$ 0').replace('R$ ', '').replace('.', '').replace(',', '.'));
+        return valA - valB;
+      });
+    } else if (tipo === 'caras') {
+      dados.sort(function(a,b){
+        var valA = parseFloat((a.valor || 'R$ 0').replace('R$ ', '').replace('.', '').replace(',', '.'));
+        var valB = parseFloat((b.valor || 'R$ 0').replace('R$ ', '').replace('.', '').replace(',', '.'));
+        return valB - valA;
+      });
+    }
+    
+    // Pega apenas os 6 primeiros
+    var top6 = dados.slice(0, 6);
+    
+    grid.innerHTML = '';
+    if (top6.length === 0) {
+      grid.innerHTML = '<p style="text-align:center;color:var(--ink-mute2);padding:20px 0;grid-column:1/-1;">Nenhuma pedra encontrada.</p>';
+      return;
+    }
+    
+    top6.forEach(function(item, index){
+      var div = document.createElement('div');
+      div.className = 'rank-item';
+      
+      var badgeIcon = '';
+      var badgeTexto = '';
+      if (tipo === 'recentes') {
+        badgeIcon = '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>';
+        badgeTexto = 'recente';
+      } else if (tipo === 'baratas') {
+        badgeIcon = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M8 16l8-8"/></svg>';
+        badgeTexto = 'barata';
+      } else if (tipo === 'caras') {
+        badgeIcon = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>';
+        badgeTexto = 'premium';
+      }
+      
+      var fotoHtml = item.foto
+        ? '<img src="' + item.foto + '" alt="' + item.nome + '" style="width:100%;height:100%;object-fit:cover;display:block;">'
+        : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--ink-mute2);font-size:11px;">📷</div>';
+      
+      div.innerHTML = 
+        '<div style="aspect-ratio:1/1;background:var(--card);border-radius:6px;overflow:hidden;margin-bottom:8px;border:1px solid var(--line);">' +
+          fotoHtml +
+        '</div>' +
+        '<div class="rank-pos">#' + (index + 1) + '</div>' +
+        '<div class="rank-name">' + (item.nome || 'Pedra não identificada') + '</div>' +
+        '<div class="rank-meta">' + (item.valor ? item.valor + ' · ' : '') + 'por ' + (item.avaliador || 'cliente') + (item.data ? ' · ' + tempoRelativo(item.data) : '') + '</div>' +
+        '<span class="rank-badge">' + badgeIcon + badgeTexto + '</span>';
+      
+      grid.appendChild(div);
+    });
+  }
+
+  function renderizarRankings(tipo){
+    carregarRankingsComFotos(tipo);
+  }
+
+  // ========================================================================
   // CATÁLOGO GERAL - RENDERIZAÇÃO
   // ========================================================================
-  // Preenche o filtro "tipo de pedra" com os tipos que já existem no catálogo
-  // (nomes distintos de catalogoDados), mantendo a seleção atual se ainda for válida.
   function popularFiltroTipoCatalogo(){
     var select = document.getElementById('catalogo-filtro-tipo');
     if (!select) return;
@@ -1628,7 +1743,6 @@
       select.appendChild(opt);
     });
 
-    // Mantém a seleção anterior se o tipo ainda existir na lista
     if (valorAtual && tipos.indexOf(valorAtual) !== -1) {
       select.value = valorAtual;
     } else {
@@ -1642,8 +1756,6 @@
 
     popularFiltroTipoCatalogo();
 
-    // Filtrar (mostra todas as pedras da comunidade, inclusive as que também
-    // aparecem em destaque na vitrine "Descobertas da comunidade")
     var dados = catalogoDados.filter(function(item){
       var matchBusca = item.nome.toLowerCase().includes(catalogoBusca.toLowerCase());
       if (!matchBusca) return false;
@@ -1661,7 +1773,6 @@
       return true;
     });
 
-    // Ordenar por recentes
     dados.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
 
     var total = dados.length;
@@ -1695,7 +1806,6 @@
       });
     }
 
-    // Paginação
     paginacao.innerHTML = '';
     for (var i = 1; i <= totalPaginas; i++) {
       (function(pag){
@@ -1722,14 +1832,12 @@
     renderizarCatalogo();
   });
 
-  // Busca no catálogo
   document.getElementById('catalogo-busca-input').addEventListener('input', function(){
     catalogoBusca = this.value;
     catalogoPagina = 1;
     renderizarCatalogo();
   });
 
-  // Filtro por tipo de pedra (só os tipos que já existem no catálogo)
   document.getElementById('catalogo-filtro-tipo').addEventListener('change', function(){
     catalogoFiltroTipo = this.value;
     catalogoPagina = 1;
@@ -2030,14 +2138,13 @@
   var carregandoVitrine = false;
   var VITRINE_COLUNAS = 6;
   var VITRINE_LINHAS = 3;
-  var VITRINE_POR_PAGINA = VITRINE_COLUNAS * VITRINE_LINHAS; // 18 itens (grade 6x3) por página
+  var VITRINE_POR_PAGINA = VITRINE_COLUNAS * VITRINE_LINHAS;
 
   function carregarVitrine(pagina){
     if (carregandoVitrine) return;
     carregandoVitrine = true;
     paginaVitrineAtual = pagina || 1;
 
-    // Usa os dados do catálogo como fonte da vitrine (os mais recentes)
     var idsVitrine = obterIdsVitrine();
     var itens = catalogoDados.filter(function(item){ return idsVitrine.indexOf(item.id) !== -1; });
     itens.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
@@ -2127,58 +2234,6 @@
       }
     }
   }
-
-  // ========================================================================
-  // RANKINGS
-  // ========================================================================
-  var rankingsData = {
-    recentes: [
-      { nome: 'Quartzo Rosa Druza', meta: 'por LUCAS · há 2h', badge: 'novo' },
-      { nome: 'Turmalina Negra', meta: 'por LUCAS · há 3h', badge: 'novo' },
-      { nome: 'Água-marinha', meta: 'por LUCAS · há 4h', badge: 'novo' }
-    ],
-    baratas: [
-      { nome: 'Calcário', meta: 'R$ 20,00 · por Marcos', badge: 'barata' },
-      { nome: 'Calcita', meta: 'R$ 22,00 · por Luisa', badge: 'barata' },
-      { nome: 'Mica', meta: 'R$ 28,00 · por Pedro', badge: 'barata' }
-    ],
-    caras: [
-      { nome: 'Rubi', meta: 'R$ 1.200,00 · por Sofia', badge: 'premium' },
-      { nome: 'Esmeralda', meta: 'R$ 950,00 · por Thiago', badge: 'premium' },
-      { nome: 'Turmalina Negra', meta: 'R$ 400,00 · por LUCAS', badge: 'premium' }
-    ]
-  };
-
-  var rankingAtual = 'recentes';
-
-  function renderizarRankings(tipo){
-    var grid = document.getElementById('rankings-grid');
-    var dados = rankingsData[tipo] || rankingsData.recentes;
-    grid.innerHTML = '';
-    dados.forEach(function(item, index){
-      var div = document.createElement('div');
-      div.className = 'rank-item';
-      var badgeIcon = '';
-      if (item.badge === 'novo') badgeIcon = '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>';
-      else if (item.badge === 'barata') badgeIcon = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M8 16l8-8"/></svg>';
-      else if (item.badge === 'premium') badgeIcon = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>';
-      div.innerHTML = 
-        '<div class="rank-pos">#' + (index + 1) + '</div>' +
-        '<div class="rank-name">' + item.nome + '</div>' +
-        '<div class="rank-meta">' + item.meta + '</div>' +
-        '<span class="rank-badge">' + badgeIcon + item.badge + '</span>';
-      grid.appendChild(div);
-    });
-  }
-
-  document.getElementById('rankings-tabs').addEventListener('click', function(e){
-    var btn = e.target.closest('button');
-    if (!btn) return;
-    document.querySelectorAll('.rankings-tabs button').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    rankingAtual = btn.dataset.rank;
-    renderizarRankings(rankingAtual);
-  });
 
   // ========================================================================
   // FEED DA COMUNIDADE
@@ -2838,6 +2893,7 @@
         carregarDadosPublicos().then(function(){
           renderizarCatalogo();
           carregarVitrine(1);
+          renderizarRankings(rankingAtual);
         });
       }
     })
@@ -2944,11 +3000,19 @@
 
   document.getElementById('catalogo-grid').innerHTML = '<p style="text-align:center;color:var(--ink-mute2);padding:20px 0;grid-column:1/-1;">Carregando pedras da comunidade...</p>';
 
-  // Busca os itens reais (com foto) da vitrine pública e só então renderiza
-  // o catálogo e a vitrine "Descobertas da comunidade".
   carregarDadosPublicos().then(function(){
     renderizarCatalogo();
     carregarVitrine(1);
+    renderizarRankings(rankingAtual);
+  });
+
+  document.getElementById('rankings-tabs').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('.rankings-tabs button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    rankingAtual = btn.dataset.rank;
+    renderizarRankings(rankingAtual);
   });
 
   supa.auth.getSession().then(function(sessaoResp){
