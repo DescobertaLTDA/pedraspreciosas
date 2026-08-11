@@ -1245,30 +1245,57 @@
   var LINK_CHECKOUT_CAKTO = 'https://pay.cakto.com.br/jfotn5o_1030574';
 
   // ========================================================================
-  // DADOS DO CATÁLOGO (inclui todos os itens da vitrine)
+  // DADOS DO CATÁLOGO (vem de verdade do /api/vitrine — itens reais com foto)
   // ========================================================================
-  var catalogoDados = [
-    // Itens da vitrine (Descobertas da comunidade)
-    { nome: 'Minério de Manganês (Pirolusita ou...)', valor: 'R$ 100,00', data: '2026-08-11T10:30:00', avaliador: 'Tania' },
-    { nome: 'Calcário ou Rocha Sedimentar', valor: 'R$ 20,00', data: '2026-08-11T09:15:00', avaliador: 'Marcos' },
-    { nome: 'Água-marinha', valor: 'R$ 120,00', data: '2026-08-11T08:00:00', avaliador: 'LUCAS' },
-    { nome: 'Calciata Laranja', valor: 'R$ 80,00', data: '2026-08-10T22:30:00', avaliador: 'LUCAS' },
-    { nome: 'Turmalina Negra (Schorl)', valor: 'R$ 400,00', data: '2026-08-10T21:00:00', avaliador: 'LUCAS' },
-    { nome: 'Quartzo Rosa Druza (Drusy Quartzo Rosa)', valor: 'R$ 120,00', data: '2026-08-10T19:30:00', avaliador: 'LUCAS' },
-    { nome: 'Pirita', valor: 'R$ 80,00', data: '2026-08-10T18:00:00', avaliador: 'LUCAS' },
-    // Itens adicionais do catálogo
-    { nome: 'Quartzo Rosa', valor: 'R$ 45,00', data: '2026-08-10T14:30:00', avaliador: 'Ana' },
-    { nome: 'Ametista', valor: 'R$ 120,00', data: '2026-08-10T13:15:00', avaliador: 'Carlos' },
-    { nome: 'Jadeíta', valor: 'R$ 350,00', data: '2026-08-10T12:00:00', avaliador: 'Mariana' },
-    { nome: 'Rubi', valor: 'R$ 1.200,00', data: '2026-08-09T18:45:00', avaliador: 'Sofia' },
-    { nome: 'Esmeralda', valor: 'R$ 950,00', data: '2026-08-09T17:30:00', avaliador: 'Thiago' },
-    { nome: 'Calcita', valor: 'R$ 22,00', data: '2026-08-09T15:10:00', avaliador: 'Luisa' },
-    { nome: 'Mica', valor: 'R$ 28,00', data: '2026-08-09T14:00:00', avaliador: 'Pedro' },
-    { nome: 'Quartzo Hialino', valor: 'R$ 15,00', data: '2026-08-09T12:45:00', avaliador: 'João' },
-    { nome: 'Granada', valor: 'R$ 210,00', data: '2026-08-08T20:00:00', avaliador: 'Fernanda' }
-  ];
-  // Dá um id único e estável a cada item (usado para não duplicar vitrine x catálogo)
-  catalogoDados.forEach(function(item, indice){ item.id = indice; });
+  var catalogoDados = [];
+  var catalogoDadosCarregados = false;
+
+  function formatarMoedaBR(valor){
+    if (typeof valor !== 'number' || isNaN(valor)) return null;
+    return 'R$ ' + valor.toFixed(2).replace('.', ',');
+  }
+
+  // Busca as identificações públicas (com foto) no /api/vitrine e monta o
+  // array catalogoDados usado tanto pela vitrine "Descobertas da comunidade"
+  // quanto pelo "Catálogo Geral". Pega várias páginas do endpoint (que
+  // pagina de 10 em 10) até um limite razoável, pra não pesar demais.
+  var MAX_PAGINAS_API = 8;
+  function carregarDadosPublicos(){
+    return fetch('/api/vitrine?pagina=1')
+      .then(function(r){ return r.json(); })
+      .then(function(primeira){
+        var totalPaginas = Math.min(primeira.total_paginas || 1, MAX_PAGINAS_API);
+        var promessas = [Promise.resolve(primeira)];
+        for (var p = 2; p <= totalPaginas; p++){
+          promessas.push(
+            fetch('/api/vitrine?pagina=' + p).then(function(r){ return r.json(); })
+          );
+        }
+        return Promise.all(promessas);
+      })
+      .then(function(paginas){
+        var todos = [];
+        paginas.forEach(function(pg){
+          (pg.itens || []).forEach(function(item){
+            todos.push({
+              id: item.id,
+              nome: item.pedra || 'Pedra não identificada',
+              valor: formatarMoedaBR(item.valor_exibicao),
+              data: item.criado_em || null,
+              avaliador: item.nome || 'cliente',
+              foto: item.foto || null
+            });
+          });
+        });
+        catalogoDados = todos;
+        catalogoDadosCarregados = true;
+      })
+      .catch(function(err){
+        console.error('Erro ao carregar dados públicos (vitrine/catálogo):', err);
+        catalogoDados = [];
+        catalogoDadosCarregados = true;
+      });
+  }
 
   // Retorna os ids dos itens que estão sendo exibidos na vitrine "Descobertas da comunidade"
   // (os N mais recentes). O catálogo geral usa isso para não repetir os mesmos cards.
@@ -1566,6 +1593,7 @@
       var matchBusca = item.nome.toLowerCase().includes(catalogoBusca.toLowerCase());
       if (!matchBusca) return false;
       if (catalogoFiltro === 'recentes') return true;
+      if (!item.valor) return catalogoFiltro === 'todos';
       if (catalogoFiltro === 'baratos') {
         var valorNum = parseFloat(item.valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
         return valorNum < 50;
@@ -1596,14 +1624,15 @@
       paginaDados.forEach(function(item){
         var div = document.createElement('div');
         div.className = 'catalogo-item';
+        var fotoHtml = item.foto
+          ? '<img src="' + item.foto + '" alt="' + item.nome + '" loading="lazy">'
+          : '<div class="no-image">📷</div>';
         div.innerHTML = 
-          '<div class="cat-foto">' +
-            '<div class="no-image">📷</div>' +
-          '</div>' +
+          '<div class="cat-foto">' + fotoHtml + '</div>' +
           '<div class="cat-info">' +
             '<div class="cat-nome">' + item.nome + '</div>' +
             '<div class="cat-meta">por ' + item.avaliador + ' · ' + tempoRelativo(item.data) + '</div>' +
-            '<div class="cat-preco">' + item.valor + '</div>' +
+            '<div class="cat-preco">' + (item.valor || 'Valor sob consulta') + '</div>' +
             '<span class="cat-badge">avaliado</span>' +
           '</div>';
         grid.appendChild(div);
@@ -1984,7 +2013,7 @@
       foto.className = 'vitrine-foto';
       var img = document.createElement('img');
       img.loading = 'lazy';
-      img.src = '/stone-placeholder.png';
+      img.src = item.foto || '/stone-placeholder.png';
       img.alt = item.nome || 'Pedra identificada';
       img.onerror = function(){ this.style.display = 'none'; };
       foto.appendChild(img);
@@ -2743,7 +2772,10 @@
       mostrarResultado(data);
       atualizarHeader();
       if (checkPermiteVitrine.checked) {
-        carregarVitrine(1);
+        carregarDadosPublicos().then(function(){
+          renderizarCatalogo();
+          carregarVitrine(1);
+        });
       }
     })
     .catch(function(err){
@@ -2846,7 +2878,15 @@
   atualizarContadorGratis();
   renderizarRankings('recentes');
   gerarFeed();
-  renderizarCatalogo();
+
+  document.getElementById('catalogo-grid').innerHTML = '<p style="text-align:center;color:var(--ink-mute2);padding:20px 0;grid-column:1/-1;">Carregando pedras da comunidade...</p>';
+
+  // Busca os itens reais (com foto) da vitrine pública e só então renderiza
+  // o catálogo e a vitrine "Descobertas da comunidade".
+  carregarDadosPublicos().then(function(){
+    renderizarCatalogo();
+    carregarVitrine(1);
+  });
 
   supa.auth.getSession().then(function(sessaoResp){
     if (sessaoResp.data.session) {
@@ -2859,11 +2899,6 @@
   window.addEventListener('beforeunload', function() {
     limparTimeouts();
   });
-
-  // Carrega a vitrine
-  setTimeoutSeguro(function() {
-    carregarVitrine(1);
-  }, 500);
 </script>
 </body>
 </html>
