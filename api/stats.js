@@ -1,8 +1,5 @@
 // /api/stats.js
 // Retorna estatísticas reais da comunidade
-// - Total de membros (TODOS os usuários cadastrados no Supabase Auth)
-// - Total de pedras avaliadas (identificações públicas)
-// - Avaliações feitas hoje
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -140,14 +137,7 @@ module.exports = async function handler(req, res) {
       hoje: '+' + (avaliacoesHoje || 0),
       hoje_raw: avaliacoesHoje || 0,
       membros_hoje: membrosHoje || 0,
-      total_avaliacoes: totalAvaliacoes || 0,
-      // Dados de debug
-      _debug: {
-        total_membros_raw: totalMembros,
-        total_pedras_raw: totalPedras,
-        avaliacoes_hoje_raw: avaliacoesHoje,
-        membros_hoje_raw: membrosHoje
-      }
+      total_avaliacoes: totalAvaliacoes || 0
     });
 
   } catch (error) {
