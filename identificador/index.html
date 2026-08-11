@@ -792,7 +792,7 @@
     .community-stats .stat {
       background: var(--accent-light);
       border-radius: 10px;
-      padding: 14px 8px;
+      padding: 14px 4px;
       text-align: center;
       border: 1px solid var(--line);
     }
@@ -802,13 +802,21 @@
       font-weight: 700;
       color: var(--accent-dark);
       display: block;
+      margin-bottom: 4px;
     }
     .community-stats .stat .label {
-      font-size: 10.5px;
+      font-size: 9.5px;
       color: var(--ink-mute2);
       font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      display: block;
+    }
+    @media (max-width: 400px) {
+      .community-stats .stat .label {
+        font-size: 8.5px;
+      }
     }
 
     /* demais componentes */
@@ -1323,7 +1331,6 @@
         <div class="stat"><span class="num" id="stat-pedras">...</span><span class="label">pedras avaliadas</span></div>
         <div class="stat"><span class="num" id="stat-hoje">...</span><span class="label">avaliações hoje</span></div>
       </div>
-      <p style="font-size:11px;color:var(--ink-mute2);text-align:center;margin-top:4px;" id="stat-atualizado">Atualizando...</p>
     </div>
 
     <div class="card" id="area-vitrine">
