@@ -924,7 +924,11 @@
     }
     @media (min-width: 768px) {
       .modal-dossie {
-        max-width: 860px;
+        max-width: 1040px;
+        max-height: 640px;
+        display: flex;
+        flex-direction: row;
+        overflow: hidden;
       }
     }
     .modal-dossie-close {
@@ -953,10 +957,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
     @media (min-width: 768px) {
       .modal-dossie-foto {
-        aspect-ratio: 16/9;
+        width: 46%;
+        height: auto;
+        aspect-ratio: auto;
+        border-radius: 20px 0 0 20px;
       }
     }
     .modal-dossie-foto img {
@@ -966,6 +974,14 @@
     }
     .modal-dossie-body {
       padding: 24px 28px 32px;
+    }
+    @media (min-width: 768px) {
+      .modal-dossie-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 32px 36px;
+        max-height: 640px;
+      }
     }
 
     /* footer */
@@ -2634,7 +2650,10 @@
         card.addEventListener('click', function() {
           fetch('/api/obter-publico?id=' + item.id)
             .then(function(r) { return r.json(); })
-            .then(function(dados) { abrirDossie(dados, item.foto); })
+            .then(function(dados) {
+              dados.nome = dados.nome || dados.nome_provavel || item.nome;
+              abrirDossie(dados, item.foto);
+            })
             .catch(function() {
               var dadosFallback = {
                 nome: item.nome,
