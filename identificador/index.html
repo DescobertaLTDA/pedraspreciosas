@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>Identificador de Pedras com IA — Tesouro Esquecido</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#17151b">
+<meta name="theme-color" content="#075e54">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -19,22 +19,22 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{
-    --bg:#17151b;
-    --card:#1e1a23;
-    --card-alt:#211c28;
-    --ink:#efe6d8;
-    --ink-light:#f1e7d3;
-    --ink-mute:#b4a99a;
-    --ink-mute2:#a99a86;
-    --ink-soft:#e7dabf;
-    --accent:#f5b342;
-    --accent-dark:#dba33a;
-    --accent-light:rgba(245,179,66,0.15);
-    --on-accent:#241a06;
-    --emerald:#4f9a72;
-    --danger:#e2584a;
-    --line:rgba(240,230,210,0.14);
-    --line-strong:rgba(240,230,210,0.28);
+    --bg:#075e54;
+    --card:#0c6e61;
+    --card-alt:#0a5c51;
+    --ink:#ffffff;
+    --ink-light:#ffffff;
+    --ink-mute:#c9e6df;
+    --ink-mute2:#a9d6cb;
+    --ink-soft:#e3f5ef;
+    --accent:#25d366;
+    --accent-dark:#128c7e;
+    --accent-light:rgba(37,211,102,0.2);
+    --on-accent:#062f22;
+    --emerald:#06cf9c;
+    --danger:#f15c6d;
+    --line:rgba(255,255,255,0.16);
+    --line-strong:rgba(255,255,255,0.3);
   }
   html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:none;overflow-x:hidden;max-width:100%;}
   body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:0 0 60px;overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-x:none;}
@@ -48,7 +48,7 @@
     .head h1{font-size:clamp(26px,7.5vw,34px);}
   }
 
-  header{position:sticky;top:0;z-index:50;background:rgba(23,21,27,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  header{position:sticky;top:0;z-index:50;background:rgba(7,94,84,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
   .nav-wrap{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 24px;padding-left:max(24px, env(safe-area-inset-left));padding-right:max(24px, env(safe-area-inset-right));min-width:0;}
   @media (max-width:600px){ .nav-wrap{padding:12px 16px;padding-left:max(16px, env(safe-area-inset-left));padding-right:max(16px, env(safe-area-inset-right));} }
   .nav-left{display:flex;align-items:center;gap:12px;min-width:0;}
@@ -159,7 +159,7 @@
   .scanner-overlay.active{display:block;}
   .scanner-grid{position:absolute;inset:0;opacity:0;background-image:linear-gradient(rgba(56,196,120,0.45) 1px, transparent 1px),linear-gradient(90deg, rgba(56,196,120,0.45) 1px, transparent 1px);background-size:26px 26px;animation:scannerGridFade .5s ease forwards;}
   .scanner-overlay::after{content:'';position:absolute;inset:0;background:rgba(56,196,120,0.06);opacity:0;animation:scannerGridFade .5s ease forwards;}
-  .scanner-line{position:absolute;left:0;right:0;top:-4px;height:4px;background:linear-gradient(90deg, transparent, #38c478 15%, #a7f3c5 50%, #38c478 85%, transparent);box-shadow:0 0 14px 3px rgba(56,196,120,0.85), 0 0 34px 8px rgba(56,196,120,0.35);animation:scannerMove 1.9s ease-in-out infinite;}
+  .scanner-line{position:absolute;left:0;right:0;top:-4px;height:4px;background:linear-gradient(90deg, transparent, #128c7e 15%, #25d366 50%, #128c7e 85%, transparent);box-shadow:0 0 14px 3px rgba(37,211,102,0.85), 0 0 34px 8px rgba(37,211,102,0.35);animation:scannerMove 1.9s ease-in-out infinite;}
   @keyframes scannerGridFade{to{opacity:1;}}
   @keyframes scannerMove{0%{top:-4px;}50%{top:calc(100% - 4px);}100%{top:-4px;}}
 
@@ -228,7 +228,7 @@
 
   .canais-venda{margin-top:16px;}
   .canal-destaque{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--accent-light);border:1.5px solid var(--accent);border-radius:11px;padding:14px 16px;text-decoration:none;transition:background .15s ease;}
-  .canal-destaque:hover{background:rgba(245,179,66,0.22);}
+  .canal-destaque:hover{background:rgba(37,211,102,0.22);}
   .canal-destaque-info{display:flex;flex-direction:column;gap:2px;}
   .canal-destaque-info .canal-tag{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent-dark);}
   .canal-destaque-info strong{font-family:'Fraunces',serif;font-size:16.5px;color:var(--ink);}
@@ -256,7 +256,7 @@
   .premium-preview .btn{padding:13px 22px;}
 
   .bloqueado-badge{display:inline-block;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-left:8px;}
-  .carregando .btn-primary{background:rgba(245,179,66,0.5);}
+  .carregando .btn-primary{background:rgba(37,211,102,0.5);}
 
   .painel-acesso{display:none;}
   .painel-acesso.active{
@@ -310,7 +310,7 @@
   .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.3);}
   .vitrine-card:active{transform:scale(0.97);}
   .vitrine-index{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:0.03em;color:var(--ink-mute2);padding:8px 8px 0;}
-  .consentimento-vitrine{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:13px;color:var(--ink-mute,#b4a99a);cursor:pointer;line-height:1.4;}
+  .consentimento-vitrine{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:13px;color:var(--ink-mute,#c9e6df);cursor:pointer;line-height:1.4;}
   .consentimento-vitrine input{margin-top:2px;flex-shrink:0;}
   .vitrine-foto{margin:5px 7px 0;border-radius:6px;overflow:hidden;aspect-ratio:1/1;background:var(--card-alt);border:1px solid var(--line);}
   .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -1007,7 +1007,7 @@
   var btnCtaFinal = document.getElementById('btn-cta-final');
   var navLinkPrecos = document.getElementById('nav-link-precos');
 
-  var confiancaCores = { alta: '#4f9a72', media: '#f5b342', baixa: '#e2584a' };
+  var confiancaCores = { alta: '#25d366', media: '#128c7e', baixa: '#f15c6d' };
 
   // CONTROLE DE TIMEOUTS - PREVINE TRAVAMENTO
   var timeoutIds = [];
@@ -2197,7 +2197,7 @@
     document.getElementById('canal-olx').href = 'https://www.olx.com.br/brasil?q=' + termoBuscaEnc;
 
     var confEl = document.getElementById('res-confianca');
-    var cor = confiancaCores[data.confianca] || '#a99a86';
+    var cor = confiancaCores[data.confianca] || '#c9e6df';
     confEl.textContent = 'confiança ' + (data.confianca || '');
     confEl.style.color = cor;
 
