@@ -2766,6 +2766,11 @@
         atualizarContadorGratis();
       }
       var fotoUrl = previewImg.src || '/stone-placeholder.png';
+      // normaliza o campo de nome: a API de identificação retorna
+      // "nome_provavel", mas abrirDossie() espera "nome" — sem isso o
+      // modal caía no fallback "Pedra não identificada" mesmo quando a
+      // IA tinha identificado a pedra com confiança alta.
+      data.nome = data.nome || data.nome_provavel;
       abrirDossie(data, fotoUrl);
     }
 
