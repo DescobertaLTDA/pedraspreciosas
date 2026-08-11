@@ -618,6 +618,88 @@
       stroke-width: 1.7;
       fill: none;
     }
+    /* Demo de scan com foto real — apenas mobile */
+    .dz-scan-demo {
+      display: none;
+    }
+    @media (max-width: 767px) {
+      .dz-icon {
+        display: none;
+      }
+      .dz-scan-demo {
+        position: relative;
+        display: flex;
+        width: 100%;
+        max-width: 200px;
+        aspect-ratio: 4/3;
+        border-radius: 14px;
+        background: linear-gradient(150deg, var(--accent-light), var(--card));
+        border: 1px solid var(--line);
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .dz-scan-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .dz-scan-photo.loaded {
+      display: block;
+    }
+    .dz-scan-corner {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-color: var(--accent);
+      opacity: 0.75;
+      z-index: 2;
+    }
+    .dz-scan-corner.tl { top: 8px; left: 8px; border-top: 2px solid; border-left: 2px solid; border-radius: 4px 0 0 0; }
+    .dz-scan-corner.tr { top: 8px; right: 8px; border-top: 2px solid; border-right: 2px solid; border-radius: 0 4px 0 0; }
+    .dz-scan-corner.bl { bottom: 8px; left: 8px; border-bottom: 2px solid; border-left: 2px solid; border-radius: 0 0 0 4px; }
+    .dz-scan-corner.br { bottom: 8px; right: 8px; border-bottom: 2px solid; border-right: 2px solid; border-radius: 0 0 4px 0; }
+    .dz-scan-line {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      box-shadow: 0 0 8px 1px var(--accent);
+      z-index: 2;
+      animation: dzScanMove 2.6s ease-in-out infinite;
+    }
+    @keyframes dzScanMove {
+      0% { top: 12%; opacity: 0.15; }
+      50% { top: 88%; opacity: 1; }
+      100% { top: 12%; opacity: 0.15; }
+    }
+    .dz-scan-badge {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      border: 2px solid var(--card);
+      z-index: 3;
+    }
+    .dz-scan-badge svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--on-accent);
+      stroke-width: 2.2;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dz-scan-line { animation: none; top: 50%; }
+    }
     .dropzone strong {
       font-family: 'Fraunces', serif;
       font-size: 17px;
@@ -1305,7 +1387,16 @@
 
     <div class="card" id="area-principal" style="margin-top:12px;">
       <div class="dropzone" id="dropzone">
-        <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
+        <div class="dz-icon" id="dz-icon-desktop"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
+        <div class="dz-scan-demo" id="dz-scan-demo" aria-hidden="true">
+          <img class="dz-scan-photo" id="dz-scan-photo" alt="" src="">
+          <span class="dz-scan-corner tl"></span>
+          <span class="dz-scan-corner tr"></span>
+          <span class="dz-scan-corner bl"></span>
+          <span class="dz-scan-corner br"></span>
+          <div class="dz-scan-line"></div>
+          <div class="dz-scan-badge"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
+        </div>
         <strong id="dz-titulo">Envie a foto da sua pedra</strong>
         <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Você pode enviar até 3 fotos da mesma pedra em ângulos diferentes.</span>
         <input type="file" id="input-foto" accept="image/*">
@@ -2987,6 +3078,16 @@
       });
     }
 
+    function carregarFotoDemoScan() {
+      var demoImg = document.getElementById('dz-scan-photo');
+      if (!demoImg) return;
+      var comFoto = (catalogoDados || []).filter(function(item) { return !!item.foto; });
+      if (comFoto.length === 0) return;
+      var escolhida = comFoto[Math.floor(Math.random() * comFoto.length)];
+      demoImg.src = escolhida.foto;
+      demoImg.onload = function() { demoImg.classList.add('loaded'); };
+    }
+
     // ========================================================================
     // INICIALIZAÇÃO
     // ========================================================================
@@ -3000,6 +3101,7 @@
       carregarVitrine(1);
       renderizarRankings(rankingAtual);
       carregarFeedReal();
+      carregarFotoDemoScan();
     });
     carregarEstatisticas();
     setInterval(carregarEstatisticas, 60000);
