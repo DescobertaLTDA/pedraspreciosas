@@ -159,17 +159,17 @@
       fill: none;
     }
 
-    /* LOGO — corrigida: centralizada, sem distorção */
+    /* LOGO — corrigida: centralizada, sem distorção, alinhada */
     .logo {
       display: flex;
       flex-direction: column;
       align-items: center;
-      /* centraliza verticalmente o bloco */
       justify-content: center;
-      line-height: 1.2;
+      line-height: 1.1;
       text-decoration: none;
       flex-shrink: 0;
-      gap: 2px;
+      gap: 0px;
+      text-align: center;
     }
     .logo .logo-main {
       font-family: 'Inter', sans-serif;
@@ -181,6 +181,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
+      line-height: 1.2;
     }
     .logo .logo-main img {
       height: 26px;
@@ -188,6 +189,7 @@
       flex-shrink: 0;
       object-fit: contain;
       display: block;
+      vertical-align: middle;
     }
     .logo .logo-sub {
       font-family: 'Inter', sans-serif;
@@ -197,8 +199,10 @@
       text-transform: uppercase;
       color: var(--ink-mute2);
       text-align: center;
-      margin-top: -2px;
+      margin-top: -1px;
       padding-left: 0;
+      display: block;
+      line-height: 1.3;
     }
     @media (max-width:480px) {
       .logo .logo-main {
@@ -210,6 +214,33 @@
       .logo .logo-sub {
         font-size: 8px;
         letter-spacing: 0.08em;
+        margin-top: 0px;
+      }
+    }
+    @media (max-width:600px) {
+      .logo .logo-main {
+        font-size: 14px;
+      }
+      .logo .logo-main img {
+        height: 20px;
+      }
+      .logo .logo-sub {
+        font-size: 7px;
+        letter-spacing: 0.06em;
+      }
+      .nav-wrap {
+        padding: 10px 12px;
+      }
+    }
+    @media (max-width:400px) {
+      .logo .logo-main {
+        font-size: 13px;
+      }
+      .logo .logo-main img {
+        height: 18px;
+      }
+      .logo .logo-sub {
+        font-size: 6.5px;
       }
     }
 
@@ -434,7 +465,7 @@
       }
     }
 
-    /* restante do layout — mantido */
+    /* HEAD */
     .head {
       text-align: center;
       padding-top: 4px;
@@ -460,6 +491,7 @@
     .head h1 {
       margin-top: 12px;
       font-size: clamp(32px, 6.5vw, 46px);
+      text-align: center;
     }
     .head .sub-tag {
       font-family: 'Inter', sans-serif;
@@ -467,6 +499,7 @@
       color: var(--ink-mute);
       margin-top: 4px;
       font-weight: 400;
+      text-align: center;
     }
     .hero-sub {
       margin: 14px auto 0;
@@ -474,6 +507,7 @@
       font-size: 16.5px;
       line-height: 1.6;
       color: var(--ink-mute);
+      text-align: center;
     }
     .hero-sub strong {
       color: var(--ink);
@@ -910,6 +944,7 @@
       color: var(--ink-mute);
       max-width: 360px;
       text-align: center;
+      margin: 0 auto;
     }
     .foot-links {
       margin-top: 18px;
@@ -928,31 +963,220 @@
       color: var(--accent-dark);
     }
 
-    /* Ajustes de responsividade para a logo */
-    @media (max-width:600px) {
-      .logo .logo-main {
-        font-size: 14px;
+    /* sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 290px;
+      max-width: 84vw;
+      background: var(--card);
+      border-right: 1px solid var(--line);
+      z-index: 91;
+      transform: translateX(-100%);
+      transition: transform .2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.active {
+      transform: translateX(0);
+    }
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .sidebar-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sidebar-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+    .sidebar-head h2 {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-head h2 svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--ink);
+      stroke-width: 1.8;
+      fill: none;
+    }
+    .btn-sidebar-close {
+      background: transparent;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .btn-sidebar-close:hover {
+      background: var(--card-alt);
+    }
+    .btn-sidebar-close svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--ink-mute);
+      stroke-width: 1.9;
+      fill: none;
+    }
+    .sidebar-body {
+      padding: 14px 12px;
+      overflow-y: auto;
+      flex: 1;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* upload hint */
+    .upload-hint {
+      margin: 28px auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      text-align: center;
+      max-width: 280px;
+    }
+    @keyframes heroArrowBounce {
+      0%,
+      100% {
+        transform: translateY(0);
       }
-      .logo .logo-main img {
-        height: 20px;
-      }
-      .logo .logo-sub {
-        font-size: 7px;
-        letter-spacing: 0.06em;
-      }
-      .nav-wrap {
-        padding: 10px 12px;
+      50% {
+        transform: translateY(4px);
       }
     }
-    @media (max-width:400px) {
-      .logo .logo-main {
+    .upload-hint svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--accent-dark);
+      stroke-width: 2.4;
+      fill: none;
+      animation: heroArrowBounce 1.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    /* BOAS VINDAS */
+    .painel-acesso {
+      display: none;
+    }
+    .painel-acesso.active {
+      display: block;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+      width: 90%;
+      max-width: 440px;
+      max-height: min(88vh, 88dvh);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      z-index: 1000;
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.72), 0 24px 60px rgba(0, 0, 0, 0.5);
+      padding: 0;
+      border-radius: 20px;
+    }
+    body.popup-aberto {
+      overflow: hidden;
+    }
+    .painel-fechar {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card-alt);
+      color: var(--ink-mute);
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+    .painel-fechar:hover {
+      background: var(--line);
+      color: var(--ink);
+    }
+    .painel-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent-dark);
+      margin-bottom: 14px;
+      padding-right: 36px;
+    }
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px 24px;
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      transition: all 0.2s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-google:hover {
+      background: #f8f8f8;
+      border-color: #bbb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .btn-google svg {
+      flex-shrink: 0;
+    }
+    .btn-google .google-text {
+      font-size: 15px;
+    }
+    @media (max-width:480px) {
+      .btn-google {
+        padding: 12px 16px;
+        font-size: 14px;
+        max-width: 100%;
+      }
+      .btn-google .google-text {
         font-size: 13px;
-      }
-      .logo .logo-main img {
-        height: 18px;
-      }
-      .logo .logo-sub {
-        font-size: 6.5px;
       }
     }
   </style>
@@ -1000,7 +1224,7 @@
     </div>
     <div class="sidebar-body">
       <div class="historico-lista" id="historico-lista"></div>
-      <p class="aviso" id="historico-vazio" style="display:none;">Você ainda não fez nenhuma avaliação.</p>
+      <p class="aviso" id="historico-vazio" style="display:none;text-align:center;color:var(--ink-mute);padding:10px 0;">Você ainda não fez nenhuma avaliação.</p>
     </div>
   </aside>
 
@@ -1012,9 +1236,9 @@
       <p class="hero-sub"><strong>Identifique sua pedra com IA</strong> e veja como ela se compara com as descobertas da comunidade.</p>
     </div>
 
-    <div class="upload-hint" style="margin:28px auto 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent-dark);text-align:center;max-width:280px;">
+    <div class="upload-hint">
       Carregue a foto abaixo e veja o resultado na hora
-      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--accent-dark);stroke-width:2.4;fill:none;animation:heroArrowBounce 1.4s ease-in-out infinite;flex-shrink:0;"><path d="M12 5v14m0 0l-6-6m6 6l6-6"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 5v14m0 0l-6-6m6 6l6-6"/></svg>
     </div>
 
     <div class="card" id="area-principal" style="margin-top:12px;">
@@ -1051,7 +1275,7 @@
           <span class="btn-label" id="btn-ver-resultado-label">Ver resultado</span>
         </button>
       </div>
-      <p class="erro" id="erro" style="display:none;"></p>
+      <p class="erro" id="erro" style="display:none;text-align:center;font-size:13.5px;color:var(--danger);margin-top:16px;"></p>
     </div>
 
     <div class="card" style="margin-top:20px;background:var(--accent-light);border-color:var(--line);">
@@ -1071,7 +1295,7 @@
         <div class="vitrine-grid" id="vitrine-grid"></div>
       </div>
       <div class="vitrine-paginacao" id="vitrine-paginacao"></div>
-      <p class="aviso" id="vitrine-vazio" style="display:none;">Ainda não temos resultados para mostrar aqui.</p>
+      <p class="aviso" id="vitrine-vazio" style="display:none;text-align:center;color:var(--ink-mute2);padding:10px 0;">Ainda não temos resultados para mostrar aqui.</p>
     </div>
 
     <div class="card" style="margin-top:20px;" id="secao-rankings">
@@ -1090,23 +1314,28 @@
       <div class="community-feed" id="community-feed"></div>
     </div>
 
-    <div class="card painel-acesso" id="painel-login">
+    <!-- PAINEL DE LOGIN COM GOOGLE (substitui o de e-mail/senha) -->
+    <div class="card painel-acesso" id="painel-login" style="padding:32px 28px;">
       <button type="button" class="painel-fechar" id="btn-fechar-login">&times;</button>
-      <div class="painel-tag" id="painel-login-tag">Criar conta</div>
-      <p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:16px;" id="painel-login-sub">Use e-mail e senha. Sua conta fica pronta na hora.</p>
-      <div id="campos-cadastro">
-        <div class="campo"><label for="input-nome">Seu nome</label><input type="text" id="input-nome" placeholder="Como podemos te chamar"></div>
-        <div class="campo"><label for="input-whatsapp">Seu WhatsApp</label><input type="tel" id="input-whatsapp" placeholder="(00) 00000-0000"></div>
-      </div>
-      <div class="campo"><label for="input-email">E-mail</label><input type="email" id="input-email" placeholder="voce@email.com"></div>
-      <div class="campo"><label for="input-senha">Senha</label><input type="password" id="input-senha" placeholder="mínimo 6 caracteres"></div>
-      <button class="btn btn-primary btn-block" id="btn-entrar">Criar conta</button>
-      <p class="troca-modo" id="btn-trocar-modo-login">Já tenho conta — Entrar</p>
-      <p class="erro" id="erro-login" style="display:none;"></p>
+      <div class="painel-tag" style="text-align:center;padding-right:0;">Entrar na comunidade</div>
+      <h2 style="font-size:20px;text-align:center;margin-top:4px;color:var(--ink);">Acesse com sua conta Google</h2>
+      <p style="font-size:13.5px;color:var(--ink-mute);text-align:center;margin:8px 0 24px;">Use sua conta Google para entrar e salvar seu histórico</p>
+      
+      <button class="btn-google" id="btn-google-login">
+        <svg width="20" height="20" viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+          <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+          <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+          <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+        </svg>
+        <span class="google-text">Entrar com Google</span>
+      </button>
+      <p class="erro" id="erro-login" style="display:none;text-align:center;font-size:13px;color:var(--danger);margin-top:12px;"></p>
     </div>
 
-    <div class="card painel-acesso" id="painel-boas-vindas">
-      <button type="button" class="painel-fechar" id="btn-fechar-boas-vindas">&times;</button>
+    <!-- PAINEL DE BOAS-VINDAS -->
+    <div class="card painel-acesso" id="painel-boas-vindas" style="padding:0;overflow:hidden;border-radius:20px;">
+      <button type="button" class="painel-fechar" id="btn-fechar-boas-vindas" style="top:12px;right:12px;background:rgba(0,0,0,0.06);width:32px;height:32px;font-size:18px;">&times;</button>
       <div class="boas-vindas-header" style="padding:28px 24px 16px;background:linear-gradient(135deg, var(--accent-light) 0%, var(--card) 100%);border-bottom:1px solid var(--line);">
         <div class="boas-vindas-icon" style="text-align:center;margin-bottom:4px;"><svg viewBox="0 0 24 24" style="width:32px;height:32px;stroke:var(--accent);stroke-width:1.5;fill:none;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
         <div class="painel-tag" style="text-align:center;padding-right:0;">Bem-vindo à comunidade!</div>
@@ -1426,8 +1655,7 @@
         auth: {
           getSession: function() { return Promise.reject(erroInicSupabase); },
           onAuthStateChange: function() { return { data: { subscription: { unsubscribe: function() {} } } }; },
-          signInWithPassword: function() { return Promise.reject(erroInicSupabase); },
-          signUp: function() { return Promise.reject(erroInicSupabase); },
+          signInWithOAuth: function() { return Promise.reject(erroInicSupabase); },
           signOut: function() { return Promise.reject(erroInicSupabase); }
         }
       };
@@ -1467,17 +1695,8 @@
     var painelBoasVindas = document.getElementById('painel-boas-vindas');
     var btnFecharBoasVindas = document.getElementById('btn-fechar-boas-vindas');
     var btnContinuarBoasVindas = document.getElementById('btn-continuar-boas-vindas');
-    var btnEntrar = document.getElementById('btn-entrar');
-    var inputNome = document.getElementById('input-nome');
-    var inputWhatsapp = document.getElementById('input-whatsapp');
-    var inputEmail = document.getElementById('input-email');
-    var inputSenha = document.getElementById('input-senha');
-    var btnTrocarModoLogin = document.getElementById('btn-trocar-modo-login');
+    var btnGoogleLogin = document.getElementById('btn-google-login');
     var erroLoginEl = document.getElementById('erro-login');
-    var painelLoginTag = document.getElementById('painel-login-tag');
-    var painelLoginSub = document.getElementById('painel-login-sub');
-    var camposCadastro = document.getElementById('campos-cadastro');
-    var modoLoginAtivo = false;
     var gratisCounterNav = document.getElementById('gratis-counter-nav');
     var gratisCounterText = document.getElementById('gratis-counter-text');
     var fotoTiraWrap = document.getElementById('foto-tira-wrap');
@@ -1543,28 +1762,7 @@
       painel.classList.add('active');
       document.body.classList.add('popup-aberto'); }
 
-    function definirModoLogin(login) {
-      modoLoginAtivo = login;
-      erroLoginEl.style.display = 'none';
-      if (login) {
-        camposCadastro.style.display = 'none';
-        painelLoginTag.textContent = 'Entrar';
-        painelLoginSub.textContent = 'Use o e-mail e a senha da sua conta.';
-        btnEntrar.textContent = 'Entrar';
-        btnTrocarModoLogin.textContent = 'Ainda não tenho conta — Cadastrar';
-      } else {
-        camposCadastro.style.display = '';
-        painelLoginTag.textContent = 'Criar conta';
-        painelLoginSub.textContent = 'Use e-mail e senha. Sua conta fica pronta na hora.';
-        btnEntrar.textContent = 'Criar conta';
-        btnTrocarModoLogin.textContent = 'Já tenho conta — Entrar';
-      }
-    }
-
-    function abrirPainelLogin() { definirModoLogin(false);
-      abrirPopup(painelLogin); }
-
-    btnTrocarModoLogin.addEventListener('click', function() { definirModoLogin(!modoLoginAtivo); });
+    function abrirPainelLogin() { abrirPopup(painelLogin); }
 
     btnFecharLogin.addEventListener('click', function() { esconderPaineis(); });
 
@@ -1597,8 +1795,28 @@
     }
 
     // ========================================================================
-    // AUTENTICAÇÃO
+    // AUTENTICAÇÃO COM GOOGLE
     // ========================================================================
+    function loginComGoogle() {
+      erroLoginEl.style.display = 'none';
+      supa.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      }).then(function(result) {
+        if (result.error) {
+          erroLoginEl.textContent = 'Erro ao fazer login: ' + result.error.message;
+          erroLoginEl.style.display = 'block';
+        }
+      }).catch(function(err) {
+        erroLoginEl.textContent = 'Erro ao fazer login: ' + err.message;
+        erroLoginEl.style.display = 'block';
+      });
+    }
+
+    btnGoogleLogin.addEventListener('click', loginComGoogle);
+
     function atualizarHeader() {
       supa.auth.getSession().then(function(sessaoResp) {
         return sessaoResp;
@@ -1607,7 +1825,9 @@
       }).then(function(sessaoResp) {
         var sessao = sessaoResp.data.session;
         if (sessao && sessao.user) {
-          var nomeExibido = (sessao.user.user_metadata && sessao.user.user_metadata.nome) || sessao.user.email;
+          var nomeExibido = (sessao.user.user_metadata && sessao.user.user_metadata.full_name) || 
+                            (sessao.user.user_metadata && sessao.user.user_metadata.name) || 
+                            sessao.user.email || 'Usuário';
           var inicial = nomeExibido.trim().charAt(0) || '?';
           headerAuthArea.innerHTML =
             '<div class="nav-user" id="nav-user">' +
@@ -2236,76 +2456,6 @@
           .finally(function() { btnJaPaguei.disabled = false;
             btnJaPaguei.textContent = textoOriginal; });
       });
-    });
-
-    // ========================================================================
-    // LOGIN
-    // ========================================================================
-    btnEntrar.addEventListener('click', function() {
-      var nome = inputNome.value.trim();
-      var whatsapp = inputWhatsapp.value.trim();
-      var email = inputEmail.value.trim();
-      var senha = inputSenha.value;
-      erroLoginEl.style.display = 'none';
-      if (!email || senha.length < 6) {
-        erroLoginEl.textContent = 'Preencha um e-mail válido e uma senha com pelo menos 6 caracteres.';
-        erroLoginEl.style.display = 'block';
-        return;
-      }
-      if (!modoLoginAtivo && !whatsapp) {
-        erroLoginEl.textContent = 'Informe seu WhatsApp para criar a conta.';
-        erroLoginEl.style.display = 'block';
-        return;
-      }
-      btnEntrar.disabled = true;
-      btnEntrar.textContent = modoLoginAtivo ? 'Entrando...' : 'Criando conta...';
-      var chamadaAuth = modoLoginAtivo ?
-        supa.auth.signInWithPassword({ email: email, password: senha }) :
-        supa.auth.signUp({ email: email, password: senha, options: { data: { nome: nome || email.split('@')[0],
-            whatsapp: whatsapp } } });
-      chamadaAuth.then(function(resp) {
-        if (resp.error) throw resp.error;
-        painelLogin.classList.remove('active');
-        document.body.classList.remove('popup-aberto');
-        atualizarHeader();
-        if (fotosSelecionadas.length && fotoCarregada) {
-          supa.auth.getSession().then(function(sessaoResp) {
-            var sessao = sessaoResp.data.session;
-            if (sessao) {
-              fetch('/api/status', { method: 'POST', headers: { 'Authorization': 'Bearer ' + sessao.access_token } })
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                  if (typeof data.avaliacoes_gratis_restantes === 'number') {
-                    avaliacoesGratisRestantes = data.avaliacoes_gratis_restantes;
-                    atualizarContadorGratis();
-                  }
-                  analiseEmAndamento = true;
-                  btnVerResultado.disabled = true;
-                  btnAdicionarAngulo.disabled = true;
-                  btnVerResultadoLabel.textContent = 'Analisando...';
-                  iniciarScanner();
-                  iniciarProgresso();
-                  identificarPedra(sessao.access_token);
-                })
-                .catch(function() {
-                  analiseEmAndamento = true;
-                  btnVerResultado.disabled = true;
-                  btnAdicionarAngulo.disabled = true;
-                  btnVerResultadoLabel.textContent = 'Analisando...';
-                  iniciarScanner();
-                  iniciarProgresso();
-                  identificarPedra(sessao.access_token);
-                });
-            }
-          });
-        }
-      }).catch(function(err) {
-        erroLoginEl.textContent = err.message || (modoLoginAtivo ?
-          'Não foi possível entrar. Confira seu e-mail e senha.' :
-          'Não foi possível criar a conta. Tente novamente.');
-        erroLoginEl.style.display = 'block';
-      }).finally(function() { btnEntrar.disabled = false;
-        btnEntrar.textContent = modoLoginAtivo ? 'Entrar' : 'Criar conta'; });
     });
 
     // ========================================================================
