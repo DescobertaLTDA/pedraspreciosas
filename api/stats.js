@@ -1,9 +1,5 @@
 // /api/stats.js
-// Retorna estatísticas reais da comunidade:
-// - Total de membros (usuários com avaliações públicas)
-// - Total de pedras avaliadas (identificações públicas)
-// - Avaliações feitas hoje
-// Não requer autenticação - dados públicos
+// Retorna estatísticas reais da comunidade
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -21,7 +17,6 @@ function formatarNumero(num) {
 }
 
 module.exports = async function handler(req, res) {
-  // Configuração CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -35,14 +30,23 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // 1. Total de membros (emails únicos com avaliações PÚBLICAS)
-    const { count: totalMembros, error: errMembros } = await supabase
+    // 1. TOTAL DE MEMBROS - BUSCA EMAILS ÚNICOS COM AVALIAÇÕES PÚBLICAS
+    const { data: membrosData, error: errMembrosData } = await supabase
       .from('identificacoes')
-      .select('email', { count: 'exact', head: true, distinct: true })
-      .eq('publica', true);  // ← FILTRO ADICIONADO
+      .select('email')
+      .eq('publica', true);
 
-    if (errMembros) {
-      console.error('Erro ao buscar membros:', errMembros);
+    let totalMembros = 0;
+    if (!errMembrosData && membrosData) {
+      const emailsUnicos = new Set();
+      membrosData.forEach(row => {
+        if (row.email) emailsUnicos.add(row.email.toLowerCase());
+      });
+      totalMembros = emailsUnicos.size;
+    }
+
+    if (errMembrosData) {
+      console.error('Erro ao buscar membros:', errMembrosData);
     }
 
     // 2. Total de pedras avaliadas (identificações públicas)
@@ -70,24 +74,20 @@ module.exports = async function handler(req, res) {
       console.error('Erro ao buscar avaliações de hoje:', errHoje);
     }
 
-    // 4. Membros que avaliaram hoje (emails únicos com avaliações públicas hoje)
-    const { count: membrosHoje, error: errMembrosHoje } = await supabase
+    // 4. Membros que avaliaram hoje
+    const { data: membrosHojeData, error: errMembrosHoje } = await supabase
       .from('identificacoes')
-      .select('email', { count: 'exact', head: true, distinct: true })
+      .select('email')
       .eq('publica', true)
       .gte('criado_em', hojeISO);
 
-    if (errMembrosHoje) {
-      console.error('Erro ao buscar membros de hoje:', errMembrosHoje);
-    }
-
-    // 5. Total de avaliações (para referência)
-    const { count: totalAvaliacoes, error: errTotal } = await supabase
-      .from('identificacoes')
-      .select('id', { count: 'exact', head: true });
-
-    if (errTotal) {
-      console.error('Erro ao buscar total de avaliações:', errTotal);
+    let membrosHoje = 0;
+    if (!errMembrosHoje && membrosHojeData) {
+      const emailsUnicosHoje = new Set();
+      membrosHojeData.forEach(row => {
+        if (row.email) emailsUnicosHoje.add(row.email.toLowerCase());
+      });
+      membrosHoje = emailsUnicosHoje.size;
     }
 
     // Retorna os dados formatados
@@ -98,14 +98,11 @@ module.exports = async function handler(req, res) {
       pedras_raw: totalPedras || 0,
       hoje: '+' + (avaliacoesHoje || 0),
       hoje_raw: avaliacoesHoje || 0,
-      membros_hoje: membrosHoje || 0,
-      total_avaliacoes: totalAvaliacoes || 0
+      membros_hoje: membrosHoje || 0
     });
 
   } catch (error) {
     console.error('Erro ao buscar estatísticas:', error);
-    
-    // Fallback com dados estáticos caso algo dê errado
     return res.status(500).json({
       error: 'Erro ao buscar estatísticas da comunidade',
       membros: '0',
