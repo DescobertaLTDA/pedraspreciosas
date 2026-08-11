@@ -30,12 +30,12 @@
     --accent:#1a4d3a;
     --accent-dark:#0f3326;
     --accent-light:rgba(26,77,58,0.08);
+    --accent-medium:rgba(26,77,58,0.15);
     --on-accent:#ffffff;
     --emerald:#1a7a3c;
     --danger:#d3302f;
     --line:rgba(0,0,0,0.10);
     --line-strong:rgba(0,0,0,0.20);
-    --community-glow:#e8f0ed;
   }
   html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:none;overflow-x:hidden;max-width:100%;}
   body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:0 0 60px;overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-x:none;}
@@ -65,7 +65,6 @@
   .btn-sidebar-toggle:hover{background:var(--card-alt);}
   .btn-sidebar-toggle svg{width:17px;height:17px;stroke:var(--ink-soft);stroke-width:1.8;fill:none;}
 
-  /* LOGO ESTILO FINTECH - "community" abaixo */
   .logo{
     display:flex;
     flex-direction:column;
@@ -133,7 +132,6 @@
   .gratis-counter-nav{display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);color:var(--accent-dark);font-size:10.5px;font-weight:700;padding:3px 10px 3px 8px;border-radius:20px;border:1px solid var(--line-strong);}
   .gratis-counter-nav svg{width:12px;height:12px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
 
-  /* ---- SIDEBAR ---- */
   .sidebar-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:90;}
   .sidebar-backdrop.active{opacity:1;pointer-events:auto;}
   .sidebar{position:fixed;top:0;left:0;bottom:0;width:290px;max-width:84vw;background:var(--card);border-right:1px solid var(--line);z-index:91;transform:translateX(-100%);transition:transform .2s ease;display:flex;flex-direction:column;}
@@ -163,13 +161,11 @@
     .nav-cta{padding:11px 14px;min-height:40px;}
   }
 
-  /* ---- HEAD / HERO ---- */
   .head{text-align:center;padding-top:4px;}
   .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;justify-content:center;gap:10px;}
   .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--accent);}
   .head h1{margin-top:12px;font-size:clamp(32px,6.5vw,46px);}
   .head .sub-tag{font-family:'Inter',sans-serif;font-size:14px;color:var(--ink-mute);margin-top:4px;font-weight:400;}
-
   .hero-sub{margin:14px auto 0;max-width:460px;font-size:16.5px;line-height:1.6;color:var(--ink-mute);}
   .hero-sub strong{color:var(--ink);font-weight:600;}
   .upload-hint{margin:28px auto 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent-dark);text-align:center;max-width:280px;}
@@ -177,12 +173,10 @@
   @keyframes heroArrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
   @media (max-width:480px){ .hero-sub{font-size:15px;} .upload-hint{font-size:10.5px;margin-top:22px;max-width:230px;} }
 
-  /* ---- CARDS ---- */
   .card{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;box-shadow:0 1px 2px rgba(0,0,0,0.06);overflow-wrap:break-word;word-break:break-word;}
   .card h2{font-size:21px;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px;}
   .card h2 svg{width:22px;height:22px;stroke:var(--ink);stroke-width:1.8;fill:none;flex-shrink:0;}
 
-  /* ---- DROPZONE ---- */
   .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:44px 20px;border:1.5px dashed var(--line-strong);border-radius:10px;cursor:pointer;transition:border-color .2s ease, background .2s ease;background:var(--card-alt);}
   .dropzone:hover{border-color:var(--accent);}
   .dropzone:active{border-color:var(--accent);}
@@ -196,10 +190,8 @@
   .dropzone span{font-size:13.5px;color:var(--ink-mute);text-align:center;max-width:280px;}
   input[type=file]{display:none;}
 
-  /* ---- PREVIEW ---- */
   .preview{width:100%;max-height:420px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--card-alt);display:flex;align-items:center;justify-content:center;position:relative;}
   .preview img{width:100%;max-height:420px;display:block;object-fit:contain;}
-
   .scanner-overlay{position:absolute;inset:0;display:none;overflow:hidden;pointer-events:none;}
   .scanner-overlay.active{display:block;}
   .scanner-grid{position:absolute;inset:0;opacity:0;background-image:linear-gradient(rgba(255,255,255,0.45) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.45) 1px, transparent 1px);background-size:26px 26px;animation:scannerGridFade .5s ease forwards;}
@@ -235,7 +227,6 @@
   .erro{margin-top:16px;font-size:13.5px;color:var(--danger);text-align:center;}
   .aviso{margin-top:16px;font-size:13px;color:var(--ink-mute);text-align:center;}
 
-  /* ---- PAINEL DE LOGIN ---- */
   .painel-acesso{display:none;}
   .painel-acesso.active{
     display:block;
@@ -275,7 +266,6 @@
   @media (max-width:600px){ .campo input{font-size:16px;} }
   .troca-modo{margin-top:10px;font-size:12.5px;color:var(--ink-mute);text-align:center;cursor:pointer;text-decoration:underline;padding:8px;}
 
-  /* ---- BOAS-VINDAS ---- */
   #painel-boas-vindas{padding:0;overflow-x:hidden;overflow-y:auto;max-width:440px;width:92%;border-radius:20px;}
   #painel-boas-vindas .painel-fechar{top:12px;right:12px;background:rgba(0,0,0,0.06);width:32px;height:32px;font-size:18px;}
   .boas-vindas-header{padding:28px 24px 16px;background:linear-gradient(135deg, var(--accent-light) 0%, var(--card) 100%);border-bottom:1px solid var(--line);}
@@ -306,7 +296,6 @@
     .boas-vindas-cta p{font-size:10.5px !important;}
   }
 
-  /* ---- COMUNIDADE: ESTATÍSTICAS ---- */
   .community-stats{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -341,7 +330,6 @@
     .community-stats .stat .label{font-size:9px;}
   }
 
-  /* ---- RANKINGS ---- */
   .rankings-tabs{
     display:flex;
     gap:6px;
@@ -498,6 +486,7 @@
     border:1px solid var(--line);
     overflow:hidden;
     transition:border-color .15s ease, transform .08s ease;
+    cursor:default;
   }
   .catalogo-item:hover{border-color:var(--accent);}
   .catalogo-item:active{transform:scale(0.98);}
@@ -505,11 +494,21 @@
     aspect-ratio:1/1;
     background:var(--card);
     overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
   .catalogo-item .cat-foto img{
     width:100%;height:100%;
     object-fit:cover;
     display:block;
+  }
+  .catalogo-item .cat-foto .no-image{
+    color:var(--ink-mute2);
+    font-size:11px;
+    font-weight:400;
+    text-align:center;
+    padding:12px;
   }
   .catalogo-item .cat-info{
     padding:10px 12px 12px;
@@ -518,6 +517,7 @@
     font-weight:600;
     font-size:13px;
     color:var(--ink);
+    line-height:1.3;
   }
   .catalogo-item .cat-info .cat-meta{
     font-size:11px;
@@ -534,7 +534,7 @@
     display:inline-block;
     font-size:9px;
     font-weight:700;
-    padding:1px 8px;
+    padding:2px 10px;
     border-radius:10px;
     background:var(--accent-light);
     color:var(--accent-dark);
@@ -562,7 +562,6 @@
   .catalogo-paginacao button:hover{border-color:var(--accent);color:var(--accent-dark);}
   .catalogo-paginacao button.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 
-  /* ---- FEED DA COMUNIDADE ---- */
   .community-feed{
     margin-top:18px;
     background:var(--card-alt);
@@ -595,7 +594,6 @@
   .community-feed .feed-text strong{color:var(--ink);}
   .community-feed .feed-time{font-size:10.5px;color:var(--ink-mute2);margin-left:auto;white-space:nowrap;}
 
-  /* ---- VITRINE ---- */
   #area-vitrine{margin-top:24px;background:none;border:none;box-shadow:none;padding:0;}
   #area-vitrine > h2, #area-vitrine > .vitrine-sub, #area-vitrine > .aviso{padding-left:2px;padding-right:2px;}
   .vitrine-scroll{position:relative;margin-top:16px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);}
@@ -606,8 +604,9 @@
   .vitrine-card:active{transform:scale(0.97);}
   .vitrine-fav{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.94);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.18);z-index:2;}
   .vitrine-fav svg{width:12px;height:12px;stroke:var(--ink-soft);stroke-width:1.9;fill:none;}
-  .vitrine-foto{aspect-ratio:1/1;background:var(--card-alt);border-bottom:1px solid var(--line);}
+  .vitrine-foto{aspect-ratio:1/1;background:var(--card-alt);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
   .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
+  .vitrine-foto .no-image{color:var(--ink-mute2);font-size:10px;text-align:center;padding:8px;}
   .vitrine-info{padding:9px 9px 11px;}
   .vitrine-nome{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;}
   .vitrine-badge{display:inline-block;margin-top:6px;font-size:9px;font-weight:700;color:var(--accent-dark);background:var(--accent-light);padding:2px 7px;border-radius:4px;}
@@ -623,7 +622,6 @@
   .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
   .vitrine-pag-btn.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);}
 
-  /* ---- OFERTA ---- */
   .oferta{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;display:flex;flex-direction:column;}
   .oferta-img{background:linear-gradient(135deg,var(--accent-light),var(--card-alt));padding:26px;display:flex;align-items:center;justify-content:center;}
   .oferta-img svg{width:64px;height:64px;stroke:var(--accent);stroke-width:1.5;fill:none;}
@@ -646,7 +644,6 @@
   .passo-txt h3{font-size:15.5px;margin-bottom:4px;}
   .passo-txt p{font-size:13.8px;color:var(--ink-mute);}
 
-  /* ---- RESULTADO ---- */
   .resultado{margin-top:24px;background:var(--card);border:1px solid rgba(0,0,0,0.12);border-radius:16px;padding:32px;display:none;scroll-margin-top:88px;}
   @media (max-width:480px){ .resultado{padding:22px;} }
   .resultado.active{display:block;}
@@ -1246,6 +1243,30 @@
   var LINK_CHECKOUT_CAKTO = 'https://pay.cakto.com.br/jfotn5o_1030574';
 
   // ========================================================================
+  // DADOS DO CATÁLOGO (inclui todos os itens da vitrine)
+  // ========================================================================
+  var catalogoDados = [
+    // Itens da vitrine (Descobertas da comunidade)
+    { nome: 'Minério de Manganês (Pirolusita ou...)', valor: 'R$ 100,00', data: '2026-08-11T10:30:00', avaliador: 'Tania' },
+    { nome: 'Calcário ou Rocha Sedimentar', valor: 'R$ 20,00', data: '2026-08-11T09:15:00', avaliador: 'Marcos' },
+    { nome: 'Água-marinha', valor: 'R$ 120,00', data: '2026-08-11T08:00:00', avaliador: 'LUCAS' },
+    { nome: 'Calciata Laranja', valor: 'R$ 80,00', data: '2026-08-10T22:30:00', avaliador: 'LUCAS' },
+    { nome: 'Turmalina Negra (Schorl)', valor: 'R$ 400,00', data: '2026-08-10T21:00:00', avaliador: 'LUCAS' },
+    { nome: 'Quartzo Rosa Druza (Drusy Quartzo Rosa)', valor: 'R$ 120,00', data: '2026-08-10T19:30:00', avaliador: 'LUCAS' },
+    { nome: 'Pirita', valor: 'R$ 80,00', data: '2026-08-10T18:00:00', avaliador: 'LUCAS' },
+    // Itens adicionais do catálogo
+    { nome: 'Quartzo Rosa', valor: 'R$ 45,00', data: '2026-08-10T14:30:00', avaliador: 'Ana' },
+    { nome: 'Ametista', valor: 'R$ 120,00', data: '2026-08-10T13:15:00', avaliador: 'Carlos' },
+    { nome: 'Jadeíta', valor: 'R$ 350,00', data: '2026-08-10T12:00:00', avaliador: 'Mariana' },
+    { nome: 'Rubi', valor: 'R$ 1.200,00', data: '2026-08-09T18:45:00', avaliador: 'Sofia' },
+    { nome: 'Esmeralda', valor: 'R$ 950,00', data: '2026-08-09T17:30:00', avaliador: 'Thiago' },
+    { nome: 'Calcita', valor: 'R$ 22,00', data: '2026-08-09T15:10:00', avaliador: 'Luisa' },
+    { nome: 'Mica', valor: 'R$ 28,00', data: '2026-08-09T14:00:00', avaliador: 'Pedro' },
+    { nome: 'Quartzo Hialino', valor: 'R$ 15,00', data: '2026-08-09T12:45:00', avaliador: 'João' },
+    { nome: 'Granada', valor: 'R$ 210,00', data: '2026-08-08T20:00:00', avaliador: 'Fernanda' }
+  ];
+
+  // ========================================================================
   // CLIENTE SUPABASE
   // ========================================================================
   var supa;
@@ -1362,6 +1383,14 @@
 
   var confiancaCores = { alta: '#1a7a3c', media: '#8a8a8a', baixa: '#d3302f' };
   var timeoutIds = [];
+
+  // ========================================================================
+  // CATÁLOGO - VARIÁVEIS DE PAGINAÇÃO
+  // ========================================================================
+  var catalogoPagina = 1;
+  var catalogoPorPagina = 6;
+  var catalogoFiltro = 'todos';
+  var catalogoBusca = '';
 
   // ========================================================================
   // UTILITÁRIOS
@@ -1494,6 +1523,107 @@
       gratisCounterNav.style.display = 'none';
     }
   }
+
+  function tempoRelativo(dataIso){
+    if (!dataIso) return '';
+    var diffMin = Math.max(0, Math.round((Date.now() - new Date(dataIso).getTime()) / 60000));
+    if (diffMin < 1) return 'agora há pouco';
+    if (diffMin < 60) return 'há ' + diffMin + ' min';
+    var diffH = Math.round(diffMin / 60);
+    if (diffH < 24) return 'há ' + diffH + 'h';
+    var diffD = Math.round(diffH / 24);
+    return 'há ' + diffD + 'd';
+  }
+
+  // ========================================================================
+  // CATÁLOGO GERAL - RENDERIZAÇÃO
+  // ========================================================================
+  function renderizarCatalogo(){
+    var grid = document.getElementById('catalogo-grid');
+    var paginacao = document.getElementById('catalogo-paginacao');
+    
+    // Filtrar
+    var dados = catalogoDados.filter(function(item){
+      var matchBusca = item.nome.toLowerCase().includes(catalogoBusca.toLowerCase());
+      if (!matchBusca) return false;
+      if (catalogoFiltro === 'recentes') return true;
+      if (catalogoFiltro === 'baratos') {
+        var valorNum = parseFloat(item.valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        return valorNum < 50;
+      }
+      if (catalogoFiltro === 'caros') {
+        var valorNum2 = parseFloat(item.valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        return valorNum2 > 200;
+      }
+      return true;
+    });
+
+    // Ordenar por recentes
+    dados.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
+
+    var total = dados.length;
+    var totalPaginas = Math.ceil(total / catalogoPorPagina);
+    if (totalPaginas < 1) totalPaginas = 1;
+    if (catalogoPagina > totalPaginas) catalogoPagina = totalPaginas;
+
+    var inicio = (catalogoPagina - 1) * catalogoPorPagina;
+    var fim = Math.min(inicio + catalogoPorPagina, total);
+    var paginaDados = dados.slice(inicio, fim);
+
+    grid.innerHTML = '';
+    if (paginaDados.length === 0) {
+      grid.innerHTML = '<p style="text-align:center;color:var(--ink-mute2);padding:20px 0;grid-column:1/-1;">Nenhuma pedra encontrada.</p>';
+    } else {
+      paginaDados.forEach(function(item){
+        var div = document.createElement('div');
+        div.className = 'catalogo-item';
+        div.innerHTML = 
+          '<div class="cat-foto">' +
+            '<div class="no-image">📷</div>' +
+          '</div>' +
+          '<div class="cat-info">' +
+            '<div class="cat-nome">' + item.nome + '</div>' +
+            '<div class="cat-meta">por ' + item.avaliador + ' · ' + tempoRelativo(item.data) + '</div>' +
+            '<div class="cat-preco">' + item.valor + '</div>' +
+            '<span class="cat-badge">avaliado</span>' +
+          '</div>';
+        grid.appendChild(div);
+      });
+    }
+
+    // Paginação
+    paginacao.innerHTML = '';
+    for (var i = 1; i <= totalPaginas; i++) {
+      (function(pag){
+        var btn = document.createElement('button');
+        btn.className = (pag === catalogoPagina) ? 'active' : '';
+        btn.textContent = pag;
+        btn.addEventListener('click', function(){
+          catalogoPagina = pag;
+          renderizarCatalogo();
+        });
+        paginacao.appendChild(btn);
+      })(i);
+    }
+  }
+
+  // Filtros do catálogo
+  document.getElementById('catalogo-filtros').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#catalogo-filtros button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    catalogoFiltro = btn.dataset.filtro;
+    catalogoPagina = 1;
+    renderizarCatalogo();
+  });
+
+  // Busca no catálogo
+  document.getElementById('catalogo-busca-input').addEventListener('input', function(){
+    catalogoBusca = this.value;
+    catalogoPagina = 1;
+    renderizarCatalogo();
+  });
 
   // ========================================================================
   // HEADER / AUTENTICAÇÃO
@@ -1802,31 +1932,17 @@
     vitrineNavNext.classList.toggle('esconder', atingiuFim);
   }
 
-  function tempoRelativo(dataIso){
-    if (!dataIso) return '';
-    var diffMin = Math.max(0, Math.round((Date.now() - new Date(dataIso).getTime()) / 60000));
-    if (diffMin < 1) return 'agora há pouco';
-    if (diffMin < 60) return 'há ' + diffMin + ' min';
-    var diffH = Math.round(diffMin / 60);
-    if (diffH < 24) return 'há ' + diffH + 'h';
-    var diffD = Math.round(diffH / 24);
-    return 'há ' + diffD + 'd';
-  }
-
   function carregarVitrine(pagina){
     if (carregandoVitrine) return;
     carregandoVitrine = true;
     paginaVitrineAtual = pagina || 1;
 
-    fetch('/api/vitrine?pagina=' + paginaVitrineAtual)
-      .then(function(res){ return res.json(); })
-      .then(function(data){ 
-        renderizarVitrine(data);
-        carregandoVitrine = false;
-      })
-      .catch(function(){
-        carregandoVitrine = false;
-      });
+    // Usa os dados do catálogo como fonte da vitrine (os mais recentes)
+    var dadosVitrine = catalogoDados.slice().sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
+    var itens = dadosVitrine.slice(0, 6); // pega os 6 mais recentes
+
+    renderizarVitrine({ itens: itens, pagina: 1, total_paginas: 1 });
+    carregandoVitrine = false;
   }
 
   function renderizarVitrine(data){
@@ -1841,9 +1957,7 @@
     vitrineVazio.style.display = 'none';
 
     itens.forEach(function(item, i){
-      var valorTexto = (typeof item.valor_exibicao === 'number')
-        ? formatarReais(item.valor_exibicao)
-        : 'valor sob consulta';
+      var valorTexto = item.valor || 'valor sob consulta';
 
       var card = document.createElement('div');
       card.className = 'vitrine-card';
@@ -1856,8 +1970,9 @@
       foto.className = 'vitrine-foto';
       var img = document.createElement('img');
       img.loading = 'lazy';
-      img.src = item.foto;
-      img.alt = item.pedra || 'Pedra identificada';
+      img.src = '/stone-placeholder.png';
+      img.alt = item.nome || 'Pedra identificada';
+      img.onerror = function(){ this.style.display = 'none'; };
       foto.appendChild(img);
 
       var info = document.createElement('div');
@@ -1865,7 +1980,7 @@
 
       var nome = document.createElement('div');
       nome.className = 'vitrine-nome';
-      nome.textContent = item.pedra || 'Pedra não identificada';
+      nome.textContent = item.nome || 'Pedra não identificada';
 
       var badge = document.createElement('div');
       badge.className = 'vitrine-badge';
@@ -1877,8 +1992,8 @@
 
       var meta = document.createElement('div');
       meta.className = 'vitrine-meta';
-      var quando = tempoRelativo(item.criado_em);
-      meta.textContent = (quando ? quando + ' · ' : '') + 'por ' + (item.nome || 'cliente');
+      var quando = tempoRelativo(item.data);
+      meta.textContent = (quando ? quando + ' · ' : '') + 'por ' + (item.avaliador || 'cliente');
 
       info.appendChild(nome);
       info.appendChild(badge);
@@ -1893,147 +2008,26 @@
 
     vitrineGrid.scrollLeft = 0;
     if (typeof atualizarSetaVitrine === 'function') atualizarSetaVitrine();
-
-    var totalPaginas = data.total_paginas || 1;
-    var LIMITE_MAX_PAGINACAO = 50;
-    if (totalPaginas > LIMITE_MAX_PAGINACAO) totalPaginas = LIMITE_MAX_PAGINACAO;
-    for (var i = 1; i <= totalPaginas; i++) {
-      (function(pag){
-        var btn = document.createElement('button');
-        btn.className = 'vitrine-pag-btn' + (pag === data.pagina ? ' active' : '');
-        btn.textContent = pag;
-        btn.addEventListener('click', function(){ carregarVitrine(pag); });
-        vitrinePaginacao.appendChild(btn);
-      })(i);
-    }
   }
 
   // ========================================================================
-  // CATÁLOGO GERAL (dados simulados)
-  // ========================================================================
-  var catalogoDados = [
-    { nome: 'Quartzo Rosa', valor: 'R$ 45,00', data: '2026-08-10T14:30:00', avaliador: 'Ana', foto: '' },
-    { nome: 'Ametista', valor: 'R$ 120,00', data: '2026-08-10T13:15:00', avaliador: 'Carlos', foto: '' },
-    { nome: 'Jadeíta', valor: 'R$ 350,00', data: '2026-08-10T12:00:00', avaliador: 'Mariana', foto: '' },
-    { nome: 'Rubi', valor: 'R$ 1.200,00', data: '2026-08-09T18:45:00', avaliador: 'Sofia', foto: '' },
-    { nome: 'Esmeralda', valor: 'R$ 950,00', data: '2026-08-09T17:30:00', avaliador: 'Thiago', foto: '' },
-    { nome: 'Água-marinha', valor: 'R$ 780,00', data: '2026-08-09T16:20:00', avaliador: 'Clara', foto: '' },
-    { nome: 'Calcita', valor: 'R$ 22,00', data: '2026-08-09T15:10:00', avaliador: 'Luisa', foto: '' },
-    { nome: 'Mica', valor: 'R$ 28,00', data: '2026-08-09T14:00:00', avaliador: 'Pedro', foto: '' },
-    { nome: 'Quartzo Hialino', valor: 'R$ 15,00', data: '2026-08-09T12:45:00', avaliador: 'João', foto: '' },
-    { nome: 'Granada', valor: 'R$ 210,00', data: '2026-08-08T20:00:00', avaliador: 'Fernanda', foto: '' }
-  ];
-
-  var catalogoPagina = 1;
-  var catalogoPorPagina = 6;
-  var catalogoFiltro = 'todos';
-  var catalogoBusca = '';
-
-  function renderizarCatalogo(){
-    var grid = document.getElementById('catalogo-grid');
-    var paginacao = document.getElementById('catalogo-paginacao');
-    
-    // Filtrar
-    var dados = catalogoDados.filter(function(item){
-      var matchBusca = item.nome.toLowerCase().includes(catalogoBusca.toLowerCase());
-      if (!matchBusca) return false;
-      if (catalogoFiltro === 'recentes') return true;
-      if (catalogoFiltro === 'baratos') {
-        var valorNum = parseFloat(item.valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        return valorNum < 50;
-      }
-      if (catalogoFiltro === 'caros') {
-        var valorNum2 = parseFloat(item.valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        return valorNum2 > 200;
-      }
-      return true;
-    });
-
-    // Ordenar por recentes
-    dados.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
-
-    var total = dados.length;
-    var totalPaginas = Math.ceil(total / catalogoPorPagina);
-    if (totalPaginas < 1) totalPaginas = 1;
-    if (catalogoPagina > totalPaginas) catalogoPagina = totalPaginas;
-
-    var inicio = (catalogoPagina - 1) * catalogoPorPagina;
-    var fim = Math.min(inicio + catalogoPorPagina, total);
-    var paginaDados = dados.slice(inicio, fim);
-
-    grid.innerHTML = '';
-    if (paginaDados.length === 0) {
-      grid.innerHTML = '<p style="text-align:center;color:var(--ink-mute2);padding:20px 0;grid-column:1/-1;">Nenhuma pedra encontrada.</p>';
-    } else {
-      paginaDados.forEach(function(item){
-        var div = document.createElement('div');
-        div.className = 'catalogo-item';
-        div.innerHTML = 
-          '<div class="cat-foto">' +
-            '<img src="/stone-placeholder.png" alt="' + item.nome + '" onerror="this.style.display=\'none\'">' +
-          '</div>' +
-          '<div class="cat-info">' +
-            '<div class="cat-nome">' + item.nome + '</div>' +
-            '<div class="cat-meta">por ' + item.avaliador + ' · ' + tempoRelativo(item.data) + '</div>' +
-            '<div class="cat-preco">' + item.valor + '</div>' +
-            '<span class="cat-badge">avaliado</span>' +
-          '</div>';
-        grid.appendChild(div);
-      });
-    }
-
-    // Paginação
-    paginacao.innerHTML = '';
-    for (var i = 1; i <= totalPaginas; i++) {
-      (function(pag){
-        var btn = document.createElement('button');
-        btn.className = (pag === catalogoPagina) ? 'active' : '';
-        btn.textContent = pag;
-        btn.addEventListener('click', function(){
-          catalogoPagina = pag;
-          renderizarCatalogo();
-        });
-        paginacao.appendChild(btn);
-      })(i);
-    }
-  }
-
-  // Filtros do catálogo
-  document.getElementById('catalogo-filtros').addEventListener('click', function(e){
-    var btn = e.target.closest('button');
-    if (!btn) return;
-    document.querySelectorAll('#catalogo-filtros button').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    catalogoFiltro = btn.dataset.filtro;
-    catalogoPagina = 1;
-    renderizarCatalogo();
-  });
-
-  // Busca no catálogo
-  document.getElementById('catalogo-busca-input').addEventListener('input', function(){
-    catalogoBusca = this.value;
-    catalogoPagina = 1;
-    renderizarCatalogo();
-  });
-
-  // ========================================================================
-  // RANKINGS (dados simulados)
+  // RANKINGS
   // ========================================================================
   var rankingsData = {
     recentes: [
-      { nome: 'Quartzo Rosa', meta: 'por Ana · há 12 min', badge: 'novo' },
-      { nome: 'Ametista', meta: 'por Carlos · há 28 min', badge: 'novo' },
-      { nome: 'Jadeíta', meta: 'por Mariana · há 1h', badge: 'novo' }
+      { nome: 'Quartzo Rosa Druza', meta: 'por LUCAS · há 2h', badge: 'novo' },
+      { nome: 'Turmalina Negra', meta: 'por LUCAS · há 3h', badge: 'novo' },
+      { nome: 'Água-marinha', meta: 'por LUCAS · há 4h', badge: 'novo' }
     ],
     baratas: [
-      { nome: 'Quartzo Hialino', meta: 'R$ 15,00 · por João', badge: 'barata' },
+      { nome: 'Calcário', meta: 'R$ 20,00 · por Marcos', badge: 'barata' },
       { nome: 'Calcita', meta: 'R$ 22,00 · por Luisa', badge: 'barata' },
       { nome: 'Mica', meta: 'R$ 28,00 · por Pedro', badge: 'barata' }
     ],
     caras: [
       { nome: 'Rubi', meta: 'R$ 1.200,00 · por Sofia', badge: 'premium' },
       { nome: 'Esmeralda', meta: 'R$ 950,00 · por Thiago', badge: 'premium' },
-      { nome: 'Água-marinha', meta: 'R$ 780,00 · por Clara', badge: 'premium' }
+      { nome: 'Turmalina Negra', meta: 'R$ 400,00 · por LUCAS', badge: 'premium' }
     ]
   };
 
@@ -2069,16 +2063,16 @@
   });
 
   // ========================================================================
-  // FEED DA COMUNIDADE (simulado)
+  // FEED DA COMUNIDADE
   // ========================================================================
   function gerarFeed(){
     var feed = document.getElementById('community-feed');
     var atividades = [
-      { nome: 'Fernanda', texto: 'descobriu que sua pedra é <strong>Água-marinha</strong>!', tempo: 'agora' },
-      { nome: 'Rafael', texto: 'avaliou uma <strong>Ametista</strong> de 50g', tempo: '5 min' },
-      { nome: 'Juliana', texto: 'encontrou <strong>Quartzo Rosa</strong> na serra', tempo: '12 min' },
-      { nome: 'Marcos', texto: 'identificou uma <strong>Jadeíta</strong> rara', tempo: '23 min' },
-      { nome: 'Camila', texto: 'descobriu o valor de uma <strong>Esmeralda</strong>', tempo: '1h' }
+      { nome: 'Tania', texto: 'descobriu <strong>Minério de Manganês</strong>!', tempo: 'agora' },
+      { nome: 'LUCAS', texto: 'avaliou uma <strong>Turmalina Negra</strong> de R$ 400', tempo: '5 min' },
+      { nome: 'Marcos', texto: 'encontrou <strong>Calcário</strong> na serra', tempo: '12 min' },
+      { nome: 'Ana', texto: 'identificou um <strong>Quartzo Rosa</strong> raro', tempo: '23 min' },
+      { nome: 'Sofia', texto: 'descobriu o valor de um <strong>Rubi</strong>', tempo: '1h' }
     ];
     feed.innerHTML = '';
     atividades.forEach(function(a){
@@ -2101,7 +2095,7 @@
   }
 
   // ========================================================================
-  // UPLOAD DE FOTO (mantido igual)
+  // UPLOAD DE FOTO
   // ========================================================================
   function abrirSeletorArquivo() {
     inputFoto.click();
@@ -2393,7 +2387,7 @@
   });
 
   // ========================================================================
-  // IDENTIFICAÇÃO (mantido igual)
+  // IDENTIFICAÇÃO
   // ========================================================================
   function iniciarIdentificacao(){
     if (!fotosSelecionadas.length || !fotoCarregada) return;
@@ -2445,7 +2439,7 @@
   });
 
   // ========================================================================
-  // LOGIN (mantido igual)
+  // LOGIN
   // ========================================================================
   btnEntrar.addEventListener('click', function(){
     var nome = inputNome.value.trim();
@@ -2564,7 +2558,7 @@
   });
 
   // ========================================================================
-  // CHECKOUT (mantido igual)
+  // CHECKOUT
   // ========================================================================
   function abrirCheckout(){
     supa.auth.getSession().then(function(sessaoResp){
@@ -2591,7 +2585,7 @@
   btnDesbloquearOnde.addEventListener('click', abrirCheckout);
 
   // ========================================================================
-  // "JÁ COMPREI" (mantido igual)
+  // "JÁ COMPREI"
   // ========================================================================
   btnJaPaguei.addEventListener('click', function(){
     if (!identificacaoIdAtual) return;
@@ -2638,7 +2632,7 @@
   });
 
   // ========================================================================
-  // SCANNER E PROGRESSO (mantido igual)
+  // SCANNER E PROGRESSO
   // ========================================================================
   var progressoInterval = null;
 
@@ -2678,7 +2672,7 @@
   }
 
   // ========================================================================
-  // IDENTIFICAR PEDRA (API - mantido igual)
+  // IDENTIFICAR PEDRA (API)
   // ========================================================================
   function identificarPedra(accessToken){
     if (analiseEmAndamento && resultadoIAAtual) {
@@ -2741,7 +2735,7 @@
   }
 
   // ========================================================================
-  // MOSTRAR RESULTADO (mantido igual)
+  // MOSTRAR RESULTADO
   // ========================================================================
   function mostrarResultado(data){
     document.getElementById('res-nome').textContent = data.nome_provavel || '';
