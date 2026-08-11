@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>Identificador de Pedras com IA — Tesouro Esquecido</title>
+<title>STONE Community — Identificador de Pedras com IA</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Tesouro Esquecido">
+<meta name="apple-mobile-web-app-title" content="STONE Community">
 <link rel="icon" type="image/png" href="/logo.png">
 <link rel="shortcut icon" type="image/png" href="/logo.png">
 <link rel="apple-touch-icon" href="/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -27,23 +27,32 @@
     --ink-mute:#666666;
     --ink-mute2:#8a8a8a;
     --ink-soft:#333333;
-    --accent:#141414;
-    --accent-dark:#000000;
-    --accent-light:rgba(20,20,20,0.06);
+    --accent:#1a4d3a;
+    --accent-dark:#0f3326;
+    --accent-light:rgba(26,77,58,0.08);
     --on-accent:#ffffff;
     --emerald:#1a7a3c;
     --danger:#d3302f;
-    --line:rgba(0,0,0,0.12);
-    --line-strong:rgba(0,0,0,0.24);
+    --line:rgba(0,0,0,0.10);
+    --line-strong:rgba(0,0,0,0.20);
+    --community-glow:#e8f0ed;
   }
   html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:none;overflow-x:hidden;max-width:100%;}
   body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;padding:0 0 60px;overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-x:none;}
   h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;color:var(--ink);}
   a,button,input,.dropzone,.historico-item,.vitrine-card,.vitrine-pag-btn{touch-action:manipulation;}
-  .wrap{max-width:800px;margin:0 auto;position:relative;padding:44px 28px 0;}
-  @media (max-width:480px){ .wrap{padding:36px 20px 0;} }
+  
+  .wrap{
+    max-width:820px;
+    margin:0 auto;
+    position:relative;
+    padding:48px 32px 0;
+  }
+  @media (max-width:480px){ 
+    .wrap{padding:36px 20px 0;} 
+  }
   @media (max-width:600px){
-    .wrap{padding-left:max(18px, env(safe-area-inset-left)); padding-right:max(18px, env(safe-area-inset-right));}
+    .wrap{padding-left:max(20px, env(safe-area-inset-left)); padding-right:max(20px, env(safe-area-inset-right));}
     body{padding-bottom:max(60px, env(safe-area-inset-bottom));}
     .head h1{font-size:clamp(26px,7.5vw,34px);}
   }
@@ -55,12 +64,51 @@
   .btn-sidebar-toggle{background:transparent;border:1px solid var(--line-strong);border-radius:7px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
   .btn-sidebar-toggle:hover{background:var(--card-alt);}
   .btn-sidebar-toggle svg{width:17px;height:17px;stroke:var(--ink-soft);stroke-width:1.8;fill:none;}
-  .logo{display:flex;align-items:center;gap:8px;font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink);white-space:nowrap;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;}
-  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
-  .logo img{height:28px;width:auto;flex-shrink:0;object-fit:contain;}
-  footer .logo img{height:24px;}
+
+  /* LOGO ESTILO FINTECH - "community" abaixo */
+  .logo{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    line-height:1;
+    text-decoration:none;
+    flex-shrink:0;
+  }
+  .logo .logo-main{
+    font-family:'Inter',sans-serif;
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .logo .logo-main img{
+    height:26px;
+    width:auto;
+    flex-shrink:0;
+    object-fit:contain;
+  }
+  .logo .logo-sub{
+    font-family:'Inter',sans-serif;
+    font-size:10px;
+    font-weight:300;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-mute2);
+    margin-top:-1px;
+    padding-left:2px;
+  }
+  @media (max-width:480px){
+    .logo .logo-main{font-size:15px;}
+    .logo .logo-main img{height:22px;}
+    .logo .logo-sub{font-size:8px;letter-spacing:0.08em;}
+  }
+
   .nav-right{display:flex;align-items:center;gap:16px;}
-  .nav-link{font-size:13px;color:var(--ink-mute);text-decoration:none;white-space:nowrap;cursor:pointer;}
+  .nav-link{font-size:13px;color:var(--ink-mute);text-decoration:none;white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:5px;}
+  .nav-link svg{width:14px;height:14px;stroke:var(--ink-mute);stroke-width:1.8;fill:none;}
   .nav-cta{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;background:var(--card);color:var(--ink);padding:9px 14px;border-radius:6px;border:1px solid var(--line-strong);cursor:pointer;white-space:nowrap;flex-shrink:0;}
   .nav-cta .short{display:none;}
 
@@ -85,22 +133,14 @@
   .gratis-counter-nav{display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);color:var(--accent-dark);font-size:10.5px;font-weight:700;padding:3px 10px 3px 8px;border-radius:20px;border:1px solid var(--line-strong);}
   .gratis-counter-nav svg{width:12px;height:12px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
 
-  .painel-navegador-interno{text-align:center;}
-  .painel-navegador-interno .painel-tag{padding-right:0;}
-  .painel-navegador-interno .painel-icon{width:44px;height:44px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
-  .painel-navegador-interno .painel-icon svg{width:22px;height:22px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
-  .painel-navegador-interno p{font-size:14px;color:var(--ink-soft);line-height:1.5;margin-bottom:14px;text-align:left;}
-  .painel-navegador-interno .navegador-passo{display:block;font-size:13.5px;color:var(--ink-soft);background:var(--card-alt);border-radius:8px;padding:12px;margin-bottom:16px;line-height:1.45;text-align:left;overflow-wrap:break-word;word-break:break-word;}
-  .painel-navegador-interno .navegador-passo strong{color:var(--ink);}
-  .painel-navegador-interno p,
-  .painel-navegador-interno .navegador-passo{max-width:100%;overflow-wrap:break-word;word-break:break-word;}
-  .painel-navegador-interno .grifo{background:var(--accent-light);color:var(--accent-dark);font-weight:700;padding:1px 5px;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  /* ---- SIDEBAR ---- */
   .sidebar-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:90;}
   .sidebar-backdrop.active{opacity:1;pointer-events:auto;}
   .sidebar{position:fixed;top:0;left:0;bottom:0;width:290px;max-width:84vw;background:var(--card);border-right:1px solid var(--line);z-index:91;transform:translateX(-100%);transition:transform .2s ease;display:flex;flex-direction:column;}
   .sidebar.active{transform:translateX(0);}
   .sidebar-head{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 14px;border-bottom:1px solid var(--line);flex-shrink:0;}
-  .sidebar-head h2{font-size:16px;}
+  .sidebar-head h2{font-size:16px;display:flex;align-items:center;gap:8px;}
+  .sidebar-head h2 svg{width:16px;height:16px;stroke:var(--ink);stroke-width:1.8;fill:none;}
   .btn-sidebar-close{background:transparent;border:none;width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
   .btn-sidebar-close:hover{background:var(--card-alt);}
   .btn-sidebar-close svg{width:16px;height:16px;stroke:var(--ink-mute);stroke-width:1.9;fill:none;}
@@ -112,7 +152,6 @@
 
   @media (max-width:420px){
     .nav-name{max-width:54px;}
-    .logo{font-size:14px;}
     .nav-link{display:none;}
     .nav-cta .full{display:none;}
     .nav-cta .short{display:inline;}
@@ -124,21 +163,26 @@
     .nav-cta{padding:11px 14px;min-height:40px;}
   }
 
-  .head{text-align:center;}
-  .eyebrow{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;justify-content:center;gap:10px;}
+  /* ---- HEAD / HERO ---- */
+  .head{text-align:center;padding-top:4px;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;justify-content:center;gap:10px;}
   .eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--accent);}
-  .head h1{margin-top:16px;font-size:clamp(30px,6vw,44px);}
+  .head h1{margin-top:12px;font-size:clamp(32px,6.5vw,46px);}
+  .head .sub-tag{font-family:'Inter',sans-serif;font-size:14px;color:var(--ink-mute);margin-top:4px;font-weight:400;}
 
-  .hero-sub{margin:18px auto 0;max-width:440px;font-size:16.5px;line-height:1.6;color:var(--ink-mute);}
+  .hero-sub{margin:14px auto 0;max-width:460px;font-size:16.5px;line-height:1.6;color:var(--ink-mute);}
   .hero-sub strong{color:var(--ink);font-weight:600;}
-  .upload-hint{margin:36px auto 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent-dark);text-align:center;max-width:280px;}
+  .upload-hint{margin:28px auto 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent-dark);text-align:center;max-width:280px;}
   .upload-hint svg{width:14px;height:14px;stroke:var(--accent-dark);stroke-width:2.4;fill:none;animation:heroArrowBounce 1.4s ease-in-out infinite;flex-shrink:0;}
   @keyframes heroArrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
-  @media (max-width:480px){ .hero-sub{font-size:15px;} .upload-hint{font-size:10.5px;margin-top:28px;max-width:230px;} }
+  @media (max-width:480px){ .hero-sub{font-size:15px;} .upload-hint{font-size:10.5px;margin-top:22px;max-width:230px;} }
 
-  .card{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(0,0,0,0.06);overflow-wrap:break-word;word-break:break-word;}
-  .card h2{font-size:21px;text-align:center;}
+  /* ---- CARDS ---- */
+  .card{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;box-shadow:0 1px 2px rgba(0,0,0,0.06);overflow-wrap:break-word;word-break:break-word;}
+  .card h2{font-size:21px;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px;}
+  .card h2 svg{width:22px;height:22px;stroke:var(--ink);stroke-width:1.8;fill:none;flex-shrink:0;}
 
+  /* ---- DROPZONE ---- */
   .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:44px 20px;border:1.5px dashed var(--line-strong);border-radius:10px;cursor:pointer;transition:border-color .2s ease, background .2s ease;background:var(--card-alt);}
   .dropzone:hover{border-color:var(--accent);}
   .dropzone:active{border-color:var(--accent);}
@@ -152,6 +196,7 @@
   .dropzone span{font-size:13.5px;color:var(--ink-mute);text-align:center;max-width:280px;}
   input[type=file]{display:none;}
 
+  /* ---- PREVIEW ---- */
   .preview{width:100%;max-height:420px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--card-alt);display:flex;align-items:center;justify-content:center;position:relative;}
   .preview img{width:100%;max-height:420px;display:block;object-fit:contain;}
 
@@ -173,6 +218,7 @@
   .foto-contador{font-size:12.5px;color:var(--ink-mute);font-weight:600;}
   .btn-adicionar-angulo{font-size:13px;font-weight:600;color:var(--accent-dark);background:var(--accent-light);border:1px solid var(--line-strong);border-radius:20px;padding:7px 14px;cursor:pointer;}
   .btn-adicionar-angulo:disabled{opacity:0.5;cursor:not-allowed;}
+  
   .actions{display:flex;gap:12px;margin-top:18px;}
   .btn{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;border-radius:7px;padding:13px 18px;cursor:pointer;border:none;min-height:46px;transition:transform .08s ease;}
   .btn:active{transform:scale(0.97);}
@@ -189,7 +235,396 @@
   .erro{margin-top:16px;font-size:13.5px;color:var(--danger);text-align:center;}
   .aviso{margin-top:16px;font-size:13px;color:var(--ink-mute);text-align:center;}
 
-  .oferta{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;display:flex;flex-direction:column;}
+  /* ---- PAINEL DE LOGIN ---- */
+  .painel-acesso{display:none;}
+  .painel-acesso.active{
+    display:block;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    margin:0;
+    width:90%;
+    max-width:440px;
+    max-height:min(88vh, 88dvh);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    z-index:1000;
+    box-shadow:0 0 0 9999px rgba(0,0,0,0.72), 0 24px 60px rgba(0,0,0,0.5);
+  }
+  body.popup-aberto{overflow:hidden;}
+  .painel-fechar{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:var(--card-alt);color:var(--ink-mute);font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;flex-shrink:0;}
+  .painel-fechar:hover{background:var(--line);color:var(--ink);}
+  .painel-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);margin-bottom:14px;padding-right:36px;}
+
+  .painel-navegador-interno{text-align:center;}
+  .painel-navegador-interno .painel-tag{padding-right:0;}
+  .painel-navegador-interno .painel-icon{width:44px;height:44px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+  .painel-navegador-interno .painel-icon svg{width:22px;height:22px;stroke:var(--accent-dark);stroke-width:2;fill:none;}
+  .painel-navegador-interno p{font-size:14px;color:var(--ink-soft);line-height:1.5;margin-bottom:14px;text-align:left;}
+  .painel-navegador-interno .navegador-passo{display:block;font-size:13.5px;color:var(--ink-soft);background:var(--card-alt);border-radius:8px;padding:12px;margin-bottom:16px;line-height:1.45;text-align:left;overflow-wrap:break-word;word-break:break-word;}
+  .painel-navegador-interno .navegador-passo strong{color:var(--ink);}
+  .painel-navegador-interno p,
+  .painel-navegador-interno .navegador-passo{max-width:100%;overflow-wrap:break-word;word-break:break-word;}
+  .painel-navegador-interno .grifo{background:var(--accent-light);color:var(--accent-dark);font-weight:700;padding:1px 5px;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+
+  .campo{margin-bottom:12px;}
+  .campo label{display:block;font-size:12.5px;color:var(--ink-mute);margin-bottom:6px;}
+  .campo input{width:100%;background:var(--card-alt);border:1px solid var(--line-strong);border-radius:7px;padding:12px;color:var(--ink);font-size:14px;min-height:46px;}
+  .campo input:focus{outline:none;border-color:var(--accent);}
+  @media (max-width:600px){ .campo input{font-size:16px;} }
+  .troca-modo{margin-top:10px;font-size:12.5px;color:var(--ink-mute);text-align:center;cursor:pointer;text-decoration:underline;padding:8px;}
+
+  /* ---- BOAS-VINDAS ---- */
+  #painel-boas-vindas{padding:0;overflow-x:hidden;overflow-y:auto;max-width:440px;width:92%;border-radius:20px;}
+  #painel-boas-vindas .painel-fechar{top:12px;right:12px;background:rgba(0,0,0,0.06);width:32px;height:32px;font-size:18px;}
+  .boas-vindas-header{padding:28px 24px 16px;background:linear-gradient(135deg, var(--accent-light) 0%, var(--card) 100%);border-bottom:1px solid var(--line);}
+  .boas-vindas-icon{text-align:center;margin-bottom:4px;}
+  .boas-vindas-icon svg{width:32px;height:32px;stroke:var(--accent);stroke-width:1.5;fill:none;}
+  .boas-vindas-destaque{padding:0 24px;margin-top:16px;}
+  .boas-vindas-card{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;background:var(--card-alt);border-radius:12px;border:1px solid var(--line);transition:border-color .2s ease;}
+  .boas-vindas-card:hover{border-color:var(--accent);}
+  .boas-vindas-card-icon{flex-shrink:0;margin-top:1px;width:34px;text-align:center;}
+  .boas-vindas-card-icon svg{width:20px;height:20px;stroke:var(--accent);stroke-width:1.6;fill:none;}
+  .boas-vindas-card-title{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:2px;}
+  .boas-vindas-card-desc{font-size:12.5px;color:var(--ink-mute);line-height:1.4;}
+  .boas-vindas-cta{padding:18px 24px 24px;border-top:1px solid var(--line);margin-top:4px;}
+  @media (max-width:480px){
+    #painel-boas-vindas{width:94%;max-height:94vh;border-radius:16px;}
+    .boas-vindas-header{padding:20px 16px 12px;}
+    .boas-vindas-icon svg{width:26px;height:26px;}
+    #painel-boas-vindas .painel-tag{font-size:9px;}
+    .boas-vindas-destaque{padding:0 16px;margin-top:12px;}
+    .boas-vindas-destaque p{font-size:13px;}
+    .boas-vindas-card{padding:12px 14px;gap:12px;border-radius:10px;}
+    .boas-vindas-card-icon{width:28px;}
+    .boas-vindas-card-icon svg{width:16px;height:16px;}
+    .boas-vindas-card-title{font-size:13px;}
+    .boas-vindas-card-desc{font-size:12px;}
+    .boas-vindas-cta{padding:14px 16px 18px;}
+    .boas-vindas-cta .btn{font-size:14px !important;padding:12px !important;}
+    .boas-vindas-cta p{font-size:10.5px !important;}
+  }
+
+  /* ---- COMUNIDADE: ESTATÍSTICAS ---- */
+  .community-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:20px;
+  }
+  .community-stats .stat{
+    background:var(--accent-light);
+    border-radius:10px;
+    padding:14px 8px;
+    text-align:center;
+    border:1px solid var(--line);
+  }
+  .community-stats .stat .num{
+    font-family:'Fraunces',serif;
+    font-size:22px;
+    font-weight:700;
+    color:var(--accent-dark);
+    display:block;
+  }
+  .community-stats .stat .label{
+    font-size:10.5px;
+    color:var(--ink-mute2);
+    font-weight:500;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  @media (max-width:480px){
+    .community-stats{grid-template-columns:1fr 1fr 1fr;gap:8px;}
+    .community-stats .stat{padding:10px 4px;}
+    .community-stats .stat .num{font-size:17px;}
+    .community-stats .stat .label{font-size:9px;}
+  }
+
+  /* ---- RANKINGS ---- */
+  .rankings-tabs{
+    display:flex;
+    gap:6px;
+    margin-top:14px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:8px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .rankings-tabs button{
+    background:transparent;
+    border:none;
+    padding:6px 14px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-mute2);
+    cursor:pointer;
+    border-radius:20px;
+    transition:all .15s ease;
+    font-family:'Inter',sans-serif;
+    white-space:nowrap;
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .rankings-tabs button svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;}
+  .rankings-tabs button:hover{color:var(--ink);background:var(--card-alt);}
+  .rankings-tabs button.active{
+    color:var(--accent-dark);
+    background:var(--accent-light);
+    border:1px solid var(--line-strong);
+  }
+  .rankings-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin-top:14px;
+  }
+  .rankings-grid .rank-item{
+    background:var(--card-alt);
+    border-radius:8px;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    transition:border-color .15s ease;
+  }
+  .rankings-grid .rank-item:hover{border-color:var(--accent);}
+  .rankings-grid .rank-item .rank-pos{
+    font-family:'Space Mono',monospace;
+    font-size:10px;
+    font-weight:700;
+    color:var(--ink-mute2);
+  }
+  .rankings-grid .rank-item .rank-name{
+    font-weight:600;
+    font-size:13px;
+    color:var(--ink);
+    margin:2px 0 1px;
+  }
+  .rankings-grid .rank-item .rank-meta{
+    font-size:11px;
+    color:var(--ink-mute2);
+  }
+  .rankings-grid .rank-item .rank-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    font-size:9px;
+    font-weight:700;
+    padding:1px 8px;
+    border-radius:10px;
+    background:var(--accent);
+    color:#fff;
+    margin-top:4px;
+  }
+  .rankings-grid .rank-item .rank-badge svg{width:10px;height:10px;stroke:currentColor;stroke-width:2;fill:none;}
+  @media (max-width:520px){
+    .rankings-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:380px){
+    .rankings-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---- CATÁLOGO GERAL ---- */
+  .catalogo-header{
+    display:flex;
+    gap:12px;
+    margin-top:14px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .catalogo-header .catalogo-busca{
+    flex:1;
+    min-width:160px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--card-alt);
+    border:1px solid var(--line-strong);
+    border-radius:8px;
+    padding:0 12px;
+  }
+  .catalogo-header .catalogo-busca svg{
+    width:16px;height:16px;
+    stroke:var(--ink-mute2);
+    stroke-width:1.8;
+    fill:none;
+    flex-shrink:0;
+  }
+  .catalogo-header .catalogo-busca input{
+    border:none;
+    background:transparent;
+    padding:10px 0;
+    font-size:13px;
+    color:var(--ink);
+    width:100%;
+    font-family:'Inter',sans-serif;
+    outline:none;
+  }
+  .catalogo-header .catalogo-busca input::placeholder{color:var(--ink-mute2);}
+  .catalogo-header .catalogo-filtro{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .catalogo-header .catalogo-filtro button{
+    background:transparent;
+    border:1px solid var(--line-strong);
+    border-radius:20px;
+    padding:6px 14px;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--ink-mute2);
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+    transition:all .15s ease;
+    white-space:nowrap;
+  }
+  .catalogo-header .catalogo-filtro button:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .catalogo-header .catalogo-filtro button.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+
+  .catalogo-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+    gap:14px;
+    margin-top:16px;
+  }
+  .catalogo-item{
+    background:var(--card-alt);
+    border-radius:10px;
+    border:1px solid var(--line);
+    overflow:hidden;
+    transition:border-color .15s ease, transform .08s ease;
+  }
+  .catalogo-item:hover{border-color:var(--accent);}
+  .catalogo-item:active{transform:scale(0.98);}
+  .catalogo-item .cat-foto{
+    aspect-ratio:1/1;
+    background:var(--card);
+    overflow:hidden;
+  }
+  .catalogo-item .cat-foto img{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .catalogo-item .cat-info{
+    padding:10px 12px 12px;
+  }
+  .catalogo-item .cat-info .cat-nome{
+    font-weight:600;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .catalogo-item .cat-info .cat-meta{
+    font-size:11px;
+    color:var(--ink-mute2);
+    margin-top:2px;
+  }
+  .catalogo-item .cat-info .cat-preco{
+    font-weight:700;
+    font-size:14px;
+    color:var(--accent-dark);
+    margin-top:4px;
+  }
+  .catalogo-item .cat-info .cat-badge{
+    display:inline-block;
+    font-size:9px;
+    font-weight:700;
+    padding:1px 8px;
+    border-radius:10px;
+    background:var(--accent-light);
+    color:var(--accent-dark);
+    margin-top:4px;
+  }
+
+  .catalogo-paginacao{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  .catalogo-paginacao button{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    font-weight:700;
+    width:30px;height:30px;
+    border-radius:6px;
+    border:1px solid var(--line-strong);
+    background:var(--card);
+    color:var(--ink-mute);
+    cursor:pointer;
+  }
+  .catalogo-paginacao button:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .catalogo-paginacao button.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+  /* ---- FEED DA COMUNIDADE ---- */
+  .community-feed{
+    margin-top:18px;
+    background:var(--card-alt);
+    border-radius:10px;
+    padding:14px 16px;
+    border:1px solid var(--line);
+  }
+  .community-feed .feed-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .community-feed .feed-item:last-child{border-bottom:none;}
+  .community-feed .feed-avatar{
+    width:28px;height:28px;
+    border-radius:50%;
+    background:var(--accent-light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:700;
+    color:var(--accent-dark);
+    flex-shrink:0;
+    font-family:'Space Mono',monospace;
+  }
+  .community-feed .feed-text{font-size:13px;color:var(--ink-soft);}
+  .community-feed .feed-text strong{color:var(--ink);}
+  .community-feed .feed-time{font-size:10.5px;color:var(--ink-mute2);margin-left:auto;white-space:nowrap;}
+
+  /* ---- VITRINE ---- */
+  #area-vitrine{margin-top:24px;background:none;border:none;box-shadow:none;padding:0;}
+  #area-vitrine > h2, #area-vitrine > .vitrine-sub, #area-vitrine > .aviso{padding-left:2px;padding-right:2px;}
+  .vitrine-scroll{position:relative;margin-top:16px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);}
+  .vitrine-grid{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 20px 12px;padding-left:max(20px, env(safe-area-inset-left));padding-right:max(20px, env(safe-area-inset-right));}
+  .vitrine-grid::-webkit-scrollbar{display:none;}
+  .vitrine-card{flex:0 0 152px;width:152px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
+  .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
+  .vitrine-card:active{transform:scale(0.97);}
+  .vitrine-fav{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.94);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.18);z-index:2;}
+  .vitrine-fav svg{width:12px;height:12px;stroke:var(--ink-soft);stroke-width:1.9;fill:none;}
+  .vitrine-foto{aspect-ratio:1/1;background:var(--card-alt);border-bottom:1px solid var(--line);}
+  .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
+  .vitrine-info{padding:9px 9px 11px;}
+  .vitrine-nome{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;}
+  .vitrine-badge{display:inline-block;margin-top:6px;font-size:9px;font-weight:700;color:var(--accent-dark);background:var(--accent-light);padding:2px 7px;border-radius:4px;}
+  .vitrine-valor{margin-top:6px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:var(--ink);}
+  .vitrine-meta{margin-top:4px;font-size:10px;color:var(--ink-mute2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .vitrine-nav{position:absolute;top:calc(50% - 8px);right:6px;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--line-strong);box-shadow:0 2px 10px rgba(0,0,0,0.16);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;}
+  .vitrine-nav:hover{border-color:var(--accent);}
+  .vitrine-nav svg{width:15px;height:15px;stroke:var(--ink-soft);stroke-width:2.3;fill:none;}
+  .vitrine-nav.esconder{display:none;}
+  @media (max-width:700px){ .vitrine-nav{display:none !important;} }
+  .vitrine-paginacao{margin-top:12px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+  .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;width:30px;height:30px;border-radius:6px;border:1px solid var(--line-strong);background:var(--card);color:var(--ink-mute);cursor:pointer;}
+  .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .vitrine-pag-btn.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);}
+
+  /* ---- OFERTA ---- */
+  .oferta{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;display:flex;flex-direction:column;}
   .oferta-img{background:linear-gradient(135deg,var(--accent-light),var(--card-alt));padding:26px;display:flex;align-items:center;justify-content:center;}
   .oferta-img svg{width:64px;height:64px;stroke:var(--accent);stroke-width:1.5;fill:none;}
   .oferta-body{padding:26px;}
@@ -211,8 +646,9 @@
   .passo-txt h3{font-size:15.5px;margin-bottom:4px;}
   .passo-txt p{font-size:13.8px;color:var(--ink-mute);}
 
-  .resultado{margin-top:26px;background:var(--card);border:1px solid rgba(0,0,0,0.12);border-radius:16px;padding:36px;display:none;scroll-margin-top:88px;}
-  @media (max-width:480px){ .resultado{padding:24px;} }
+  /* ---- RESULTADO ---- */
+  .resultado{margin-top:24px;background:var(--card);border:1px solid rgba(0,0,0,0.12);border-radius:16px;padding:32px;display:none;scroll-margin-top:88px;}
+  @media (max-width:480px){ .resultado{padding:22px;} }
   .resultado.active{display:block;}
   .resultado-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
   .resultado-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--emerald);}
@@ -228,7 +664,7 @@
 
   .canais-venda{margin-top:16px;}
   .canal-destaque{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--accent-light);border:1.5px solid var(--accent);border-radius:11px;padding:14px 16px;text-decoration:none;transition:background .15s ease;}
-  .canal-destaque:hover{background:rgba(20,20,20,0.08);}
+  .canal-destaque:hover{background:rgba(26,77,58,0.12);}
   .canal-destaque-info{display:flex;flex-direction:column;gap:2px;}
   .canal-destaque-info .canal-tag{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent-dark);}
   .canal-destaque-info strong{font-family:'Fraunces',serif;font-size:16.5px;color:var(--ink);}
@@ -254,126 +690,11 @@
   .premium-preview .preco-destaque{font-size:28px;margin:20px 0 0;font-family:'Fraunces',serif;color:var(--ink);}
   .premium-preview .preco-sub{font-size:11.5px;color:var(--ink-mute2);margin-bottom:12px;}
   .premium-preview .btn{padding:13px 22px;}
-
   .bloqueado-badge{display:inline-block;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-left:8px;}
-  .carregando .btn-primary{background:rgba(20,20,20,0.45);}
 
-  .painel-acesso{display:none;}
-  .painel-acesso.active{
-    display:block;
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    margin:0;
-    width:90%;
-    max-width:440px;
-    max-height:min(88vh, 88dvh);
-    overflow-y:auto;
-    overscroll-behavior:contain;
-    z-index:1000;
-    box-shadow:0 0 0 9999px rgba(0,0,0,0.72), 0 24px 60px rgba(0,0,0,0.5);
-  }
-  body.popup-aberto{overflow:hidden;}
-  .painel-fechar{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:var(--card-alt);color:var(--ink-mute);font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;flex-shrink:0;}
-  .painel-fechar:hover{background:var(--line);color:var(--ink);}
-  .painel-tag{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);margin-bottom:14px;padding-right:36px;}
-  .boas-vindas-lista li{align-items:flex-start;line-height:1.4;}
-  .boas-vindas-lista .ico{margin-top:1px;}
-  @media (max-width:380px){
-    #painel-boas-vindas{padding:20px;}
-    .boas-vindas-lista{gap:8px;}
-    .boas-vindas-lista li{font-size:13px;}
-    .boas-vindas-lista .ico{width:18px;height:18px;font-size:10px;}
-  }
-  .campo{margin-bottom:12px;}
-  .campo label{display:block;font-size:12.5px;color:var(--ink-mute);margin-bottom:6px;}
-  .campo input{width:100%;background:var(--card-alt);border:1px solid var(--line-strong);border-radius:7px;padding:12px;color:var(--ink);font-size:14px;min-height:46px;}
-  .campo input:focus{outline:none;border-color:var(--accent);}
-  @media (max-width:600px){ .campo input{font-size:16px;} }
-  .troca-modo{margin-top:10px;font-size:12.5px;color:var(--ink-mute);text-align:center;cursor:pointer;text-decoration:underline;padding:8px;}
-  .historico-lista{display:flex;flex-direction:column;gap:10px;}
-  .historico-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:var(--card-alt);border:1px solid var(--line);border-radius:8px;cursor:pointer;transition:border-color .2s ease, transform .08s ease;}
-  .historico-item:hover{border-color:var(--accent);}
-  .historico-item:active{transform:scale(0.98);}
-  .historico-nome{font-size:14px;color:var(--ink);font-weight:600;}
-  .historico-data{font-size:11.5px;color:var(--ink-mute2);margin-top:2px;}
-  .historico-badge{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;text-transform:uppercase;padding:4px 8px;border-radius:20px;white-space:nowrap;border:1px solid currentColor;}
-  .historico-badge.pago{color:var(--emerald);}
-  .historico-badge.bloqueado{color:var(--ink-mute);}
-
-  .vitrine-sub{margin-top:6px;font-size:13.5px;color:var(--ink-mute);text-align:center;}
-
-  /* #area-vitrine é uma seção "solta" (sem moldura de .card), do jeito que
-     a OLX faz: o título respeita o respiro normal da página, e o carrossel
-     estica de verdade até a borda real da viewport — nunca fica preso
-     dentro de uma caixa centralizada, nem colado sem nenhuma margem. */
-  #area-vitrine{
-    position:relative;
-    margin-top:32px;
-    background:none;
-    border:none;
-    box-shadow:none;
-    padding:0;
-  }
-  #area-vitrine > h2, #area-vitrine > .vitrine-sub, #area-vitrine > .aviso{
-    padding-left:2px;padding-right:2px;
-  }
-
-  .vitrine-scroll{
-    position:relative;
-    margin-top:18px;
-    width:100vw;
-    margin-left:calc(50% - 50vw);
-    margin-right:calc(50% - 50vw);
-  }
-
-  .vitrine-grid{
-    display:flex;
-    gap:14px;
-    overflow-x:auto;
-    overflow-y:hidden;
-    scroll-snap-type:x proximity;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-    padding:2px 20px 12px;
-    padding-left:max(20px, env(safe-area-inset-left));
-    padding-right:max(20px, env(safe-area-inset-right));
-  }
-  .vitrine-grid::-webkit-scrollbar{display:none;}
-
-  .vitrine-card{flex:0 0 152px;width:152px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
-  .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
-  .vitrine-card:active{transform:scale(0.97);}
-
-  .vitrine-fav{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.94);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.18);z-index:2;}
-  .vitrine-fav svg{width:12px;height:12px;stroke:var(--ink-soft);stroke-width:1.9;fill:none;}
-
-  .consentimento-vitrine{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:13px;color:var(--ink-mute,#a6a6a6);cursor:pointer;line-height:1.4;}
-  .consentimento-vitrine input{margin-top:2px;flex-shrink:0;}
-
-  .vitrine-foto{aspect-ratio:1/1;background:var(--card-alt);border-bottom:1px solid var(--line);}
-  .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
-
-  .vitrine-info{padding:9px 9px 11px;}
-  .vitrine-nome{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;}
-  .vitrine-badge{display:inline-block;margin-top:7px;font-size:10px;font-weight:700;color:var(--accent-dark);background:var(--accent-light);padding:3px 7px;border-radius:5px;}
-  .vitrine-valor{margin-top:7px;font-family:'Inter',sans-serif;font-size:15.5px;font-weight:700;color:var(--ink);}
-  .vitrine-meta{margin-top:5px;font-size:10px;color:var(--ink-mute2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-
-  .vitrine-nav{position:absolute;top:calc(50% - 8px);right:6px;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--line-strong);box-shadow:0 2px 10px rgba(0,0,0,0.16);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;}
-  .vitrine-nav:hover{border-color:var(--accent);}
-  .vitrine-nav svg{width:15px;height:15px;stroke:var(--ink-soft);stroke-width:2.3;fill:none;}
-  .vitrine-nav.esconder{display:none;}
-  @media (max-width:700px){ .vitrine-nav{display:none !important;} }
-
-  .vitrine-paginacao{margin-top:16px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
-  .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;width:32px;height:32px;border-radius:7px;border:1px solid var(--line-strong);background:var(--card);color:var(--ink-mute);cursor:pointer;}
-  .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
-  .vitrine-pag-btn.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);}
-
-  .conteudo{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;}
-  .conteudo h2{font-size:21px;margin-bottom:14px;}
+  .conteudo{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;}
+  .conteudo h2{font-size:21px;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .conteudo h2 svg{width:20px;height:20px;stroke:var(--ink);stroke-width:1.8;fill:none;}
   .conteudo p{font-size:14px;color:var(--ink-mute);margin-bottom:12px;}
   .conteudo p:last-child{margin-bottom:0;}
   .conteudo strong{color:var(--ink);}
@@ -383,173 +704,20 @@
   .faq-item h3{font-size:14.5px;margin-bottom:6px;}
   .faq-item p{font-size:13.5px;color:var(--ink-mute);margin:0;}
 
-  .cta-final{margin-top:32px;background:var(--card-alt);border:1px solid var(--line);border-radius:14px;padding:30px 24px;text-align:center;}
+  .cta-final{margin-top:28px;background:var(--card-alt);border:1px solid var(--line);border-radius:14px;padding:30px 24px;text-align:center;}
   .cta-final h2{font-size:20px;}
   .cta-final p{margin-top:8px;font-size:13.5px;color:var(--ink-mute);}
   .cta-final .btn{margin-top:16px;}
 
-  footer{max-width:800px;margin:40px auto 0;padding:26px 20px 0;border-top:1px solid var(--line);}
+  footer{max-width:820px;margin:40px auto 0;padding:26px 20px 0;border-top:1px solid var(--line);}
   footer .logo{margin-bottom:8px;}
+  footer .logo .logo-main{font-size:15px;}
+  footer .logo .logo-main img{height:20px;}
   footer p{font-size:13px;color:var(--ink-mute);max-width:360px;}
   footer .foot-links{margin-top:18px;display:flex;gap:22px;flex-wrap:wrap;}
   footer .foot-links a{font-size:12.5px;color:var(--ink-mute);text-decoration:none;padding:4px 0;}
   footer{padding-bottom:env(safe-area-inset-bottom);}
   footer .foot-links a:hover{color:var(--accent-dark);}
-
-  /* BOAS-VINDAS */
-  #painel-boas-vindas {
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-width: 440px;
-    width: 92%;
-    border-radius: 20px;
-  }
-  #painel-boas-vindas .painel-fechar {
-    top: 12px;
-    right: 12px;
-    background: rgba(0,0,0,0.06);
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-  }
-  .boas-vindas-header {
-    padding: 28px 24px 16px;
-    background: linear-gradient(135deg, var(--accent-light) 0%, var(--card) 100%);
-    border-bottom: 1px solid var(--line);
-  }
-  .boas-vindas-icon {
-    font-size: 32px;
-    text-align: center;
-    margin-bottom: 4px;
-  }
-  .boas-vindas-destaque {
-    padding: 0 24px;
-    margin-top: 16px;
-  }
-  .boas-vindas-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 14px 18px;
-    background: var(--card-alt);
-    border-radius: 12px;
-    border: 1px solid var(--line);
-    transition: border-color .2s ease;
-  }
-  .boas-vindas-card:hover {
-    border-color: var(--accent);
-  }
-  .boas-vindas-card-icon {
-    font-size: 22px;
-    line-height: 1;
-    flex-shrink: 0;
-    margin-top: 1px;
-    width: 34px;
-    text-align: center;
-  }
-  .boas-vindas-card-title {
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--ink);
-    margin-bottom: 2px;
-  }
-  .boas-vindas-card-desc {
-    font-size: 12.5px;
-    color: var(--ink-mute);
-    line-height: 1.4;
-  }
-  .boas-vindas-cta {
-    padding: 18px 24px 24px;
-    border-top: 1px solid var(--line);
-    margin-top: 4px;
-  }
-  @media (max-width: 480px) {
-    #painel-boas-vindas {
-      width: 94%;
-      max-height: 94vh;
-      border-radius: 16px;
-    }
-    .boas-vindas-header {
-      padding: 20px 16px 12px;
-    }
-    .boas-vindas-icon {
-      font-size: 26px;
-    }
-    #painel-boas-vindas .painel-tag {
-      font-size: 9px;
-    }
-    .boas-vindas-destaque {
-      padding: 0 16px;
-      margin-top: 12px;
-    }
-    .boas-vindas-destaque p {
-      font-size: 13px;
-    }
-    .boas-vindas-card {
-      padding: 12px 14px;
-      gap: 12px;
-      border-radius: 10px;
-    }
-    .boas-vindas-card-icon {
-      font-size: 18px;
-      width: 28px;
-    }
-    .boas-vindas-card-title {
-      font-size: 13px;
-    }
-    .boas-vindas-card-desc {
-      font-size: 12px;
-    }
-    .boas-vindas-cta {
-      padding: 14px 16px 18px;
-    }
-    .boas-vindas-cta .btn {
-      font-size: 14px !important;
-      padding: 12px !important;
-    }
-    .boas-vindas-cta p {
-      font-size: 10.5px !important;
-    }
-  }
-  @media (max-width: 380px) {
-    #painel-boas-vindas {
-      width: 96%;
-    }
-    .boas-vindas-header {
-      padding: 16px 12px 10px;
-    }
-    .boas-vindas-card {
-      padding: 10px 12px;
-      gap: 10px;
-    }
-    .boas-vindas-card-icon {
-      font-size: 16px;
-      width: 24px;
-    }
-    .boas-vindas-card-title {
-      font-size: 12px;
-    }
-    .boas-vindas-card-desc {
-      font-size: 11px;
-    }
-    .boas-vindas-cta {
-      padding: 12px 12px 14px;
-    }
-  }
-  @media (min-width: 768px) {
-    #painel-boas-vindas {
-      max-width: 460px;
-      border-radius: 24px;
-    }
-    .boas-vindas-card {
-      padding: 16px 20px;
-    }
-    .boas-vindas-card:hover {
-      transform: translateX(4px);
-      transition: transform .15s ease, border-color .2s ease;
-    }
-  }
 
   .teaser-bloqueio{display:none !important;}
 </style>
@@ -561,10 +729,23 @@
       <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" title="Histórico" aria-label="Abrir histórico">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
       </button>
-      <div class="logo"><img src="/logo.png" alt="Tesouro Esquecido">Tesouro Esquecido</div>
+      <a href="#" class="logo">
+        <span class="logo-main">
+          <img src="/logo.png" alt="STONE Community">
+          STONE
+        </span>
+        <span class="logo-sub">community</span>
+      </a>
     </div>
     <div class="nav-right">
-      <a class="nav-link" id="nav-link-precos">Preços</a>
+      <a class="nav-link" id="nav-link-catalogo">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+        Catálogo
+      </a>
+      <a class="nav-link" id="nav-link-rankings">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg>
+        Rankings
+      </a>
       <span class="gratis-counter-nav" id="gratis-counter-nav" style="display:none;">
         <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         <span id="gratis-counter-text">1 grátis</span>
@@ -580,7 +761,10 @@
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-head">
-    <h2>Histórico</h2>
+    <h2>
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+      Histórico
+    </h2>
     <button class="btn-sidebar-close" id="btn-sidebar-close" aria-label="Fechar histórico">
       <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
@@ -594,9 +778,10 @@
 <div class="wrap">
 
   <div class="head">
-    <div class="eyebrow">Identificador com IA</div>
-    <h1>Descubra o que é sua pedra</h1>
-    <p class="hero-sub"><strong>Avaliamos sua pedra em poucos segundos</strong> e te dizemos quanto ela vale e onde vender.</p>
+    <div class="eyebrow">Comunidade de avaliação de pedras</div>
+    <h1>STONE Community</h1>
+    <p class="sub-tag">— descubra, avalie e compartilhe —</p>
+    <p class="hero-sub"><strong>Identifique sua pedra com IA</strong> e veja como ela se compara com as descobertas da comunidade.</p>
   </div>
 
   <div class="upload-hint">
@@ -604,11 +789,11 @@
     <svg viewBox="0 0 24 24"><path d="M12 5v14m0 0l-6-6m6 6l6-6"/></svg>
   </div>
 
-  <div class="card" id="area-principal" style="margin-top:14px;">
+  <div class="card" id="area-principal" style="margin-top:12px;">
     <div class="dropzone" id="dropzone">
       <div class="dz-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div>
       <strong id="dz-titulo">Envie a foto da sua pedra</strong>
-      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Você pode enviar até 3 fotos da mesma pedra em ângulos diferentes para um resultado mais preciso.</span>
+      <span>Imagens nítidas e bem iluminadas ajudam a IA a identificar com mais precisão. Você pode enviar até 3 fotos da mesma pedra em ângulos diferentes.</span>
       <input type="file" id="input-foto" accept="image/*">
     </div>
 
@@ -626,7 +811,7 @@
         <span class="foto-contador" id="foto-contador">0/3 fotos</span>
         <button type="button" class="btn-adicionar-angulo" id="btn-adicionar-angulo">+ Adicionar outro ângulo</button>
       </div>
-      <p class="foto-tira-dica" id="foto-tira-dica" style="font-size:12px;color:var(--muted,#8a8a8a);margin:4px 2px 0;">Dica: 2 ou 3 ângulos diferentes da mesma pedra deixam a análise mais precisa.</p>
+      <p class="foto-tira-dica" id="foto-tira-dica" style="font-size:12px;color:var(--ink-mute2);margin:4px 2px 0;">Dica: 2 ou 3 ângulos diferentes da mesma pedra deixam a análise mais precisa.</p>
     </div>
 
     <input type="checkbox" id="check-permite-vitrine" checked style="display:none;">
@@ -642,11 +827,102 @@
     <p class="erro" id="erro" style="display:none;"></p>
   </div>
 
+  <!-- ---- COMUNIDADE: ESTATÍSTICAS ---- -->
+  <div class="card" style="margin-top:20px;background:var(--accent-light);border-color:var(--line);">
+    <h2 style="font-size:18px;">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Comunidade ao vivo
+    </h2>
+    <div class="community-stats">
+      <div class="stat">
+        <span class="num" id="stat-membros">1.2k</span>
+        <span class="label">membros</span>
+      </div>
+      <div class="stat">
+        <span class="num" id="stat-pedras">4.7k</span>
+        <span class="label">pedras avaliadas</span>
+      </div>
+      <div class="stat">
+        <span class="num" id="stat-hoje">+38</span>
+        <span class="label">avaliações hoje</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- CATÁLOGO GERAL ---- -->
+  <div class="card" style="margin-top:20px;" id="secao-catalogo">
+    <h2>
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+      Catálogo Geral
+    </h2>
+    <p style="font-size:13px;color:var(--ink-mute);text-align:center;margin-top:4px;">Todas as pedras avaliadas pela comunidade</p>
+    
+    <div class="catalogo-header">
+      <div class="catalogo-busca">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="catalogo-busca-input" placeholder="Buscar pedra...">
+      </div>
+      <div class="catalogo-filtro" id="catalogo-filtros">
+        <button class="active" data-filtro="todos">Todos</button>
+        <button data-filtro="recentes">Recentes</button>
+        <button data-filtro="baratos">Baratos</button>
+        <button data-filtro="caros">Caros</button>
+      </div>
+    </div>
+
+    <div class="catalogo-grid" id="catalogo-grid">
+      <!-- Preenchido via JS -->
+    </div>
+
+    <div class="catalogo-paginacao" id="catalogo-paginacao">
+      <!-- Preenchido via JS -->
+    </div>
+  </div>
+
+  <!-- ---- RANKINGS ---- -->
+  <div class="card" style="margin-top:20px;" id="secao-rankings">
+    <h2>
+      <svg viewBox="0 0 24 24"><path d="M12 2v20M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg>
+      Rankings
+    </h2>
+    <p style="font-size:13px;color:var(--ink-mute);text-align:center;margin-top:4px;">As pedras mais comentadas e avaliadas pelos membros</p>
+    
+    <div class="rankings-tabs" id="rankings-tabs">
+      <button class="active" data-rank="recentes">
+        <svg viewBox="0 0 24 24"><path d="M12 2v6l3-3-3-3zM12 22v-6l3 3-3 3zM2 12h6l-3-3-3 3zM22 12h-6l3-3 3 3z"/></svg>
+        Mais recentes
+      </button>
+      <button data-rank="baratas">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M8 16l8-8"/></svg>
+        Mais baratas
+      </button>
+      <button data-rank="caras">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+        Mais caras
+      </button>
+    </div>
+
+    <div class="rankings-grid" id="rankings-grid">
+      <!-- Preenchido via JS -->
+    </div>
+  </div>
+
+  <!-- ---- FEED DA COMUNIDADE ---- -->
+  <div class="card" style="margin-top:20px;">
+    <h2>
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Atividade recente
+    </h2>
+    <div class="community-feed" id="community-feed">
+      <!-- Preenchido via JS -->
+    </div>
+  </div>
+
   <!-- PAINEL DE LOGIN/CADASTRO -->
   <div class="card painel-acesso" id="painel-login">
     <button type="button" class="painel-fechar" id="btn-fechar-login" aria-label="Fechar">&times;</button>
     <div class="painel-tag" id="painel-login-tag">Criar conta</div>
-    <p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:16px;" id="painel-login-sub">Use e-mail e senha. Não enviamos nada por e-mail — sua conta fica pronta na hora.</p>
+    <p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:16px;" id="painel-login-sub">Use e-mail e senha. Sua conta fica pronta na hora.</p>
     <div id="campos-cadastro">
       <div class="campo">
         <label for="input-nome">Seu nome</label>
@@ -673,48 +949,50 @@
   <!-- POPUP DE BOAS-VINDAS -->
   <div class="card painel-acesso" id="painel-boas-vindas">
     <button type="button" class="painel-fechar" id="btn-fechar-boas-vindas" aria-label="Fechar">&times;</button>
-    
     <div class="boas-vindas-header">
-      <div class="boas-vindas-icon">✨</div>
-      <div class="painel-tag" style="text-align:center;padding-right:0;">Seja bem-vindo(a)!</div>
+      <div class="boas-vindas-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="painel-tag" style="text-align:center;padding-right:0;">Bem-vindo à comunidade!</div>
       <h2 style="font-size:20px;text-align:center;margin-top:4px;color:var(--ink);">
         Identifique suas pedras com IA
       </h2>
     </div>
-
     <div class="boas-vindas-destaque">
       <p style="font-size:14px;color:var(--ink);margin-bottom:0;text-align:center;line-height:1.5;">
         Você tem <strong style="color:var(--accent-dark);">1 avaliação gratuita</strong> para testar.
         Depois, desbloqueie o valor real da sua pedra.
       </p>
     </div>
-
     <div style="margin-top:20px;display:flex;flex-direction:column;gap:14px;padding:0 24px;">
       <div class="boas-vindas-card">
-        <div class="boas-vindas-card-icon">🤖</div>
+        <div class="boas-vindas-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
+        </div>
         <div>
           <div class="boas-vindas-card-title">IA da Anthropic (Claude)</div>
           <div class="boas-vindas-card-desc">A IA mais precisa do mercado para identificar pedras e minerais.</div>
         </div>
       </div>
-
       <div class="boas-vindas-card">
-        <div class="boas-vindas-card-icon">🎯</div>
+        <div class="boas-vindas-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
         <div>
           <div class="boas-vindas-card-title">Identificação confiável</div>
           <div class="boas-vindas-card-desc">Não é um chute — é uma análise com alto índice de precisão.</div>
         </div>
       </div>
-
       <div class="boas-vindas-card">
-        <div class="boas-vindas-card-icon">💰</div>
+        <div class="boas-vindas-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+        </div>
         <div>
           <div class="boas-vindas-card-title">Venda pelo valor justo</div>
           <div class="boas-vindas-card-desc">Descubra o preço de mercado e onde vender sua pedra.</div>
         </div>
       </div>
     </div>
-
     <div class="boas-vindas-cta">
       <button class="btn btn-primary btn-block" id="btn-continuar-boas-vindas" style="font-size:15px;padding:14px;">
         Começar agora →
@@ -770,7 +1048,7 @@
         </div>
 
         <div class="canais-venda" id="canais-venda" style="display:none;">
-          <a class="canal-destaque" id="canal-mfrural" href="https://www.mfrural.com.br/busca/pedras" target="_blank" rel="noopener noreferrer">
+          <a class="canal-destaque" id="canal-mfrural" href="#" target="_blank" rel="noopener noreferrer">
             <div class="canal-destaque-info">
               <span class="canal-tag">⭐ Mais recomendado</span>
               <strong>MF Rural</strong>
@@ -779,8 +1057,8 @@
             <span class="canal-seta">→</span>
           </a>
           <div class="canal-secundarios">
-            <a class="canal-link" id="canal-ml" href="https://lista.mercadolivre.com.br/pedras" target="_blank" rel="noopener noreferrer">Mercado Livre</a>
-            <a class="canal-link" id="canal-olx" href="https://www.olx.com.br/brasil?q=pedras" target="_blank" rel="noopener noreferrer">OLX</a>
+            <a class="canal-link" id="canal-ml" href="#" target="_blank" rel="noopener noreferrer">Mercado Livre</a>
+            <a class="canal-link" id="canal-olx" href="#" target="_blank" rel="noopener noreferrer">OLX</a>
           </div>
         </div>
       </div>
@@ -807,7 +1085,10 @@
 
   <!-- VITRINE -->
   <div class="card" id="area-vitrine">
-    <h2>Veja o que outras pessoas encontraram</h2>
+    <h2>
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+      Descobertas da comunidade
+    </h2>
     <p class="vitrine-sub">Resultados reais de quem já descobriu o valor da própria pedra.</p>
     <div class="vitrine-scroll">
       <div class="vitrine-grid" id="vitrine-grid"></div>
@@ -841,7 +1122,10 @@
 
   <!-- COMO USAR -->
   <div class="card">
-    <h2>Como Usar o Identificador de Pedras</h2>
+    <h2>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      Como Usar o Identificador
+    </h2>
     <ul class="passos">
       <li class="passo">
         <span class="passo-num">1</span>
@@ -883,13 +1167,19 @@
 
   <!-- CONTEÚDO -->
   <div class="conteudo">
-    <h2>Pedra ou Rocha? Existe Diferença?</h2>
+    <h2>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      Pedra ou Rocha? Existe Diferença?
+    </h2>
     <p>No dia a dia, usamos as duas palavras como sinônimos, mas há uma distinção que ajuda na identificação. <strong>Rocha</strong> é o termo geológico para o material sólido da crosta terrestre — pense em montanhas e afloramentos. <strong>Pedra</strong> costuma se referir a um fragmento menor, muitas vezes removido do seu local de origem e desgastado pela água, pelo tempo ou por mãos humanas.</p>
     <p>Nosso identificador reconhece as duas coisas: seja um pedaço bruto de granito encontrado numa trilha ou uma gema já lapidada, a IA analisa cor, brilho, transparência e textura para sugerir a composição mineral mais provável.</p>
   </div>
 
   <div class="conteudo">
-    <h2>Como a IA Analisa a Sua Pedra</h2>
+    <h2>
+      <svg viewBox="0 0 24 24"><path d="M12 2v4M12 22v-4M4 12H2M22 12h-2M19.07 4.93l-2.83 2.83M4.93 19.07l2.83-2.83M19.07 19.07l-2.83-2.83M4.93 4.93l2.83 2.83"/></svg>
+      Como a IA Analisa a Sua Pedra
+    </h2>
     <p><strong>Cor e transparência:</strong> a pedra é opaca, translúcida ou transparente? Esse é o primeiro critério observado — mas isoladamente não basta, já que um mesmo mineral pode aparecer em várias cores.</p>
     <p><strong>Brilho e efeitos ópticos:</strong> reflexos como o "olho de gato" ou o brilho azulado de certas pedras luares são pistas importantes que a IA foi treinada para reconhecer.</p>
     <p><strong>Textura e inclusões:</strong> superfícies lisas, ásperas, vítreas ou foscas, além de padrões internos, ajudam a diferenciar pedras que à primeira vista parecem semelhantes.</p>
@@ -897,7 +1187,10 @@
 
   <!-- FAQ -->
   <div class="conteudo">
-    <h2>Perguntas Frequentes</h2>
+    <h2>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      Perguntas Frequentes
+    </h2>
     <div class="faq-item">
       <h3>O identificador de pedras é gratuito?</h3>
       <p>Sim, você tem <strong>1 avaliação gratuita</strong> para testar. Nela, você vê o nome, características, confiança e faixa de preço da pedra. Para ver <strong>onde vender</strong> e continuar avaliando, é preciso comprar o pacote de 10 leituras por R$ 13,99.</p>
@@ -929,8 +1222,14 @@
 </div>
 
 <footer>
-  <div class="logo"><img src="/logo.png" alt="Tesouro Esquecido">Tesouro Esquecido</div>
-  <p>Identifique pedras, minerais e cristais com inteligência artificial. Sem assinatura — você compra só o acesso que for usar.</p>
+  <a href="#" class="logo">
+    <span class="logo-main">
+      <img src="/logo.png" alt="STONE Community">
+      STONE
+    </span>
+    <span class="logo-sub">community</span>
+  </a>
+  <p>Identifique pedras, minerais e cristais com inteligência artificial. Faça parte da comunidade e descubra o valor das suas pedras.</p>
   <div class="foot-links">
     <a href="#" id="foot-link-termos">Termos de uso</a>
     <a href="#" id="foot-link-privacidade">Privacidade</a>
@@ -939,15 +1238,16 @@
 </footer>
 
 <script>
-  // ==== CONFIGURAÇÃO ====
+  // ========================================================================
+  // CONFIGURAÇÃO
+  // ========================================================================
   var SUPABASE_URL = 'https://lflqjmbygghuikwuoimd.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmbHFqbWJ5Z2dodWlrd3VvaW1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNjU1NTMsImV4cCI6MjEwMTg0MTU1M30.tMrllUj-s0ZxahNbrazuGlWq6bT16o2E6hpbchhxqFU';
   var LINK_CHECKOUT_CAKTO = 'https://pay.cakto.com.br/jfotn5o_1030574';
-  // ========================================================================
 
-  // CRIAÇÃO SEGURA DO CLIENTE SUPABASE
-  // Se a lib do CDN não carregar a tempo (rede lenta, bloqueio, CDN fora do ar),
-  // isso NÃO pode derrubar o resto do script — senão nenhum botão da página funciona.
+  // ========================================================================
+  // CLIENTE SUPABASE
+  // ========================================================================
   var supa;
   function criarClienteSupabase(){
     return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -957,7 +1257,6 @@
     supa = criarClienteSupabase();
   } catch (erroInicSupabase) {
     console.error('Falha ao iniciar Supabase, usando modo de segurança:', erroInicSupabase);
-    // Stub: qualquer chamada de auth rejeita, mas não quebra o restante do app.
     supa = {
       auth: {
         getSession: function(){ return Promise.reject(erroInicSupabase); },
@@ -967,7 +1266,6 @@
         signOut: function(){ return Promise.reject(erroInicSupabase); }
       }
     };
-    // Tenta se recuperar sozinho, recarregando a lib uma vez.
     var scriptRetrySupabase = document.createElement('script');
     scriptRetrySupabase.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
     scriptRetrySupabase.onload = function(){
@@ -981,6 +1279,9 @@
     document.head.appendChild(scriptRetrySupabase);
   }
 
+  // ========================================================================
+  // VARIÁVEIS GLOBAIS
+  // ========================================================================
   var ehNavegadorInterno = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly/i.test(navigator.userAgent || '');
 
   var dropzone = document.getElementById('dropzone');
@@ -1035,13 +1336,13 @@
   var fotoContador = document.getElementById('foto-contador');
   var btnAdicionarAngulo = document.getElementById('btn-adicionar-angulo');
 
-  var MAX_FOTOS = 3; // até 5 no backend (identificar.js) — 3 é o equilíbrio custo x precisão escolhido aqui
+  var MAX_FOTOS = 3;
   var MAX_LADO_PX = 1280;
   var QUALIDADE_JPEG = 0.8;
 
   var identificacaoIdAtual = null;
   var aposBoasVindas = null;
-  var fotosSelecionadas = []; // até 5 itens: { base64, mediaType, previewUrl }
+  var fotosSelecionadas = [];
   var avaliacoesGratisRestantes = 0;
   var resultadoIAAtual = null;
   var analiseEmAndamento = false;
@@ -1056,18 +1357,19 @@
   var historicoVazio = document.getElementById('historico-vazio');
 
   var btnCtaFinal = document.getElementById('btn-cta-final');
-  var navLinkPrecos = document.getElementById('nav-link-precos');
+  var navLinkCatalogo = document.getElementById('nav-link-catalogo');
+  var navLinkRankings = document.getElementById('nav-link-rankings');
 
   var confiancaCores = { alta: '#1a7a3c', media: '#8a8a8a', baixa: '#d3302f' };
-
-  // CONTROLE DE TIMEOUTS - PREVINE TRAVAMENTO
   var timeoutIds = [];
 
+  // ========================================================================
+  // UTILITÁRIOS
+  // ========================================================================
   function limparTimeouts() {
     timeoutIds.forEach(function(id) { clearTimeout(id); });
     timeoutIds = [];
   }
-
   function setTimeoutSeguro(fn, delay) {
     var id = setTimeout(fn, delay);
     timeoutIds.push(id);
@@ -1105,7 +1407,7 @@
     } else {
       camposCadastro.style.display = '';
       painelLoginTag.textContent = 'Criar conta';
-      painelLoginSub.textContent = 'Use e-mail e senha. Não enviamos nada por e-mail — sua conta fica pronta na hora.';
+      painelLoginSub.textContent = 'Use e-mail e senha. Sua conta fica pronta na hora.';
       btnEntrar.textContent = 'Criar conta';
       btnTrocarModoLogin.textContent = 'Já tenho conta — Entrar';
     }
@@ -1116,8 +1418,6 @@
   function abrirPainelLogin(){
     definirModoLogin(false);
     abrirPopup(painelLogin);
-    // Marca que o painel acabou de ser aberto por este clique, para o
-    // listener global de "clique fora" (abaixo) não fechá-lo na mesma hora.
     loginAbertoNesteClique = true;
   }
 
@@ -1152,7 +1452,6 @@
 
   document.addEventListener('click', function(ev){
     if (loginAbertoNesteClique) {
-      // Este clique foi o que abriu o painel agora mesmo — não fechar.
       loginAbertoNesteClique = false;
       return;
     }
@@ -1173,8 +1472,14 @@
     document.getElementById('area-principal').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
-  navLinkPrecos.addEventListener('click', function(){
-    document.getElementById('area-oferta').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  navLinkCatalogo.addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('secao-catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  navLinkRankings.addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('secao-rankings').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   function formatarReais(valor){
@@ -1190,11 +1495,13 @@
     }
   }
 
+  // ========================================================================
+  // HEADER / AUTENTICAÇÃO
+  // ========================================================================
   function atualizarHeader(){
     supa.auth.getSession().then(function(sessaoResp){
       return sessaoResp;
     }, function(erroSessao){
-      // Sem sessão (ou falha de rede): trata como "não logado" em vez de travar.
       return { data: { session: null } };
     }).then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
@@ -1261,6 +1568,9 @@
     });
   }
 
+  // ========================================================================
+  // HISTÓRICO
+  // ========================================================================
   function abrirHistorico(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
@@ -1469,7 +1779,9 @@
     });
   }
 
-  // ---- Vitrine ----
+  // ========================================================================
+  // VITRINE
+  // ========================================================================
   var vitrineGrid = document.getElementById('vitrine-grid');
   var vitrinePaginacao = document.getElementById('vitrine-paginacao');
   var vitrineVazio = document.getElementById('vitrine-vazio');
@@ -1583,7 +1895,7 @@
     if (typeof atualizarSetaVitrine === 'function') atualizarSetaVitrine();
 
     var totalPaginas = data.total_paginas || 1;
-    var LIMITE_MAX_PAGINACAO = 50; // segurança: nunca cria uma quantidade absurda de botões
+    var LIMITE_MAX_PAGINACAO = 50;
     if (totalPaginas > LIMITE_MAX_PAGINACAO) totalPaginas = LIMITE_MAX_PAGINACAO;
     for (var i = 1; i <= totalPaginas; i++) {
       (function(pag){
@@ -1596,12 +1908,201 @@
     }
   }
 
-  // Carrega a vitrine apenas uma vez
-  setTimeoutSeguro(function() {
-    carregarVitrine(1);
-  }, 500);
+  // ========================================================================
+  // CATÁLOGO GERAL (dados simulados)
+  // ========================================================================
+  var catalogoDados = [
+    { nome: 'Quartzo Rosa', valor: 'R$ 45,00', data: '2026-08-10T14:30:00', avaliador: 'Ana', foto: '' },
+    { nome: 'Ametista', valor: 'R$ 120,00', data: '2026-08-10T13:15:00', avaliador: 'Carlos', foto: '' },
+    { nome: 'Jadeíta', valor: 'R$ 350,00', data: '2026-08-10T12:00:00', avaliador: 'Mariana', foto: '' },
+    { nome: 'Rubi', valor: 'R$ 1.200,00', data: '2026-08-09T18:45:00', avaliador: 'Sofia', foto: '' },
+    { nome: 'Esmeralda', valor: 'R$ 950,00', data: '2026-08-09T17:30:00', avaliador: 'Thiago', foto: '' },
+    { nome: 'Água-marinha', valor: 'R$ 780,00', data: '2026-08-09T16:20:00', avaliador: 'Clara', foto: '' },
+    { nome: 'Calcita', valor: 'R$ 22,00', data: '2026-08-09T15:10:00', avaliador: 'Luisa', foto: '' },
+    { nome: 'Mica', valor: 'R$ 28,00', data: '2026-08-09T14:00:00', avaliador: 'Pedro', foto: '' },
+    { nome: 'Quartzo Hialino', valor: 'R$ 15,00', data: '2026-08-09T12:45:00', avaliador: 'João', foto: '' },
+    { nome: 'Granada', valor: 'R$ 210,00', data: '2026-08-08T20:00:00', avaliador: 'Fernanda', foto: '' }
+  ];
 
-  // ---- Upload da foto ----
+  var catalogoPagina = 1;
+  var catalogoPorPagina = 6;
+  var catalogoFiltro = 'todos';
+  var catalogoBusca = '';
+
+  function renderizarCatalogo(){
+    var grid = document.getElementById('catalogo-grid');
+    var paginacao = document.getElementById('catalogo-paginacao');
+    
+    // Filtrar
+    var dados = catalogoDados.filter(function(item){
+      var matchBusca = item.nome.toLowerCase().includes(catalogoBusca.toLowerCase());
+      if (!matchBusca) return false;
+      if (catalogoFiltro === 'recentes') return true;
+      if (catalogoFiltro === 'baratos') {
+        var valorNum = parseFloat(item.valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        return valorNum < 50;
+      }
+      if (catalogoFiltro === 'caros') {
+        var valorNum2 = parseFloat(item.valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        return valorNum2 > 200;
+      }
+      return true;
+    });
+
+    // Ordenar por recentes
+    dados.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
+
+    var total = dados.length;
+    var totalPaginas = Math.ceil(total / catalogoPorPagina);
+    if (totalPaginas < 1) totalPaginas = 1;
+    if (catalogoPagina > totalPaginas) catalogoPagina = totalPaginas;
+
+    var inicio = (catalogoPagina - 1) * catalogoPorPagina;
+    var fim = Math.min(inicio + catalogoPorPagina, total);
+    var paginaDados = dados.slice(inicio, fim);
+
+    grid.innerHTML = '';
+    if (paginaDados.length === 0) {
+      grid.innerHTML = '<p style="text-align:center;color:var(--ink-mute2);padding:20px 0;grid-column:1/-1;">Nenhuma pedra encontrada.</p>';
+    } else {
+      paginaDados.forEach(function(item){
+        var div = document.createElement('div');
+        div.className = 'catalogo-item';
+        div.innerHTML = 
+          '<div class="cat-foto">' +
+            '<img src="/stone-placeholder.png" alt="' + item.nome + '" onerror="this.style.display=\'none\'">' +
+          '</div>' +
+          '<div class="cat-info">' +
+            '<div class="cat-nome">' + item.nome + '</div>' +
+            '<div class="cat-meta">por ' + item.avaliador + ' · ' + tempoRelativo(item.data) + '</div>' +
+            '<div class="cat-preco">' + item.valor + '</div>' +
+            '<span class="cat-badge">avaliado</span>' +
+          '</div>';
+        grid.appendChild(div);
+      });
+    }
+
+    // Paginação
+    paginacao.innerHTML = '';
+    for (var i = 1; i <= totalPaginas; i++) {
+      (function(pag){
+        var btn = document.createElement('button');
+        btn.className = (pag === catalogoPagina) ? 'active' : '';
+        btn.textContent = pag;
+        btn.addEventListener('click', function(){
+          catalogoPagina = pag;
+          renderizarCatalogo();
+        });
+        paginacao.appendChild(btn);
+      })(i);
+    }
+  }
+
+  // Filtros do catálogo
+  document.getElementById('catalogo-filtros').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#catalogo-filtros button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    catalogoFiltro = btn.dataset.filtro;
+    catalogoPagina = 1;
+    renderizarCatalogo();
+  });
+
+  // Busca no catálogo
+  document.getElementById('catalogo-busca-input').addEventListener('input', function(){
+    catalogoBusca = this.value;
+    catalogoPagina = 1;
+    renderizarCatalogo();
+  });
+
+  // ========================================================================
+  // RANKINGS (dados simulados)
+  // ========================================================================
+  var rankingsData = {
+    recentes: [
+      { nome: 'Quartzo Rosa', meta: 'por Ana · há 12 min', badge: 'novo' },
+      { nome: 'Ametista', meta: 'por Carlos · há 28 min', badge: 'novo' },
+      { nome: 'Jadeíta', meta: 'por Mariana · há 1h', badge: 'novo' }
+    ],
+    baratas: [
+      { nome: 'Quartzo Hialino', meta: 'R$ 15,00 · por João', badge: 'barata' },
+      { nome: 'Calcita', meta: 'R$ 22,00 · por Luisa', badge: 'barata' },
+      { nome: 'Mica', meta: 'R$ 28,00 · por Pedro', badge: 'barata' }
+    ],
+    caras: [
+      { nome: 'Rubi', meta: 'R$ 1.200,00 · por Sofia', badge: 'premium' },
+      { nome: 'Esmeralda', meta: 'R$ 950,00 · por Thiago', badge: 'premium' },
+      { nome: 'Água-marinha', meta: 'R$ 780,00 · por Clara', badge: 'premium' }
+    ]
+  };
+
+  var rankingAtual = 'recentes';
+
+  function renderizarRankings(tipo){
+    var grid = document.getElementById('rankings-grid');
+    var dados = rankingsData[tipo] || rankingsData.recentes;
+    grid.innerHTML = '';
+    dados.forEach(function(item, index){
+      var div = document.createElement('div');
+      div.className = 'rank-item';
+      var badgeIcon = '';
+      if (item.badge === 'novo') badgeIcon = '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>';
+      else if (item.badge === 'barata') badgeIcon = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M8 16l8-8"/></svg>';
+      else if (item.badge === 'premium') badgeIcon = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>';
+      div.innerHTML = 
+        '<div class="rank-pos">#' + (index + 1) + '</div>' +
+        '<div class="rank-name">' + item.nome + '</div>' +
+        '<div class="rank-meta">' + item.meta + '</div>' +
+        '<span class="rank-badge">' + badgeIcon + item.badge + '</span>';
+      grid.appendChild(div);
+    });
+  }
+
+  document.getElementById('rankings-tabs').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('.rankings-tabs button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    rankingAtual = btn.dataset.rank;
+    renderizarRankings(rankingAtual);
+  });
+
+  // ========================================================================
+  // FEED DA COMUNIDADE (simulado)
+  // ========================================================================
+  function gerarFeed(){
+    var feed = document.getElementById('community-feed');
+    var atividades = [
+      { nome: 'Fernanda', texto: 'descobriu que sua pedra é <strong>Água-marinha</strong>!', tempo: 'agora' },
+      { nome: 'Rafael', texto: 'avaliou uma <strong>Ametista</strong> de 50g', tempo: '5 min' },
+      { nome: 'Juliana', texto: 'encontrou <strong>Quartzo Rosa</strong> na serra', tempo: '12 min' },
+      { nome: 'Marcos', texto: 'identificou uma <strong>Jadeíta</strong> rara', tempo: '23 min' },
+      { nome: 'Camila', texto: 'descobriu o valor de uma <strong>Esmeralda</strong>', tempo: '1h' }
+    ];
+    feed.innerHTML = '';
+    atividades.forEach(function(a){
+      var div = document.createElement('div');
+      div.className = 'feed-item';
+      var avatar = document.createElement('div');
+      avatar.className = 'feed-avatar';
+      avatar.textContent = a.nome.charAt(0);
+      var text = document.createElement('div');
+      text.className = 'feed-text';
+      text.innerHTML = '<strong>' + a.nome + '</strong> ' + a.texto;
+      var time = document.createElement('span');
+      time.className = 'feed-time';
+      time.textContent = a.tempo;
+      div.appendChild(avatar);
+      div.appendChild(text);
+      div.appendChild(time);
+      feed.appendChild(div);
+    });
+  }
+
+  // ========================================================================
+  // UPLOAD DE FOTO (mantido igual)
+  // ========================================================================
   function abrirSeletorArquivo() {
     inputFoto.click();
   }
@@ -1612,20 +2113,10 @@
       abrirPopup(painelNavegadorInterno);
       return;
     }
-
-    // O seletor de arquivo precisa abrir de forma SÍNCRONA, direto na resposta
-    // ao clique do usuário. Se passar por um .then() (ex.: checar a sessão de
-    // login antes), alguns navegadores perdem a "ativação" do gesto do usuário
-    // e a página trava/fica sem resposta depois que o arquivo é escolhido.
-    // A checagem de login agora acontece depois, ao processar o arquivo.
     abrirSeletorArquivo();
   });
 
-  // ---- Arrastar e soltar (drag-and-drop) ----
-  // Sem isto, o navegador assume o comportamento padrão dele ao soltar um
-  // arquivo: navega a aba inteira para o arquivo de imagem, o que trava a
-  // página em fotos grandes. e.preventDefault() em cada evento evita isso.
-  var dropzoneArrastes = 0; // contador p/ lidar com dragenter/dragleave em elementos filhos
+  var dropzoneArrastes = 0;
 
   dropzone.addEventListener('dragenter', function(e){
     e.preventDefault();
@@ -1664,11 +2155,9 @@
     processarArquivoDeFoto(arquivo);
   });
 
-  // Rede de segurança: se o usuário soltar o arquivo um pouco fora da área
-  // demarcada, ainda assim impede o navegador de abrir o arquivo cru.
   ['dragover', 'drop'].forEach(function(evento){
     window.addEventListener(evento, function(e){
-      if (e.target && dropzone.contains(e.target)) return; // já tratado acima
+      if (e.target && dropzone.contains(e.target)) return;
       e.preventDefault();
     });
   });
@@ -1685,7 +2174,7 @@
     }
   });
 
-  var MAX_TAMANHO_ARQUIVO_BYTES = 35 * 1024 * 1024; // 35MB, segurança contra arquivos gigantes
+  var MAX_TAMANHO_ARQUIVO_BYTES = 35 * 1024 * 1024;
 
   function redimensionarEExportar(fonte, larguraOrig, alturaOrig, callback, bitmapParaFechar){
     try {
@@ -1704,9 +2193,6 @@
       ctx.drawImage(fonte, 0, 0, largura, altura);
       if (bitmapParaFechar && bitmapParaFechar.close) bitmapParaFechar.close();
 
-      // toBlob é assíncrono e não bloqueia a thread principal como o toDataURL
-      // fazia — em fotos reais de alta resolução/muito detalhe, a codificação
-      // JPEG síncrona era o que travava a página (RESULT_CODE_HUNG).
       if (canvas.toBlob) {
         canvas.toBlob(function(blob){
           if (!blob) {
@@ -1725,7 +2211,6 @@
         return;
       }
 
-      // Fallback para navegadores sem suporte a toBlob.
       var dataUrl;
       try {
         dataUrl = canvas.toDataURL('image/jpeg', QUALIDADE_JPEG);
@@ -1740,8 +2225,6 @@
   }
 
   function comprimirImagemFallback(file, callback){
-    // Método antigo, usado só se o navegador não suportar createImageBitmap.
-    // Roda a decodificação via <img>, que pode travar a página em fotos muito grandes.
     var leitor = new FileReader();
     leitor.onload = function(){
       var img = new Image();
@@ -1761,8 +2244,6 @@
       return;
     }
 
-    // createImageBitmap decodifica a foto fora da thread principal, evitando que
-    // fotos grandes de celular (12–50MP) travem a página durante o processamento.
     if (window.createImageBitmap) {
       window.createImageBitmap(file).then(function(bitmap){
         redimensionarEExportar(bitmap, bitmap.width, bitmap.height, callback, bitmap);
@@ -1848,10 +2329,8 @@
       return;
     }
     if (fotosSelecionadas.length >= MAX_FOTOS) return;
-    if (processandoFoto) return; // evita processar duas fotos ao mesmo tempo
+    if (processandoFoto) return;
 
-    // Checagem de login movida pra cá (depois que o arquivo já foi escolhido),
-    // pra não atrasar a abertura do seletor de arquivo com um .then() antes dele.
     supa.auth.getSession()
       .then(function(sessaoResp){
         if (!sessaoResp.data.session) {
@@ -1913,6 +2392,9 @@
     inputFoto.click();
   });
 
+  // ========================================================================
+  // IDENTIFICAÇÃO (mantido igual)
+  // ========================================================================
   function iniciarIdentificacao(){
     if (!fotosSelecionadas.length || !fotoCarregada) return;
     
@@ -1962,7 +2444,9 @@
     iniciarIdentificacao();
   });
 
-  // ---- Login/cadastro ----
+  // ========================================================================
+  // LOGIN (mantido igual)
+  // ========================================================================
   btnEntrar.addEventListener('click', function(){
     var nome = inputNome.value.trim();
     var whatsapp = inputWhatsapp.value.trim();
@@ -2079,7 +2563,9 @@
       });
   });
 
-  // ---- Checkout ----
+  // ========================================================================
+  // CHECKOUT (mantido igual)
+  // ========================================================================
   function abrirCheckout(){
     supa.auth.getSession().then(function(sessaoResp){
       var sessao = sessaoResp.data.session;
@@ -2095,7 +2581,6 @@
       }
       window.open(url, '_blank');
     }).catch(function(erroCheckout){
-      // Falha ao checar sessão: melhor abrir o login do que deixar o botão sem reação.
       console.error('Falha ao abrir checkout:', erroCheckout);
       abrirPainelLogin();
     });
@@ -2105,7 +2590,9 @@
   btnComprarEarly.addEventListener('click', abrirCheckout);
   btnDesbloquearOnde.addEventListener('click', abrirCheckout);
 
-  // ---- "Já comprei" ----
+  // ========================================================================
+  // "JÁ COMPREI" (mantido igual)
+  // ========================================================================
   btnJaPaguei.addEventListener('click', function(){
     if (!identificacaoIdAtual) return;
 
@@ -2150,7 +2637,9 @@
     });
   });
 
-  // ---- Scanner e Progresso ----
+  // ========================================================================
+  // SCANNER E PROGRESSO (mantido igual)
+  // ========================================================================
   var progressoInterval = null;
 
   function iniciarScanner(){
@@ -2188,7 +2677,9 @@
     }
   }
 
-  // ---- Identificar Pedra ----
+  // ========================================================================
+  // IDENTIFICAR PEDRA (API - mantido igual)
+  // ========================================================================
   function identificarPedra(accessToken){
     if (analiseEmAndamento && resultadoIAAtual) {
       pararScanner();
@@ -2231,7 +2722,6 @@
       pararProgresso(true);
       mostrarResultado(data);
       atualizarHeader();
-      // Recarrega a vitrine APENAS se a imagem foi autorizada
       if (checkPermiteVitrine.checked) {
         carregarVitrine(1);
       }
@@ -2250,7 +2740,9 @@
     });
   }
 
-  // ---- Mostrar Resultado ----
+  // ========================================================================
+  // MOSTRAR RESULTADO (mantido igual)
+  // ========================================================================
   function mostrarResultado(data){
     document.getElementById('res-nome').textContent = data.nome_provavel || '';
 
@@ -2319,9 +2811,6 @@
 
     resultadoEl.classList.add('active');
 
-    // Espera dois frames de renderização (garante que o layout já foi
-    // recalculado com o resultado visível) antes de rolar — mais confiável
-    // do que um setTimeout curto, que às vezes disparava antes da hora.
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         resultadoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2329,10 +2818,15 @@
     });
   }
 
-  // ---- Inicialização ----
+  // ========================================================================
+  // INICIALIZAÇÃO
+  // ========================================================================
   restaurarConsultaDaURL();
   atualizarHeader();
   atualizarContadorGratis();
+  renderizarRankings('recentes');
+  gerarFeed();
+  renderizarCatalogo();
 
   supa.auth.getSession().then(function(sessaoResp){
     if (sessaoResp.data.session) {
@@ -2342,10 +2836,14 @@
     console.error('Falha ao checar sessão na inicialização:', erroInit);
   });
 
-  // Limpa timeouts quando a página é descarregada
   window.addEventListener('beforeunload', function() {
     limparTimeouts();
   });
+
+  // Carrega a vitrine
+  setTimeoutSeguro(function() {
+    carregarVitrine(1);
+  }, 500);
 </script>
 </body>
 </html>
