@@ -1,6 +1,6 @@
 // /api/stats.js
 // Retorna estatísticas reais da comunidade:
-// - Total de membros (usuários cadastrados)
+// - Total de membros (usuários com avaliações públicas)
 // - Total de pedras avaliadas (identificações públicas)
 // - Avaliações feitas hoje
 // Não requer autenticação - dados públicos
@@ -35,13 +35,14 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // 1. Total de membros (usuários únicos que já fizeram pelo menos uma avaliação)
-    const { count: membrosAtivos, error: errMembros } = await supabase
+    // 1. Total de membros (emails únicos com avaliações PÚBLICAS)
+    const { count: totalMembros, error: errMembros } = await supabase
       .from('identificacoes')
-      .select('email', { count: 'exact', head: true, distinct: true });
+      .select('email', { count: 'exact', head: true, distinct: true })
+      .eq('publica', true);  // ← FILTRO ADICIONADO
 
     if (errMembros) {
-      console.error('Erro ao buscar membros ativos:', errMembros);
+      console.error('Erro ao buscar membros:', errMembros);
     }
 
     // 2. Total de pedras avaliadas (identificações públicas)
@@ -54,7 +55,7 @@ module.exports = async function handler(req, res) {
       console.error('Erro ao buscar pedras:', errPedras);
     }
 
-    // 3. Avaliações de hoje
+    // 3. Avaliações de hoje (apenas públicas)
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
     const hojeISO = hoje.toISOString();
@@ -62,55 +63,57 @@ module.exports = async function handler(req, res) {
     const { count: avaliacoesHoje, error: errHoje } = await supabase
       .from('identificacoes')
       .select('id', { count: 'exact', head: true })
+      .eq('publica', true)
       .gte('criado_em', hojeISO);
 
     if (errHoje) {
       console.error('Erro ao buscar avaliações de hoje:', errHoje);
     }
 
-    // 4. Total de membros (todos os usuários cadastrados - estimativa)
-    // Como não temos uma tabela de usuários, usamos emails únicos das identificações
-    const { count: totalMembros, error: errTotalMembros } = await supabase
-      .from('identificacoes')
-      .select('email', { count: 'exact', head: true, distinct: true });
-
-    if (errTotalMembros) {
-      console.error('Erro ao buscar total de membros:', errTotalMembros);
-    }
-
-    // 5. Membros que avaliaram hoje
+    // 4. Membros que avaliaram hoje (emails únicos com avaliações públicas hoje)
     const { count: membrosHoje, error: errMembrosHoje } = await supabase
       .from('identificacoes')
       .select('email', { count: 'exact', head: true, distinct: true })
+      .eq('publica', true)
       .gte('criado_em', hojeISO);
 
     if (errMembrosHoje) {
       console.error('Erro ao buscar membros de hoje:', errMembrosHoje);
     }
 
+    // 5. Total de avaliações (para referência)
+    const { count: totalAvaliacoes, error: errTotal } = await supabase
+      .from('identificacoes')
+      .select('id', { count: 'exact', head: true });
+
+    if (errTotal) {
+      console.error('Erro ao buscar total de avaliações:', errTotal);
+    }
+
     // Retorna os dados formatados
     return res.status(200).json({
       membros: formatarNumero(totalMembros || 0),
       membros_raw: totalMembros || 0,
-      membros_ativos: formatarNumero(membrosAtivos || 0),
-      membros_ativos_raw: membrosAtivos || 0,
       pedras: formatarNumero(totalPedras || 0),
       pedras_raw: totalPedras || 0,
       hoje: '+' + (avaliacoesHoje || 0),
       hoje_raw: avaliacoesHoje || 0,
-      membros_hoje: membrosHoje || 0
+      membros_hoje: membrosHoje || 0,
+      total_avaliacoes: totalAvaliacoes || 0
     });
 
   } catch (error) {
     console.error('Erro ao buscar estatísticas:', error);
+    
     // Fallback com dados estáticos caso algo dê errado
     return res.status(500).json({
       error: 'Erro ao buscar estatísticas da comunidade',
-      membros: '1.2k',
-      pedras: '4.7k',
-      hoje: '+38',
-      membros_ativos: '1.2k',
-      membros_hoje: 38
+      membros: '0',
+      pedras: '0',
+      hoje: '+0',
+      membros_raw: 0,
+      pedras_raw: 0,
+      hoje_raw: 0
     });
   }
 };
