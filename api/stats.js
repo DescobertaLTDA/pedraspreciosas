@@ -36,13 +36,10 @@ module.exports = async function handler(req, res) {
     // ==========================================
     // 1. TOTAL DE MEMBROS (TODOS OS USUÁRIOS CADASTRADOS)
     // ==========================================
-    // Usando a tabela auth.users do Supabase
-    // NOTA: Isso requer permissão para acessar auth.users
-    // Se não tiver, use a segunda opção abaixo
     let totalMembros = 0;
     
     try {
-      // Tenta buscar da tabela auth.users (requer permissão)
+      // Tenta buscar da tabela auth.users
       const { count: totalUsuarios, error: errUsuarios } = await supabase
         .from('auth.users')
         .select('id', { count: 'exact', head: true });
@@ -55,12 +52,11 @@ module.exports = async function handler(req, res) {
       }
     } catch (err) {
       // Fallback: Busca emails únicos da tabela identificacoes
-      console.log('⚠️ Usando fallback: contando emails únicos da tabela identificacoes');
+      console.log('⚠️ Fallback: contando emails únicos da tabela identificacoes');
       
       const { data: membrosData, error: errMembrosData } = await supabase
         .from('identificacoes')
-        .select('email')
-        .eq('publica', true);
+        .select('email');
 
       if (!errMembrosData && membrosData) {
         const emailsUnicos = new Set();
@@ -144,7 +140,14 @@ module.exports = async function handler(req, res) {
       hoje: '+' + (avaliacoesHoje || 0),
       hoje_raw: avaliacoesHoje || 0,
       membros_hoje: membrosHoje || 0,
-      total_avaliacoes: totalAvaliacoes || 0
+      total_avaliacoes: totalAvaliacoes || 0,
+      // Dados de debug
+      _debug: {
+        total_membros_raw: totalMembros,
+        total_pedras_raw: totalPedras,
+        avaliacoes_hoje_raw: avaliacoesHoje,
+        membros_hoje_raw: membrosHoje
+      }
     });
 
   } catch (error) {
