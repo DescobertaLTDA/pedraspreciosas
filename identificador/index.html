@@ -1802,7 +1802,7 @@
       supa.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: window.location.href.split('#')[0].split('?')[0]
         }
       }).then(function(result) {
         if (result.error) {
