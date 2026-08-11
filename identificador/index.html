@@ -304,14 +304,29 @@
 
   .vitrine-sub{margin-top:6px;font-size:13.5px;color:var(--ink-mute);text-align:center;}
 
-  /* #area-vitrine fica DENTRO do .wrap (sem hack de 100vw) — isso é o que
-     evitava o conteúdo colar/estourar nas bordas em telas pequenas.
-     O carrossel "sangra" apenas até a borda do próprio card, nunca até a
-     borda real da viewport. */
-  #area-vitrine{position:relative;}
+  /* #area-vitrine é uma seção "solta" (sem moldura de .card), do jeito que
+     a OLX faz: o título respeita o respiro normal da página, e o carrossel
+     estica de verdade até a borda real da viewport — nunca fica preso
+     dentro de uma caixa centralizada, nem colado sem nenhuma margem. */
+  #area-vitrine{
+    position:relative;
+    margin-top:32px;
+    background:none;
+    border:none;
+    box-shadow:none;
+    padding:0;
+  }
+  #area-vitrine > h2, #area-vitrine > .vitrine-sub, #area-vitrine > .aviso{
+    padding-left:2px;padding-right:2px;
+  }
 
-  .vitrine-scroll{position:relative;margin:22px -26px 0;}
-  @media (max-width:380px){ .vitrine-scroll{margin:22px -20px 0;} }
+  .vitrine-scroll{
+    position:relative;
+    margin-top:18px;
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+  }
 
   .vitrine-grid{
     display:flex;
@@ -321,9 +336,10 @@
     scroll-snap-type:x proximity;
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
-    padding:2px 26px 12px;
+    padding:2px 20px 12px;
+    padding-left:max(20px, env(safe-area-inset-left));
+    padding-right:max(20px, env(safe-area-inset-right));
   }
-  @media (max-width:380px){ .vitrine-grid{padding:2px 20px 12px;} }
   .vitrine-grid::-webkit-scrollbar{display:none;}
 
   .vitrine-card{flex:0 0 152px;width:152px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
