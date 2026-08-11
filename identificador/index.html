@@ -634,7 +634,6 @@
   @media (max-width:900px){ .vitrine-grid{grid-template-columns:repeat(3, 1fr);} }
   @media (max-width:480px){ .vitrine-grid{grid-template-columns:repeat(2, 1fr);} }
   
-  /* Ajuste automático do grid da vitrine baseado no número de itens */
   .vitrine-grid:has(.vitrine-card:only-child) {
     grid-template-columns: 1fr !important;
     max-width: 300px !important;
@@ -942,7 +941,7 @@
       Atividade recente
     </h2>
     <div class="community-feed" id="community-feed">
-      <!-- Preenchido via JS -->
+      <!-- Preenchido via JS com dados reais -->
     </div>
   </div>
 
@@ -1296,6 +1295,7 @@
   // ========================================================================
   var catalogoDados = [];
   var catalogoDadosCarregados = false;
+  var feedDados = [];
 
   function formatarMoedaBR(valor){
     if (typeof valor !== 'number' || isNaN(valor)) return null;
@@ -1303,7 +1303,7 @@
   }
 
   // Busca as identificações públicas (com foto) no /api/vitrine
-  var MAX_PAGINAS_API = 15; // Aumentado para carregar mais itens
+  var MAX_PAGINAS_API = 15;
   function carregarDadosPublicos(){
     return fetch('/api/vitrine?pagina=1')
       .then(function(r){ return r.json(); })
@@ -1333,12 +1333,112 @@
         });
         catalogoDados = todos;
         catalogoDadosCarregados = true;
+        
+        // Também alimenta o feed com os dados reais
+        gerarFeedReal(todos);
       })
       .catch(function(err){
         console.error('Erro ao carregar dados públicos (vitrine/catálogo):', err);
         catalogoDados = [];
         catalogoDadosCarregados = true;
+        // Fallback: feed com dados de exemplo
+        gerarFeedFallback();
       });
+  }
+
+  // ========================================================================
+  // FEED REAL - Busca atividades reais da API
+  // ========================================================================
+  function carregarFeedReal(){
+    return fetch('/api/feed')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.itens && data.itens.length > 0) {
+          feedDados = data.itens;
+          renderizarFeed(feedDados);
+        } else {
+          // Se não houver dados do feed, usa os dados do catálogo
+          if (catalogoDados.length > 0) {
+            gerarFeedReal(catalogoDados);
+          } else {
+            gerarFeedFallback();
+          }
+        }
+      })
+      .catch(function(){
+        // Fallback: usa os dados do catálogo
+        if (catalogoDados.length > 0) {
+          gerarFeedReal(catalogoDados);
+        } else {
+          gerarFeedFallback();
+        }
+      });
+  }
+
+  function gerarFeedReal(dados){
+    // Pega as 5 avaliações mais recentes
+    var recentes = dados.slice().sort(function(a,b){ 
+      return new Date(b.data) - new Date(a.data); 
+    }).slice(0, 5);
+    
+    feedDados = recentes.map(function(item){
+      var acao = '';
+      if (item.valor && item.valor !== 'Valor sob consulta') {
+        acao = 'avaliou <strong>' + item.nome + '</strong> por ' + item.valor;
+      } else {
+        acao = 'descobriu <strong>' + item.nome + '</strong>';
+      }
+      return {
+        nome: item.avaliador || 'Cliente',
+        acao: acao,
+        tempo: tempoRelativo(item.data) || 'agora'
+      };
+    });
+    
+    renderizarFeed(feedDados);
+  }
+
+  function gerarFeedFallback(){
+    var fallback = [
+      { nome: 'Tania', acao: 'descobriu <strong>Minério de Manganês</strong>!', tempo: 'agora' },
+      { nome: 'LUCAS', acao: 'avaliou uma <strong>Turmalina Negra</strong> de R$ 400', tempo: '5 min' },
+      { nome: 'Marcos', acao: 'encontrou <strong>Calcário</strong> na serra', tempo: '12 min' },
+      { nome: 'Ana', acao: 'identificou um <strong>Quartzo Rosa</strong> raro', tempo: '23 min' },
+      { nome: 'Sofia', acao: 'descobriu o valor de um <strong>Rubi</strong>', tempo: '1h' }
+    ];
+    renderizarFeed(fallback);
+  }
+
+  function renderizarFeed(atividades){
+    var feed = document.getElementById('community-feed');
+    feed.innerHTML = '';
+    
+    if (!atividades || atividades.length === 0) {
+      feed.innerHTML = '<p style="text-align:center;color:var(--ink-mute2);padding:8px 0;">Nenhuma atividade recente.</p>';
+      return;
+    }
+    
+    atividades.forEach(function(a){
+      var div = document.createElement('div');
+      div.className = 'feed-item';
+      
+      var avatar = document.createElement('div');
+      avatar.className = 'feed-avatar';
+      avatar.textContent = (a.nome || '?').charAt(0).toUpperCase();
+      
+      var text = document.createElement('div');
+      text.className = 'feed-text';
+      text.innerHTML = '<strong>' + (a.nome || 'Cliente') + '</strong> ' + (a.acao || 'avaliou uma pedra');
+      
+      var time = document.createElement('span');
+      time.className = 'feed-time';
+      time.textContent = a.tempo || 'agora';
+      
+      div.appendChild(avatar);
+      div.appendChild(text);
+      div.appendChild(time);
+      feed.appendChild(div);
+    });
   }
 
   // ========================================================================
@@ -1494,7 +1594,7 @@
   // ========================================================================
   // VITRINE - CONFIGURAÇÃO PARA 8 ITENS
   // ========================================================================
-  var QTD_VITRINE = 8; // Mostrar 8 itens
+  var QTD_VITRINE = 8;
   var vitrineGrid = document.getElementById('vitrine-grid');
   var vitrinePaginacao = document.getElementById('vitrine-paginacao');
   var vitrineVazio = document.getElementById('vitrine-vazio');
@@ -1536,7 +1636,6 @@
     }
     vitrineVazio.style.display = 'none';
 
-    // Define o número de colunas baseado na quantidade de itens
     var cols = 4;
     if (itens.length <= 2) cols = 2;
     else if (itens.length <= 4) cols = 3;
@@ -2255,38 +2354,6 @@
   }
 
   // ========================================================================
-  // FEED DA COMUNIDADE
-  // ========================================================================
-  function gerarFeed(){
-    var feed = document.getElementById('community-feed');
-    var atividades = [
-      { nome: 'Tania', texto: 'descobriu <strong>Minério de Manganês</strong>!', tempo: 'agora' },
-      { nome: 'LUCAS', texto: 'avaliou uma <strong>Turmalina Negra</strong> de R$ 400', tempo: '5 min' },
-      { nome: 'Marcos', texto: 'encontrou <strong>Calcário</strong> na serra', tempo: '12 min' },
-      { nome: 'Ana', texto: 'identificou um <strong>Quartzo Rosa</strong> raro', tempo: '23 min' },
-      { nome: 'Sofia', texto: 'descobriu o valor de um <strong>Rubi</strong>', tempo: '1h' }
-    ];
-    feed.innerHTML = '';
-    atividades.forEach(function(a){
-      var div = document.createElement('div');
-      div.className = 'feed-item';
-      var avatar = document.createElement('div');
-      avatar.className = 'feed-avatar';
-      avatar.textContent = a.nome.charAt(0);
-      var text = document.createElement('div');
-      text.className = 'feed-text';
-      text.innerHTML = '<strong>' + a.nome + '</strong> ' + a.texto;
-      var time = document.createElement('span');
-      time.className = 'feed-time';
-      time.textContent = a.tempo;
-      div.appendChild(avatar);
-      div.appendChild(text);
-      div.appendChild(time);
-      feed.appendChild(div);
-    });
-  }
-
-  // ========================================================================
   // UPLOAD DE FOTO
   // ========================================================================
   function abrirSeletorArquivo() {
@@ -2913,6 +2980,7 @@
           renderizarCatalogo();
           carregarVitrine(1);
           renderizarRankings(rankingAtual);
+          carregarFeedReal();
         });
       }
     })
@@ -3015,7 +3083,6 @@
   atualizarHeader();
   atualizarContadorGratis();
   renderizarRankings('recentes');
-  gerarFeed();
 
   document.getElementById('catalogo-grid').innerHTML = '<p style="text-align:center;color:var(--ink-mute2);padding:20px 0;grid-column:1/-1;">Carregando pedras da comunidade...</p>';
 
@@ -3023,6 +3090,8 @@
     renderizarCatalogo();
     carregarVitrine(1);
     renderizarRankings(rankingAtual);
+    // Carrega o feed real
+    carregarFeedReal();
   });
 
   document.getElementById('rankings-tabs').addEventListener('click', function(e){
