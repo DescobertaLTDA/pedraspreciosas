@@ -303,36 +303,55 @@
   .historico-badge.bloqueado{color:var(--ink-mute);}
 
   .vitrine-sub{margin-top:6px;font-size:13.5px;color:var(--ink-mute);text-align:center;}
-  .vitrine-grid{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
-  #area-vitrine{
-    width:100vw;
-    max-width:100vw;
-    margin-left:calc(50% - 50vw);
-    margin-right:calc(50% - 50vw);
-    border-radius:0;
-    border-left:none;
-    border-right:none;
-    padding-left:max(28px, env(safe-area-inset-left), calc((100vw - 1600px) / 2));
-    padding-right:max(28px, env(safe-area-inset-right), calc((100vw - 1600px) / 2));
-    box-sizing:border-box;
+
+  /* #area-vitrine fica DENTRO do .wrap (sem hack de 100vw) — isso é o que
+     evitava o conteúdo colar/estourar nas bordas em telas pequenas.
+     O carrossel "sangra" apenas até a borda do próprio card, nunca até a
+     borda real da viewport. */
+  #area-vitrine{position:relative;}
+
+  .vitrine-scroll{position:relative;margin:22px -26px 0;}
+  @media (max-width:380px){ .vitrine-scroll{margin:22px -20px 0;} }
+
+  .vitrine-grid{
+    display:flex;
+    gap:14px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:2px 26px 12px;
   }
-  .vitrine-card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
+  @media (max-width:380px){ .vitrine-grid{padding:2px 20px 12px;} }
+  .vitrine-grid::-webkit-scrollbar{display:none;}
+
+  .vitrine-card{flex:0 0 152px;width:152px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
   .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
   .vitrine-card:active{transform:scale(0.97);}
-  .vitrine-index{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:0.03em;color:var(--ink-mute2);padding:8px 8px 0;}
+
+  .vitrine-fav{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.94);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.18);z-index:2;}
+  .vitrine-fav svg{width:12px;height:12px;stroke:var(--ink-soft);stroke-width:1.9;fill:none;}
+
   .consentimento-vitrine{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:13px;color:var(--ink-mute,#a6a6a6);cursor:pointer;line-height:1.4;}
   .consentimento-vitrine input{margin-top:2px;flex-shrink:0;}
-  .vitrine-foto{margin:5px 7px 0;border-radius:6px;overflow:hidden;aspect-ratio:1/1;background:var(--card-alt);border:1px solid var(--line);}
+
+  .vitrine-foto{aspect-ratio:1/1;background:var(--card-alt);border-bottom:1px solid var(--line);}
   .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
-  .vitrine-info{padding:8px 8px 10px;}
-  .vitrine-nome{font-family:'Fraunces',serif;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .vitrine-subtitulo{font-style:italic;font-size:9.5px;color:var(--ink-mute);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .vitrine-divisor{border-top:1px dashed var(--line-strong);margin:7px 0;}
-  .vitrine-label{font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mute2);margin-bottom:3px;}
-  .vitrine-valor{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--emerald);}
-  .vitrine-status{display:flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--accent-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .vitrine-status svg{width:10px;height:10px;stroke:var(--accent-dark);stroke-width:2.6;fill:none;flex-shrink:0;}
-  .vitrine-paginacao{margin-top:22px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+
+  .vitrine-info{padding:9px 9px 11px;}
+  .vitrine-nome{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;}
+  .vitrine-badge{display:inline-block;margin-top:7px;font-size:10px;font-weight:700;color:var(--accent-dark);background:var(--accent-light);padding:3px 7px;border-radius:5px;}
+  .vitrine-valor{margin-top:7px;font-family:'Inter',sans-serif;font-size:15.5px;font-weight:700;color:var(--ink);}
+  .vitrine-meta{margin-top:5px;font-size:10px;color:var(--ink-mute2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  .vitrine-nav{position:absolute;top:calc(50% - 8px);right:6px;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--line-strong);box-shadow:0 2px 10px rgba(0,0,0,0.16);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;}
+  .vitrine-nav:hover{border-color:var(--accent);}
+  .vitrine-nav svg{width:15px;height:15px;stroke:var(--ink-soft);stroke-width:2.3;fill:none;}
+  .vitrine-nav.esconder{display:none;}
+  @media (max-width:700px){ .vitrine-nav{display:none !important;} }
+
+  .vitrine-paginacao{margin-top:16px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
   .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;width:32px;height:32px;border-radius:7px;border:1px solid var(--line-strong);background:var(--card);color:var(--ink-mute);cursor:pointer;}
   .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
   .vitrine-pag-btn.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);}
@@ -774,7 +793,12 @@
   <div class="card" id="area-vitrine">
     <h2>Veja o que outras pessoas encontraram</h2>
     <p class="vitrine-sub">Resultados reais de quem já descobriu o valor da própria pedra.</p>
-    <div class="vitrine-grid" id="vitrine-grid"></div>
+    <div class="vitrine-scroll">
+      <div class="vitrine-grid" id="vitrine-grid"></div>
+      <button class="vitrine-nav" id="vitrine-nav-next" type="button" aria-label="Ver mais resultados">
+        <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
     <div class="vitrine-paginacao" id="vitrine-paginacao"></div>
     <p class="aviso" id="vitrine-vazio" style="display:none;">Ainda não temos resultados para mostrar aqui.</p>
   </div>
@@ -1433,8 +1457,33 @@
   var vitrineGrid = document.getElementById('vitrine-grid');
   var vitrinePaginacao = document.getElementById('vitrine-paginacao');
   var vitrineVazio = document.getElementById('vitrine-vazio');
+  var vitrineNavNext = document.getElementById('vitrine-nav-next');
   var paginaVitrineAtual = 1;
   var carregandoVitrine = false;
+
+  if (vitrineNavNext) {
+    vitrineNavNext.addEventListener('click', function(){
+      vitrineGrid.scrollBy({ left: vitrineGrid.clientWidth * 0.85, behavior: 'smooth' });
+    });
+    vitrineGrid && vitrineGrid.addEventListener && vitrineGrid.addEventListener('scroll', atualizarSetaVitrine);
+  }
+
+  function atualizarSetaVitrine(){
+    if (!vitrineNavNext) return;
+    var atingiuFim = vitrineGrid.scrollWidth - vitrineGrid.scrollLeft - vitrineGrid.clientWidth < 8;
+    vitrineNavNext.classList.toggle('esconder', atingiuFim);
+  }
+
+  function tempoRelativo(dataIso){
+    if (!dataIso) return '';
+    var diffMin = Math.max(0, Math.round((Date.now() - new Date(dataIso).getTime()) / 60000));
+    if (diffMin < 1) return 'agora há pouco';
+    if (diffMin < 60) return 'há ' + diffMin + ' min';
+    var diffH = Math.round(diffMin / 60);
+    if (diffH < 24) return 'há ' + diffH + 'h';
+    var diffD = Math.round(diffH / 24);
+    return 'há ' + diffD + 'd';
+  }
 
   function carregarVitrine(pagina){
     if (carregandoVitrine) return;
@@ -1468,19 +1517,17 @@
         ? formatarReais(item.valor_exibicao)
         : 'valor sob consulta';
 
-      var numeroGlobal = (data.pagina - 1) * itens.length + i + 1;
-      var numeroTexto = 'N° ' + String(numeroGlobal).padStart(3, '0');
-
       var card = document.createElement('div');
       card.className = 'vitrine-card';
 
-      var indice = document.createElement('div');
-      indice.className = 'vitrine-index';
-      indice.textContent = numeroTexto;
+      var fav = document.createElement('div');
+      fav.className = 'vitrine-fav';
+      fav.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.1C.6 8.4 2.3 5 5.8 5c2 0 3.4 1 6.2 3.6C14.8 6 16.2 5 18.2 5c3.5 0 5.2 3.4 3.8 6.9C19.5 16.4 12 21 12 21z"/></svg>';
 
       var foto = document.createElement('div');
       foto.className = 'vitrine-foto';
       var img = document.createElement('img');
+      img.loading = 'lazy';
       img.src = item.foto;
       img.alt = item.pedra || 'Pedra identificada';
       foto.appendChild(img);
@@ -1492,41 +1539,32 @@
       nome.className = 'vitrine-nome';
       nome.textContent = item.pedra || 'Pedra não identificada';
 
-      var subtitulo = document.createElement('div');
-      subtitulo.className = 'vitrine-subtitulo';
-      subtitulo.textContent = 'encontrada por ' + (item.nome || 'cliente');
-
-      var divisor1 = document.createElement('div');
-      divisor1.className = 'vitrine-divisor';
-
-      var labelValor = document.createElement('div');
-      labelValor.className = 'vitrine-label';
-      labelValor.textContent = 'Valor encontrado';
+      var badge = document.createElement('div');
+      badge.className = 'vitrine-badge';
+      badge.textContent = 'Avaliada por IA';
 
       var valor = document.createElement('div');
       valor.className = 'vitrine-valor';
       valor.textContent = valorTexto;
 
-      var divisor2 = document.createElement('div');
-      divisor2.className = 'vitrine-divisor';
-
-      var status = document.createElement('div');
-      status.className = 'vitrine-status';
-      status.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Já descobriu o valor!';
+      var meta = document.createElement('div');
+      meta.className = 'vitrine-meta';
+      var quando = tempoRelativo(item.criado_em);
+      meta.textContent = (quando ? quando + ' · ' : '') + 'por ' + (item.nome || 'cliente');
 
       info.appendChild(nome);
-      info.appendChild(subtitulo);
-      info.appendChild(divisor1);
-      info.appendChild(labelValor);
+      info.appendChild(badge);
       info.appendChild(valor);
-      info.appendChild(divisor2);
-      info.appendChild(status);
+      info.appendChild(meta);
 
-      card.appendChild(indice);
+      card.appendChild(fav);
       card.appendChild(foto);
       card.appendChild(info);
       vitrineGrid.appendChild(card);
     });
+
+    vitrineGrid.scrollLeft = 0;
+    if (typeof atualizarSetaVitrine === 'function') atualizarSetaVitrine();
 
     var totalPaginas = data.total_paginas || 1;
     var LIMITE_MAX_PAGINACAO = 50; // segurança: nunca cria uma quantidade absurda de botões
