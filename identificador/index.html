@@ -2852,7 +2852,7 @@
         .catch(function(err) {
           pararProgresso(false);
           var msg = err.message || 'Não foi possível identificar a pedra agora. Tente novamente.';
-          if (/avalia[cç][aã]o(?:es)? gr[aá]tis|avalia[cç][aã]o(?:es)? gratuita/i.test(msg)) {
+          if (/gratuita|gr[aá]tis/i.test(msg)) {
             abrirPaywall(msg);
           } else {
             erroEl.textContent = msg;
