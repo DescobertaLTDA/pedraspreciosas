@@ -633,6 +633,27 @@
   .vitrine-card:active{transform:scale(0.97);}
   @media (max-width:900px){ .vitrine-grid{grid-template-columns:repeat(3, 1fr);} }
   @media (max-width:480px){ .vitrine-grid{grid-template-columns:repeat(2, 1fr);} }
+  
+  /* Ajuste automático do grid da vitrine baseado no número de itens */
+  .vitrine-grid:has(.vitrine-card:only-child) {
+    grid-template-columns: 1fr !important;
+    max-width: 300px !important;
+  }
+  .vitrine-grid:has(.vitrine-card:nth-last-child(2):first-child),
+  .vitrine-grid:has(.vitrine-card:nth-last-child(2):first-child ~ .vitrine-card) {
+    grid-template-columns: repeat(2, 1fr) !important;
+    max-width: 600px !important;
+  }
+  .vitrine-grid:has(.vitrine-card:nth-last-child(3):first-child),
+  .vitrine-grid:has(.vitrine-card:nth-last-child(3):first-child ~ .vitrine-card) {
+    grid-template-columns: repeat(3, 1fr) !important;
+    max-width: 900px !important;
+  }
+  .vitrine-grid:has(.vitrine-card:nth-last-child(4):first-child),
+  .vitrine-grid:has(.vitrine-card:nth-last-child(4):first-child ~ .vitrine-card) {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+
   .vitrine-fav{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.94);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.18);z-index:2;}
   .vitrine-fav svg{width:12px;height:12px;stroke:var(--ink-soft);stroke-width:1.9;fill:none;}
   .vitrine-foto{aspect-ratio:1/1;background:var(--card-alt);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
@@ -1281,11 +1302,8 @@
     return 'R$ ' + valor.toFixed(2).replace('.', ',');
   }
 
-  // Busca as identificações públicas (com foto) no /api/vitrine e monta o
-  // array catalogoDados usado tanto pela vitrine "Descobertas da comunidade"
-  // quanto pelo "Catálogo Geral". Pega várias páginas do endpoint (que
-  // pagina de 10 em 10) até um limite razoável, pra não pesar demais.
-  var MAX_PAGINAS_API = 8;
+  // Busca as identificações públicas (com foto) no /api/vitrine
+  var MAX_PAGINAS_API = 15; // Aumentado para carregar mais itens
   function carregarDadosPublicos(){
     return fetch('/api/vitrine?pagina=1')
       .then(function(r){ return r.json(); })
@@ -1321,17 +1339,6 @@
         catalogoDados = [];
         catalogoDadosCarregados = true;
       });
-  }
-
-  // Retorna os ids dos itens que estão sendo exibidos na vitrine "Descobertas da comunidade"
-  // (os N mais recentes). O catálogo geral usa isso para não repetir os mesmos cards.
-  var QTD_VITRINE = 6;
-  function obterIdsVitrine(){
-    return catalogoDados
-      .slice()
-      .sort(function(a,b){ return new Date(b.data) - new Date(a.data); })
-      .slice(0, QTD_VITRINE)
-      .map(function(item){ return item.id; });
   }
 
   // ========================================================================
@@ -1462,7 +1469,7 @@
   var catalogoFiltroTipo = '';
 
   // ========================================================================
-  // RANKINGS - DATA FALLBACK (usado apenas enquanto os dados reais não carregam)
+  // RANKINGS - DATA FALLBACK
   // ========================================================================
   var rankingsData = {
     recentes: [
@@ -1483,6 +1490,128 @@
   };
 
   var rankingAtual = 'recentes';
+
+  // ========================================================================
+  // VITRINE - CONFIGURAÇÃO PARA 8 ITENS
+  // ========================================================================
+  var QTD_VITRINE = 8; // Mostrar 8 itens
+  var vitrineGrid = document.getElementById('vitrine-grid');
+  var vitrinePaginacao = document.getElementById('vitrine-paginacao');
+  var vitrineVazio = document.getElementById('vitrine-vazio');
+  var paginaVitrineAtual = 1;
+  var carregandoVitrine = false;
+
+  function obterIdsVitrine(){
+    var todos = catalogoDados.slice();
+    todos.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
+    return todos.slice(0, QTD_VITRINE).map(function(item){ return item.id; });
+  }
+
+  function carregarVitrine(pagina){
+    if (carregandoVitrine) return;
+    carregandoVitrine = true;
+    paginaVitrineAtual = pagina || 1;
+
+    var idsVitrine = obterIdsVitrine();
+    var itens = catalogoDados.filter(function(item){ return idsVitrine.indexOf(item.id) !== -1; });
+    itens.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
+
+    var totalPaginas = Math.max(1, Math.ceil(itens.length / QTD_VITRINE));
+    if (paginaVitrineAtual > totalPaginas) paginaVitrineAtual = totalPaginas;
+    var inicio = (paginaVitrineAtual - 1) * QTD_VITRINE;
+    var itensPagina = itens.slice(inicio, inicio + QTD_VITRINE);
+
+    renderizarVitrine({ itens: itensPagina, pagina: paginaVitrineAtual, total_paginas: totalPaginas });
+    carregandoVitrine = false;
+  }
+
+  function renderizarVitrine(data){
+    var itens = data.itens || [];
+    vitrineGrid.innerHTML = '';
+    vitrinePaginacao.innerHTML = '';
+
+    if (itens.length === 0) {
+      vitrineVazio.style.display = 'block';
+      return;
+    }
+    vitrineVazio.style.display = 'none';
+
+    // Define o número de colunas baseado na quantidade de itens
+    var cols = 4;
+    if (itens.length <= 2) cols = 2;
+    else if (itens.length <= 4) cols = 3;
+    vitrineGrid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+    if (itens.length <= 4) {
+      vitrineGrid.style.maxWidth = (cols * 220 + (cols - 1) * 14) + 'px';
+    } else {
+      vitrineGrid.style.maxWidth = '1180px';
+    }
+
+    itens.forEach(function(item, i){
+      var valorTexto = item.valor || 'valor sob consulta';
+
+      var card = document.createElement('div');
+      card.className = 'vitrine-card';
+
+      var fav = document.createElement('div');
+      fav.className = 'vitrine-fav';
+      fav.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.1C.6 8.4 2.3 5 5.8 5c2 0 3.4 1 6.2 3.6C14.8 6 16.2 5 18.2 5c3.5 0 5.2 3.4 3.8 6.9C19.5 16.4 12 21 12 21z"/></svg>';
+
+      var foto = document.createElement('div');
+      foto.className = 'vitrine-foto';
+      var img = document.createElement('img');
+      img.loading = 'lazy';
+      img.src = item.foto || '/stone-placeholder.png';
+      img.alt = item.nome || 'Pedra identificada';
+      img.onerror = function(){ this.style.display = 'none'; };
+      foto.appendChild(img);
+
+      var info = document.createElement('div');
+      info.className = 'vitrine-info';
+
+      var nome = document.createElement('div');
+      nome.className = 'vitrine-nome';
+      nome.textContent = item.nome || 'Pedra não identificada';
+
+      var badge = document.createElement('div');
+      badge.className = 'vitrine-badge';
+      badge.textContent = 'Avaliada por IA';
+
+      var valor = document.createElement('div');
+      valor.className = 'vitrine-valor';
+      valor.textContent = valorTexto;
+
+      var meta = document.createElement('div');
+      meta.className = 'vitrine-meta';
+      var quando = tempoRelativo(item.data);
+      meta.textContent = (quando ? quando + ' · ' : '') + 'por ' + (item.avaliador || 'cliente');
+
+      info.appendChild(nome);
+      info.appendChild(badge);
+      info.appendChild(valor);
+      info.appendChild(meta);
+
+      card.appendChild(fav);
+      card.appendChild(foto);
+      card.appendChild(info);
+      vitrineGrid.appendChild(card);
+    });
+
+    var totalPaginas = data.total_paginas || 1;
+    if (totalPaginas > 1) {
+      for (var p = 1; p <= totalPaginas; p++) {
+        (function(numeroPagina){
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'vitrine-pag-btn' + (numeroPagina === data.pagina ? ' active' : '');
+          btn.textContent = numeroPagina;
+          btn.setAttribute('aria-label', 'Ver página ' + numeroPagina + ' das descobertas');
+          btn.addEventListener('click', function(){ carregarVitrine(numeroPagina); });
+          vitrinePaginacao.appendChild(btn);
+        })(p);
+      }
+    }
+  }
 
   // ========================================================================
   // UTILITÁRIOS
@@ -1628,13 +1757,12 @@
   }
 
   // ========================================================================
-  // RANKINGS - AGORA COM FOTOS REAIS
+  // RANKINGS - COM FOTOS
   // ========================================================================
   function carregarRankingsComFotos(tipo){
     var grid = document.getElementById('rankings-grid');
     
     if (!catalogoDadosCarregados || catalogoDados.length === 0) {
-      // Fallback: dados estáticos com placeholder de imagem
       var dadosFallback = rankingsData[tipo] || rankingsData.recentes;
       grid.innerHTML = '';
       dadosFallback.forEach(function(item, index){
@@ -1655,7 +1783,6 @@
       return;
     }
     
-    // Pega os dados do catálogo e ordena conforme o tipo selecionado
     var dados = catalogoDados.slice();
     
     if (tipo === 'recentes') {
@@ -1674,7 +1801,6 @@
       });
     }
     
-    // Pega apenas os 6 primeiros
     var top6 = dados.slice(0, 6);
     
     grid.innerHTML = '';
@@ -2126,113 +2252,6 @@
       erroEl.textContent = err.message || 'Não foi possível abrir sua última consulta automaticamente.';
       erroEl.style.display = 'block';
     });
-  }
-
-  // ========================================================================
-  // VITRINE
-  // ========================================================================
-  var vitrineGrid = document.getElementById('vitrine-grid');
-  var vitrinePaginacao = document.getElementById('vitrine-paginacao');
-  var vitrineVazio = document.getElementById('vitrine-vazio');
-  var paginaVitrineAtual = 1;
-  var carregandoVitrine = false;
-  var VITRINE_COLUNAS = 6;
-  var VITRINE_LINHAS = 3;
-  var VITRINE_POR_PAGINA = VITRINE_COLUNAS * VITRINE_LINHAS;
-
-  function carregarVitrine(pagina){
-    if (carregandoVitrine) return;
-    carregandoVitrine = true;
-    paginaVitrineAtual = pagina || 1;
-
-    var idsVitrine = obterIdsVitrine();
-    var itens = catalogoDados.filter(function(item){ return idsVitrine.indexOf(item.id) !== -1; });
-    itens.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
-
-    var totalPaginas = Math.max(1, Math.ceil(itens.length / VITRINE_POR_PAGINA));
-    if (paginaVitrineAtual > totalPaginas) paginaVitrineAtual = totalPaginas;
-    var inicio = (paginaVitrineAtual - 1) * VITRINE_POR_PAGINA;
-    var itensPagina = itens.slice(inicio, inicio + VITRINE_POR_PAGINA);
-
-    renderizarVitrine({ itens: itensPagina, pagina: paginaVitrineAtual, total_paginas: totalPaginas });
-    carregandoVitrine = false;
-  }
-
-  function renderizarVitrine(data){
-    var itens = data.itens || [];
-    vitrineGrid.innerHTML = '';
-    vitrinePaginacao.innerHTML = '';
-
-    if (itens.length === 0) {
-      vitrineVazio.style.display = 'block';
-      return;
-    }
-    vitrineVazio.style.display = 'none';
-
-    itens.forEach(function(item, i){
-      var valorTexto = item.valor || 'valor sob consulta';
-
-      var card = document.createElement('div');
-      card.className = 'vitrine-card';
-
-      var fav = document.createElement('div');
-      fav.className = 'vitrine-fav';
-      fav.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.1C.6 8.4 2.3 5 5.8 5c2 0 3.4 1 6.2 3.6C14.8 6 16.2 5 18.2 5c3.5 0 5.2 3.4 3.8 6.9C19.5 16.4 12 21 12 21z"/></svg>';
-
-      var foto = document.createElement('div');
-      foto.className = 'vitrine-foto';
-      var img = document.createElement('img');
-      img.loading = 'lazy';
-      img.src = item.foto || '/stone-placeholder.png';
-      img.alt = item.nome || 'Pedra identificada';
-      img.onerror = function(){ this.style.display = 'none'; };
-      foto.appendChild(img);
-
-      var info = document.createElement('div');
-      info.className = 'vitrine-info';
-
-      var nome = document.createElement('div');
-      nome.className = 'vitrine-nome';
-      nome.textContent = item.nome || 'Pedra não identificada';
-
-      var badge = document.createElement('div');
-      badge.className = 'vitrine-badge';
-      badge.textContent = 'Avaliada por IA';
-
-      var valor = document.createElement('div');
-      valor.className = 'vitrine-valor';
-      valor.textContent = valorTexto;
-
-      var meta = document.createElement('div');
-      meta.className = 'vitrine-meta';
-      var quando = tempoRelativo(item.data);
-      meta.textContent = (quando ? quando + ' · ' : '') + 'por ' + (item.avaliador || 'cliente');
-
-      info.appendChild(nome);
-      info.appendChild(badge);
-      info.appendChild(valor);
-      info.appendChild(meta);
-
-      card.appendChild(fav);
-      card.appendChild(foto);
-      card.appendChild(info);
-      vitrineGrid.appendChild(card);
-    });
-
-    var totalPaginas = data.total_paginas || 1;
-    if (totalPaginas > 1) {
-      for (var p = 1; p <= totalPaginas; p++) {
-        (function(numeroPagina){
-          var btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'vitrine-pag-btn' + (numeroPagina === data.pagina ? ' active' : '');
-          btn.textContent = numeroPagina;
-          btn.setAttribute('aria-label', 'Ver página ' + numeroPagina + ' das descobertas');
-          btn.addEventListener('click', function(){ carregarVitrine(numeroPagina); });
-          vitrinePaginacao.appendChild(btn);
-        })(p);
-      }
-    }
   }
 
   // ========================================================================
