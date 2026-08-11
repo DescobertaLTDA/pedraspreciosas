@@ -870,7 +870,7 @@
     <p class="erro" id="erro" style="display:none;"></p>
   </div>
 
-  <!-- ---- COMUNIDADE: ESTATÍSTICAS ---- -->
+  <!-- ---- COMUNIDADE: ESTATÍSTICAS REAIS ---- -->
   <div class="card" style="margin-top:20px;background:var(--accent-light);border-color:var(--line);">
     <h2 style="font-size:18px;">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -878,18 +878,19 @@
     </h2>
     <div class="community-stats">
       <div class="stat">
-        <span class="num" id="stat-membros">1.2k</span>
+        <span class="num" id="stat-membros">...</span>
         <span class="label">membros</span>
       </div>
       <div class="stat">
-        <span class="num" id="stat-pedras">4.7k</span>
+        <span class="num" id="stat-pedras">...</span>
         <span class="label">pedras avaliadas</span>
       </div>
       <div class="stat">
-        <span class="num" id="stat-hoje">+38</span>
+        <span class="num" id="stat-hoje">...</span>
         <span class="label">avaliações hoje</span>
       </div>
     </div>
+    <p style="font-size:11px;color:var(--ink-mute2);text-align:center;margin-top:4px;" id="stat-atualizado">Atualizando...</p>
   </div>
 
   <!-- VITRINE -->
@@ -3077,6 +3078,70 @@
   }
 
   // ========================================================================
+  // CARREGAR ESTATÍSTICAS REAIS DA COMUNIDADE
+  // ========================================================================
+  var statsTimeout = null;
+
+  function carregarEstatisticas() {
+    var statMembros = document.getElementById('stat-membros');
+    var statPedras = document.getElementById('stat-pedras');
+    var statHoje = document.getElementById('stat-hoje');
+    var statAtualizado = document.getElementById('stat-atualizado');
+    
+    if (!statMembros) return;
+    
+    // Mostra loading
+    statMembros.textContent = '...';
+    statPedras.textContent = '...';
+    statHoje.textContent = '...';
+    if (statAtualizado) statAtualizado.textContent = 'Atualizando...';
+    
+    fetch('/api/stats')
+      .then(function(res) {
+        if (!res.ok) throw new Error('Erro na API');
+        return res.json();
+      })
+      .then(function(data) {
+        // Atualiza com dados reais
+        statMembros.textContent = data.membros || '0';
+        statPedras.textContent = data.pedras || '0';
+        statHoje.textContent = data.hoje || '+0';
+        
+        if (statAtualizado) {
+          var agora = new Date();
+          var hora = String(agora.getHours()).padStart(2, '0');
+          var minuto = String(agora.getMinutes()).padStart(2, '0');
+          statAtualizado.textContent = 'Atualizado às ' + hora + ':' + minuto;
+          statAtualizado.style.color = 'var(--accent-dark)';
+        }
+        
+        // Adiciona tooltip com números exatos
+        if (data.membros_raw) {
+          statMembros.title = data.membros_raw + ' membros ativos';
+        }
+        if (data.pedras_raw) {
+          statPedras.title = data.pedras_raw + ' pedras avaliadas';
+        }
+        if (data.hoje_raw) {
+          statHoje.title = data.hoje_raw + ' avaliações hoje';
+        }
+        
+        return data;
+      })
+      .catch(function(err) {
+        console.error('Erro ao carregar estatísticas:', err);
+        
+        // Fallback final: dados estáticos
+        statMembros.textContent = '1.2k';
+        statPedras.textContent = '4.7k';
+        statHoje.textContent = '+38';
+        if (statAtualizado) {
+          statAtualizado.textContent = 'Carregando...';
+        }
+      });
+  }
+
+  // ========================================================================
   // INICIALIZAÇÃO
   // ========================================================================
   restaurarConsultaDaURL();
@@ -3090,9 +3155,29 @@
     renderizarCatalogo();
     carregarVitrine(1);
     renderizarRankings(rankingAtual);
-    // Carrega o feed real
     carregarFeedReal();
   });
+
+  // Carrega estatísticas na inicialização
+  carregarEstatisticas();
+
+  // Atualiza a cada 60 segundos (mantém dados frescos)
+  statsTimeout = setInterval(carregarEstatisticas, 60000);
+
+  // Atualiza quando a página ganha foco (usuário voltou)
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+      carregarEstatisticas();
+    }
+  });
+
+  // Atualiza quando o usuário clica no card de estatísticas
+  var cardStats = document.querySelector('.card:has(#stat-membros)');
+  if (cardStats) {
+    cardStats.addEventListener('click', function() {
+      carregarEstatisticas();
+    });
+  }
 
   document.getElementById('rankings-tabs').addEventListener('click', function(e){
     var btn = e.target.closest('button');
@@ -3113,6 +3198,7 @@
 
   window.addEventListener('beforeunload', function() {
     limparTimeouts();
+    if (statsTimeout) clearInterval(statsTimeout);
   });
 </script>
 </body>
