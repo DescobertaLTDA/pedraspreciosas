@@ -596,27 +596,23 @@
 
   #area-vitrine{margin-top:24px;background:none;border:none;box-shadow:none;padding:0;}
   #area-vitrine > h2, #area-vitrine > .vitrine-sub, #area-vitrine > .aviso{padding-left:2px;padding-right:2px;}
-  .vitrine-scroll{position:relative;margin-top:16px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);}
-  .vitrine-grid{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 20px 12px;padding-left:max(20px, env(safe-area-inset-left));padding-right:max(20px, env(safe-area-inset-right));}
-  .vitrine-grid::-webkit-scrollbar{display:none;}
-  .vitrine-card{flex:0 0 152px;width:152px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
+  .vitrine-scroll{position:relative;margin-top:16px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:2px max(20px, env(safe-area-inset-left)) 12px;}
+  .vitrine-grid{display:grid;grid-template-columns:repeat(6, 1fr);grid-auto-rows:auto;gap:14px;max-width:1180px;margin:0 auto;}
+  .vitrine-card{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;}
   .vitrine-card:hover{border-color:var(--line-strong);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
   .vitrine-card:active{transform:scale(0.97);}
+  @media (max-width:900px){ .vitrine-grid{grid-template-columns:repeat(3, 1fr);} }
+  @media (max-width:480px){ .vitrine-grid{grid-template-columns:repeat(2, 1fr);} }
   .vitrine-fav{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.94);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.18);z-index:2;}
   .vitrine-fav svg{width:12px;height:12px;stroke:var(--ink-soft);stroke-width:1.9;fill:none;}
   .vitrine-foto{aspect-ratio:1/1;background:var(--card-alt);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
   .vitrine-foto img{width:100%;height:100%;object-fit:cover;display:block;}
   .vitrine-foto .no-image{color:var(--ink-mute2);font-size:10px;text-align:center;padding:8px;}
   .vitrine-info{padding:9px 9px 11px;}
-  .vitrine-nome{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;}
+  .vitrine-nome{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;height:2.7em;}
   .vitrine-badge{display:inline-block;margin-top:6px;font-size:9px;font-weight:700;color:var(--accent-dark);background:var(--accent-light);padding:2px 7px;border-radius:4px;}
   .vitrine-valor{margin-top:6px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:var(--ink);}
   .vitrine-meta{margin-top:4px;font-size:10px;color:var(--ink-mute2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .vitrine-nav{position:absolute;top:calc(50% - 8px);right:6px;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--line-strong);box-shadow:0 2px 10px rgba(0,0,0,0.16);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;}
-  .vitrine-nav:hover{border-color:var(--accent);}
-  .vitrine-nav svg{width:15px;height:15px;stroke:var(--ink-soft);stroke-width:2.3;fill:none;}
-  .vitrine-nav.esconder{display:none;}
-  @media (max-width:700px){ .vitrine-nav{display:none !important;} }
   .vitrine-paginacao{margin-top:12px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
   .vitrine-pag-btn{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;width:30px;height:30px;border-radius:6px;border:1px solid var(--line-strong);background:var(--card);color:var(--ink-mute);cursor:pointer;}
   .vitrine-pag-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
@@ -1089,9 +1085,6 @@
     <p class="vitrine-sub">Resultados reais de quem já descobriu o valor da própria pedra.</p>
     <div class="vitrine-scroll">
       <div class="vitrine-grid" id="vitrine-grid"></div>
-      <button class="vitrine-nav" id="vitrine-nav-next" type="button" aria-label="Ver mais resultados">
-        <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
-      </button>
     </div>
     <div class="vitrine-paginacao" id="vitrine-paginacao"></div>
     <p class="aviso" id="vitrine-vazio" style="display:none;">Ainda não temos resultados para mostrar aqui.</p>
@@ -1265,6 +1258,19 @@
     { nome: 'Quartzo Hialino', valor: 'R$ 15,00', data: '2026-08-09T12:45:00', avaliador: 'João' },
     { nome: 'Granada', valor: 'R$ 210,00', data: '2026-08-08T20:00:00', avaliador: 'Fernanda' }
   ];
+  // Dá um id único e estável a cada item (usado para não duplicar vitrine x catálogo)
+  catalogoDados.forEach(function(item, indice){ item.id = indice; });
+
+  // Retorna os ids dos itens que estão sendo exibidos na vitrine "Descobertas da comunidade"
+  // (os N mais recentes). O catálogo geral usa isso para não repetir os mesmos cards.
+  var QTD_VITRINE = 6;
+  function obterIdsVitrine(){
+    return catalogoDados
+      .slice()
+      .sort(function(a,b){ return new Date(b.data) - new Date(a.data); })
+      .slice(0, QTD_VITRINE)
+      .map(function(item){ return item.id; });
+  }
 
   // ========================================================================
   // CLIENTE SUPABASE
@@ -1542,8 +1548,12 @@
     var grid = document.getElementById('catalogo-grid');
     var paginacao = document.getElementById('catalogo-paginacao');
     
+    // Não repetir no catálogo os itens que já estão em destaque na vitrine
+    var idsNaVitrine = obterIdsVitrine();
+
     // Filtrar
     var dados = catalogoDados.filter(function(item){
+      if (idsNaVitrine.indexOf(item.id) !== -1) return false;
       var matchBusca = item.nome.toLowerCase().includes(catalogoBusca.toLowerCase());
       if (!matchBusca) return false;
       if (catalogoFiltro === 'recentes') return true;
@@ -1915,22 +1925,11 @@
   var vitrineGrid = document.getElementById('vitrine-grid');
   var vitrinePaginacao = document.getElementById('vitrine-paginacao');
   var vitrineVazio = document.getElementById('vitrine-vazio');
-  var vitrineNavNext = document.getElementById('vitrine-nav-next');
   var paginaVitrineAtual = 1;
   var carregandoVitrine = false;
-
-  if (vitrineNavNext) {
-    vitrineNavNext.addEventListener('click', function(){
-      vitrineGrid.scrollBy({ left: vitrineGrid.clientWidth * 0.85, behavior: 'smooth' });
-    });
-    vitrineGrid && vitrineGrid.addEventListener && vitrineGrid.addEventListener('scroll', atualizarSetaVitrine);
-  }
-
-  function atualizarSetaVitrine(){
-    if (!vitrineNavNext) return;
-    var atingiuFim = vitrineGrid.scrollWidth - vitrineGrid.scrollLeft - vitrineGrid.clientWidth < 8;
-    vitrineNavNext.classList.toggle('esconder', atingiuFim);
-  }
+  var VITRINE_COLUNAS = 6;
+  var VITRINE_LINHAS = 3;
+  var VITRINE_POR_PAGINA = VITRINE_COLUNAS * VITRINE_LINHAS; // 18 itens (grade 6x3) por página
 
   function carregarVitrine(pagina){
     if (carregandoVitrine) return;
@@ -1938,10 +1937,16 @@
     paginaVitrineAtual = pagina || 1;
 
     // Usa os dados do catálogo como fonte da vitrine (os mais recentes)
-    var dadosVitrine = catalogoDados.slice().sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
-    var itens = dadosVitrine.slice(0, 6); // pega os 6 mais recentes
+    var idsVitrine = obterIdsVitrine();
+    var itens = catalogoDados.filter(function(item){ return idsVitrine.indexOf(item.id) !== -1; });
+    itens.sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
 
-    renderizarVitrine({ itens: itens, pagina: 1, total_paginas: 1 });
+    var totalPaginas = Math.max(1, Math.ceil(itens.length / VITRINE_POR_PAGINA));
+    if (paginaVitrineAtual > totalPaginas) paginaVitrineAtual = totalPaginas;
+    var inicio = (paginaVitrineAtual - 1) * VITRINE_POR_PAGINA;
+    var itensPagina = itens.slice(inicio, inicio + VITRINE_POR_PAGINA);
+
+    renderizarVitrine({ itens: itensPagina, pagina: paginaVitrineAtual, total_paginas: totalPaginas });
     carregandoVitrine = false;
   }
 
@@ -2006,8 +2011,20 @@
       vitrineGrid.appendChild(card);
     });
 
-    vitrineGrid.scrollLeft = 0;
-    if (typeof atualizarSetaVitrine === 'function') atualizarSetaVitrine();
+    var totalPaginas = data.total_paginas || 1;
+    if (totalPaginas > 1) {
+      for (var p = 1; p <= totalPaginas; p++) {
+        (function(numeroPagina){
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'vitrine-pag-btn' + (numeroPagina === data.pagina ? ' active' : '');
+          btn.textContent = numeroPagina;
+          btn.setAttribute('aria-label', 'Ver página ' + numeroPagina + ' das descobertas');
+          btn.addEventListener('click', function(){ carregarVitrine(numeroPagina); });
+          vitrinePaginacao.appendChild(btn);
+        })(p);
+      }
+    }
   }
 
   // ========================================================================
