@@ -1656,6 +1656,31 @@
   </style>
 </head>
 <body>
+  <div id="modal-navegador-interno" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;padding:20px;">
+    <div style="background:var(--bg);color:var(--ink-light);max-width:380px;width:100%;border-radius:16px;padding:28px 24px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="font-size:38px;margin-bottom:10px;">⚠️</div>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Abra no navegador pra continuar</h3>
+      <p style="font-size:13.5px;color:var(--ink-mute);line-height:1.5;margin-bottom:18px;">
+        Você está usando o navegador interno do app. Siga os passos abaixo:
+      </p>
+      <div style="text-align:left;background:var(--card);border-radius:12px;padding:14px 16px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--ink-light);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">1</div>
+          <div style="font-size:13.5px;line-height:1.4;">
+            Toque no ícone <strong style="font-size:16px;letter-spacing:1px;">⋯</strong> (três pontinhos), geralmente no canto superior direito da tela
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--ink-light);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">2</div>
+          <div style="font-size:13.5px;line-height:1.4;">
+            Toque em <strong>"Abrir no navegador"</strong>
+          </div>
+        </div>
+      </div>
+      <button id="btn-copiar-link-modal" style="width:100%;background:var(--ink-light);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14.5px;font-weight:600;cursor:pointer;margin-bottom:10px;">Copiar link</button>
+      <button id="btn-fechar-modal-navinterno" style="width:100%;background:none;border:none;color:var(--ink-mute);font-size:13px;cursor:pointer;padding:6px;">Entendi, continuar mesmo assim</button>
+    </div>
+  </div>
   <header>
     <div class="nav-wrap">
       <div class="nav-left">
@@ -2180,6 +2205,35 @@
     // VARIÁVEIS GLOBAIS
     // ========================================================================
     var ehNavegadorInterno = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly/i.test(navigator.userAgent || '');
+    if (ehNavegadorInterno) {
+      var modalNavInterno = document.getElementById('modal-navegador-interno');
+      if (modalNavInterno) {
+        modalNavInterno.style.display = 'flex';
+        var btnCopiarLinkModal = document.getElementById('btn-copiar-link-modal');
+        var btnFecharModalNavInterno = document.getElementById('btn-fechar-modal-navinterno');
+        if (btnCopiarLinkModal) {
+          btnCopiarLinkModal.addEventListener('click', function() {
+            var url = window.location.href;
+            function marcarCopiado() {
+              btnCopiarLinkModal.textContent = 'Copiado!';
+              setTimeout(function() { btnCopiarLinkModal.textContent = 'Copiar link'; }, 2000);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(url).then(marcarCopiado).catch(function() {
+                window.prompt('Copie o link abaixo e cole no seu navegador:', url);
+              });
+            } else {
+              window.prompt('Copie o link abaixo e cole no seu navegador:', url);
+            }
+          });
+        }
+        if (btnFecharModalNavInterno) {
+          btnFecharModalNavInterno.addEventListener('click', function() {
+            modalNavInterno.style.display = 'none';
+          });
+        }
+      }
+    }
     var dropzone = document.getElementById('dropzone');
     var inputFoto = document.getElementById('input-foto');
     var preview = document.getElementById('preview');
@@ -2718,7 +2772,12 @@
     }
 
     dropzone.addEventListener('click', function(e) {
-      if (ehNavegadorInterno) { e.preventDefault(); return; }
+      if (ehNavegadorInterno) {
+        e.preventDefault();
+        var modalAviso = document.getElementById('modal-navegador-interno');
+        if (modalAviso) { modalAviso.style.display = 'flex'; }
+        return;
+      }
       inputFoto.click();
     });
     inputFoto.addEventListener('change', function(e) {
