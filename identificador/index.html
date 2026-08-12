@@ -3348,6 +3348,9 @@
         })
         .then(function(data) {
           var lugares = data.lugares || [];
+          try {
+            localStorage.setItem('lojasProximasCache', JSON.stringify({ lugares: lugares, ts: Date.now() }));
+          } catch (e) {}
           if (lugares.length === 0) {
             status.textContent = 'Nenhuma loja encontrada perto de você.';
             return;
@@ -3369,6 +3372,29 @@
 
     var btnVerLojasProximas = document.getElementById('btn-ver-lojas-proximas');
     if (btnVerLojasProximas) { btnVerLojasProximas.addEventListener('click', buscarLojasProximas); }
+
+    var LOJAS_CACHE_LOCAL_TTL_DIAS = 7;
+    function restaurarLojasProximasSeExistir() {
+      var lista = document.getElementById('lojas-proximas-lista');
+      var intro = document.getElementById('lojas-proximas-intro');
+      var status = document.getElementById('lojas-proximas-status');
+      if (!lista) return;
+      try {
+        var salvo = JSON.parse(localStorage.getItem('lojasProximasCache') || 'null');
+        if (!salvo || !salvo.lugares || !salvo.ts) return;
+        var idadeDias = (Date.now() - salvo.ts) / 86400000;
+        if (idadeDias > LOJAS_CACHE_LOCAL_TTL_DIAS) return;
+        if (intro) intro.style.display = 'none';
+        lista.innerHTML = '';
+        if (salvo.lugares.length === 0) {
+          if (status) status.textContent = 'Nenhuma loja encontrada perto de você.';
+          if (intro) intro.style.display = 'block';
+          return;
+        }
+        salvo.lugares.forEach(function(lugar) { renderizarLojaProxima(lugar, lista); });
+      } catch (e) {}
+    }
+    restaurarLojasProximasSeExistir();
 
     // ========================================================================
     // MOSTRAR RESULTADO
