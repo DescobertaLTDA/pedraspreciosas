@@ -68,7 +68,7 @@ async function buscarNoGooglePlaces(lat, lng) {
     headers: {
       'Content-Type': 'application/json',
       'X-Goog-Api-Key': process.env.GOOGLE_MAPS_API_KEY,
-      'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingCount,places.location'
+      'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingCount,places.location,places.photos'
     },
     body: JSON.stringify({
       textQuery: 'loja de pedras e minerais joalheria gemologista',
@@ -85,6 +85,7 @@ async function buscarNoGooglePlaces(lat, lng) {
   }
   const data = await res.json();
   return (data.places || []).map(function(p) {
+    var fotoRef = (p.photos && p.photos.length > 0) ? p.photos[0].name : null;
     return {
       place_id: p.id,
       nome: p.displayName && p.displayName.text,
@@ -92,7 +93,8 @@ async function buscarNoGooglePlaces(lat, lng) {
       rating: p.rating || null,
       total_avaliacoes: p.userRatingCount || null,
       lat: p.location && p.location.latitude,
-      lng: p.location && p.location.longitude
+      lng: p.location && p.location.longitude,
+      foto_ref: fotoRef
     };
   }).slice(0, 6);
 }
