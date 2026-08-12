@@ -102,7 +102,41 @@ async function buscarNoGooglePlaces(lat, lng) {
   }).slice(0, 6);
 }
 
+const LARGURA_MAX_FOTO_PX = 400;
+
+async function servirFoto(req, res) {
+  const ref = req.query && req.query.ref;
+  if (!ref || typeof ref !== 'string') {
+    res.status(400).json({ erro: 'parâmetro ref é obrigatório' });
+    return;
+  }
+  // ref vem no formato "places/XXX/photos/YYY" — validação simples pra evitar SSRF.
+  if (!/^places\/[^/]+\/photos\/[^/]+$/.test(ref)) {
+    res.status(400).json({ erro: 'ref inválida' });
+    return;
+  }
+  try {
+    const url = 'https://places.googleapis.com/v1/' + ref +
+      '/media?maxWidthPx=' + LARGURA_MAX_FOTO_PX + '&key=' + process.env.GOOGLE_MAPS_API_KEY;
+    const resposta = await fetch(url);
+    if (!resposta.ok) { res.status(404).json({ erro: 'Foto não encontrada' }); return; }
+    const buffer = Buffer.from(await resposta.arrayBuffer());
+    const contentType = resposta.headers.get('content-type') || 'image/jpeg';
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Cache-Control', 's-maxage=604800, stale-while-revalidate');
+    res.status(200).send(buffer);
+  } catch (erro) {
+    console.error('Erro ao buscar foto da loja:', erro);
+    res.status(500).json({ erro: 'Não foi possível carregar a foto' });
+  }
+}
+
 export default async function handler(req, res) {
+  // GET /api/lojas-proximas?ref=places/XXX/photos/YYY → proxy de foto
+  // (mesma função serverless faz as duas coisas pra não estourar o limite
+  // de 12 funções do plano Hobby da Vercel)
+  if (req.method === 'GET') { await servirFoto(req, res); return; }
+
   if (req.method !== 'POST') { res.status(405).json({ erro: 'Método não permitido' }); return; }
 
   const body = req.body || {};
