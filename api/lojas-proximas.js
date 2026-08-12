@@ -40,7 +40,10 @@ async function buscarNoCache(gradeLat, gradeLng) {
   const registro = linhas[0];
   const idadeDias = (Date.now() - new Date(registro.atualizado_em).getTime()) / 86400000;
   if (idadeDias > CACHE_TTL_DIAS) return null;
-  return registro.lugares;
+  const lugares = registro.lugares;
+  // Cache gravado antes do campo foto_ref existir — considera velho e refaz a busca.
+  if (!lugares || lugares.length === 0 || !('foto_ref' in lugares[0])) return null;
+  return lugares;
 }
 
 async function salvarNoCache(gradeLat, gradeLng, lugares) {
