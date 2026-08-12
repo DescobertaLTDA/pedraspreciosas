@@ -1984,6 +1984,11 @@
               <a class="canal-link" id="canal-olx" href="#" target="_blank" rel="noopener noreferrer" style="flex:1;text-align:center;padding:11px;border:1px solid var(--line-strong);border-radius:8px;font-size:13px;font-weight:700;color:var(--ink-soft);text-decoration:none;">OLX</a>
             </div>
           </div>
+          <div id="lojas-proximas-box" style="display:none;margin-top:16px;">
+            <div class="preco-label" style="font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);">Lojas perto de você</div>
+            <div id="lojas-proximas-lista" style="margin-top:8px;display:flex;flex-direction:column;gap:8px;"></div>
+            <div id="lojas-proximas-status" style="font-size:12px;color:var(--ink-mute2);margin-top:6px;"></div>
+          </div>
         </div>
         <div class="premium-preview" id="premium-preview" style="display:none;background:var(--card-alt);border:1px solid var(--line);border-radius:12px;padding:24px;margin-top:16px;">
           <div class="premium-preview-tag" style="font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent-dark);display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--accent-dark);stroke-width:2;fill:none;"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg> O que você ainda não viu sobre essa pedra</div>
@@ -3236,6 +3241,117 @@
     }
 
     // ========================================================================
+    // GOOGLE PLACES — LOJAS PRÓXIMAS PARA VENDER
+    // ========================================================================
+    var googleMapsCarregando = null;
+    var googleMapsApiKeyCache = null;
+
+    function obterChaveGoogleMaps() {
+      if (googleMapsApiKeyCache) return Promise.resolve(googleMapsApiKeyCache);
+      return fetch('/api/maps-key').then(function(res) {
+        if (!res.ok) throw new Error('Não foi possível obter a chave do Google Maps');
+        return res.json();
+      }).then(function(data) {
+        if (!data.key) throw new Error('Chave do Google Maps não configurada no servidor');
+        googleMapsApiKeyCache = data.key;
+        return googleMapsApiKeyCache;
+      });
+    }
+
+    function carregarGoogleMapsApi() {
+      if (window.google && window.google.maps && window.google.maps.places) { return Promise.resolve(); }
+      if (googleMapsCarregando) return googleMapsCarregando;
+      googleMapsCarregando = obterChaveGoogleMaps().then(function(chave) {
+        return new Promise(function(resolve, reject) {
+          var callbackName = '__googleMapsPlacesReady';
+          window[callbackName] = function() { resolve(); };
+          var script = document.createElement('script');
+          script.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(chave) +
+            '&libraries=places&callback=' + callbackName;
+          script.async = true;
+          script.onerror = function() { reject(new Error('Falha ao carregar Google Maps')); };
+          document.head.appendChild(script);
+        });
+      });
+      return googleMapsCarregando;
+    }
+
+    function obterLocalizacaoUsuario() {
+      return new Promise(function(resolve, reject) {
+        if (!navigator.geolocation) { reject(new Error('Geolocalização não suportada neste navegador')); return; }
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        }, function(err) { reject(err); }, { timeout: 8000, maximumAge: 300000 });
+      });
+    }
+
+    function renderizarLojaProxima(lugar, lista) {
+      var item = document.createElement('a');
+      item.href = 'https://www.google.com/maps/place/?q=place_id:' + lugar.place_id;
+      item.target = '_blank';
+      item.rel = 'noopener noreferrer';
+      item.style.display = 'flex';
+      item.style.flexDirection = 'column';
+      item.style.gap = '2px';
+      item.style.padding = '10px 12px';
+      item.style.borderRadius = '8px';
+      item.style.border = '1px solid var(--line)';
+      item.style.textDecoration = 'none';
+      item.style.color = 'var(--ink)';
+      var nomeEl = document.createElement('span');
+      nomeEl.style.fontWeight = '700';
+      nomeEl.style.fontSize = '13.5px';
+      nomeEl.textContent = lugar.name;
+      var metaEl = document.createElement('span');
+      metaEl.style.fontSize = '11.5px';
+      metaEl.style.color = 'var(--ink-mute2)';
+      var avaliacao = lugar.rating ? ('⭐ ' + lugar.rating + (lugar.user_ratings_total ? ' (' + lugar.user_ratings_total +
+        ')' : '')) : '';
+      metaEl.textContent = [avaliacao, lugar.vicinity].filter(Boolean).join(' · ');
+      item.appendChild(nomeEl);
+      item.appendChild(metaEl);
+      lista.appendChild(item);
+    }
+
+    function buscarLojasProximas() {
+      var box = document.getElementById('lojas-proximas-box');
+      var lista = document.getElementById('lojas-proximas-lista');
+      var status = document.getElementById('lojas-proximas-status');
+      if (!box || !lista || !status) return;
+      box.style.display = 'block';
+      lista.innerHTML = '';
+      status.textContent = 'Buscando lojas perto de você...';
+
+      Promise.all([carregarGoogleMapsApi(), obterLocalizacaoUsuario()])
+        .then(function(resultados) {
+          var coords = resultados[1];
+          var service = new google.maps.places.PlacesService(document.createElement('div'));
+          var request = {
+            location: new google.maps.LatLng(coords.lat, coords.lng),
+            radius: 20000,
+            keyword: 'loja de pedras e minerais joalheria gemologista'
+          };
+          service.nearbySearch(request, function(results, statusApi) {
+            if (statusApi !== google.maps.places.PlacesServiceStatus.OK || !results || results.length === 0) {
+              status.textContent = 'Nenhuma loja encontrada perto de você.';
+              return;
+            }
+            status.textContent = '';
+            lista.innerHTML = '';
+            results.slice(0, 4).forEach(function(lugar) { renderizarLojaProxima(lugar, lista); });
+          });
+        })
+        .catch(function(erro) {
+          console.warn('Não foi possível buscar lojas próximas:', erro && erro.message);
+          if (erro && erro.code === 1) {
+            status.textContent = 'Ative a localização no navegador para ver lojas perto de você.';
+          } else {
+            box.style.display = 'none';
+          }
+        });
+    }
+
+    // ========================================================================
     // MOSTRAR RESULTADO
     // ========================================================================
     function mostrarResultado(data) {
@@ -3270,11 +3386,14 @@
         btnDesbloquearOnde.style.display = 'none';
         premiumPreview.style.display = 'none';
         mensagemUpsellEl.textContent = '';
+        buscarLojasProximas();
       } else {
         ondeVenderEl.innerHTML = '<span style="color:var(--ink-mute2);">🔒 Desbloqueie para ver onde vender essa pedra</span>';
         canaisVenda.style.display = 'none';
         btnDesbloquearOnde.style.display = 'block';
         premiumPreview.style.display = 'block';
+        var lojasProximasBox = document.getElementById('lojas-proximas-box');
+        if (lojasProximasBox) lojasProximasBox.style.display = 'none';
         if (data.mensagem_upsell) { mensagemUpsellEl.textContent = data.mensagem_upsell; } else if (typeof data
           .avaliacoes_gratis_restantes === 'number' && data.avaliacoes_gratis_restantes > 0) {
           mensagemUpsellEl.textContent = 'Você ainda tem ' + data.avaliacoes_gratis_restantes + ' avaliações grátis.';
