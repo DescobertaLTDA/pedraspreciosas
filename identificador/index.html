@@ -3287,7 +3287,7 @@
       fotoWrap.style.justifyContent = 'center';
       if (lugar.foto_ref) {
         var img = document.createElement('img');
-        img.src = '/api/loja-foto?ref=' + encodeURIComponent(lugar.foto_ref);
+        img.src = '/api/lojas-proximas?ref=' + encodeURIComponent(lugar.foto_ref);
         img.alt = lugar.nome || 'Loja';
         img.loading = 'lazy';
         img.style.width = '100%';
