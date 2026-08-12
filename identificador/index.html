@@ -17,6 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js">
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     /* Reset & base */
     * {
@@ -1718,6 +1719,23 @@
       <button class="btn-sidebar-close" id="btn-sidebar-close" aria-label="Fechar histórico"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="sidebar-body">
+      <div id="nivel-colecionador" style="display:none;background:var(--card-alt);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <div>
+            <div id="nivel-colecionador-titulo" style="font-size:13.5px;font-weight:700;color:var(--ink);"></div>
+            <div id="nivel-colecionador-sub" style="font-size:11.5px;color:var(--ink-mute);margin-top:2px;"></div>
+          </div>
+          <div id="nivel-colecionador-emoji" style="font-size:26px;"></div>
+        </div>
+        <div style="margin-top:9px;height:6px;border-radius:3px;background:var(--line);overflow:hidden;">
+          <div id="nivel-colecionador-barra" style="height:100%;background:var(--accent-dark);width:0%;transition:width .4s ease;"></div>
+        </div>
+      </div>
+      <div id="badges-colecionador" style="display:none;margin-bottom:16px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-mute2);margin-bottom:8px;">Conquistas</div>
+        <div id="badges-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;"></div>
+        <div id="badge-detalhe" style="margin-top:8px;font-size:11.5px;color:var(--ink-mute);min-height:14px;"></div>
+      </div>
       <div class="historico-lista" id="historico-lista"></div>
       <p class="aviso" id="historico-vazio" style="display:none;text-align:center;color:var(--ink-mute);padding:10px 0;">Você ainda não fez nenhuma avaliação.</p>
     </div>
@@ -1806,6 +1824,30 @@
       <p class="aviso" id="vitrine-vazio" style="display:none;text-align:center;color:var(--ink-mute2);padding:10px 0;">Ainda não temos resultados para mostrar aqui.</p>
     </div>
 
+    <div class="card" style="margin-top:20px;" id="area-quiz">
+      <h2><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> Adivinhe a Pedra</h2>
+      <p style="font-size:13px;color:var(--ink-mute);text-align:center;margin-top:4px;">Teste seu olho de garimpeiro com pedras reais identificadas pela comunidade</p>
+      <div id="quiz-area" style="margin-top:18px;">
+        <div id="quiz-carregando" style="text-align:center;padding:24px 0;color:var(--ink-mute);font-size:13.5px;">Preparando o desafio...</div>
+        <div id="quiz-conteudo" style="display:none;">
+          <div style="display:flex;justify-content:center;">
+            <div style="width:180px;height:180px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--card-alt);">
+              <img id="quiz-foto" src="" alt="Pedra do quiz" style="width:100%;height:100%;object-fit:cover;display:block;">
+            </div>
+          </div>
+          <div id="quiz-opcoes" style="margin-top:18px;display:flex;flex-direction:column;gap:9px;max-width:340px;margin-left:auto;margin-right:auto;"></div>
+          <div id="quiz-resultado" style="display:none;text-align:center;margin-top:14px;font-size:14px;font-weight:600;"></div>
+          <div style="text-align:center;margin-top:16px;">
+            <button id="btn-quiz-proxima" style="display:none;background:var(--ink-light);color:#fff;border:none;border-radius:10px;padding:11px 22px;font-size:13.5px;font-weight:700;cursor:pointer;">Próxima pedra →</button>
+          </div>
+          <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--ink-mute2);">
+            Acertos: <strong id="quiz-acertos" style="color:var(--ink);">0</strong> / <span id="quiz-total">0</span>
+          </div>
+        </div>
+        <p id="quiz-vazio" style="display:none;text-align:center;color:var(--ink-mute2);font-size:13px;padding:16px 0;">Ainda não temos pedras suficientes na comunidade para montar o quiz. Volte em breve!</p>
+      </div>
+    </div>
+
     <div class="card" style="margin-top:20px;" id="secao-rankings">
       <h2><svg viewBox="0 0 24 24"><path d="M12 2v20M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg> Rankings</h2>
       <p style="font-size:13px;color:var(--ink-mute);text-align:center;margin-top:4px;">As pedras mais comentadas e avaliadas pelos membros</p>
@@ -1892,6 +1934,14 @@
             <div class="dossie-onde-texto" id="modal-dossie-onde" style="font-size:14px;color:var(--ink);margin-top:2px;">🔒 Desbloqueie para ver</div>
           </div>
           <div class="dossie-observacao" id="modal-dossie-observacao" style="margin-top:16px;font-size:12.5px;color:var(--ink-mute);padding-top:12px;border-top:1px solid var(--line);"></div>
+          <button id="btn-compartilhar-dossie" style="width:100%;margin-top:18px;background:var(--ink-light);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;stroke-width:2;fill:none;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Compartilhar essa descoberta
+          </button>
+          <button id="btn-certificado-dossie" style="width:100%;margin-top:10px;background:transparent;color:var(--ink);border:1.5px solid var(--line-strong);border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--ink);stroke-width:2;fill:none;"><path d="M12 15a4 4 0 100-8 4 4 0 000 8z"/><path d="M8.5 13.5L7 22l5-2.5 5 2.5-1.5-8.5"/></svg>
+            Baixar certificado em PDF
+          </button>
         </div>
       </div>
     </div>
@@ -2088,6 +2138,7 @@
           catalogoDados = todos;
           catalogoDadosCarregados = true;
           gerarFeedReal(todos);
+          iniciarQuiz();
         })
         .catch(function(err) {
           console.error('Erro ao carregar dados públicos (vitrine/catálogo):', err);
@@ -2120,6 +2171,131 @@
         { nome: 'Sofia', acao: 'descobriu o valor de um <strong>Rubi</strong>', tempo: '1h' }
       ];
       renderizarFeed(fallback);
+    }
+
+    // ========================================================================
+    // QUIZ "ADIVINHE A PEDRA"
+    // ========================================================================
+    var quizPerguntas = [];
+    var quizIndiceAtual = 0;
+    var quizAcertos = 0;
+    var quizRespondeu = false;
+
+    function iniciarQuiz() {
+      var carregando = document.getElementById('quiz-carregando');
+      var conteudo = document.getElementById('quiz-conteudo');
+      var vazio = document.getElementById('quiz-vazio');
+      if (!carregando) return;
+
+      // só entram no quiz itens com foto e nome válidos, sem repetir nome
+      var vistos = {};
+      var candidatos = catalogoDados.filter(function(item) {
+        if (!item.foto || !item.nome || item.nome === 'Pedra não identificada') return false;
+        if (vistos[item.nome]) return false;
+        vistos[item.nome] = true;
+        return true;
+      });
+
+      if (candidatos.length < 4) {
+        carregando.style.display = 'none';
+        vazio.style.display = 'block';
+        return;
+      }
+
+      // embaralha e monta até 8 perguntas
+      var embaralhado = candidatos.slice().sort(function() { return Math.random() - 0.5; });
+      quizPerguntas = embaralhado.slice(0, Math.min(8, embaralhado.length)).map(function(certo) {
+        var nomesUnicos = [];
+        candidatos.forEach(function(c) { if (c.nome !== certo.nome && nomesUnicos.indexOf(c.nome) === -1) nomesUnicos.push(c.nome); });
+        var distratores = nomesUnicos.sort(function() { return Math.random() - 0.5; }).slice(0, 3);
+        var opcoes = distratores.concat([certo.nome]).sort(function() { return Math.random() - 0.5; });
+        return { foto: certo.foto, correta: certo.nome, opcoes: opcoes };
+      });
+
+      quizIndiceAtual = 0;
+      quizAcertos = 0;
+      carregando.style.display = 'none';
+      conteudo.style.display = 'block';
+      document.getElementById('quiz-total').textContent = quizPerguntas.length;
+      renderizarPerguntaQuiz();
+    }
+
+    function renderizarPerguntaQuiz() {
+      quizRespondeu = false;
+      var pergunta = quizPerguntas[quizIndiceAtual];
+      if (!pergunta) return;
+      document.getElementById('quiz-foto').src = pergunta.foto;
+      document.getElementById('quiz-resultado').style.display = 'none';
+      document.getElementById('btn-quiz-proxima').style.display = 'none';
+      document.getElementById('quiz-acertos').textContent = quizAcertos;
+
+      var opcoesEl = document.getElementById('quiz-opcoes');
+      opcoesEl.innerHTML = '';
+      pergunta.opcoes.forEach(function(nomeOpcao) {
+        var btn = document.createElement('button');
+        btn.textContent = nomeOpcao;
+        btn.style.cssText = 'padding:12px 16px;border-radius:9px;border:1.5px solid var(--line-strong);background:var(--card);color:var(--ink);font-size:13.5px;font-weight:600;cursor:pointer;text-align:left;transition:all .15s ease;';
+        btn.addEventListener('click', function() { responderQuiz(nomeOpcao, pergunta, btn, opcoesEl); });
+        opcoesEl.appendChild(btn);
+      });
+    }
+
+    function responderQuiz(escolha, pergunta, btnClicado, opcoesEl) {
+      if (quizRespondeu) return;
+      quizRespondeu = true;
+      var acertou = escolha === pergunta.correta;
+      if (acertou) quizAcertos++;
+
+      Array.prototype.forEach.call(opcoesEl.children, function(btn) {
+        btn.disabled = true;
+        if (btn.textContent === pergunta.correta) {
+          btn.style.borderColor = '#1a7a3c';
+          btn.style.background = 'rgba(26,122,60,0.08)';
+          btn.style.color = '#1a7a3c';
+        } else if (btn === btnClicado) {
+          btn.style.borderColor = 'var(--danger)';
+          btn.style.background = 'rgba(211,48,47,0.08)';
+          btn.style.color = 'var(--danger)';
+        } else {
+          btn.style.opacity = '0.55';
+        }
+      });
+
+      var resultadoEl2 = document.getElementById('quiz-resultado');
+      resultadoEl2.textContent = acertou ? '✅ Acertou! É mesmo ' + pergunta.correta + '.' : '❌ Essa era ' + pergunta.correta + '.';
+      resultadoEl2.style.color = acertou ? '#1a7a3c' : 'var(--danger)';
+      resultadoEl2.style.display = 'block';
+      document.getElementById('quiz-acertos').textContent = quizAcertos;
+
+      var btnProxima = document.getElementById('btn-quiz-proxima');
+      var ultima = quizIndiceAtual >= quizPerguntas.length - 1;
+      btnProxima.textContent = ultima ? 'Ver resultado final →' : 'Próxima pedra →';
+      btnProxima.style.display = 'inline-block';
+      btnProxima.onclick = function() {
+        if (ultima) {
+          finalizarQuiz();
+        } else {
+          quizIndiceAtual++;
+          renderizarPerguntaQuiz();
+        }
+      };
+    }
+
+    function finalizarQuiz() {
+      var conteudo = document.getElementById('quiz-conteudo');
+      var total = quizPerguntas.length;
+      var pct = Math.round((quizAcertos / total) * 100);
+      var mensagem = pct === 100 ? '🏆 Perfeito! Você tem olho de gemólogo profissional.' :
+        pct >= 70 ? '💎 Muito bom! Você entende bem de pedras.' :
+        pct >= 40 ? '⛏️ Nada mal! Continue praticando com o scanner.' :
+        '🪨 Você ainda está começando — use o scanner pra aprender mais!';
+      conteudo.innerHTML = '<div style="text-align:center;padding:20px 0;">' +
+        '<div style="font-size:40px;margin-bottom:10px;">' + (pct === 100 ? '🏆' : pct >= 70 ? '💎' : pct >= 40 ? '⛏️' : '🪨') + '</div>' +
+        '<div style="font-size:20px;font-weight:700;color:var(--ink);">' + quizAcertos + ' de ' + total + ' acertos</div>' +
+        '<p style="font-size:14px;color:var(--ink-mute);margin-top:8px;max-width:320px;margin-left:auto;margin-right:auto;">' + mensagem + '</p>' +
+        '<button id="btn-quiz-refazer" style="margin-top:16px;background:var(--ink-light);color:#fff;border:none;border-radius:10px;padding:11px 22px;font-size:13.5px;font-weight:700;cursor:pointer;">Jogar de novo</button>' +
+        '</div>';
+      document.getElementById('btn-quiz-refazer').addEventListener('click', iniciarQuiz);
     }
 
     function renderizarFeed(atividades) {
@@ -2474,7 +2650,139 @@
       });
     }
 
+    function atualizarNivelColecionador(total) {
+      var box = document.getElementById('nivel-colecionador');
+      if (!box) return;
+      if (!total || total <= 0) { box.style.display = 'none'; return; }
+      var niveis = [
+        { min: 0,  emoji: '🪨', nome: 'Iniciante' },
+        { min: 3,  emoji: '⛏️', nome: 'Garimpeiro' },
+        { min: 8,  emoji: '💎', nome: 'Colecionador' },
+        { min: 15, emoji: '🔬', nome: 'Gemólogo' },
+        { min: 30, emoji: '👑', nome: 'Lendário' }
+      ];
+      var atual = niveis[0];
+      var proximo = niveis[1];
+      for (var i = 0; i < niveis.length; i++) {
+        if (total >= niveis[i].min) { atual = niveis[i]; proximo = niveis[i + 1] || null; }
+      }
+      var titulo = document.getElementById('nivel-colecionador-titulo');
+      var sub = document.getElementById('nivel-colecionador-sub');
+      var emoji = document.getElementById('nivel-colecionador-emoji');
+      var barra = document.getElementById('nivel-colecionador-barra');
+      titulo.textContent = 'Nível: ' + atual.nome;
+      emoji.textContent = atual.emoji;
+      if (proximo) {
+        var faltam = proximo.min - total;
+        sub.textContent = faltam + (faltam === 1 ? ' identificação para ' : ' identificações para ') + proximo.nome;
+        var progresso = ((total - atual.min) / (proximo.min - atual.min)) * 100;
+        barra.style.width = Math.max(6, Math.min(100, progresso)) + '%';
+      } else {
+        sub.textContent = 'Nível máximo alcançado!';
+        barra.style.width = '100%';
+      }
+      box.style.display = 'block';
+    }
+
+    // ========================================================================
+    // CONQUISTAS (BADGES)
+    // ========================================================================
+    var BADGES = [
+      { id: 'primeira', nome: 'Primeira Descoberta', emoji: '🔍', desc: 'Identifique sua primeira pedra.', check: function(ctx) { return ctx.total >= 1; } },
+      { id: 'trio', nome: 'Trio de Pedras', emoji: '⛏️', desc: 'Identifique 3 pedras.', check: function(ctx) { return ctx.total >= 3; } },
+      { id: 'dezena', nome: 'Uma Dezena', emoji: '💎', desc: 'Identifique 10 pedras.', check: function(ctx) { return ctx.total >= 10; } },
+      { id: 'acervo', nome: 'Acervo e Tanto', emoji: '🏛️', desc: 'Identifique 25 pedras.', check: function(ctx) { return ctx.total >= 25; } },
+      { id: 'olho', nome: 'Olho Treinado', emoji: '🧭', desc: 'Identifique 5 tipos diferentes de pedra.', check: function(ctx) { return ctx.tiposDistintos >= 5; } },
+      { id: 'enciclopedia', nome: 'Enciclopédia Viva', emoji: '📚', desc: 'Identifique 10 tipos diferentes de pedra.', check: function(ctx) { return ctx.tiposDistintos >= 10; } },
+      { id: 'quartzo', nome: 'Fã de Quartzo', emoji: '🔷', desc: 'Identifique 3 variações de quartzo.', check: function(ctx) { return ctx.quartzos >= 3; } },
+      { id: 'investigador', nome: 'Investigador', emoji: '🔓', desc: 'Desbloqueie o relatório completo de uma pedra.', check: function(ctx) { return ctx.desbloqueadas >= 1; } },
+      { id: 'maratona', nome: 'Maratona', emoji: '⚡', desc: 'Identifique 3 pedras no mesmo dia.', check: function(ctx) { return ctx.maxPorDia >= 3; } },
+      { id: 'veterano', nome: 'Veterano', emoji: '🗓️', desc: 'Volte para identificar pedras em 5 dias diferentes.', check: function(ctx) { return ctx.diasDistintos >= 5; } },
+      { id: 'lendario', nome: 'Nível Lendário', emoji: '👑', desc: 'Alcance 30 identificações e vire lendário.', check: function(ctx) { return ctx.total >= 30; } }
+    ];
+
+    function atualizarBadges(itens) {
+      var box = document.getElementById('badges-colecionador');
+      var grid = document.getElementById('badges-grid');
+      var detalhe = document.getElementById('badge-detalhe');
+      if (!box || !grid) return;
+      if (!itens || itens.length === 0) { box.style.display = 'none'; return; }
+
+      var tiposSet = {};
+      var diasSet = {};
+      var porDia = {};
+      var quartzos = 0;
+      var desbloqueadas = 0;
+      itens.forEach(function(item) {
+        var nome = (item.nome_provavel || '').trim();
+        if (nome) tiposSet[nome.toLowerCase()] = true;
+        if (nome.toLowerCase().indexOf('quartzo') !== -1) quartzos++;
+        if (item.desbloqueada) desbloqueadas++;
+        if (item.criado_em) {
+          var dia = new Date(item.criado_em).toISOString().slice(0, 10);
+          diasSet[dia] = true;
+          porDia[dia] = (porDia[dia] || 0) + 1;
+        }
+      });
+      var maxPorDia = 0;
+      Object.keys(porDia).forEach(function(d) { if (porDia[d] > maxPorDia) maxPorDia = porDia[d]; });
+
+      var ctx = {
+        total: itens.length,
+        tiposDistintos: Object.keys(tiposSet).length,
+        quartzos: quartzos,
+        desbloqueadas: desbloqueadas,
+        diasDistintos: Object.keys(diasSet).length,
+        maxPorDia: maxPorDia
+      };
+
+      grid.innerHTML = '';
+      var totalDesbloqueados = 0;
+      BADGES.forEach(function(b) {
+        var desbloqueado = b.check(ctx);
+        if (desbloqueado) totalDesbloqueados++;
+        var chip = document.createElement('div');
+        chip.style.display = 'flex';
+        chip.style.flexDirection = 'column';
+        chip.style.alignItems = 'center';
+        chip.style.justifyContent = 'center';
+        chip.style.gap = '4px';
+        chip.style.padding = '10px 4px';
+        chip.style.borderRadius = '10px';
+        chip.style.border = '1px solid ' + (desbloqueado ? 'var(--accent-medium)' : 'var(--line)');
+        chip.style.background = desbloqueado ? 'var(--accent-light)' : 'var(--card-alt)';
+        chip.style.cursor = 'pointer';
+        chip.title = b.nome + ' — ' + b.desc;
+        var iconWrap = document.createElement('div');
+        iconWrap.style.fontSize = '22px';
+        iconWrap.style.filter = desbloqueado ? 'none' : 'grayscale(1)';
+        iconWrap.style.opacity = desbloqueado ? '1' : '0.4';
+        iconWrap.textContent = b.emoji;
+        var label = document.createElement('div');
+        label.style.fontSize = '9px';
+        label.style.fontWeight = '700';
+        label.style.textAlign = 'center';
+        label.style.lineHeight = '1.2';
+        label.style.color = desbloqueado ? 'var(--accent-dark)' : 'var(--ink-mute2)';
+        label.textContent = b.nome;
+        chip.appendChild(iconWrap);
+        chip.appendChild(label);
+        chip.addEventListener('click', function() {
+          detalhe.textContent = (desbloqueado ? '✓ ' : '🔒 ') + b.nome + ' — ' + b.desc;
+          detalhe.style.color = desbloqueado ? 'var(--accent-dark)' : 'var(--ink-mute)';
+        });
+        grid.appendChild(chip);
+      });
+
+      var titulo = box.querySelector('div');
+      if (titulo) titulo.textContent = 'Conquistas (' + totalDesbloqueados + '/' + BADGES.length + ')';
+
+      box.style.display = 'block';
+    }
+
     function renderizarHistorico(itens) {
+      atualizarNivelColecionador(itens.length);
+      atualizarBadges(itens);
       historicoLista.innerHTML = '';
       if (itens.length === 0) {
         historicoVazio.textContent = 'Você ainda não fez nenhuma avaliação.';
@@ -3023,8 +3331,149 @@
       if (desbloqueado && data.onde_vender) { onde.textContent = data.onde_vender; } else { onde.textContent =
           '🔒 Desbloqueie para ver onde vender essa pedra'; }
       observacao.textContent = data.observacao || '';
+      dossieCompartilhamentoAtual = {
+        nome: data.nome || 'uma pedra misteriosa',
+        preco: data.faixa_preco_brasil || '',
+        confianca: data.confianca || '',
+        caracteristicas: data.caracteristicas || [],
+        foto: fotoUrl || ''
+      };
       document.body.classList.add('popup-aberto');
       modal.classList.add('active');
+    }
+
+    var dossieCompartilhamentoAtual = null;
+    var btnCompartilharDossie = document.getElementById('btn-compartilhar-dossie');
+    if (btnCompartilharDossie) {
+      btnCompartilharDossie.addEventListener('click', function() {
+        var info = dossieCompartilhamentoAtual || { nome: 'uma pedra misteriosa', preco: '' };
+        var texto = '💎 Identifiquei minha pedra com IA: ' + info.nome + '!' +
+          (info.preco ? ' Faixa de preço estimada: ' + info.preco + '.' : '') +
+          ' Descubra a sua também 👇';
+        var url = window.location.origin + window.location.pathname;
+        if (navigator.share) {
+          navigator.share({ title: 'Identifiquei minha pedra!', text: texto, url: url }).catch(function() {});
+        } else {
+          var textoCompleto = texto + ' ' + url;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textoCompleto).then(function() {
+              btnCompartilharDossie.textContent = 'Copiado! Cole onde quiser';
+              setTimeout(function() {
+                btnCompartilharDossie.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;stroke-width:2;fill:none;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Compartilhar essa descoberta';
+              }, 2500);
+            }).catch(function() { window.prompt('Copie e compartilhe:', textoCompleto); });
+          } else { window.prompt('Copie e compartilhe:', textoCompleto); }
+        }
+      });
+    }
+
+    var btnCertificadoDossie = document.getElementById('btn-certificado-dossie');
+    if (btnCertificadoDossie) {
+      btnCertificadoDossie.addEventListener('click', function() {
+        gerarCertificadoPDF(dossieCompartilhamentoAtual || {});
+      });
+    }
+
+    function gerarCertificadoPDF(info) {
+      try {
+        var jsPDFLib = window.jspdf && window.jspdf.jsPDF;
+        if (!jsPDFLib) { window.alert('Não foi possível gerar o certificado agora. Tente novamente em instantes.'); return; }
+        var doc = new jsPDFLib({ orientation: 'portrait', unit: 'mm', format: 'a5' });
+        var W = doc.internal.pageSize.getWidth();
+        var H = doc.internal.pageSize.getHeight();
+        var corInk = '#141414';
+        var corMute = '#666666';
+        var corAccent = '#8a6d3b';
+
+        // fundo e moldura decorativa
+        doc.setFillColor('#f7f6f4');
+        doc.rect(0, 0, W, H, 'F');
+        doc.setDrawColor(corAccent);
+        doc.setLineWidth(0.8);
+        doc.rect(6, 6, W - 12, H - 12);
+        doc.setLineWidth(0.2);
+        doc.rect(9, 9, W - 18, H - 18);
+
+        // cabeçalho
+        doc.setTextColor(corAccent);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.text('SCANNER 3.5 · CERTIFICADO DE IDENTIFICAÇÃO', W / 2, 20, { align: 'center' });
+
+        // foto (se existir e for base64)
+        var yCursor = 27;
+        if (info.foto && info.foto.indexOf('data:image') === 0) {
+          try {
+            var imgW = 40, imgH = 40;
+            var formatoImg = /data:image\/(png|jpeg|jpg)/i.exec(info.foto);
+            formatoImg = formatoImg ? formatoImg[1].toUpperCase().replace('JPG', 'JPEG') : 'JPEG';
+            doc.setDrawColor(corAccent);
+            doc.roundedRect(W / 2 - imgW / 2 - 1, yCursor - 1, imgW + 2, imgH + 2, 2, 2);
+            doc.addImage(info.foto, formatoImg, W / 2 - imgW / 2, yCursor, imgW, imgH);
+            yCursor += imgH + 10;
+          } catch (eImg) { yCursor += 4; }
+        } else { yCursor += 4; }
+
+        // nome da pedra
+        doc.setTextColor(corInk);
+        doc.setFont('times', 'bolditalic');
+        doc.setFontSize(22);
+        var nomeExibicao = info.nome || 'Pedra não identificada';
+        doc.text(nomeExibicao, W / 2, yCursor, { align: 'center', maxWidth: W - 24 });
+        yCursor += 9;
+
+        // confiança
+        if (info.confianca) {
+          doc.setTextColor(corAccent);
+          doc.setFont('courier', 'bold');
+          doc.setFontSize(9);
+          doc.text(('confiança ' + info.confianca).toUpperCase(), W / 2, yCursor, { align: 'center' });
+          yCursor += 8;
+        }
+
+        // faixa de preço
+        if (info.preco) {
+          doc.setTextColor(corMute);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(10);
+          doc.text('Faixa de preço estimada', W / 2, yCursor, { align: 'center' });
+          yCursor += 5.5;
+          doc.setTextColor(corInk);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(13);
+          doc.text(info.preco, W / 2, yCursor, { align: 'center' });
+          yCursor += 9;
+        }
+
+        // características
+        if (info.caracteristicas && info.caracteristicas.length > 0) {
+          doc.setTextColor(corMute);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(9);
+          var linhas = doc.splitTextToSize(info.caracteristicas.join('  ·  '), W - 30);
+          doc.text(linhas, W / 2, yCursor, { align: 'center' });
+          yCursor += linhas.length * 4.5 + 6;
+        }
+
+        // rodapé
+        var dataEmissao = new Date().toLocaleDateString('pt-BR');
+        doc.setDrawColor('#dcd6cc');
+        doc.setLineWidth(0.2);
+        doc.line(W / 2 - 30, H - 22, W / 2 + 30, H - 22);
+        doc.setTextColor(corMute);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text('Identificado com Inteligência Artificial em ' + dataEmissao, W / 2, H - 16, { align: 'center' });
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(7.5);
+        doc.text('Certificado gerado automaticamente para fins de curiosidade e coleção.', W / 2, H - 11, { align: 'center', maxWidth: W - 24 });
+
+        var nomeArquivo = 'certificado-' + (nomeExibicao || 'pedra').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '.pdf';
+        doc.save(nomeArquivo);
+      } catch (erroCertificado) {
+        console.error('Erro ao gerar certificado:', erroCertificado);
+        window.alert('Não foi possível gerar o certificado agora. Tente novamente.');
+      }
     }
 
     function fecharDossie() {
