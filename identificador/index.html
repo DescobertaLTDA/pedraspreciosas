@@ -3265,13 +3265,48 @@
       item.target = '_blank';
       item.rel = 'noopener noreferrer';
       item.style.display = 'flex';
-      item.style.flexDirection = 'column';
-      item.style.gap = '2px';
+      item.style.flexDirection = 'row';
+      item.style.alignItems = 'center';
+      item.style.gap = '10px';
       item.style.padding = '10px 12px';
       item.style.borderRadius = '8px';
       item.style.border = '1px solid var(--line)';
       item.style.textDecoration = 'none';
       item.style.color = 'var(--ink)';
+
+      var fotoWrap = document.createElement('div');
+      fotoWrap.style.width = '48px';
+      fotoWrap.style.height = '48px';
+      fotoWrap.style.flexShrink = '0';
+      fotoWrap.style.borderRadius = '6px';
+      fotoWrap.style.overflow = 'hidden';
+      fotoWrap.style.border = '1px solid var(--line)';
+      fotoWrap.style.background = 'var(--card-alt)';
+      fotoWrap.style.display = 'flex';
+      fotoWrap.style.alignItems = 'center';
+      fotoWrap.style.justifyContent = 'center';
+      if (lugar.foto_ref) {
+        var img = document.createElement('img');
+        img.src = '/api/loja-foto?ref=' + encodeURIComponent(lugar.foto_ref);
+        img.alt = lugar.nome || 'Loja';
+        img.loading = 'lazy';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.style.display = 'block';
+        img.onerror = function() { fotoWrap.innerHTML = '📷'; fotoWrap.style.fontSize = '16px'; fotoWrap.style.color = 'var(--ink-mute2)'; };
+        fotoWrap.appendChild(img);
+      } else {
+        fotoWrap.innerHTML = '📷';
+        fotoWrap.style.fontSize = '16px';
+        fotoWrap.style.color = 'var(--ink-mute2)';
+      }
+
+      var textoWrap = document.createElement('div');
+      textoWrap.style.display = 'flex';
+      textoWrap.style.flexDirection = 'column';
+      textoWrap.style.gap = '2px';
+      textoWrap.style.minWidth = '0';
       var nomeEl = document.createElement('span');
       nomeEl.style.fontWeight = '700';
       nomeEl.style.fontSize = '13.5px';
@@ -3282,8 +3317,11 @@
       var avaliacao = lugar.rating ? ('⭐ ' + lugar.rating + (lugar.total_avaliacoes ? ' (' + lugar.total_avaliacoes +
         ')' : '')) : '';
       metaEl.textContent = [avaliacao, lugar.endereco].filter(Boolean).join(' · ');
-      item.appendChild(nomeEl);
-      item.appendChild(metaEl);
+      textoWrap.appendChild(nomeEl);
+      textoWrap.appendChild(metaEl);
+
+      item.appendChild(fotoWrap);
+      item.appendChild(textoWrap);
       lista.appendChild(item);
     }
 
